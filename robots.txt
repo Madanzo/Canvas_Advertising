@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://canvas-advertising.com/sitemap.xml

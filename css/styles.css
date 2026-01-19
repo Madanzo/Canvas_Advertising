@@ -53,6 +53,23 @@
     --container-padding: 1.5rem;
 }
 
+/* Skip Link (Accessibility) */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--accent);
+    color: var(--white);
+    padding: 8px 16px;
+    z-index: 10000;
+    font-weight: 600;
+    transition: top 0.3s;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
 /* ===================================
    Reset & Base Styles
    =================================== */
@@ -306,8 +323,13 @@ button {
 
 .nav__logo {
     display: flex;
-    flex-direction: column;
-    line-height: 1.1;
+    align-items: center;
+}
+
+.nav__logo-img {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
 }
 
 .nav__logo-text {
@@ -685,7 +707,7 @@ button {
 
 .trust-bar__grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: var(--space-xl);
     text-align: center;
 }
@@ -714,6 +736,10 @@ button {
     background: rgba(230, 57, 70, 0.1);
 }
 
+.trust-bar__icon--dark {
+    background: var(--primary);
+}
+
 .trust-bar__icon svg {
     width: 28px;
     height: 28px;
@@ -723,6 +749,12 @@ button {
 
 .trust-bar__icon--accent svg {
     stroke: var(--accent);
+}
+
+.trust-bar__icon img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
 }
 
 .trust-bar__number {
@@ -744,6 +776,12 @@ button {
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.1em;
+}
+
+@media (max-width: 1024px) {
+    .trust-bar__grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
@@ -812,6 +850,13 @@ button {
     height: 28px;
     stroke: var(--accent);
     stroke-width: 1.5;
+}
+
+.service-card__icon img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
 }
 
 .service-card__title {
@@ -1122,37 +1167,76 @@ button {
 }
 
 .gallery__scroll {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--space-lg);
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
     padding: var(--space-md) 0;
-    margin: 0 calc(-1 * var(--container-padding));
-    padding-left: var(--container-padding);
-    padding-right: var(--container-padding);
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    cursor: grab;
 }
 
-.gallery__scroll::-webkit-scrollbar {
+/* Hide items beyond 9 (3 rows of 3) when not expanded */
+.gallery__scroll:not(.expanded) .gallery__item:nth-child(n+10) {
     display: none;
 }
 
-.gallery__scroll:active {
-    cursor: grabbing;
-}
-
 .gallery__item {
-    flex: 0 0 auto;
-    width: 350px;
-    height: 280px;
+    width: 100%;
+    aspect-ratio: 4/3;
     border-radius: var(--radius-lg);
     overflow: hidden;
     cursor: pointer;
     transition: all var(--transition-base);
-    scroll-snap-align: start;
+}
+
+/* Gallery Expand Button */
+.gallery__expand {
+    text-align: center;
+    margin-top: var(--space-xl);
+    position: relative;
+    z-index: 1;
+}
+
+.gallery__expand-btn {
+    gap: var(--space-xs);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: var(--white);
+    background: transparent;
+}
+
+.gallery__expand-btn:hover {
+    border-color: var(--white);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.gallery__expand-icon {
+    width: 20px;
+    height: 20px;
+    transition: transform var(--transition-base);
+}
+
+.gallery__expand-btn.expanded .gallery__expand-icon {
+    transform: rotate(180deg);
+}
+
+@media (max-width: 1024px) {
+    .gallery__scroll {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Show 6 items on tablet (3 rows of 2) */
+    .gallery__scroll:not(.expanded) .gallery__item:nth-child(n+7) {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .gallery__scroll {
+        grid-template-columns: 1fr;
+    }
+
+    /* Show 3 items on mobile (3 stacked) */
+    .gallery__scroll:not(.expanded) .gallery__item:nth-child(n+4) {
+        display: none;
+    }
 }
 
 .gallery__item:hover {
@@ -1843,6 +1927,111 @@ button {
     /* Add padding to body to account for fixed button */
     body {
         padding-bottom: 80px;
+    }
+}
+
+/* ===================================
+   Company Stats Section
+   =================================== */
+.company-stats {
+    padding: var(--space-3xl) 0;
+    position: relative;
+}
+
+.company-stats__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+    position: relative;
+    z-index: 1;
+}
+
+.stat-card {
+    background: rgba(26, 26, 26, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    transition: all var(--transition-base);
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: var(--shadow-card-hover);
+}
+
+.stat-card--wide {
+    grid-column: span 2;
+}
+
+.stat-card__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.stat-card__icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    transition: transform var(--transition-base);
+}
+
+.stat-card:hover .stat-card__icon {
+    transform: scale(1.1);
+}
+
+.stat-card__icon--accent {
+    background: rgba(230, 57, 70, 0.2);
+}
+
+.stat-card__icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--white);
+}
+
+.stat-card__icon--accent svg {
+    stroke: var(--accent);
+}
+
+.stat-card__number {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--white);
+    line-height: 1;
+}
+
+.stat-card__number--accent {
+    color: var(--accent);
+}
+
+.stat-card__title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--white);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.stat-card__desc {
+    font-size: 0.9375rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+    .company-stats__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-card--wide {
+        grid-column: span 1;
     }
 }
 

@@ -2,16 +2,80 @@
    Canvas Advertising - Main JavaScript
    =================================== */
 
+// Language strings
+const strings = {
+    en: {
+        viewMore: 'View More Projects',
+        showLess: 'Show Less',
+        sending: 'Sending...',
+        errors: {
+            name: 'Please enter your name',
+            phone: 'Please enter your phone number',
+            phoneInvalid: 'Please enter a valid phone number',
+            emailInvalid: 'Please enter a valid email address'
+        }
+    },
+    es: {
+        viewMore: 'Ver Más Proyectos',
+        showLess: 'Mostrar Menos',
+        sending: 'Enviando...',
+        errors: {
+            name: 'Por favor ingresa tu nombre',
+            phone: 'Por favor ingresa tu teléfono',
+            phoneInvalid: 'Por favor ingresa un teléfono válido',
+            emailInvalid: 'Por favor ingresa un correo válido'
+        }
+    }
+};
+
+const lang = document.documentElement.lang || 'en';
+const t = strings[lang] || strings.en;
+
 document.addEventListener('DOMContentLoaded', function () {
     // Initialize all modules
     initNavigation();
     initSmoothScroll();
     initScrollAnimations();
     initGalleryFilters();
+    initGalleryExpand();
     initHorizontalGalleryScroll();
     initBeforeAfterSlider();
     initForm();
 });
+
+/* ===================================
+   Gallery Expand/Collapse
+   =================================== */
+function initGalleryExpand() {
+    const expandBtn = document.getElementById('galleryExpandBtn');
+    const gallery = document.getElementById('galleryScroll');
+
+    if (!expandBtn || !gallery) return;
+
+    expandBtn.addEventListener('click', function () {
+        const isExpanded = gallery.classList.contains('expanded');
+
+        if (isExpanded) {
+            gallery.classList.remove('expanded');
+            expandBtn.classList.remove('expanded');
+            expandBtn.querySelector('.gallery__expand-text').textContent = t.viewMore;
+
+            // Scroll to gallery section
+            const gallerySection = document.getElementById('gallery');
+            if (gallerySection) {
+                const navHeight = document.getElementById('nav').offsetHeight;
+                window.scrollTo({
+                    top: gallerySection.offsetTop - navHeight,
+                    behavior: 'smooth'
+                });
+            }
+        } else {
+            gallery.classList.add('expanded');
+            expandBtn.classList.add('expanded');
+            expandBtn.querySelector('.gallery__expand-text').textContent = t.showLess;
+        }
+    });
+}
 
 /* ===================================
    Navigation
@@ -276,7 +340,7 @@ function initBeforeAfterSlider() {
 }
 
 /* ===================================
-   Form Handling
+   Form Handling (Firebase Integration)
    =================================== */
 function initForm() {
     const form = document.getElementById('quoteForm');
@@ -284,7 +348,30 @@ function initForm() {
 
     if (!form) return;
 
-    form.addEventListener('submit', function (e) {
+    // Initialize Firebase if available
+    if (window.CanvasFirebase) {
+        window.CanvasFirebase.init();
+    }
+
+    // Track phone clicks
+    document.querySelectorAll('a[href^="tel:"]').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.CanvasFirebase) {
+                window.CanvasFirebase.trackPhoneClick();
+            }
+        });
+    });
+
+    // Track directions clicks
+    document.querySelectorAll('a[href*="maps.google"]').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.CanvasFirebase) {
+                window.CanvasFirebase.trackDirectionsClick();
+            }
+        });
+    });
+
+    form.addEventListener('submit', async function (e) {
         e.preventDefault();
 
         // Basic validation
@@ -300,48 +387,79 @@ function initForm() {
 
         // Validate name
         if (!name.value.trim()) {
-            showError(name, 'Please enter your name');
+            showError(name, t.errors.name);
             isValid = false;
         }
 
         // Validate phone
         if (!phone.value.trim()) {
-            showError(phone, 'Please enter your phone number');
+            showError(phone, t.errors.phone);
             isValid = false;
         } else if (!isValidPhone(phone.value)) {
-            showError(phone, 'Please enter a valid phone number');
+            showError(phone, t.errors.phoneInvalid);
             isValid = false;
         }
 
         // Validate email if provided
         const email = form.querySelector('#email');
         if (email.value.trim() && !isValidEmail(email.value)) {
-            showError(email, 'Please enter a valid email address');
+            showError(email, t.errors.emailInvalid);
             isValid = false;
         }
 
         if (!isValid) return;
 
-        // Simulate form submission
+        // Show loading state
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
-        submitBtn.textContent = 'Sending...';
+        submitBtn.textContent = t.sending;
         submitBtn.disabled = true;
 
-        // Simulate API call
-        setTimeout(() => {
-            // Hide form, show success message
+        // Collect form data
+        const leadData = {
+            name: name.value.trim(),
+            phone: phone.value.trim(),
+            email: email.value.trim() || null,
+            service: form.querySelector('#service').value || null,
+            message: form.querySelector('#message').value.trim() || null
+        };
+
+        try {
+            // Submit to Firebase if available
+            if (window.CanvasFirebase && typeof firebase !== 'undefined') {
+                await window.CanvasFirebase.submitLead(leadData);
+            } else {
+                // Fallback: log to console and continue
+                console.log('Lead captured (Firebase not configured):', leadData);
+            }
+
+
+            // Redirect to thank you page
+            if (lang === 'es') {
+                window.location.href = '/thank-you-es.html';
+            } else {
+                window.location.href = '/thank-you.html';
+            }
+
+        } catch (error) {
+            console.error('Error submitting form:', error);
+
+            // Show inline success anyway (don't block user)
             form.style.display = 'none';
             formSuccess.style.display = 'block';
 
-            // Log form data (in production, this would be sent to a server)
-            const formData = new FormData(form);
-            console.log('Form submitted:', Object.fromEntries(formData));
-
-            // Reset button (in case form is shown again)
+            // Store lead locally as backup
+            try {
+                const pendingLeads = JSON.parse(localStorage.getItem('pending_leads') || '[]');
+                pendingLeads.push({ ...leadData, timestamp: new Date().toISOString() });
+                localStorage.setItem('pending_leads', JSON.stringify(pendingLeads));
+            } catch (e) {
+                console.warn('Could not save lead locally');
+            }
+        } finally {
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
-        }, 1000);
+        }
     });
 
     function showError(input, message) {
