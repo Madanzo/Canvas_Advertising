@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Dynamic SEO Tags -->
+    <title>{{TITLE}} | Canvas Advertising Portfolio</title>
+    <meta name="description" content="{{DESCRIPTION}}">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="{{TITLE}} | Canvas Advertising">
+    <meta property="og:description" content="{{DESCRIPTION}}">
+    <meta property="og:image" content="{{OG_IMAGE}}">
+    <meta property="og:type" content="article">
+
+    <!-- Fonts & Styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <!-- GA (Same as main site) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-98HWWM4BDW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-98HWWM4BDW');
+    </script>
+</head>
+
+<body>
+    <!-- Navigation ( simplified for template) -->
+    <nav class="nav" id="nav">
+        <div class="nav__container">
+            <a href="/" class="nav__logo">
+                <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Logo%2Fblack-version.png?alt=media&token=699b013d-6739-4d26-8c05-deda4af0e2c5"
+                    alt="Canvas Advertising Logo" class="nav__logo-img">
+            </a>
+            <ul class="nav__menu">
+                <li><a href="/#services" class="nav__link">Services</a></li>
+                <li><a href="/#gallery" class="nav__link">Gallery</a></li>
+                <li><a href="/#contact" class="nav__link">Contact</a></li>
+            </ul>
+            <a href="tel:+15129459783" class="nav__phone">
+                <span>(512) 945-9783</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Project Header -->
+    <header class="project-header section--dark">
+        <div class="hero__grain"></div>
+        <div class="container">
+            <a href="/#gallery" class="back-link">← Back to All Projects</a>
+            <h1 class="project-title">{{TITLE}}</h1>
+            <div class="project-meta">
+                <span class="project-category">{{CATEGORY}}</span>
+                <span class="project-location">{{LOCATION}}</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="project-content">
+        <div class="container">
+            <div class="project-case-study">
+                <div class="case-study-section">
+                    <h3>The Challenge</h3>
+                    <p>{{CHALLENGE}}</p>
+                </div>
+                <div class="case-study-section">
+                    <h3>Our Solution</h3>
+                    <p>{{SOLUTION}}</p>
+                </div>
+                <div class="case-study-section">
+                    <h3>The Result</h3>
+                    <p>{{RESULT}}</p>
+                </div>
+            </div>
+
+            <!-- Image Grid -->
+            <div class="project-gallery-grid">
+                {{IMAGES_HTML}}
+            </div>
+        </div>
+    </main>
+
+    <!-- CTA Section -->
+    <section class="min-cta section--accent">
+        <div class="container" style="text-align: center;">
+            <h2 style="color:white; font-family: var(--font-display); font-size: 2rem; margin-bottom: 1rem;">Looking for
+                something similar?</h2>
+            <a href="/#contact" class="btn btn--white">Get a Free Quote</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__bottom">
+                <p>&copy; 2024 Canvas Advertising LLC. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

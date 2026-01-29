@@ -1,10 +1,29 @@
 {
   "hosting": {
     "public": ".",
+    "cleanUrls": true,
+    "trailingSlash": false,
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**"
+      "**/node_modules/**",
+      "functions/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/projects/**",
+        "function": "serveProjectPage"
+      },
+      {
+        "source": "/es/proyectos/**",
+        "function": "serveProjectPage"
+      }
     ]
+  },
+  "functions": {
+    "source": "functions"
+  },
+  "firestore": {
+    "rules": "firestore.rules"
   }
 }

@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Canvas Leads - authenticated users can read/write
+    match /canvas_leads/{document=**} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Canvas Workflows - authenticated users can read/write
+    match /canvas_workflows/{document=**} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Canvas Settings (templates, etc.) - authenticated users can read/write
+    match /canvas_settings/{document=**} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Canvas Projects - anyone can read, authenticated can write
+    match /canvas_projects/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Communication Logs - authenticated users can read/write
+    match /communicationLogs/{document=**} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Email Templates - authenticated users can read/write
+    match /emailTemplates/{document=**} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // SMS Templates - authenticated users can read/write
+    match /smsTemplates/{document=**} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Workflow Contacts (for tracking workflow progress) - authenticated users can read/write
+    match /workflowContacts/{document=**} {
+      allow read, write: if isAuthenticated();
+    }
+  }
+}

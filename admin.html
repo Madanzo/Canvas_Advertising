@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Dashboard | Canvas Advertising</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Admin Styles -->
+    <link rel="stylesheet" href="css/admin.css">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login">
+        <div class="login__card">
+            <h1 class="login__title">🎨 Canvas Admin</h1>
+            <p class="login__subtitle">Sign in with your authorized Google account</p>
+
+            <button id="googleSignIn" class="btn btn--google btn--full">
+                <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"
+                        fill="#4285F4" />
+                    <path
+                        d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"
+                        fill="#34A853" />
+                    <path
+                        d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"
+                        fill="#FBBC05" />
+                    <path
+                        d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"
+                        fill="#EA4335" />
+                </svg>
+                Sign in with Google
+            </button>
+
+            <p id="loginError" class="login__error"></p>
+            <p class="login__note">Only authorized Canvas Advertising accounts can access this dashboard.</p>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="admin-layout" style="display: none;">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar__header">
+                <h1 class="sidebar__title">🎨 Canvas Admin</h1>
+            </div>
+
+            <nav class="sidebar__nav">
+                <button class="nav-link tab active" data-tab="leads">
+                    <span class="nav-link__icon">📊</span>
+                    <span class="nav-link__label">Leads</span>
+                </button>
+                <button class="nav-link tab" data-tab="emails">
+                    <span class="nav-link__icon">⚡</span>
+                    <span class="nav-link__label">Workflows</span>
+                </button>
+                <button class="nav-link tab" data-tab="logs">
+                    <span class="nav-link__icon">📜</span>
+                    <span class="nav-link__label">Logs</span>
+                </button>
+            </nav>
+
+            <div class="sidebar__footer">
+                <div class="sidebar__user">
+                    <span id="userEmail" class="sidebar__user-email"></span>
+                </div>
+                <button id="logoutBtn" class="btn btn--outline btn--full btn--small">Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-body">
+            <!-- Header for Page Title & Quick Actions -->
+            <header class="main-header">
+                <h2 id="pageTitle" class="main-header__title">Leads Dashboard</h2>
+                <div class="main-header__actions">
+                    <!-- Dynamic actions can go here -->
+                </div>
+            </header>
+
+
+            <!-- Leads Tab -->
+            <div id="leadsTab" class="tab-content active">
+                <!-- Stats Bar -->
+                <div class="stats">
+                    <div class="stat-card">
+                        <span class="stat-card__value" id="totalLeads">0</span>
+                        <span class="stat-card__label">Total Leads</span>
+                    </div>
+                    <div class="stat-card stat-card--new">
+                        <span class="stat-card__value" id="newLeads">0</span>
+                        <span class="stat-card__label">New</span>
+                    </div>
+                    <div class="stat-card stat-card--contacted">
+                        <span class="stat-card__value" id="contactedLeads">0</span>
+                        <span class="stat-card__label">Contacted</span>
+                    </div>
+                    <div class="stat-card stat-card--quoted">
+                        <span class="stat-card__value" id="quotedLeads">0</span>
+                        <span class="stat-card__label">Quoted</span>
+                    </div>
+                    <div class="stat-card stat-card--won">
+                        <span class="stat-card__value" id="wonLeads">0</span>
+                        <span class="stat-card__label">Won</span>
+                    </div>
+                </div>
+
+                <!-- Filter Bar -->
+                <div class="filters">
+                    <input type="text" id="searchInput" class="form-input"
+                        placeholder="🔍 Search by name, phone, or email...">
+                    <select id="statusFilter" class="form-select">
+                        <option value="">All Statuses</option>
+                        <option value="new">New</option>
+                        <option value="contacted">Contacted</option>
+                        <option value="quoted">Quoted</option>
+                        <option value="won">Won</option>
+                        <option value="lost">Lost</option>
+                    </select>
+                    <button id="refreshBtn" class="btn btn--outline">🔄 Refresh</button>
+                </div>
+
+                <!-- Leads Table -->
+                <div class="table-container">
+                    <table class="table" id="leadsTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Service</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leadsBody">
+                            <!-- Leads will be inserted here -->
+                        </tbody>
+                    </table>
+
+                    <div id="emptyState" class="empty-state" style="display: none;">
+                        <p>📭 No leads yet. They'll appear here when someone submits the form.</p>
+                    </div>
+
+                    <div id="loadingState" class="loading-state">
+                        <p>Loading leads...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Templates Tab -->
+            <div id="emailsTab" class="tab-content" style="display: none;">
+                <!-- Workflows Section -->
+                <div class="workflow-section">
+                    <div class="section-header">
+                        <h2 class="section-title">⚡ Email Workflows</h2>
+                        <button id="createWorkflowBtn" class="btn btn--primary">+ New Workflow</button>
+                    </div>
+
+                    <div class="workflow-manager-layout"
+                        style="display: grid; grid-template-columns: 250px 1fr; gap: 2rem; align-items: start;">
+                        <!-- Sidebar -->
+                        <div class="wf-sidebar"
+                            style="background: #f8f9fa; padding: 1rem; border-radius: 6px; height: 100%; min-height: 400px;">
+                            <h4 style="margin: 0 0 1rem 0; font-size: 0.8rem; text-transform: uppercase; color: #666;">
+                                📂
+                                Categories</h4>
+                            <div id="wfFolderList" class="folder-list">
+                                <!-- Folders rendered via JS -->
+                            </div>
+                        </div>
+
+                        <!-- List -->
+                        <div id="workflowsList" class="workflows-list">
+                            <!-- Workflows will be loaded here -->
+                            <div class="loading-state">Loading workflows...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Template Manager -->
+                <div class="template-section" style="margin-top: 3rem; border-top: 1px solid #eee; padding-top: 2rem;">
+                    <div class="section-header">
+                        <h2 class="section-title">📝 Template Manager</h2>
+                        <button class="btn btn--primary" id="createNewTemplateBtn">+ New Template</button>
+                    </div>
+
+                    <div class="template-manager-layout"
+                        style="display: grid; grid-template-columns: 300px 1fr; gap: 2rem; align-items: start;">
+
+                        <!-- Sidebar -->
+                        <div class="tm-sidebar"
+                            style="display: flex; flex-direction: column; gap: 1rem; height: 600px;">
+
+                            <!-- Folders Section -->
+                            <div class="tm-folders"
+                                style="flex-shrink: 0; max-height: 150px; overflow-y: auto; border-bottom: 2px solid #eee; padding-bottom: 0.5rem;">
+                                <h4
+                                    style="margin: 0 0 0.5rem 0.5rem; font-size: 0.75rem; text-transform: uppercase; color: #999; letter-spacing: 0.05em;">
+                                    📂 Folders</h4>
+                                <div id="tmFolderList" class="folder-list">
+                                    <!-- Folders rendered here -->
+                                </div>
+                            </div>
+
+                            <!-- Filters & List -->
+                            <div class="tm-templates-area"
+                                style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
+                                <div class="filters"
+                                    style="margin-bottom: 0.5rem; flex-direction: column; align-items: stretch; gap: 0.5rem;">
+                                    <input type="text" id="tmSearch" class="form-input"
+                                        placeholder="Search templates...">
+                                    <select id="tmTypeFilter" class="form-select">
+                                        <option value="all">All Types</option>
+                                        <option value="email">📧 Emails</option>
+                                        <option value="sms">💬 SMS</option>
+                                    </select>
+                                </div>
+                                <div id="tmList" class="tm-list"
+                                    style="flex: 1; overflow-y: auto; border: 1px solid #eee; border-radius: 6px; background: #f9f9f9;">
+                                    <!-- List Items -->
+                                    <div style="padding: 1rem; text-align: center; color: #999;">Loading templates...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Editor -->
+                        <div class="tm-editor" id="tmEditor"
+                            style="background: #fff; border: 1px solid #eee; border-radius: 6px; padding: 1.5rem;">
+                            <div id="tmEmptyState" class="empty-state">
+                                <p>Select a template to edit or create new.</p>
+                            </div>
+
+                            <form id="tmForm" style="display: none;">
+                                <input type="hidden" id="tmId">
+                                <!-- Helper to distinguish update vs create -->
+                                <input type="hidden" id="tmIsNew">
+
+                                <div class="form-group">
+                                    <label>Type</label>
+                                    <select id="tmType" class="form-select" required>
+                                        <option value="email">📧 Email</option>
+                                        <option value="sms">💬 SMS</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Template Name (Internal ID)</label>
+                                    <input type="text" id="tmName" class="form-input" required
+                                        placeholder="e.g. welcome_email">
+                                    <small style="color: #666;">Unique identifier used in workflows.</small>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Folder / Category</label>
+                                    <input type="text" id="tmCategory" class="form-input" list="folderOptions"
+                                        placeholder="e.g. Booking, Welcome, General">
+                                    <datalist id="folderOptions"></datalist>
+                                </div>
+
+                                <div class="form-group" id="tmSubjectGroup">
+                                    <label>Subject Line</label>
+                                    <input type="text" id="tmSubject" class="form-input">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Message Content</label>
+                                    <div class="editor-split"
+                                        style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                        <div class="editor-pane">
+                                            <textarea id="tmBody" class="form-textarea"
+                                                style="height: 400px; font-family: monospace; font-size: 13px;"
+                                                required></textarea>
+                                            <small style="color: #666;">Variables: {{name}}, {{service}},
+                                                {{phone}}</small>
+                                        </div>
+                                        <div class="preview-container">
+                                            <div
+                                                style="margin-bottom: 5px; color: #999; font-size: 0.75rem; text-transform: uppercase;">
+                                                Live Preview</div>
+                                            <div id="tmPreview"
+                                                style="border: 1px solid #ddd; background: #fff; height: 400px; overflow-y: auto; padding: 15px; border-radius: 4px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="action-btns" style="justify-content: space-between;">
+                                    <button type="button" class="btn btn--outline btn--danger" id="tmDeleteBtn"
+                                        style="display: none;">Delete</button>
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <button type="submit" class="btn btn--primary">Save Template</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logs Tab -->
+                <div id="logsTab" class="tab-content" style="display: none;">
+                    <div class="section-header">
+                        <h2 class="section-title">📜 Communication Logs</h2>
+                        <button id="refreshLogsBtn" class="btn btn--outline">🔄 Refresh</button>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="table" id="logsTable">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Type</th>
+                                    <th>Recipient</th>
+                                    <th>Status</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logsBody">
+                                <!-- Logs will be inserted here -->
+                            </tbody>
+                        </table>
+                        <div id="logsEmptyState" class="empty-state" style="display: none;">
+                            <p>No communication logs found.</p>
+                        </div>
+                        <div id="logsLoadingState" class="loading-state">
+                            <p>Loading logs...</p>
+                        </div>
+                    </div>
+                </div>
+        </main>
+    </div>
+
+    <!-- Lead Detail Modal -->
+    <div id="leadModal" class="modal">
+        <div class="modal__content">
+            <div class="modal__header">
+                <h2 class="modal__title">Lead Details</h2>
+                <button class="modal__close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal__body" id="modalBody">
+                <!-- Lead details will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Workflow Modal -->
+    <div id="workflowModal" class="modal">
+        <div class="modal__content modal__content--large">
+            <div class="modal__header">
+                <h2 class="modal__title" id="workflowModalTitle">Create Workflow</h2>
+                <button class="modal__close" id="closeWorkflowModal">&times;</button>
+            </div>
+            <div class="modal__body">
+                <form id="workflowForm">
+                    <input type="hidden" id="workflowId">
+
+                    <!-- Settings Tab -->
+                    <div class="wf-tabs">
+                        <button type="button" class="wf-tab active" data-wf-tab="settings">⚙️ Settings</button>
+                        <button type="button" class="wf-tab" data-wf-tab="steps">⚡ Steps</button>
+                    </div>
+
+                    <!-- Settings Content -->
+                    <div id="wfSettingsTab" class="wf-tab-content">
+                        <div class="form-group">
+                            <label for="workflowName">Workflow Name *</label>
+                            <input type="text" id="workflowName" class="form-input" placeholder="e.g., Welcome Sequence"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Folder / Category</label>
+                            <input type="text" id="workflowCategory" class="form-input" list="wfFolderOptions"
+                                placeholder="e.g. Leads, Customers, Promo">
+                            <datalist id="wfFolderOptions"></datalist>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="workflowTrigger">Trigger *</label>
+                            <select id="workflowTrigger" class="form-select" required>
+                                <option value="">Select a trigger...</option>
+                                <option value="form_submit">📝 Quote Form Submitted</option>
+                                <option value="booking">📅 Cal.com Booking Created</option>
+                                <option value="status_change">🔄 Lead Status Changed</option>
+                            </select>
+                        </div>
+
+                        <div id="statusTriggerConfig" class="form-group" style="display: none;">
+                            <label for="triggerStatus">When status changes to:</label>
+                            <select id="triggerStatus" class="form-select">
+                                <option value="contacted">🔵 Contacted</option>
+                                <option value="quoted">🟡 Quoted</option>
+                                <option value="won">🟢 Won</option>
+                                <option value="lost">⚪ Lost</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="workflowEnabled" checked>
+                                Enable this workflow
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Steps Content -->
+                    <div id="wfStepsTab" class="wf-tab-content" style="display: none;">
+                        <div id="workflowStepsList" class="steps-list">
+                            <!-- Steps rendered here -->
+                            <p class="empty-steps">No steps added yet.</p>
+                        </div>
+
+                        <div class="add-step-bar">
+                            <span>Add Step: </span>
+                            <button type="button" class="btn btn--outline btn--small" onclick="addStep('email')">📧
+                                Email</button>
+                            <button type="button" class="btn btn--outline btn--small" onclick="addStep('sms')">💬
+                                SMS</button>
+                            <button type="button" class="btn btn--outline btn--small" onclick="addStep('delay')">⏳
+                                Delay</button>
+                        </div>
+                    </div>
+
+                    <div class="modal__footer">
+                        <button type="button" id="deleteWorkflowBtn" class="btn btn--danger" style="display: none;">🗑️
+                            Delete</button>
+                        <button type="submit" class="btn btn--primary">💾 Save Workflow</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/firebase-config.js?v=2"></script>
+    <script src="js/admin.js"></script>
+</body>
+
+</html>

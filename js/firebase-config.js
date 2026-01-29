@@ -2,23 +2,29 @@
    Canvas Advertising - Firebase Configuration
    =================================== */
 
-// Firebase configuration for merkadagency project
+// Firebase configuration for canvas-adnvertising project
 const firebaseConfig = {
-    apiKey: "AIzaSyBxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", // TODO: Add your API key
-    authDomain: "merkadagency-dd2aa.firebaseapp.com",
-    projectId: "merkadagency-dd2aa",
-    storageBucket: "merkadagency-dd2aa.firebasestorage.app",
-    messagingSenderId: "YOUR_SENDER_ID", // TODO: Add from Firebase console
-    appId: "YOUR_APP_ID" // TODO: Add from Firebase console
+    apiKey: "AIzaSyD51YXSY2Wp2q5PwSHeAeUaUUkbWCfM5QU",
+    authDomain: "canvas-adnvertising.firebaseapp.com",
+    projectId: "canvas-adnvertising",
+    storageBucket: "canvas-adnvertising.firebasestorage.app",
+    messagingSenderId: "835646149135",
+    appId: "1:835646149135:web:b34edc32dd43c69923c97a",
+    measurementId: "G-K6P9JYBWP3"
 };
 
 // Initialize Firebase (loaded from CDN in HTML)
 let db = null;
+let auth = null;
 
 function initializeFirebase() {
     if (typeof firebase !== 'undefined') {
-        firebase.initializeApp(firebaseConfig);
+        // Check if already initialized
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         db = firebase.firestore();
+        auth = firebase.auth();
         console.log('Firebase initialized successfully');
         return true;
     }
@@ -33,21 +39,25 @@ function initializeFirebase() {
  */
 async function submitLead(leadData) {
     if (!db) {
-        throw new Error('Firebase not initialized');
+        // Try to initialize
+        if (!initializeFirebase()) {
+            throw new Error('Firebase not available');
+        }
     }
 
     const lead = {
         ...leadData,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        source: 'website',
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        source: 'form_submit',
         status: 'new',
-        notified: false
+        notes: ''
     };
 
     try {
         const docRef = await db.collection('canvas_leads').add(lead);
         console.log('Lead submitted with ID:', docRef.id);
-        
+
         // Track conversion event
         if (typeof gtag !== 'undefined') {
             gtag('event', 'generate_lead', {
@@ -61,6 +71,42 @@ async function submitLead(leadData) {
         console.error('Error submitting lead:', error);
         throw error;
     }
+}
+
+/**
+ * Get all leads (for admin dashboard)
+ */
+async function getLeads() {
+    if (!db) {
+        if (!initializeFirebase()) {
+            throw new Error('Firebase not available');
+        }
+    }
+
+    const snapshot = await db.collection('canvas_leads')
+        .orderBy('createdAt', 'desc')
+        .get();
+
+    return snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+    }));
+}
+
+/**
+ * Update lead status
+ */
+async function updateLead(leadId, updates) {
+    if (!db) {
+        if (!initializeFirebase()) {
+            throw new Error('Firebase not available');
+        }
+    }
+
+    await db.collection('canvas_leads').doc(leadId).update({
+        ...updates,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
 }
 
 /**
@@ -86,10 +132,14 @@ function trackDirectionsClick() {
     }
 }
 
-// Export functions for use in main.js
+// Export functions for use in main.js and admin.js
 window.CanvasFirebase = {
     init: initializeFirebase,
     submitLead: submitLead,
+    getLeads: getLeads,
+    updateLead: updateLead,
     trackPhoneClick: trackPhoneClick,
-    trackDirectionsClick: trackDirectionsClick
+    trackDirectionsClick: trackDirectionsClick,
+    getAuth: () => auth,
+    getDb: () => db
 };
