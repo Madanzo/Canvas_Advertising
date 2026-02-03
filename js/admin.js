@@ -280,8 +280,8 @@ function renderLeads(leads) {
             <td>${formatDate(lead.createdAt)}</td>
             <td>
                 <strong>${escapeHtml(lead.name)}</strong>
-                <span class="source-badge source-badge--${lead.source || 'website'}" title="${lead.source === 'booking' ? 'Cal.com Booking' : 'Quote Form'}">
-                    ${lead.source === 'booking' ? '📅' : '📝'}
+                <span class="source-badge source-badge--${lead.source || 'website'}" title="${getSourceTitle(lead.source)}">
+                    ${getSourceIcon(lead.source)}
                 </span>
             </td>
             <td><a href="tel:${lead.phone}">${escapeHtml(lead.phone)}</a></td>
@@ -304,6 +304,25 @@ function renderLeads(leads) {
         </tr>
     `).join('');
 }
+
+function getSourceIcon(source) {
+    switch (source) {
+        case 'booking': return '📅';
+        case 'whatsapp_widget': return '💬';
+        case 'manual': return '👤';
+        default: return '📝';
+    }
+}
+
+function getSourceTitle(source) {
+    switch (source) {
+        case 'booking': return 'Cal.com Booking';
+        case 'whatsapp_widget': return 'WhatsApp Chat';
+        case 'manual': return 'Manually Added';
+        default: return 'Quote Form';
+    }
+}
+
 
 // Update lead status
 async function updateStatus(leadId, newStatus) {
