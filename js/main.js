@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initHorizontalGalleryScroll();
     initBeforeAfterSlider();
     initForm();
+    initReviews();
 });
 
 /* ===================================
@@ -497,3 +498,172 @@ function debounce(func, wait) {
         timeout = setTimeout(later, wait);
     };
 }
+
+/* ===================================
+   Google Reviews Integration
+   =================================== */
+async function initReviews() {
+    const reviewsGrid = document.getElementById('reviewsGrid');
+    if (!reviewsGrid || !window.CanvasFirebase) return;
+
+    // Check if we have Firebase Functions
+    // If not initialized, try init
+    let functions = null;
+    try {
+        if (!firebase.apps.length) window.CanvasFirebase.init();
+        functions = window.CanvasFirebase.functions;
+    } catch (e) {
+        console.warn('Firebase not ready for reviews:', e);
+        return;
+    }
+
+    try {
+        const getGoogleReviews = functions.httpsCallable('getGoogleReviews');
+        const result = await getGoogleReviews();
+        const reviews = result.data; // reviews array
+
+        if (!reviews || reviews.length === 0) return; // Keep static fallbacks
+
+        // Clear static reviews
+        reviewsGrid.innerHTML = '';
+
+        // Render new reviews (limit to 3 for grid)
+        reviews.slice(0, 3).forEach(review => {
+            const stars = '★'.repeat(review.rating || 5);
+            const text = review.text.length > 150 ? review.text.substring(0, 150) + '...' : review.text;
+
+            const card = document.createElement('div');
+            card.className = 'testimonial fade-in';
+            card.innerHTML = `
+                <div class="testimonial__stars">
+                    ${Array(5).fill(0).map((_, i) =>
+                `<span class="testimonial__star" style="color: ${i < (review.rating || 5) ? '#FACC15' : '#444'}">★</span>`
+            ).join('')}
+                </div>
+                <p class="testimonial__text">"${text}"</p>
+                <div class="testimonial__author">
+                    <div class="testimonial__avatar" style="overflow:hidden;">
+                        ${review.profile_photo_url ? `<img src="${review.profile_photo_url}" alt="${review.author_name}" style="width:100%;height:100%;object-fit:cover;">` : review.author_name.charAt(0)}
+                    </div>
+                    <div class="testimonial__info">
+                        <strong>${review.author_name}</strong>
+                        <span>${review.relative_time_description || 'Recent Customer'}</span>
+                    </div>
+                </div>
+            `;
+            reviewsGrid.appendChild(card);
+        });
+
+    } catch (error) {
+        console.warn('Failed to load Google Reviews:', error);
+        // Fallback to static content is automatic since we didn't clear innerHTML on error
+    }
+}
+
+/* ===================================
+   WhatsApp Chat Widget (New)
+   =================================== */
+document.addEventListener('DOMContentLoaded', function () {
+    initWhatsAppWidget();
+});
+
+function initWhatsAppWidget() {
+    const toggleBtn = document.getElementById('whatsappToggle');
+    const closeBtn = document.getElementById('whatsappClose');
+    const chatWindow = document.getElementById('whatsappWindow');
+    const form = document.getElementById('whatsappForm');
+    const successMsg = document.getElementById('whatsappSuccess');
+
+    if (!toggleBtn || !chatWindow || !form) return;
+
+    // Toggle Chat Window
+    function toggleChat() {
+        chatWindow.classList.toggle('active');
+
+        // Focus input if opening
+        if (chatWindow.classList.contains('active')) {
+            setTimeout(() => {
+                document.getElementById('waName').focus();
+            }, 300);
+        }
+    }
+
+    toggleBtn.addEventListener('click', toggleChat);
+    if (closeBtn) closeBtn.addEventListener('click', toggleChat);
+
+    // Close when clicking outside
+    document.addEventListener('click', function (e) {
+        if (chatWindow.classList.contains('active') &&
+            !chatWindow.contains(e.target) &&
+            !toggleBtn.contains(e.target)) {
+            chatWindow.classList.remove('active');
+        }
+    });
+
+    // Handle Form Submission
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById('waName').value.trim();
+        const phone = document.getElementById('waPhone').value.trim();
+        const message = document.getElementById('waMessage').value.trim();
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        if (!name || !phone || !message) return;
+
+        // Disable button
+        const originalContent = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span style="animation: spin 1s linear infinite;">⏳</span>'; // Simple loader
+
+        const leadData = {
+            name: name,
+            phone: phone,
+            message: message,
+            service: 'WhatsApp Inquiry',
+            source: 'whatsapp_widget'
+        };
+
+        try {
+            // 1. Submit to Firebase (CRM)
+            if (window.CanvasFirebase) {
+                await window.CanvasFirebase.submitLead(leadData);
+            } else {
+                console.log('Firebase not initialized, logging lead:', leadData);
+            }
+
+            // 2. Show Success
+            successMsg.style.display = 'flex';
+
+            // 3. Redirect to WhatsApp after delay
+            setTimeout(() => {
+                const phoneNumber = '15129459783';
+                const waText = encodeURIComponent(`Hi, my name is ${name}. ${message}`);
+                const waUrl = `https://wa.me/${phoneNumber}?text=${waText}`;
+
+                window.open(waUrl, '_blank');
+
+                // Reset form and close window
+                setTimeout(() => {
+                    form.reset();
+                    successMsg.style.display = 'none';
+                    chatWindow.classList.remove('active');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalContent;
+                }, 1000);
+
+            }, 1500);
+
+        } catch (error) {
+            console.error('Error submitting WhatsApp lead:', error);
+            alert('Something went wrong. Redirecting to WhatsApp directly...');
+
+            // Fallback redirect
+            const phoneNumber = '15129459783';
+            window.open(`https://wa.me/${phoneNumber}`, '_blank');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalContent;
+        }
+    });
+}
+

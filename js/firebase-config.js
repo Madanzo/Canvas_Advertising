@@ -24,7 +24,17 @@ function initializeFirebase() {
             firebase.initializeApp(firebaseConfig);
         }
         db = firebase.firestore();
-        auth = firebase.auth();
+        // Safe init for Auth (optional for public site)
+        if (firebase.auth) {
+            auth = firebase.auth();
+        } else {
+            console.warn('Firebase Auth module not loaded.');
+        }
+
+        // Safe init for Functions (optional)
+        if (firebase.functions) {
+            // firebase.functions(); // Initialize if needed, usually lazy
+        }
         console.log('Firebase initialized successfully');
         return true;
     }
@@ -132,14 +142,60 @@ function trackDirectionsClick() {
     }
 }
 
+
+/**
+ * Delete a lead
+ */
+async function deleteLead(leadId) {
+    if (!db) {
+        if (!initializeFirebase()) {
+            throw new Error('Firebase not available');
+        }
+    }
+
+    await db.collection('canvas_leads').doc(leadId).delete();
+}
+
+/**
+ * Delete a template
+ */
+async function deleteTemplate(templateId) {
+    if (!db) {
+        if (!initializeFirebase()) {
+            throw new Error('Firebase not available');
+        }
+    }
+
+    // Check both collections as we don't know the type from just ID easily without type param
+    // But typically we pass type or just try deletion
+    // For now, simpler to just try deleting from both or rely on ID uniqueness
+    // Better: update backend to store all in one collection or pass type.
+    // For now: Try email first, then SMS.
+
+    try {
+        await db.collection('emailTemplates').doc(templateId).delete();
+        await db.collection('smsTemplates').doc(templateId).delete();
+    } catch (e) {
+        console.error("Error deleting template", e);
+        throw e;
+    }
+}
+
 // Export functions for use in main.js and admin.js
 window.CanvasFirebase = {
     init: initializeFirebase,
     submitLead: submitLead,
     getLeads: getLeads,
     updateLead: updateLead,
+    deleteLead: deleteLead,
+    deleteTemplate: deleteTemplate,
     trackPhoneClick: trackPhoneClick,
     trackDirectionsClick: trackDirectionsClick,
     getAuth: () => auth,
-    getDb: () => db
+    getDb: () => db,
+    get functions() {
+        if (typeof firebase !== 'undefined' && firebase.functions) return firebase.functions();
+        console.warn('Firebase Functions SDK not loaded');
+        return null;
+    }
 };

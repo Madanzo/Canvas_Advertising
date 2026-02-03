@@ -15,10 +15,14 @@
     <!-- Admin Styles -->
     <link rel="stylesheet" href="css/admin.css">
 
+    <!-- Chart.js for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-functions-compat.js"></script>
 </head>
 
 <body>
@@ -54,15 +58,16 @@
     <!-- Dashboard -->
     <div id="dashboard" class="admin-layout" style="display: none;">
         <!-- Sidebar Navigation -->
-        <aside class="sidebar">
+        <div id="sidebarOverlay" class="sidebar-overlay"></div>
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar__header">
                 <h1 class="sidebar__title">🎨 Canvas Admin</h1>
             </div>
 
             <nav class="sidebar__nav">
                 <button class="nav-link tab active" data-tab="leads">
-                    <span class="nav-link__icon">📊</span>
-                    <span class="nav-link__label">Leads</span>
+                    <span class="nav-link__icon">👥</span>
+                    <span class="nav-link__label">Contacts</span>
                 </button>
                 <button class="nav-link tab" data-tab="emails">
                     <span class="nav-link__icon">⚡</span>
@@ -72,9 +77,15 @@
                     <span class="nav-link__icon">📜</span>
                     <span class="nav-link__label">Logs</span>
                 </button>
+                <button class="nav-link tab" data-tab="analytics">
+                    <span class="nav-link__icon">📊</span>
+                    <span class="nav-link__label">Analytics</span>
+                </button>
             </nav>
 
             <div class="sidebar__footer">
+
+                <li class="sidebar-header">CRM</li>
                 <div class="sidebar__user">
                     <span id="userEmail" class="sidebar__user-email"></span>
                 </div>
@@ -86,12 +97,83 @@
         <main class="main-body">
             <!-- Header for Page Title & Quick Actions -->
             <header class="main-header">
-                <h2 id="pageTitle" class="main-header__title">Leads Dashboard</h2>
+                <div class="header-left">
+                    <button id="sidebarToggle" class="btn-icon-toggle">
+                        <span class="hamburger-icon">☰</span>
+                    </button>
+                    <h2 id="pageTitle" class="main-header__title">Leads Dashboard</h2>
+                </div>
                 <div class="main-header__actions">
                     <!-- Dynamic actions can go here -->
                 </div>
             </header>
 
+
+            <!-- Analytics Tab -->
+            <div id="analyticsTab" class="tab-content">
+                <div class="content-header">
+                    <h2>📊 Analytics Dashboard</h2>
+                    <button class="btn btn--outline" onclick="loadAnalytics()">🔄 Refresh</button>
+                </div>
+
+                <!-- Website Analytics (External) -->
+                <div class="card"
+                    style="padding: 1.5rem; margin-bottom: 2rem; border-left: 4px solid #F9AB00; background: #fff8e1;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3 style="margin: 0 0 0.5rem 0; color: #d35400;">🌐 Website Traffic (Google Analytics 4)
+                            </h3>
+                            <p style="margin: 0; color: #666;">View detailed visitor stats, real-time users, and
+                                acquisition sources on Google.</p>
+                        </div>
+                        <a href="https://analytics.google.com/analytics/web/" target="_blank" class="btn btn--primary"
+                            style="background: #F9AB00; border: none; color: #fff;">
+                            Open Google Analytics ↗
+                        </a>
+                    </div>
+                </div>
+
+                <div class="content-header">
+                    <h2>📧 Email Performance</h2>
+                </div>
+
+                <div class="stats" style="margin-bottom: 2rem;">
+                    <div class="stat-card">
+                        <span class="stat-card__value" id="emailSent">0</span>
+                        <span class="stat-card__label">Emails Sent</span>
+                    </div>
+                    <div class="stat-card stat-card--won">
+                        <span class="stat-card__value" id="emailOpenRate">0%</span>
+                        <span class="stat-card__label">Open Rate</span>
+                    </div>
+                    <div class="stat-card stat-card--quoted">
+                        <span class="stat-card__value" id="emailClickRate">0%</span>
+                        <span class="stat-card__label">Click Rate</span>
+                    </div>
+                    <div class="stat-card stat-card--lost">
+                        <span class="stat-card__value" id="emailBounceRate">0%</span>
+                        <span class="stat-card__label">Bounce Rate</span>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+                    <!-- Delivery Chart -->
+                    <div class="card" style="padding: 1.5rem;">
+                        <h3>Delivery Status</h3>
+                        <div style="height: 300px; position: relative;">
+                            <canvas id="deliveryChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Engagement Chart -->
+                    <div class="card" style="padding: 1.5rem;">
+                        <h3>Engagement Funnel</h3>
+                        <div style="height: 300px; position: relative;">
+                            <canvas id="funnelChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Leads Tab -->
             <div id="leadsTab" class="tab-content active">
@@ -234,7 +316,8 @@
                                 <div id="tmList" class="tm-list"
                                     style="flex: 1; overflow-y: auto; border: 1px solid #eee; border-radius: 6px; background: #f9f9f9;">
                                     <!-- List Items -->
-                                    <div style="padding: 1rem; text-align: center; color: #999;">Loading templates...
+                                    <div style="padding: 1rem; text-align: center; color: #999;">Loading
+                                        templates...
                                     </div>
                                 </div>
                             </div>
@@ -302,9 +385,11 @@
                                 </div>
 
                                 <div class="action-btns" style="justify-content: space-between;">
-                                    <button type="button" class="btn btn--outline btn--danger" id="tmDeleteBtn"
-                                        style="display: none;">Delete</button>
+                                    <button type="button" class="btn btn--outline" id="tmTestBtn">🧪 Send
+                                        Test</button>
                                     <div style="display: flex; gap: 0.5rem;">
+                                        <button type="button" class="btn btn--outline btn--danger" id="tmDeleteBtn"
+                                            style="display: none;">Delete</button>
                                         <button type="submit" class="btn btn--primary">Save Template</button>
                                     </div>
                                 </div>
@@ -350,11 +435,47 @@
     <div id="leadModal" class="modal">
         <div class="modal__content">
             <div class="modal__header">
-                <h2 class="modal__title">Lead Details</h2>
+                <h2 class="modal__title">Contact Profile</h2>
                 <button class="modal__close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-tabs" style="display: flex; border-bottom: 1px solid #eee;">
+                <button class="modal-tab active" data-modal-tab="profile">Profile</button>
+                <button class="modal-tab" data-modal-tab="history">History</button>
             </div>
             <div class="modal__body" id="modalBody">
                 <!-- Lead details will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Compose Message Modal -->
+    <div id="composeModal" class="modal">
+        <div class="modal__content">
+            <div class="modal__header">
+                <h2 class="modal__title" id="composeTitle">New Message</h2>
+                <button class="modal__close" id="closeComposeModal">&times;</button>
+            </div>
+            <div class="modal__body">
+                <form id="composeForm">
+                    <input type="hidden" id="composeType">
+                    <input type="hidden" id="composeContactId">
+                    <input type="hidden" id="composeRecipient">
+
+                    <div class="form-group" id="composeSubjectGroup">
+                        <label for="composeSubject">Subject *</label>
+                        <input type="text" id="composeSubject" class="form-input" placeholder="Email Subject">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="composeContent">Message *</label>
+                        <textarea id="composeContent" class="form-textarea" rows="6"
+                            placeholder="Type your message here..." required></textarea>
+                    </div>
+
+                    <div class="action-btns" style="justify-content: flex-end;">
+                        <button type="submit" class="btn btn--primary" id="btnSendDirect">Send Message</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -398,6 +519,7 @@
                                 <option value="form_submit">📝 Quote Form Submitted</option>
                                 <option value="booking">📅 Cal.com Booking Created</option>
                                 <option value="status_change">🔄 Lead Status Changed</option>
+                                <option value="manual_campaign">📢 Bulk Campaign (Manual)</option>
                             </select>
                         </div>
 
@@ -409,6 +531,22 @@
                                 <option value="won">🟢 Won</option>
                                 <option value="lost">⚪ Lost</option>
                             </select>
+                        </div>
+
+                        <!-- Audience Config for Campaigns -->
+                        <div id="audienceConfig" class="form-group" style="display: none;">
+                            <label for="targetStatus">Target Audience (Status):</label>
+                            <select id="targetStatus" class="form-select">
+                                <option value="all">👥 All Leads</option>
+                                <option value="new">🔴 New Leads</option>
+                                <option value="contacted">🔵 Contacted Leads</option>
+                                <option value="quoted">🟡 Quoted Leads</option>
+                                <option value="won">🟢 Won Leads</option>
+                                <option value="lost">⚪ Lost Leads</option>
+                            </select>
+                            <small style="display: block; margin-top: 5px; color: #666;">
+                                Defines which leads will receive this campaign when you click "Run Now".
+                            </small>
                         </div>
 
                         <div class="form-group">
@@ -443,6 +581,57 @@
                         <button type="submit" class="btn btn--primary">💾 Save Workflow</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+    <!-- Campaign Stats Modal -->
+    <div id="statsModal" class="modal">
+        <div class="modal__content modal__content--large">
+            <div class="modal__header">
+                <h2 class="modal__title">📊 Campaign Report</h2>
+                <button class="modal__close" id="closeStatsModal">&times;</button>
+            </div>
+            <div class="modal__body">
+                <div class="stats-summary"
+                    style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem;">
+                    <div class="stat-card">
+                        <span class="stat-card__value" id="statsTotal">0</span>
+                        <span class="stat-card__label">Total Sent</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-card__value" id="statsDelivered">0</span>
+                        <span class="stat-card__label">Delivered</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-card__value" id="statsOpens">0%</span>
+                        <span class="stat-card__label">Open Rate</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-card__value" id="statsClicks">0%</span>
+                        <span class="stat-card__label">Click Rate</span>
+                    </div>
+                </div>
+
+                <div class="d-flex" style="justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="margin: 0;">Detailed Logs</h3>
+                    <button id="refreshStatsBtn" class="btn btn--outline btn--small">🔄 Refresh</button>
+                </div>
+
+                <div class="table-container" style="max-height: 400px; overflow-y: auto;">
+                    <table class="table" id="statsTable">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Recipient</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="statsBody">
+                            <!-- Rows inserted here -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

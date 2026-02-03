@@ -13,7 +13,8 @@ const ALLOWED_EMAILS = [
 const TRIGGER_LABELS = {
     form_submit: '📝 Quote Form Submitted',
     booking: '📅 Cal.com Booking',
-    status_change: '🔄 Status Changed'
+    status_change: '🔄 Status Changed',
+    manual_campaign: '📢 Bulk Campaign (Manual)'
 };
 
 // DOM Elements
@@ -59,14 +60,24 @@ document.addEventListener('DOMContentLoaded', async function () {
         const workflowTrigger = document.getElementById('workflowTrigger');
         const deleteWorkflowBtn = document.getElementById('deleteWorkflowBtn');
         const workflowModal = document.getElementById('workflowModal');
+        // Define saveTemplateBtn here which was missing
+        const saveTemplateBtn = document.getElementById('saveTemplateBtn');
 
+        if (saveTemplateBtn) saveTemplateBtn.addEventListener('click', saveTemplate);
         if (createWorkflowBtn) createWorkflowBtn.addEventListener('click', openCreateWorkflowModal);
         if (closeWorkflowModalBtn) closeWorkflowModalBtn.addEventListener('click', closeWorkflowModal);
         if (workflowForm) workflowForm.addEventListener('submit', saveWorkflow);
         if (workflowTrigger) {
             workflowTrigger.addEventListener('change', function () {
+                const val = this.value;
                 document.getElementById('statusTriggerConfig').style.display =
-                    this.value === 'status_change' ? 'block' : 'none';
+                    val === 'status_change' ? 'block' : 'none';
+
+                // Show Audience/Status selector for Campaigns
+                const audienceGroup = document.getElementById('audienceConfig');
+                if (audienceGroup) {
+                    audienceGroup.style.display = val === 'manual_campaign' ? 'block' : 'none';
+                }
             });
         }
         if (deleteWorkflowBtn) deleteWorkflowBtn.addEventListener('click', deleteWorkflow);
@@ -80,6 +91,39 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     } catch (e) { console.error('Listener Init Error:', e); }
     // ----------------------------------------------------
+
+    // --- MOBILE SIDEBAR LOGIC ---
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    function toggleSidebar(show) {
+        if (show) {
+            sidebar.classList.add('active');
+            sidebarOverlay.classList.add('active');
+        } else {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        }
+    }
+
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => toggleSidebar(true));
+    }
+
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', () => toggleSidebar(false));
+    }
+
+    // Close sidebar when clicking a nav link (mobile UX)
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                toggleSidebar(false);
+            }
+        });
+    });
+    // -----------------------------
 
     if (window.CanvasFirebase) {
         window.CanvasFirebase.init();
@@ -167,19 +211,49 @@ logoutBtn.addEventListener('click', function () {
 });
 
 // Load leads from Firestore
-async function loadLeads() {
+// Load leads from Firestore (Real-time listener)
+function loadLeads() {
     loadingState.style.display = 'block';
-    emptyState.style.display = 'none';
-    leadsBody.innerHTML = '';
 
-    try {
-        allLeads = await window.CanvasFirebase.getLeads();
-        updateStats();
-        renderLeads(allLeads);
-    } catch (error) {
-        console.error('Error loading leads:', error);
-        loadingState.innerHTML = '<p>Error loading leads. Please refresh.</p>';
+    // Check if db is explicitly available, if not try to get it
+    let db = window.CanvasFirebase.getDb();
+    if (!db) {
+        window.CanvasFirebase.init();
+        db = window.CanvasFirebase.getDb();
     }
+
+    if (!db) {
+        console.error('Firestore not initialized');
+        loadingState.innerHTML = '<p>Error connecting to database.</p>';
+        return;
+    }
+
+    // Replace single fetch with onSnapshot
+    db.collection('canvas_leads')
+        .orderBy('createdAt', 'desc')
+        .onSnapshot((snapshot) => {
+            loadingState.style.display = 'none';
+            emptyState.style.display = 'none';
+
+            allLeads = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+
+            // Filter out deleted leads purely as a safety mechanism implies they should be gone from snapshot anyway
+            // but if we have local state management, this overwrites it cleanly.
+
+            if (allLeads.length === 0) {
+                emptyState.style.display = 'block';
+                leadsBody.innerHTML = '';
+            } else {
+                updateStats();
+                filterLeads(); // This calls renderLeads
+            }
+        }, (error) => {
+            console.error('Error loading leads:', error);
+            loadingState.innerHTML = '<p>Error loading leads. Please refresh.</p>';
+        });
 }
 
 // Update stats
@@ -249,76 +323,199 @@ async function updateStatus(leadId, newStatus) {
     }
 }
 
-// View lead details
+// Modal Tab Switching
+document.querySelectorAll('.modal-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        // Remove active class from all tabs
+        document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+        // Add active class to clicked tab
+        tab.classList.add('active');
+
+        // Hide all content content
+        document.querySelectorAll('.modal-tab-content').forEach(c => c.classList.remove('active'));
+
+        // Show target content
+        const targetId = tab.dataset.modalTab;
+        const targetContent = document.getElementById(`tab-${targetId}`);
+        if (targetContent) targetContent.classList.add('active');
+
+        // Load History if selected
+        if (targetId === 'history' && currentLead) {
+            loadContactHistory(currentLead);
+        }
+    });
+});
+
+// View lead details (Contact Profile)
 async function viewLead(leadId) {
     currentLead = allLeads.find(l => l.id === leadId);
     if (!currentLead) return;
 
-    // Fetch automation history
-    let automationHistory = [];
-    try {
-        const db = window.CanvasFirebase.getDb();
-        const snapshot = await db.collection('workflowContacts')
-            .where('contactId', '==', leadId)
-            .orderBy('enrolledAt', 'desc')
-            .get();
-        automationHistory = snapshot.docs.map(doc => doc.data());
-    } catch (e) {
-        console.error('Error loading automation history:', e);
-    }
+    // Reset Tabs
+    document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.modal-tab-content').forEach(c => c.classList.remove('active'));
 
+    // Default to Profile
+    document.querySelector('[data-modal-tab="profile"]').classList.add('active');
+
+    // Main Container
+    const modalBody = document.getElementById('modalBody');
     modalBody.innerHTML = `
-        <div class="detail-row">
-            <span class="detail-row__label">Name</span>
-            <span class="detail-row__value">${escapeHtml(currentLead.name)}</span>
-        </div>
-        <div class="detail-row">
-            <span class="detail-row__label">Phone</span>
-            <span class="detail-row__value"><a href="tel:${currentLead.phone}">${escapeHtml(currentLead.phone)}</a></span>
-        </div>
-        <div class="detail-row">
-            <span class="detail-row__label">Email</span>
-            <span class="detail-row__value">${currentLead.email ? `<a href="mailto:${currentLead.email}">${escapeHtml(currentLead.email)}</a>` : '-'}</span>
-        </div>
-        <div class="detail-row">
-            <span class="detail-row__label">Service</span>
-            <span class="detail-row__value">${currentLead.service || '-'}</span>
-        </div>
-        <div class="detail-row">
-            <span class="detail-row__label">Message</span>
-            <span class="detail-row__value">${currentLead.message ? escapeHtml(currentLead.message) : '-'}</span>
-        </div>
-        <div class="detail-row">
-            <span class="detail-row__label">Date</span>
-            <span class="detail-row__value">${formatDate(currentLead.createdAt)} at ${formatTime(currentLead.createdAt)}</span>
-        </div>
-        
-        <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid var(--gray-light);">
-        
-        <div class="form-group">
-            <label>Automation History</label>
-            ${automationHistory.length > 0 ? `
-                <div style="background: #f8f9fa; padding: 1rem; border-radius: 6px;">
-                    ${automationHistory.map(h => `
-                        <div style="margin-bottom: 0.5rem; display: flex; justify-content: space-between; font-size: 0.85rem;">
-                            <span><strong>${h.workflowId}</strong> (${h.status})</span>
-                            <span style="color: #6c757d;">Step ${h.currentStepIndex + 1}</span>
-                        </div>
-                    `).join('')}
-                </div>
-            ` : '<p style="font-size: 0.9rem; color: #6c757d;">No active automations.</p>'}
+        <!-- Profile Tab -->
+        <div id="tab-profile" class="modal-tab-content active">
+            <!-- Quick Actions -->
+            <div class="quick-actions" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                <button class="btn btn--outline btn--small" onclick="openComposeModal('email')">📧 Send Email</button>
+                <button class="btn btn--outline btn--small" onclick="openComposeModal('sms')">💬 Send SMS</button>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-row__label">Name</span>
+                <span class="detail-row__value">${escapeHtml(currentLead.name)}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-row__label">Phone</span>
+                <span class="detail-row__value"><a href="tel:${currentLead.phone}">${escapeHtml(currentLead.phone)}</a></span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-row__label">Email</span>
+                <span class="detail-row__value">${currentLead.email ? `<a href="mailto:${currentLead.email}">${escapeHtml(currentLead.email)}</a>` : '-'}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-row__label">Service</span>
+                <span class="detail-row__value">${currentLead.service || '-'}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-row__label">Message</span>
+                <span class="detail-row__value">${currentLead.message ? escapeHtml(currentLead.message) : '-'}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-row__label">Date</span>
+                <span class="detail-row__value">${formatDate(currentLead.createdAt)} at ${formatTime(currentLead.createdAt)}</span>
+            </div>
+            
+            <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid var(--gray-light);">
+            
+            <div class="form-group">
+                <label for="leadNotes">Notes</label>
+                <textarea id="leadNotes" class="form-textarea" placeholder="Add notes about this lead...">${currentLead.notes || ''}</textarea>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                <button class="btn btn--primary" onclick="saveNotes()">Save Notes</button>
+                <button class="btn btn--outline" style="color: #dc3545; border-color: #dc3545;" onclick="deleteLead('${currentLead.id}')">Delete Lead</button>
+            </div>
         </div>
 
-        <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid var(--gray-light);">
-        
-        <div class="form-group">
-            <label for="leadNotes">Notes</label>
-            <textarea id="leadNotes" class="form-textarea" placeholder="Add notes about this lead...">${currentLead.notes || ''}</textarea>
+        <!-- History Tab (Timeline) -->
+        <div id="tab-history" class="modal-tab-content">
+            <div id="historyTimeline" class="timeline">
+                <div style="text-align: center; color: #999;">Loading history...</div>
+            </div>
         </div>
-        <button class="btn btn--primary" onclick="saveNotes()">Save Notes</button>
     `;
 
     leadModal.classList.add('active');
+}
+
+function getStatusBadge(status) {
+    if (!status) return '';
+    const styles = {
+        'sent': 'background: #e2e8f0; color: #475569;',
+        'delivered': 'background: #dcfce7; color: #166534;',
+        'opened': 'background: #dbeafe; color: #1e40af;',
+        'clicked': 'background: #fae8ff; color: #86198f;',
+        'failed': 'background: #fee2e2; color: #991b1b;',
+        'error': 'background: #fee2e2; color: #991b1b;'
+    };
+    const labels = {
+        'sent': 'Sent',
+        'delivered': 'Delivered',
+        'opened': 'Opened',
+        'clicked': 'Clicked',
+        'failed': 'Failed',
+        'error': 'Error'
+    };
+    return `<span style="padding: 2px 6px; border-radius: 4px; font-weight: 500; ${styles[status] || styles['sent']}">${labels[status] || status}</span>`;
+}
+
+// Load Contact History (Timeline)
+async function loadContactHistory(lead) {
+    const timelineContainer = document.getElementById('historyTimeline');
+    if (!timelineContainer) return;
+
+    timelineContainer.innerHTML = '<div style="text-align: center; color: #999;">Loading conversation history...</div>';
+
+    try {
+        const db = window.CanvasFirebase.getDb();
+
+        // NEW APPROACH: Client-side sorting to bypass complex Index requirements
+        // 1. Try fetching by Contact ID (reliable)
+        let snapshot = await db.collection('communicationLogs')
+            .where('contactId', '==', lead.id)
+            .get();
+
+        // 2. If no ID match or just to cover bases, we could query by email, 
+        // but 'IN' queries + Sort are what caused the error.
+        // Let's rely on Contact ID for now as it's saved by the new system.
+
+        // If empty and we have an email, try simple email query (without sort)
+        if (snapshot.empty && lead.email) {
+            snapshot = await db.collection('communicationLogs')
+                .where('recipient', '==', lead.email)
+                .get();
+        }
+
+        if (snapshot.empty) {
+            timelineContainer.innerHTML = '<div class="empty-state">No history found. (0 messages)</div>';
+            return;
+        }
+
+        let logs = snapshot.docs.map(doc => doc.data());
+
+        // Manual Sort (Newest First)
+        logs.sort((a, b) => {
+            const tA = a.timestamp ? (a.timestamp.seconds || 0) : 0;
+            const tB = b.timestamp ? (b.timestamp.seconds || 0) : 0;
+            return tB - tA;
+        });
+
+        timelineContainer.innerHTML = logs.map(log => {
+            const isEmail = log.type === 'email';
+            const icon = isEmail ? '📧' : '💬';
+            const typeClass = isEmail ? 'email' : 'sms';
+
+            // Safe access to content
+            const content = log.content || {};
+            const subject = content.subject || 'No Subject';
+            const body = content.body || content.message || ''; // Handle both fields
+
+            const title = isEmail ? (subject) : 'SMS Sent';
+
+            return `
+                <div class="timeline-item">
+                    <div class="timeline-icon ${typeClass}">${icon}</div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <strong>${escapeHtml(title)}</strong>
+                            <span class="timeline-date">${formatDate(log.timestamp)} ${formatTime(log.timestamp)}</span>
+                        </div>
+                        <div class="timeline-body">
+                            ${body ? `<p>${escapeHtml(body)}</p>` : `<small>Template: ${content.templateId || 'N/A'}</small>`}
+                            
+                            <div style="margin-top: 5px; font-size: 0.8em;">
+                                ${getStatusBadge(log.status)}
+                                ${log.error ? `<span style="color:red; margin-left: 5px;">(${log.error})</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+    } catch (e) {
+        console.error("Error loading history:", e);
+        timelineContainer.innerHTML = `<div style="color: red; text-align: center;">Error loading history: ${e.message}</div>`;
+    }
 }
 
 // Save notes
@@ -373,6 +570,35 @@ function filterLeads() {
     renderLeads(filtered);
 }
 
+
+// Delete Lead
+async function deleteLead(leadId) {
+    if (!confirm('Are you sure you want to delete this lead? This action cannot be undone.')) {
+        return;
+    }
+
+    try {
+        await window.CanvasFirebase.deleteLead(leadId);
+
+        // Update local state
+        allLeads = allLeads.filter(l => l.id !== leadId);
+        updateStats();
+
+        // Re-render table (applying current filters)
+        filterLeads();
+
+        // Force reload from server to ensure UI is in sync (fixes "didn't disappear" issue)
+        await loadLeads();
+
+        // Close modal
+        leadModal.classList.remove('active');
+
+    } catch (error) {
+        console.error('Error deleting lead:', error);
+        alert('Failed to delete lead: ' + error.message);
+    }
+}
+
 // Refresh
 refreshBtn.addEventListener('click', loadLeads);
 
@@ -400,6 +626,8 @@ function escapeHtml(text) {
 window.updateStatus = updateStatus;
 window.viewLead = viewLead;
 window.saveNotes = saveNotes;
+window.deleteLead = deleteLead;
+window.runCampaign = runCampaign;
 
 /* ===================================
    Email Templates Section
@@ -435,6 +663,98 @@ const DEFAULT_TEMPLATES = {
 let currentTemplateType = 'form';
 let templates = { ...DEFAULT_TEMPLATES };
 
+// ==========================================
+// ANALYTICS & CHARTS
+// ==========================================
+
+let deliveryChartInstance = null;
+let funnelChartInstance = null;
+
+async function loadAnalytics() {
+    const statsContainer = document.querySelector('#analyticsTab .stats');
+    if (statsContainer) statsContainer.style.opacity = '0.5';
+
+    try {
+        const getAggregatedStats = window.CanvasFirebase.functions.httpsCallable('getAggregatedStats');
+        const result = await getAggregatedStats();
+        const data = result.data;
+
+        const email = data.email;
+
+        // Calculate Rates
+        const openRate = email.delivered > 0 ? ((email.opened / email.delivered) * 100).toFixed(1) : 0;
+        const clickRate = email.delivered > 0 ? ((email.clicked / email.delivered) * 100).toFixed(1) : 0;
+        const bounceRate = email.sent > 0 ? ((email.failed / email.sent) * 100).toFixed(1) : 0;
+
+        // Update Stat Cards
+        document.getElementById('emailSent').textContent = email.sent;
+        document.getElementById('emailOpenRate').textContent = openRate + '%';
+        document.getElementById('emailClickRate').textContent = clickRate + '%';
+        document.getElementById('emailBounceRate').textContent = bounceRate + '%';
+
+        // Update Charts
+        updateCharts(email);
+
+    } catch (error) {
+        console.error("Analytics Error:", error);
+        alert("Failed to load analytics: " + error.message);
+    } finally {
+        if (statsContainer) statsContainer.style.opacity = '1';
+    }
+}
+
+function updateCharts(emailData) {
+    const deliveryCtx = document.getElementById('deliveryChart').getContext('2d');
+    const funnelCtx = document.getElementById('funnelChart').getContext('2d');
+
+    // 1. Delivery Pie Chart
+    if (deliveryChartInstance) deliveryChartInstance.destroy();
+
+    deliveryChartInstance = new Chart(deliveryCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Delivered', 'Failed'],
+            datasets: [{
+                data: [emailData.delivered, emailData.failed],
+                backgroundColor: ['#10B981', '#EF4444'], // Green, Red
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+
+    // 2. Funnel Bar Chart
+    if (funnelChartInstance) funnelChartInstance.destroy();
+
+    funnelChartInstance = new Chart(funnelCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Sent', 'Delivered', 'Opened', 'Clicked'],
+            datasets: [{
+                label: 'Email Counts',
+                data: [emailData.sent, emailData.delivered, emailData.opened, emailData.clicked],
+                backgroundColor: ['#6366F1', '#10B981', '#3B82F6', '#8B5CF6'],
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+}
 // Tab Navigation
 document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', function () {
@@ -450,7 +770,8 @@ document.querySelectorAll('.tab').forEach(tab => {
             const labels = {
                 'leads': 'Leads Dashboard',
                 'emails': 'Automation Workflows',
-                'logs': 'Activity Logs'
+                'logs': 'Activity Logs',
+                'analytics': 'Analytics'
             };
             pageTitle.textContent = labels[tabId] || 'Dashboard';
         }
@@ -477,6 +798,11 @@ document.querySelectorAll('.tab').forEach(tab => {
         if (tabId === 'logs') {
             loadLogs();
         }
+
+        // Load analytics when switching to analytics tab
+        if (tabId === 'analytics') {
+            loadAnalytics();
+        }
     });
 });
 
@@ -493,30 +819,52 @@ async function loadLogs() {
 
     if (!logsBody) return;
 
-    logsLoading.style.display = 'block';
-    logsEmpty.style.display = 'none';
+    if (logsLoading) logsLoading.style.display = 'block';
+    if (logsEmpty) logsEmpty.style.display = 'none';
     logsBody.innerHTML = '';
 
     try {
-        const db = window.CanvasFirebase.getDb();
+        // Ensure DB initialized
+        let db = window.CanvasFirebase.getDb();
+        if (!db) {
+            window.CanvasFirebase.init();
+            db = window.CanvasFirebase.getDb();
+        }
+
+        if (!db) throw new Error("Database not initialized");
+
+        // Use a simpler query first to debug
         const snapshot = await db.collection('communicationLogs')
-            .orderBy('timestamp', 'desc')
-            .limit(50)
+            .limit(20)
             .get();
 
         if (snapshot.empty) {
-            logsLoading.style.display = 'none';
-            logsEmpty.style.display = 'block';
+            if (logsLoading) logsLoading.style.display = 'none';
+            if (logsEmpty) {
+                logsEmpty.style.display = 'block';
+                logsEmpty.innerHTML = `
+                    <p>No logs found in 'communicationLogs' collection.</p>
+                    <p><small>(This means no emails/SMS have been successfully logged yet.)</small></p>
+                `;
+            }
             return;
         }
 
-        const logs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        let logs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        // Client-side Sort (Newest First)
+        logs.sort((a, b) => {
+            const tA = a.timestamp && a.timestamp.seconds ? a.timestamp.seconds : 0;
+            const tB = b.timestamp && b.timestamp.seconds ? b.timestamp.seconds : 0;
+            return tB - tA;
+        });
+
         renderLogs(logs);
-        logsLoading.style.display = 'none';
+        if (logsLoading) logsLoading.style.display = 'none';
 
     } catch (error) {
         console.error('Error loading logs:', error);
-        logsLoading.innerHTML = 'Error loading logs.';
+        if (logsLoading) logsLoading.innerHTML = `<p style="color:red">Error: ${error.message}</p><p><small>Check console for details.</small></p>`;
     }
 }
 
@@ -524,25 +872,47 @@ function renderLogs(logs) {
     const logsBody = document.getElementById('logsBody');
     if (!logsBody) return;
 
-    logsBody.innerHTML = logs.map(log => `
+    logsBody.innerHTML = logs.map(log => {
+        const type = log.type || 'unknown'; // default
+        const status = log.status || 'unknown';
+        const recipient = log.recipient || 'Unknown Recipient';
+
+        // Safe timestamp handling
+        let dateStr = '-';
+        if (log.timestamp) {
+            try {
+                dateStr = formatDate(log.timestamp) + ' ' + formatTime(log.timestamp);
+            } catch (e) { dateStr = 'Invalid Date'; }
+        }
+
+        const icon = type === 'email' ? '📧' : (type === 'sms' ? '💬' : '❓');
+        const badgeColor = type === 'email' ? 'blue' : (type === 'sms' ? 'green' : 'gray');
+
+        // Safe content handling
+        let details = '-';
+        if (log.content) {
+            details = log.content.subject || log.content.body || log.content.templateId || 'No content';
+        }
+
+        return `
         <tr>
-            <td>${formatDate(log.timestamp)} ${formatTime(log.timestamp)}</td>
+            <td>${dateStr}</td>
             <td>
-                <span class="badge badge--${log.type === 'email' ? 'blue' : 'green'}">
-                    ${log.type === 'email' ? '📧 Email' : '💬 SMS'}
+                <span class="badge badge--${badgeColor}">
+                    ${icon} ${type.toUpperCase()}
                 </span>
             </td>
-            <td>${escapeHtml(log.recipient)}</td>
+            <td>${escapeHtml(recipient)}</td>
             <td>
-                <span class="status-dot ${log.status === 'sent' ? 'status-dot--success' : 'status-dot--error'}"></span>
-                ${log.status}
+                <span class="status-dot ${status === 'sent' || status === 'delivered' ? 'status-dot--success' : 'status-dot--error'}"></span>
+                ${status.toUpperCase()}
             </td>
             <td>
-                <small>${log.content ? (log.content.subject || log.content.body || log.content.templateId || 'No content') : '-'}</small>
-                ${log.error ? `<div class="error-text">${log.error}</div>` : ''}
+                <small>${escapeHtml(details)}</small>
+                ${log.error ? `<div class="error-text">${escapeHtml(log.error)}</div>` : ''}
             </td>
         </tr>
-    `).join('');
+    `}).join('');
 }
 
 const refreshLogsBtn = document.getElementById('refreshLogsBtn');
@@ -576,6 +946,7 @@ const tmSubjectGroup = document.getElementById('tmSubjectGroup');
 const tmBody = document.getElementById('tmBody');
 const tmPreview = document.getElementById('tmPreview'); // NEW
 const tmDeleteBtn = document.getElementById('tmDeleteBtn');
+const tmTestBtn = document.getElementById('tmTestBtn');
 const createNewTemplateBtn = document.getElementById('createNewTemplateBtn');
 
 let currentTmSelection = null;
@@ -862,9 +1233,10 @@ function updateLivePreview() {
     }
 }
 
-if (saveTemplateBtn) {
-    saveTemplateBtn.addEventListener('click', saveTemplate);
-}
+
+/*
+ * Event listener moved to DOMContentLoaded
+ */
 
 
 
@@ -989,19 +1361,24 @@ function renderWorkflows() {
         <div class="workflow-card ${!workflow.enabled ? 'workflow-card--disabled' : ''}" data-id="${workflow.id}">
             <div class="workflow-card__header">
                 <span class="workflow-card__title">${escapeHtml(workflow.name)}</span>
-                <span class="workflow-card__status ${workflow.enabled ? 'workflow-card__status--active' : 'workflow-card__status--inactive'}">
-                    ${workflow.enabled ? '✓ Active' : 'Inactive'}
-                </span>
+                ${workflow.trigger === 'manual_campaign'
+            ? `<button class="btn btn--primary btn--small" onclick="event.stopPropagation(); runCampaign('${workflow.id}')" style="padding: 2px 8px; font-size: 0.75rem;">🚀 Run Now</button>`
+            : `<span class="workflow-card__status ${workflow.enabled ? 'workflow-card__status--active' : 'workflow-card__status--inactive'}">
+                        ${workflow.enabled ? '✓ Active' : 'Inactive'}
+                       </span>`
+        }
             </div>
             <div class="workflow-card__trigger">
                 ${TRIGGER_LABELS[workflow.trigger] || workflow.trigger}
                 ${workflow.trigger === 'status_change' && workflow.triggerStatus ? `→ ${workflow.triggerStatus}` : ''}
+                ${workflow.trigger === 'manual_campaign' ? ` (Target: ${workflow.targetStatus ? workflow.targetStatus.toUpperCase() : 'ALL'})` : ''}
             </div>
             <div class="workflow-card__details">
                 <div class="workflow-stats">
                     <span class="stat-bubble" title="Active Enrollments">👥 ${workflow.activeCount || 0} Active</span>
                     <span class="stat-bubble" title="Steps">⚡ ${workflow.steps ? workflow.steps.length : 1} Steps</span>
                     ${workflow.category ? `<span class="stat-bubble" style="background:#eee;">📁 ${escapeHtml(workflow.category)}</span>` : ''}
+                    <button class="btn btn--outline btn--small" onclick="event.stopPropagation(); showCampaignStats('${workflow.id}')" style="padding: 2px 6px; font-size: 0.7rem; margin-left: auto;">📊 Report</button>
                 </div>
             </div>
         </div>
@@ -1022,6 +1399,8 @@ function openCreateWorkflowModal() {
     document.getElementById('workflowCategory').value = currentWfFolder !== 'all' && currentWfFolder !== 'uncategorized' ? currentWfFolder : ''; // Set category
     document.getElementById('workflowTrigger').value = '';
     document.getElementById('triggerStatus').value = 'contacted';
+    const targetStatusEl = document.getElementById('targetStatus');
+    if (targetStatusEl) targetStatusEl.value = 'all';
 
     // Switch to settings tab
     switchWfTab('settings');
@@ -1029,6 +1408,9 @@ function openCreateWorkflowModal() {
 
     document.getElementById('workflowEnabled').checked = true;
     document.getElementById('statusTriggerConfig').style.display = 'none';
+    const audienceGroup = document.getElementById('audienceConfig');
+    if (audienceGroup) audienceGroup.style.display = 'none';
+
     document.getElementById('deleteWorkflowBtn').style.display = 'none';
     document.getElementById('workflowModal').classList.add('active');
 }
@@ -1053,13 +1435,22 @@ function editWorkflow(workflowId) {
     document.getElementById('workflowCategory').value = currentWorkflow.category || ''; // Populate category
     document.getElementById('workflowTrigger').value = currentWorkflow.trigger || '';
     document.getElementById('triggerStatus').value = currentWorkflow.triggerStatus || 'contacted';
+    document.getElementById('targetStatus').value = currentWorkflow.targetStatus || 'all'; // NEW
 
     switchWfTab('settings');
     renderSteps();
 
     document.getElementById('workflowEnabled').checked = currentWorkflow.enabled !== false;
+
+    // Show correct config sections
     document.getElementById('statusTriggerConfig').style.display =
         currentWorkflow.trigger === 'status_change' ? 'block' : 'none';
+
+    const audienceGroup = document.getElementById('audienceConfig');
+    if (audienceGroup) {
+        audienceGroup.style.display = currentWorkflow.trigger === 'manual_campaign' ? 'block' : 'none';
+    }
+
     document.getElementById('deleteWorkflowBtn').style.display = 'block';
     document.getElementById('workflowModal').classList.add('active');
 }
@@ -1074,34 +1465,79 @@ function renderSteps() {
         return;
     }
 
-    list.innerHTML = currentWorkflow.steps.map((step, index) => `
+    list.innerHTML = currentWorkflow.steps.map((step, index) => {
+        // Fix labels
+        let label = step.type.toUpperCase();
+        if (label === 'TASK') label = 'ACTION'; // Rename TASKS to ACTIONS for clarity if they exist
+
+        return `
         <div class="workflow-step-item">
             <div class="step-header">
                 <span class="step-badge step-badge--${step.type}">
-                    ${step.type === 'email' ? '📧' : step.type === 'sms' ? '💬' : '⏳'} ${step.type.toUpperCase()}
+                    ${step.type === 'email' ? '📧' : step.type === 'sms' ? '💬' : '⏳'} ${label}
                 </span>
-                <button type="button" class="btn-icon-danger" onclick="removeStep(${index})">×</button>
+                <div class="step-actions">
+                    ${index > 0 ? `<button type="button" class="btn-icon-move" onclick="moveStep(${index}, -1)" title="Move Up">⬆️</button>` : ''}
+                    ${index < currentWorkflow.steps.length - 1 ? `<button type="button" class="btn-icon-move" onclick="moveStep(${index}, 1)" title="Move Down">⬇️</button>` : ''}
+                    <button type="button" class="btn-icon-danger" onclick="removeStep(${index})" title="Remove">×</button>
+                </div>
             </div>
             
             <div class="step-config">
                 ${step.type === 'delay' ? `
-                    <label>Wait (minutes)</label>
-                    <input type="number" class="form-input step-input" value="${step.delay || 0}" 
-                        onchange="updateStep(${index}, 'delay', this.value)">
-                ` : `
-                    <label>Template ID</label>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div style="display: flex; gap: 0.5rem; align-items: flex-end;">
+                            <div style="flex: 1.5;">
+                                <label>Wait</label>
+                                <input type="number" class="form-input step-input" value="${step.delay || 0}" 
+                                    onchange="updateStep(${index}, 'delay', this.value)">
+                            </div>
+                            <div style="flex: 1;">
+                                <label>Unit</label>
+                                <select class="form-select step-input" onchange="updateStep(${index}, 'unit', this.value)">
+                                    <option value="minutes" ${step.unit === 'minutes' ? 'selected' : ''}>Minutes</option>
+                                    <option value="hours" ${step.unit === 'hours' ? 'selected' : ''}>Hours</option>
+                                    <option value="days" ${step.unit === 'days' || !step.unit ? 'selected' : ''}>Days</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 0.5rem; align-items: flex-end;">
+                            <div style="flex: 1;">
+                                <label>Timing</label>
+                                <select class="form-select step-input" onchange="updateStep(${index}, 'timing', this.value)">
+                                    <option value="after" ${step.timing === 'after' || !step.timing ? 'selected' : ''}>After</option>
+                                    <option value="before" ${step.timing === 'before' ? 'selected' : ''}>Before</option>
+                                </select>
+                            </div>
+                            <div style="flex: 1.5;">
+                                <label>Relative To</label>
+                                <select class="form-select step-input" onchange="updateStep(${index}, 'relativeTo', this.value)">
+                                    <option value="now" ${step.relativeTo === 'now' || !step.relativeTo ? 'selected' : ''}>Previous Step</option>
+                                    <option value="event" ${step.relativeTo === 'event' ? 'selected' : ''}>Appointment Time</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+` : `
+                    <label>${step.type === 'task' ? 'Description' : 'Template ID'}</label>
                     <div style="display: flex; gap: 0.5rem;">
-                        <select class="form-select step-input" onchange="updateStep(${index}, 'templateId', this.value)" style="flex:1;">
-                            <option value="">Select Template...</option>
-                            ${(step.type === 'sms' ? allSmsTemplates : allEmailTemplates).map(t => `
-                                <option value="${t.id}" ${step.templateId === t.id ? 'selected' : ''}>
-                                    ${t.name || t.id}
-                                </option>
-                            `).join('')}
-                        </select>
-                        <button type="button" class="btn btn--outline btn--small" onclick="toggleStepPreview(${index})" title="Preview Content">
-                            👁️
-                        </button>
+                        ${step.type === 'task' ? `
+                            <input type="text" class="form-input step-input" value="${step.description || ''}" 
+                                onchange="updateStep(${index}, 'description', this.value)" placeholder="e.g. Call client" style="flex:1;">
+                        ` : `
+                            <select class="form-select step-input" onchange="updateStep(${index}, 'templateId', this.value)" style="flex:1;">
+                                <option value="">Select Template...</option>
+                                ${(step.type === 'sms' ? allSmsTemplates : allEmailTemplates).map(t => `
+                                    <option value="${t.id}" ${step.templateId === t.id ? 'selected' : ''}>
+                                        ${t.name || t.id}
+                                    </option>
+                                `).join('')}
+                            </select>
+                            <button type="button" class="btn btn--outline btn--small" onclick="toggleStepPreview(${index})" title="Preview Content">
+                                👁️
+                            </button>
+                        `}
                     </div>
                     <div id="step-preview-${index}" class="step-preview-box" style="display: none; margin-top: 0.5rem; border: 1px solid #ddd; padding: 0.5rem; background: #fff; border-radius: 4px; max-height: 200px; overflow-y: auto;">
                         <small style="color: #999;">Loading...</small>
@@ -1109,7 +1545,7 @@ function renderSteps() {
                 `}
             </div>
         </div>
-    `).join('');
+    `}).join('');
 }
 
 // Toggle Step Preview
@@ -1158,8 +1594,12 @@ function addStep(type) {
     if (!currentWorkflow.steps) currentWorkflow.steps = [];
 
     const newStep = { type };
-    if (type === 'delay') newStep.delay = 1440; // Default 1 day
-    else newStep.templateId = 'form';
+    if (type === 'delay') {
+        newStep.delay = 1;
+        newStep.unit = 'days';
+    } else {
+        newStep.templateId = '';
+    }
 
     currentWorkflow.steps.push(newStep);
     renderSteps();
@@ -1167,7 +1607,21 @@ function addStep(type) {
 
 // Remove Step
 function removeStep(index) {
-    currentWorkflow.steps.splice(index, 1);
+    if (confirm('Are you sure you want to remove this step?')) {
+        currentWorkflow.steps.splice(index, 1);
+        renderSteps();
+    }
+}
+
+// Move Step (Reorder)
+function moveStep(index, direction) {
+    const steps = currentWorkflow.steps;
+    const newIndex = index + direction;
+
+    if (newIndex < 0 || newIndex >= steps.length) return;
+
+    // Swap
+    [steps[index], steps[newIndex]] = [steps[newIndex], steps[index]];
     renderSteps();
 }
 
@@ -1199,12 +1653,13 @@ function closeWorkflowModal() {
 async function saveWorkflow(e) {
     e.preventDefault();
 
+    const trigger = document.getElementById('workflowTrigger').value;
     const workflowData = {
         name: document.getElementById('workflowName').value.trim(),
-        category: document.getElementById('workflowCategory').value.trim() || null, // NEW
-        trigger: document.getElementById('workflowTrigger').value,
-        triggerStatus: document.getElementById('workflowTrigger').value === 'status_change'
-            ? document.getElementById('triggerStatus').value : null,
+        category: document.getElementById('workflowCategory').value.trim() || null,
+        trigger: trigger,
+        triggerStatus: trigger === 'status_change' ? document.getElementById('triggerStatus').value : null,
+        targetStatus: trigger === 'manual_campaign' ? document.getElementById('targetStatus').value : null, // NEW: Campaign Audience
         steps: currentWorkflow.steps || [],
         enabled: document.getElementById('workflowEnabled').checked,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -1236,6 +1691,89 @@ async function saveWorkflow(e) {
     }
 }
 
+// Run Campaign (Manual Workflow)
+// Run Campaign (Manual Workflow)
+async function runCampaign(workflowId) {
+    const workflow = allWorkflows.find(w => w.id === workflowId);
+    if (!workflow) return;
+
+    const targetStatus = workflow.targetStatus || 'all';
+
+    // 1. Filter Audience
+    let audience = allLeads;
+    if (targetStatus !== 'all') {
+        audience = allLeads.filter(l => l.status === targetStatus);
+    }
+
+    // SMART BATCHING: Filter out leads who have already started this workflow
+    const initialCount = audience.length;
+    audience = audience.filter(l => {
+        return !l.workflows || !l.workflows[workflowId];
+    });
+
+    const eligibleCount = audience.length;
+    const excludedCount = initialCount - eligibleCount;
+
+    if (eligibleCount === 0) {
+        alert(`No eligible leads found with status "${targetStatus}".\n(${excludedCount} leads were excluded because they are already enrolled).`);
+        return;
+    }
+
+    // Prompt for Batch Size
+    const batchSizeInput = prompt(
+        `🚀 Ready to launch "${workflow.name}"?\n\n` +
+        `Target: ${targetStatus === 'all' ? 'All Leads' : targetStatus.toUpperCase()}\n` +
+        `Eligible Audience: ${eligibleCount} leads\n` +
+        `${excludedCount > 0 ? `(Excluded ${excludedCount} already enrolled leads)\n` : ''}\n` +
+        `How many leads do you want to start now? (Enter number)`,
+        Math.min(50, eligibleCount)
+    );
+
+    if (batchSizeInput === null) return; // Cancelled
+
+    let limit = parseInt(batchSizeInput);
+    if (isNaN(limit) || limit <= 0) {
+        alert("Invalid number entered.");
+        return;
+    }
+
+    if (limit > eligibleCount) limit = eligibleCount;
+
+    // Slice audience to limit
+    const targetBatch = audience.slice(0, limit);
+
+    if (!confirm(`Confirm sending to ${targetBatch.length} leads?`)) {
+        return;
+    }
+
+    // 2. Execution Logic (Cloud Function)
+    const btn = document.querySelector(`button[onclick*="runCampaign('${workflowId}')"]`);
+    if (btn) btn.innerText = 'Processing...';
+
+    try {
+        const processBulk = firebase.functions().httpsCallable('processBulkCampaign');
+        const result = await processBulk({
+            workflowId: workflowId,
+            limit: limit
+        });
+
+        const data = result.data;
+        if (data.success) {
+            alert(`✅ ${data.message}`);
+        } else {
+            alert(`⚠️ Warning: ${data.message || 'Unknown response'}`);
+        }
+
+        // Real-time listener will update the list automatically
+
+    } catch (e) {
+        console.error('Campaign Error:', e);
+        alert('Error executing campaign: ' + e.message);
+    } finally {
+        if (btn) btn.innerText = '🚀 Run Now'; // Reset
+    }
+}
+
 // Delete workflow
 async function deleteWorkflow() {
     if (!currentWorkflow) return;
@@ -1254,6 +1792,68 @@ async function deleteWorkflow() {
 }
 
 
+
+// Delete Template Listener
+if (tmDeleteBtn) {
+    tmDeleteBtn.addEventListener('click', async () => {
+        if (!confirm('Are you sure you want to delete this template?')) return;
+
+        try {
+            const id = document.getElementById('tmId').value;
+            await window.CanvasFirebase.deleteTemplate(id); // Ensure this function exists in firebase-config.js or implement here
+            document.getElementById('tmForm').style.display = 'none';
+            document.getElementById('tmEmptyState').style.display = 'flex';
+            loadTemplates(); // Refresh list
+        } catch (error) {
+            console.error(error);
+            alert('Failed to delete template: ' + error.message);
+        }
+    });
+}
+
+// Test Template Listener
+if (tmTestBtn) {
+    tmTestBtn.addEventListener('click', async (e) => {
+        e.preventDefault(); // Prevent form submission if inside form
+
+        const type = document.getElementById('tmType').value;
+        const subject = document.getElementById('tmSubject').value;
+        const body = document.getElementById('tmBody').value;
+
+        const testRecipient = prompt(`Enter ${type === 'email' ? 'email' : 'phone number'} to send test to:`);
+        if (!testRecipient) return;
+
+        if (!body || !body.trim()) {
+            alert('Please enter message content before sending a test.');
+            return;
+        }
+
+        const btn = e.target;
+        const originalText = btn.textContent;
+        btn.textContent = 'Sending...';
+        btn.disabled = true;
+
+        try {
+            const sendDirectMessage = window.CanvasFirebase.functions.httpsCallable('sendDirectMessage');
+
+            await sendDirectMessage({
+                contactId: 'TEST-USER',
+                type,
+                recipient: testRecipient,
+                subject: type === 'email' ? (subject || 'Test Email') : null,
+                content: body
+            });
+
+            alert('Test message sent successfully!');
+        } catch (error) {
+            console.error('Error sending test:', error);
+            alert('Failed to send test: ' + error.message);
+        } finally {
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
+    });
+}
 
 // Load ALL templates from collections (for dropdowns)
 async function loadAllTemplates() {
@@ -1282,3 +1882,206 @@ window.addStep = addStep;
 window.removeStep = removeStep;
 window.updateStep = updateStep;
 window.toggleStepPreview = toggleStepPreview;
+window.openComposeModal = openComposeModal;
+
+/* ===================================
+   Direct Messaging Logic
+   =================================== */
+const composeModal = document.getElementById('composeModal');
+const closeComposeModal = document.getElementById('closeComposeModal');
+const composeForm = document.getElementById('composeForm');
+
+if (closeComposeModal) {
+    closeComposeModal.addEventListener('click', () => composeModal.classList.remove('active'));
+}
+
+if (composeModal) {
+    composeModal.addEventListener('click', (e) => {
+        if (e.target === composeModal) composeModal.classList.remove('active');
+    });
+}
+
+function openComposeModal(type) {
+    if (!currentLead) return;
+
+    // Reset Form
+    document.getElementById('composeType').value = type;
+    document.getElementById('composeContactId').value = currentLead.id;
+
+    // Set Recipient
+    const recipient = type === 'email' ? currentLead.email : currentLead.phone;
+    if (!recipient) {
+        alert(`This contact does not have a valid ${type === 'email' ? 'email address' : 'phone number'}.`);
+        return;
+    }
+    document.getElementById('composeRecipient').value = recipient;
+
+    // Update Title
+    document.getElementById('composeTitle').textContent = type === 'email' ? 'New Email' : 'New SMS';
+
+    // Toggle Subject (Email Only)
+    const subjectGroup = document.getElementById('composeSubjectGroup');
+    if (type === 'email') {
+        subjectGroup.style.display = 'block';
+        document.getElementById('composeSubject').required = true;
+    } else {
+        subjectGroup.style.display = 'none';
+        document.getElementById('composeSubject').required = false;
+    }
+
+    // Reset Fields
+    document.getElementById('composeSubject').value = '';
+    document.getElementById('composeContent').value = '';
+
+    composeModal.classList.add('active');
+}
+
+if (composeForm) {
+    composeForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const btn = document.getElementById('btnSendDirect');
+        const originalText = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Sending...';
+
+        const type = document.getElementById('composeType').value;
+        const contactId = document.getElementById('composeContactId').value;
+        const recipient = document.getElementById('composeRecipient').value;
+        const subject = document.getElementById('composeSubject').value;
+        const content = document.getElementById('composeContent').value;
+
+        try {
+            const sendDirectMessage = window.CanvasFirebase.functions.httpsCallable('sendDirectMessage');
+
+            const result = await sendDirectMessage({
+                contactId,
+                type,
+                recipient,
+                subject: type === 'email' ? subject : null,
+                content
+            });
+
+            if (result.data && result.data.success) {
+                alert('Message sent successfully!');
+                composeModal.classList.remove('active');
+
+                // Refresh History if open
+                if (document.querySelector('.modal-tab[data-modal-tab="history"]').classList.contains('active')) {
+                    loadContactHistory(currentLead);
+                }
+            } else {
+                throw new Error(result.data?.error || 'Unknown error');
+            }
+
+        } catch (error) {
+            console.error('Error sending message:', error);
+            alert('Failed to send message: ' + error.message);
+        } finally {
+            btn.disabled = false;
+            btn.textContent = originalText;
+        }
+    });
+}
+
+// Campaign Stats Logic
+let statsUnsubscribe = null;
+
+async function showCampaignStats(workflowId) {
+    const modal = document.getElementById('statsModal');
+    const tbody = document.getElementById('statsBody');
+    const totalEl = document.getElementById('statsTotal');
+    const deliveredEl = document.getElementById('statsDelivered');
+    const opensEl = document.getElementById('statsOpens');
+    const clicksEl = document.getElementById('statsClicks');
+
+    // Reset UI
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Loading logs...</td></tr>';
+    totalEl.textContent = '0';
+    deliveredEl.textContent = '0';
+    opensEl.textContent = '0%';
+    clicksEl.textContent = '0%';
+    modal.classList.add('active');
+
+    if (statsUnsubscribe) statsUnsubscribe();
+
+    const db = window.CanvasFirebase.getDb();
+
+    // Query logs for this workflow
+    const q = db.collection('communicationLogs')
+        .where('content.workflowId', '==', workflowId)
+        .orderBy('timestamp', 'desc')
+        .limit(200);
+
+    statsUnsubscribe = q.onSnapshot(snapshot => {
+        const logs = [];
+        let total = 0;
+        let delivered = 0;
+        let opens = 0;
+        let clicks = 0;
+
+        snapshot.forEach(doc => {
+            const log = doc.data();
+            logs.push(log);
+            total++;
+
+            if (log.status === 'delivered' || log.status === 'opened' || log.status === 'clicked') delivered++;
+            if (log.status === 'opened' || log.status === 'clicked') opens++;
+            if (log.status === 'clicked') clicks++;
+        });
+
+        // Update Summary
+        totalEl.textContent = total;
+        deliveredEl.textContent = total > 0 ? `${delivered} (${Math.round(delivered / total * 100)}%)` : '0';
+        opensEl.textContent = delivered > 0 ? `${Math.round(opens / delivered * 100)}%` : '0%';
+        clicksEl.textContent = opens > 0 ? `${Math.round(clicks / opens * 100)}%` : '0%';
+
+        // Render Table
+        if (logs.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#999;">No activity recorded yet.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = logs.map(log => {
+            const date = log.timestamp && log.timestamp.toDate ? log.timestamp.toDate() : new Date();
+            let statusColor = '#666';
+            if (log.status === 'sent') statusColor = '#2196F3'; // Blue
+            if (log.status === 'delivered') statusColor = '#4CAF50'; // Green
+            if (log.status === 'opened') statusColor = '#9C27B0'; // Purple
+            if (log.status === 'failed') statusColor = '#F44336'; // Red
+
+            return `
+                <tr>
+                    <td>${date.toLocaleString()}</td>
+                    <td>${escapeHtml(log.recipient)}</td>
+                    <td>
+                        <span class="status-badge" style="background:${statusColor}; color:white; padding:2px 6px; border-radius:4px; font-size:0.75rem;">
+                            ${log.status.toUpperCase()}
+                        </span>
+                        ${log.error ? `<small style="display:block; color:red;">${log.error}</small>` : ''}
+                    </td>
+                    <td>
+                        ${log.type === 'email' ? '📧' : '💬'}
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+    }, error => {
+        console.error("Error loading stats:", error);
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:red;">Error loading stats. Check console.<br>You likely need to deploy the index.</td></tr>`;
+    });
+
+    // Handle Close
+    const closeBtn = document.getElementById('closeStatsModal');
+    closeBtn.onclick = () => {
+        modal.classList.remove('active');
+        if (statsUnsubscribe) statsUnsubscribe();
+    };
+
+    // Refresh button
+    const refreshBtn = document.getElementById('refreshStatsBtn');
+    refreshBtn.onclick = () => {
+        // Re-trigger (onSnapshot handles live, but user might want force refresh if connection drop)
+    };
+}

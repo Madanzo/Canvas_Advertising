@@ -2,41 +2,49 @@
 
 > 🖨️ Austin's Full-Service Print Shop | Signs, Wraps & More
 
-A modern, responsive website for **Canvas Advertising LLC** — a commercial printing and signage company located in Austin, TX.
+A modern, full-stack web application for **Canvas Advertising LLC** — a commercial printing and signage company located in Austin, TX.
 
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=firebase&logoColor=black)
+![Google Cloud](https://img.shields.io/badge/Google_Cloud-4285F4?style=flat&logo=google-cloud&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
 
 ---
 
 ## 📋 Overview
 
-Canvas Advertising provides comprehensive printing and branding services including:
+This project is a comprehensive business solution combining a customer-facing website with a powerful custom internal CRM and automation engine.
 
-- **Commercial Printing** — Business cards, brochures, flyers, menus, posters
-- **Large-Format Graphics** — Banners, wall graphics, billboards, window graphics
-- **Vehicle Wraps** — Full wraps, partial wraps, fleet branding, food truck wraps
-- **Storefront Signage** — Channel letters, dimensional signs, A-frames, yard signs
-- **Interior Branding** — Wall murals, wayfinding signage, office & lobby signs
-- **Merch & Promotional** — T-shirts, caps, tote bags, corporate gifts
+### Customer-Facing Website
+- **Services Showcase**: Detailed pages for Wraps, Signage, and Printing.
+- **Lead Capture**: Dynamic quote requests and contact forms.
+- **Project Gallery**: Real-time project portfolio fetched from the database.
 
-### Key Features
-
-✅ FREE professional design with every project  
-✅ In-house production for complete quality control  
-✅ 3-5 business day turnaround (same-week available)  
-✅ Bilingual team (Hablamos Español 🇲🇽)  
-✅ Professional installation across Texas
+### Internal Admin Dashboard
+- **Lead Management**: Track leads from "New" to "Won".
+- **Contact History**: Timeline view of all emails and SMS messages.
+- **Workflow Automation**: Visual builder for automated email/SMS sequences.
+- **Template Manager**: Edit HTML emails and SMS templates directly.
+- **Direct Messaging**: Send quick emails or texts to clients from the dashboard.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **HTML5** — Semantic markup with structured data (JSON-LD)
-- **CSS3** — Modern responsive design with custom properties
-- **JavaScript** — Interactive gallery, before/after slider, form handling
-- **Google Fonts** — Bebas Neue & DM Sans typography
+### Frontend
+- **HTML5 / CSS3**: Custom responsive design without heavy frameworks.
+- **Vanilla JavaScript**: Lightweight interactions and dynamic DOM auditing.
+- **Firebase SDK**: Client-side connection for Auth and Firestore.
+
+### Backend (Serverless)
+- **Firebase Hosting**: Fast, secure global CDN.
+- **Cloud Functions for Firebase**: Node.js backend logic.
+- **Firestore (NoSQL)**: Real-time database for leads, templates, and logs.
+- **Authentication**: Google Sign-In for Admin access.
+
+### Integrations
+- **Resend**: Transactional email delivery.
+- **Plivo**: SMS messaging logic.
+- **Cal.com**: Booking system integration (webhooks).
 
 ---
 
@@ -44,12 +52,19 @@ Canvas Advertising provides comprehensive printing and branding services includi
 
 ```
 Canvas_Advertising/
-├── index.html          # Main website page
+├── admin.html          # Admin Dashboard entry point
+├── index.html          # Main landing page
 ├── css/
-│   └── styles.css      # All styles
+│   ├── admin.css       # Dashboard specific styles
+│   └── styles.css      # Main website styles
 ├── js/
-│   └── main.js         # Interactive functionality
-└── README.md           # This file
+│   ├── admin.js        # Dashboard logic (Auth, CRUD, UI)
+│   ├── main.js         # Frontend website logic
+│   └── firebase-config.js # Firebase initialization
+├── functions/          # Backend Logic (Cloud Functions)
+│   ├── index.js        # Main server entry point
+│   └── templates/      # Base HTML templates
+└── firestore.rules     # Database security rules
 ```
 
 ---
@@ -58,23 +73,40 @@ Canvas_Advertising/
 
 ### Local Development
 
-1. Clone the repository:
+1. **Clone the repository**:
    ```bash
    git clone https://github.com/Madanzo/Canvas_Advertising.git
+   cd Canvas_Advertising
    ```
 
-2. Open `index.html` in your browser or use a local server:
+2. **Install Backend Dependencies**:
+   ```bash
+   cd functions
+   npm install
+   ```
+
+3. **Set up Environment**:
+   - Ensure you have the `firebase-tools` CLI installed.
+   - Login: `firebase login`.
+   - Select project: `firebase use default`.
+
+4. **Run Local Emulators** (Optional but recommended for Function testing):
+   ```bash
+   firebase emulators:start
+   ```
+
+5. **Serve Frontend**:
    ```bash
    npx serve .
    ```
 
 ### Deployment
 
-This is a static website that can be deployed to any hosting platform:
+Deploy both the frontend (Hosting) and backend (Functions):
 
-- **Vercel**: Simply connect your GitHub repo
-- **Netlify**: Drag and drop the project folder
-- **GitHub Pages**: Enable in repository settings
+```bash
+firebase deploy
+```
 
 ---
 
@@ -91,4 +123,4 @@ This is a static website that can be deployed to any hosting platform:
 
 ## 📄 License
 
-© 2025 Canvas Advertising LLC. All rights reserved.
+© 2026 Canvas Advertising LLC. All rights reserved.

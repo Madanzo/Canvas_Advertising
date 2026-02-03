@@ -1,0 +1,33 @@
+{
+    "indexes": [
+        {
+            "collectionGroup": "communicationLogs",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "recipient",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "timestamp",
+                    "order": "DESCENDING"
+                }
+            ]
+        },
+        {
+            "collectionGroup": "communicationLogs",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "content.workflowId",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "timestamp",
+                    "order": "DESCENDING"
+                }
+            ]
+        }
+    ],
+    "fieldOverrides": []
+}

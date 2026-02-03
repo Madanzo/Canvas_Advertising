@@ -1,6 +1,6 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const plivo = require('plivo');
+const telnyx = require('telnyx');
 const { Resend } = require('resend');
 
 // Initialize Firebase Admin
@@ -8,14 +8,14 @@ admin.initializeApp();
 const db = admin.firestore();
 
 // ----------------------------------------------------------------------
-// INTEGRATIONS: Resend & Plivo
+// INTEGRATIONS: Resend & Telnyx
 // ----------------------------------------------------------------------
 
 // 1. Get Resend Client (Lazy)
 let resend = null;
 function getResend() {
     if (!resend) {
-        const apiKey = process.env.RESEND_API_KEY || functions.config().resend?.api_key || 're_123';
+        const apiKey = process.env.RESEND_API_KEY || functions.config().resend?.api_key;
         if (!apiKey) {
             console.warn('Resend API Key missing.');
             return null;
@@ -25,19 +25,18 @@ function getResend() {
     return resend;
 }
 
-// 2. Get Plivo Client (Lazy)
-let plivoClient = null;
-function getPlivo() {
-    if (!plivoClient) {
-        const authId = process.env.PLIVO_AUTH_ID || functions.config().plivo?.auth_id;
-        const authToken = process.env.PLIVO_AUTH_TOKEN || functions.config().plivo?.auth_token;
-        if (!authId || !authToken) {
-            console.warn('Plivo credentials missing.');
+// 2. Get Telnyx Client (Lazy)
+let telnyxClient = null;
+function getTelnyx() {
+    if (!telnyxClient) {
+        const apiKey = process.env.TELNYX_API_KEY || functions.config().telnyx?.api_key;
+        if (!apiKey) {
+            console.warn('Telnyx API Key missing.');
             return null;
         }
-        plivoClient = new plivo.Client(authId, authToken);
+        telnyxClient = telnyx(apiKey);
     }
-    return plivoClient;
+    return telnyxClient;
 }
 
 // Company Info
@@ -81,6 +80,7 @@ async function enrollContactInWorkflow(contactId, workflowId, contactData) {
             contactEmail: contactData.email,
             contactPhone: contactData.phone,
             contactName: contactData.name || contactData.firstName || 'Friend',
+            eventTime: contactData.eventTime || null, // NEW: Store appointment time
             status: 'active',
             currentStepIndex: 0,
             nextExecutionAt: admin.firestore.FieldValue.serverTimestamp(), // Execute Step 1 immediately
@@ -90,12 +90,90 @@ async function enrollContactInWorkflow(contactId, workflowId, contactData) {
         };
 
         await db.collection('workflowContacts').add(instanceData);
+
+        // Update Lead Document validation (for UI visibility)
+        await db.collection('canvas_leads').doc(contactId).update({
+            [`workflows.${workflowId}`]: {
+                status: 'active',
+                startedAt: admin.firestore.FieldValue.serverTimestamp()
+            }
+        });
+
         console.log(`Enrolled successfully.`);
 
     } catch (error) {
         console.error('Error enrolling in workflow:', error);
     }
 }
+
+/**
+ * HTTP Callable: Process Bulk Campaign
+ * Enrolls a batch of leads into a workflow
+ */
+exports.processBulkCampaign = functions.https.onCall(async (data, context) => {
+    // 1. Auth Check
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'User must be logged in.');
+    }
+
+    const { workflowId, limit, batchSize } = data;
+    const countLimit = limit || batchSize || 50;
+
+    console.log(`Processing bulk campaign: WF=${workflowId}, Limit=${countLimit}, User=${context.auth.uid}`);
+
+    try {
+        // 2. Get Workflow
+        const workflowDoc = await db.collection('canvas_workflows').doc(workflowId).get();
+        if (!workflowDoc.exists) {
+            throw new functions.https.HttpsError('not-found', 'Workflow not found');
+        }
+        const workflow = workflowDoc.data();
+
+        // 3. Query Leads (Backend Filtering)
+        let query = db.collection('canvas_leads');
+        const targetStatus = workflow.targetStatus || 'all';
+
+        if (targetStatus !== 'all') {
+            query = query.where('status', '==', targetStatus);
+        }
+
+        // We can't easily filter "not enrolled" in Firestore query if 'workflows' is a map.
+        // So we fetch and filter in memory (up to reasonable limits).
+        // For production scale, would need a dedicated 'enrollments' collection query, but this works for now.
+        const snapshot = await query.get();
+
+        let eligibleLeads = [];
+        snapshot.forEach(doc => {
+            const lead = doc.data();
+            // Check if already enrolled in THIS workflow
+            const isEnrolled = lead.workflows && lead.workflows[workflowId];
+            if (!isEnrolled) {
+                eligibleLeads.push({ id: doc.id, ...lead });
+            }
+        });
+
+        // 4. Apply Limit
+        const leadsToEnroll = eligibleLeads.slice(0, countLimit);
+        console.log(`Found ${eligibleLeads.length} eligible, enrolling ${leadsToEnroll.length}`);
+
+        // 5. Enroll Loop
+        const promises = leadsToEnroll.map(lead =>
+            enrollContactInWorkflow(lead.id, workflowId, lead)
+        );
+
+        await Promise.all(promises);
+
+        return {
+            success: true,
+            enrolled: leadsToEnroll.length,
+            message: `Enrolled ${leadsToEnroll.length} leads into "${workflow.name}".`
+        };
+
+    } catch (error) {
+        console.error('Bulk Campaign Error:', error);
+        throw new functions.https.HttpsError('internal', error.message);
+    }
+});
 
 /**
  * Process Workflow Queue (Scheduled Function)
@@ -177,9 +255,19 @@ async function processInstance(doc) {
                 updates.currentStepIndex = nextIndex;
 
                 // Calculate next delay
-                if (nextStep.delay) {
-                    // delay is in minutes
-                    const delayMillis = (nextStep.delay || 0) * 60 * 1000;
+                let delayMillis = (nextStep.delay || 0) * 60 * 1000; // default minutes
+                if (nextStep.unit === 'hours') {
+                    delayMillis = (nextStep.delay || 0) * 60 * 60 * 1000;
+                } else if (nextStep.unit === 'days') {
+                    delayMillis = (nextStep.delay || 0) * 24 * 60 * 60 * 1000;
+                }
+
+                if (nextStep.relativeTo === 'event' && instance.eventTime) {
+                    const eventTime = new Date(instance.eventTime).getTime();
+                    const offset = nextStep.timing === 'before' ? -delayMillis : delayMillis;
+                    const nextTime = eventTime + offset;
+                    updates.nextExecutionAt = admin.firestore.Timestamp.fromMillis(nextTime);
+                } else if (nextStep.delay) {
                     const nextTime = Date.now() + delayMillis;
                     updates.nextExecutionAt = admin.firestore.Timestamp.fromMillis(nextTime);
                 } else {
@@ -250,6 +338,8 @@ async function sendEmail({ to, templateId, variables, options = {} }) {
         return null;
     }
 
+    let html, subject;
+
     try {
         const resendClient = getResend();
         if (!resendClient) {
@@ -257,8 +347,8 @@ async function sendEmail({ to, templateId, variables, options = {} }) {
         }
 
         // 1. Resolve content (Template or Direct)
-        let html = options.html;
-        let subject = options.subject;
+        html = options.html;
+        subject = options.subject;
 
         if (templateId) {
             const template = await getEmailTemplate(templateId);
@@ -277,12 +367,19 @@ async function sendEmail({ to, templateId, variables, options = {} }) {
         if (!subject) subject = `Message from ${COMPANY_INFO.name}`;
 
         // 2. Send via Resend
-        const result = await resendClient.emails.send({
+        const payload = {
             from: 'Canvas Advertising <noreply@canvas-advertising.com>',
             to: to,
             subject: subject,
-            html: html
-        });
+            html: html,
+            tags: [
+                { name: 'workflowId', value: options.workflowId || 'none' },
+                { name: 'contactId', value: options.contactId || 'none' },
+                { name: 'campaign', value: 'true' }
+            ]
+        };
+
+        const result = await resendClient.emails.send(payload);
 
         if (result.error) {
             throw new Error(result.error.message);
@@ -526,7 +623,12 @@ exports.onNewLead = functions.firestore
 
 /**
  * Cal.com Webhook Handler
- * Receives booking notifications from Cal.com and saves them as leads
+ * Receives booking notifications from Cal.com and saves them as leads.
+ * 
+ * WHY: We use a custom webhook instead of Zapier because:
+ * 1. Low Latency: Lead is created instantly for fast "Welcome" email.
+ * 2. Data Integrity: We capture raw event times to schedule accurate "relative" reminders (e.g. 2 hours before).
+ * 3. Cost: No defined limit on events compared to Zapier tiers.
  */
 exports.calcomWebhook = functions.https.onRequest(async (req, res) => {
     // Enable CORS
@@ -592,6 +694,12 @@ exports.calcomWebhook = functions.https.onRequest(async (req, res) => {
         // Save to Firestore
         const docRef = await db.collection('canvas_leads').add(leadData);
         console.log('Lead created with ID:', docRef.id);
+
+        // Auto-enroll in booking workflow if it exists
+        await enrollContactInWorkflow(docRef.id, 'wf_booking', {
+            ...leadData,
+            eventTime: payload.startTime // Pass event time for relative reminders
+        });
 
         res.status(200).json({
             success: true,
@@ -725,10 +833,9 @@ exports.seedWorkflows = functions.https.onRequest(async (req, res) => {
                 trigger: 'form_submit',
                 enabled: true,
                 steps: [
-                    { type: 'email', templateId: 'welcome', delay: 0 }, // Immediate
-                    { type: 'sms', templateId: 'sms_welcome', delay: 2 }, // 2 min delay
-                    { type: 'task', description: 'Review new lead submission', delay: 0 },
-                    { type: 'email', templateId: 'follow_up_no_response', delay: 2880 } // 48 hours (2880 mins)
+                    { type: 'email', templateId: 'welcome', delay: 0, unit: 'minutes' }, // Immediate
+                    { type: 'sms', templateId: 'sms_welcome', delay: 2, unit: 'minutes' }, // 2 min delay
+                    { type: 'email', templateId: 'follow_up_no_response', delay: 2, unit: 'days' } // 2 days
                 ]
             },
             {
@@ -737,9 +844,9 @@ exports.seedWorkflows = functions.https.onRequest(async (req, res) => {
                 trigger: 'booking',
                 enabled: true,
                 steps: [
-                    { type: 'email', templateId: 'booking_confirmed', delay: 0 },
-                    { type: 'sms', templateId: 'sms_booking_confirmed', delay: 0 },
-                    { type: 'task', description: 'Prepare for consultation', delay: 0 }
+                    { type: 'email', templateId: 'booking_confirmed', delay: 0, unit: 'minutes' },
+                    { type: 'sms', templateId: 'sms_booking_confirmed', delay: 0, unit: 'minutes' },
+                    { type: 'sms', templateId: 'sms_booking_confirmed', delay: 2, unit: 'hours', relativeTo: 'event', timing: 'before' } // 2 hours before
                 ]
             },
             {
@@ -749,8 +856,8 @@ exports.seedWorkflows = functions.https.onRequest(async (req, res) => {
                 triggerStatus: 'completed',
                 enabled: true,
                 steps: [
-                    { type: 'email', templateId: 'thank_you_post_project', delay: 0 },
-                    { type: 'sms', templateId: 'sms_thank_you', delay: 10 } // 10 mins
+                    { type: 'email', templateId: 'thank_you_post_project', delay: 0, unit: 'minutes' },
+                    { type: 'sms', templateId: 'sms_thank_you', delay: 10, unit: 'minutes' }
                 ]
             }
         ];
@@ -932,5 +1039,315 @@ exports.seedTemplates = functions.https.onRequest(async (req, res) => {
     } catch (error) {
         console.error('Error seeding templates:', error);
         res.status(500).send(error.message);
+    }
+});
+
+/**
+ * Send a direct message (Email or SMS) to a contact
+ * Callable Function for Admin Dashboard
+ */
+exports.sendDirectMessage = functions.https.onCall(async (data, context) => {
+    // 1. Auth Check
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+
+    const { contactId, type, content, subject, recipient } = data;
+
+    // 2. Validation
+    if (!contactId || !type || !content) {
+        throw new functions.https.HttpsError('invalid-argument', 'Missing required fields: contactId, type, content.');
+    }
+
+    try {
+        let result;
+
+        // 3. Send Message
+        if (type === 'email') {
+            if (!subject) throw new functions.https.HttpsError('invalid-argument', 'Email requires a subject.');
+
+            // Use internal helper
+            result = await sendEmail({
+                to: recipient, // Email address
+                options: {
+                    subject: subject,
+                    html: content, // Content passed in options
+                    contactId,
+                    workflowId: 'direct_message'
+                }
+            });
+
+        } else if (type === 'sms') {
+            // Use internal helper
+            result = await sendSMS({
+                to: recipient, // Phone number
+                options: {
+                    text: content,
+                    contactId,
+                    workflowId: 'direct_message'
+                }
+            });
+
+        } else {
+            throw new functions.https.HttpsError('invalid-argument', 'Invalid type. Must be "email" or "sms".');
+        }
+
+        if (!result || (result.success === false)) {
+            throw new functions.https.HttpsError('internal', result?.error || 'Failed to send message.');
+        }
+
+        return { success: true, messageId: result.id || result.messageUuid };
+
+    } catch (error) {
+        console.error('sendDirectMessage error:', error);
+        throw new functions.https.HttpsError('internal', error.message);
+    }
+});
+
+// ----------------------------------------------------------------------
+// WEBHOOK HANDLERS (Analytics)
+// ----------------------------------------------------------------------
+
+/**
+ * Handle Resend Webhook (Email Events)
+ * Events: email.sent, email.delivered, email.delivery_delayed, email.complained, email.bounced, email.opened, email.clicked
+ */
+exports.handleResendWebhook = functions.https.onRequest(async (req, res) => {
+    const signature = req.headers['resend-signature'];
+
+    // Verify signature logic would go here in production
+    // For now, we trust the endpoint (hidden/secret)
+
+    try {
+        const event = req.body;
+        const type = event.type; // e.g. 'email.opened'
+        const data = event.data; // contains email_id, to, etc.
+
+        console.log(`Resend Webhook: ${type}`, JSON.stringify(data));
+
+        if (!data || !data.email_id) {
+            res.status(400).send('Invalid payload');
+            return;
+        }
+
+        // Find the communication log (limit 1)
+        const logsSnapshot = await db.collection('communicationLogs')
+            .where('providerMessageId', '==', data.email_id)
+            .limit(1)
+            .get();
+
+        if (logsSnapshot.empty) {
+            console.log(`No log found for Resend ID: ${data.email_id}`);
+            res.status(200).send('Log not found, skipped');
+            return;
+        }
+
+        const logDoc = logsSnapshot.docs[0];
+        const updates = {
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        };
+
+        // Map Resend events to our status
+        // We accumulate timestamps for opens/clicks
+        if (type === 'email.delivered') {
+            updates.status = 'delivered';
+            updates.deliveredAt = admin.firestore.FieldValue.serverTimestamp();
+        } else if (type === 'email.opened') {
+            updates.status = 'opened'; // Or keep 'delivered' and just add openedAt? 
+            // Better to show 'opened' as main status if opened.
+            updates.openedAt = admin.firestore.FieldValue.serverTimestamp();
+            updates.openCount = admin.firestore.FieldValue.increment(1);
+        } else if (type === 'email.clicked') {
+            updates.clickedAt = admin.firestore.FieldValue.serverTimestamp();
+            updates.clickCount = admin.firestore.FieldValue.increment(1);
+        } else if (type === 'email.bounced') {
+            updates.status = 'failed';
+            updates.error = 'Bounced';
+            updates.bouncedAt = admin.firestore.FieldValue.serverTimestamp();
+        } else if (type === 'email.complained') {
+            updates.status = 'failed';
+            updates.error = 'Spam Complaint';
+        }
+
+        await logDoc.ref.update(updates);
+        res.status(200).send('Event processed');
+
+    } catch (error) {
+        console.error('Resend Webhook Error:', error);
+        res.status(500).send(error.message);
+    }
+});
+
+/**
+ * Handle Telnyx Webhook (SMS Status)
+ * Telnyx sends POST with data.payload containing event_type and id
+ */
+exports.handleTelnyxWebhook = functions.https.onRequest(async (req, res) => {
+    try {
+        const body = req.body;
+        const data = body.data;
+
+        if (!data || !data.payload) {
+            res.status(400).send('Invalid Telnyx Payload');
+            return;
+        }
+
+        const payload = data.payload;
+        const eventType = data.event_type; // e.g., 'message.finalized', 'message.sent'
+        const messageId = payload.id;
+
+        console.log(`Telnyx Webhook: ${eventType} for ${messageId}`);
+
+        // We only care about delivery statuses
+        // Telnyx events: 'message.sent', 'message.delivered', 'message.undelivered', 'message.failed'
+
+        const logsSnapshot = await db.collection('communicationLogs')
+            .where('providerMessageId', '==', messageId)
+            .limit(1)
+            .get();
+
+        if (logsSnapshot.empty) {
+            console.log(`No log found for Telnyx ID: ${messageId}`);
+            res.status(200).send('Log not found');
+            return;
+        }
+
+        const logDoc = logsSnapshot.docs[0];
+        const updates = {
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        };
+
+        if (eventType === 'message.delivered') {
+            updates.status = 'delivered';
+            updates.deliveredAt = admin.firestore.FieldValue.serverTimestamp();
+        } else if (eventType === 'message.undelivered' || eventType === 'message.failed') {
+            updates.status = 'failed';
+            updates.error = payload.to[0].status; // Get specific error if available
+            updates.failedAt = admin.firestore.FieldValue.serverTimestamp();
+        }
+
+        if (Object.keys(updates).length > 1) {
+            await logDoc.ref.update(updates);
+        }
+
+        res.status(200).send('OK');
+
+    } catch (error) {
+        console.error('Telnyx Webhook Error:', error);
+        res.status(500).send(error.message);
+    }
+});
+
+// ----------------------------------------------------------------------
+// ANALYTICS FUNCTIONS
+// ----------------------------------------------------------------------
+
+exports.getAggregatedStats = functions.https.onCall(async (data, context) => {
+    // Auth Check
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+
+    try {
+        const stats = {
+            email: { sent: 0, delivered: 0, opened: 0, clicked: 0, failed: 0 },
+            sms: { sent: 0, delivered: 0, failed: 0 }
+        };
+
+        // Note: For large datasets, use Firestore Aggregation Queries (count())
+        // Since we are on client-side SDK in functions (admin), we can use .count().get()
+        // But admin SDK requires valid index support for complex queries.
+        // We'll do a simple iteration for now as the dataset is small (<1000 logs likely).
+        // UPGRADE: Switch to count() aggregation when nodejs sdk supports it fully or use raw query.
+
+        const logsSnap = await db.collection('communicationLogs').get();
+
+        logsSnap.forEach(doc => {
+            const log = doc.data();
+            const type = log.type || 'email';
+
+            if (stats[type]) {
+                stats[type].sent++;
+
+                if (log.status === 'delivered' || log.status === 'opened' || log.status === 'clicked') {
+                    stats[type].delivered++;
+                }
+
+                if (type === 'email') {
+                    if (log.status === 'opened' || log.status === 'clicked' || log.openedAt) stats[type].opened++;
+                    if (log.status === 'clicked' || log.clickedAt) stats[type].clicked++;
+                }
+
+                if (log.status === 'failed' || log.status === 'error') {
+                    stats[type].failed++;
+                }
+            }
+        });
+
+        return stats;
+
+    } catch (error) {
+        console.error('Stats Error:', error);
+        throw new functions.https.HttpsError('internal', error.message);
+    }
+});
+
+// ----------------------------------------------------------------------
+// GOOGLE REVIEWS (Cached)
+// ----------------------------------------------------------------------
+exports.getGoogleReviews = functions.https.onCall(async (data, context) => {
+    // 1. Check Cache (Firestore)
+    // We store the single cached object in 'canvas_settings/reviews_cache'
+    const cacheRef = db.collection('canvas_settings').doc('reviews_cache');
+    const cacheDoc = await cacheRef.get();
+    const now = Date.now();
+    const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 Hours
+
+    if (cacheDoc.exists) {
+        const cache = cacheDoc.data();
+        if (cache.updatedAt && (now - cache.updatedAt.toMillis() < CACHE_DURATION)) {
+            console.log('Returning cached Google Reviews');
+            return cache.reviews;
+        }
+    }
+
+    // 2. Fetch from Google API
+    const input = data || {};
+    const placeId = input.placeId || functions.config().google?.place_id;
+    const apiKey = process.env.GOOGLE_MAPS_API_KEY || functions.config().google?.api_key || functions.config().google?.maps_api_key;
+
+    if (!placeId || !apiKey) {
+        console.warn('Missing Google Place ID or API Key');
+        // Return cached data even if expired if we can't fetch new
+        if (cacheDoc.exists) return cacheDoc.data().reviews;
+        return [];
+    }
+
+    try {
+        const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=reviews,rating,user_ratings_total&key=${apiKey}`;
+        const response = await fetch(url);
+        const json = await response.json();
+
+        if (json.status !== 'OK') {
+            console.error('Google Places API Error:', json.status, json.error_message);
+            if (cacheDoc.exists) return cacheDoc.data().reviews; // Fallback
+            throw new Error(`Google API Error: ${json.status}`);
+        }
+
+        const reviews = json.result.reviews || [];
+
+        // 3. Update Cache
+        await cacheRef.set({
+            reviews: reviews,
+            rating: json.result.rating,
+            total: json.result.user_ratings_total,
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+
+        return reviews;
+
+    } catch (error) {
+        console.error('Error fetching reviews:', error);
+        throw new functions.https.HttpsError('internal', 'Failed to fetch reviews');
     }
 });
