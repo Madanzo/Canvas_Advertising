@@ -15,14 +15,14 @@
         gtag('config', 'G-98HWWM4BDW');
     </script>
     <meta name="description"
-        content="Austin's full-service print shop. Vehicle wraps, storefront signs, banners, business cards & more. Free design included. Hablamos Español. Call (512) 945-9783">
+        content="Austin's #1 vehicle wrap & print production partner. Food truck wraps, fleet branding, large-format printing. Wholesale printing for wrap shops. Free design included. Hablamos Español. Call (512) 945-9783">
     <meta name="keywords"
-        content="Austin printing, vehicle wraps Austin, signage Austin TX, commercial printing, banners, business cards, storefront signs">
+        content="vehicle wraps Austin, food truck wraps Austin TX, fleet wraps, wrap shop printing partner, wholesale vinyl printing, large format printing Austin, signage Austin TX">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Canvas Advertising | Austin Print Shop | Signs, Wraps & More">
+    <meta property="og:title" content="Canvas Advertising | Vehicle Wraps & Print Partner | Austin TX">
     <meta property="og:description"
-        content="Austin's full-service print shop. Vehicle wraps, storefront signs, banners & more. Free design included. Hablamos Español.">
+        content="Austin's vehicle wrap specialists & print production partner for wrap shops. Food truck wraps, fleet branding, large-format printing. Free design included. Hablamos Español.">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="en_US">
 
@@ -30,7 +30,7 @@
     <link rel="canonical" href="https://canvas-advertising.com/">
     <link rel="icon" type="image/png" href="favicon.png">
 
-    <title>Canvas Advertising | Austin Print Shop | Signs, Wraps & More</title>
+    <title>Canvas Advertising | Vehicle Wraps & Print Partner | Austin TX</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,6 +40,10 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="css/styles.css">
+
+    <!-- GSAP Animation Libraries -->
+    <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
 
     <!-- Local Business Schema -->
     <script type="application/ld+json">
@@ -65,7 +69,7 @@
             "closes": "17:00"
         },
         "priceRange": "$$",
-        "description": "Full-service commercial printing and signage company in Austin, TX. Vehicle wraps, storefront signs, banners, business cards & more."
+        "description": "Vehicle wrap specialists and print production partner in Austin, TX. Food truck wraps, fleet branding, large-format printing, signage, and wholesale printing for wrap shops."
     }
     </script>
 </head>
@@ -73,6 +77,17 @@
 <body>
     <!-- Skip to Content (Accessibility) -->
     <a href="#hero" class="skip-link">Skip to main content</a>
+
+    <!-- Preloader -->
+    <aside id="preloader" class="preloader">
+        <div class="preloader__logo">
+            <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Logo%2Fblack-version.png?alt=media&token=699b013d-6739-4d26-8c05-deda4af0e2c5"
+                alt="Canvas Advertising" class="preloader__logo-img">
+        </div>
+        <div class="preloader__bar">
+            <div class="preloader__bar-fill"></div>
+        </div>
+    </aside>
 
     <!-- Navigation -->
     <nav class="nav" id="nav">
@@ -90,14 +105,12 @@
 
             <ul class="nav__menu" id="navMenu">
                 <li><a href="#services" class="nav__link">Services</a></li>
-                <li><a href="#about" class="nav__link">About</a></li>
                 <li><a href="#gallery" class="nav__link">Gallery</a></li>
+                <li><a href="partner.html" class="nav__link">Partner With Us</a></li>
                 <li><a href="#contact" class="nav__link">Contact</a></li>
                 <li><a href="index-es.html" class="nav__link nav__link--lang">🇲🇽 Español</a></li>
             </ul>
 
-            <!-- Updated to trigger Cal.com modal -->
-            <!-- Updated to phone link -->
             <a href="tel:+15129459783" class="nav__phone">
                 <svg class="nav__phone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path
@@ -108,77 +121,132 @@
         </div>
     </nav>
 
-    <!-- Hero Section - Split Screen -->
-    <section class="hero" id="hero">
-        <div class="hero__grain"></div>
-        <div class="hero__container">
-            <div class="hero__content">
-                <div class="hero__badges">
-                    <span class="hero__badge hero__badge--spanish">🇲🇽 Hablamos Español</span>
-                    <span class="hero__badge hero__badge--free">🎨 FREE DESIGN with every project</span>
-                </div>
-                <h1 class="hero__title">AUSTIN'S<br>FULL-SERVICE<br>PRINT SHOP</h1>
-                <p class="hero__subtitle">From business cards to building wraps.<br>Quality printing with free
-                    professional design.</p>
+    <!-- ===== HERO: Cinematic 3D Carousel ===== -->
+    <section class="hero-cinema" id="hero">
+        <div class="hero-cinema__grain"></div>
 
-                <div class="hero__cta">
-                    <button class="btn btn--primary btn--large btn--pulse"
-                        data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting"
-                        data-cal-namespace="canvas-advertising-strategy-meeting"
-                        data-cal-config='{"layout":"month_view"}'>
-                        <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                            <line x1="16" y1="2" x2="16" y2="6" />
-                            <line x1="8" y1="2" x2="8" y2="6" />
-                            <line x1="3" y1="10" x2="21" y2="10" />
-                        </svg>
-                        Book a Strategy Meeting
-                    </button>
-                    <a href="#contact" class="btn btn--secondary btn--large">Get a Free Quote</a>
-                </div>
-
-                <div class="hero__trust">
-                    <div class="hero__trust-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
-                            <path d="M22 4L12 14.01l-3-3" />
-                        </svg>
-                        <span>20+ Years Experience</span>
-                    </div>
-                    <div class="hero__trust-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
-                            <path d="M22 4L12 14.01l-3-3" />
-                        </svg>
-                        <span>150+ Projects</span>
-                    </div>
-                    <div class="hero__trust-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                        </svg>
-                        <span>Same-Week Available</span>
-                    </div>
-                </div>
+        <!-- Slide Backgrounds -->
+        <div class="hero-cinema__slides" id="heroSlides">
+            <div class="hero-cinema__slide active"
+                style="background-image: url('https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fcommercial-transit-van-full-wrap.webp?alt=media&token=970e7ab6-35fe-44c9-a763-fb04a7662ec3')">
             </div>
+            <div class="hero-cinema__slide"
+                style="background-image: url('https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fwaterloo-sparkling-water-fleet-wrap-austin.webp?alt=media&token=c4805ad5-1929-4d37-a23d-fef7e1733aa4')">
+            </div>
+            <div class="hero-cinema__slide"
+                style="background-image: url('https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2FIMG_0536.jpg?alt=media&token=de87063d-b9ed-44e0-a7cd-d6cc3d01bac4')">
+            </div>
+            <div class="hero-cinema__slide"
+                style="background-image: url('https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_5200.jpg?alt=media&token=a00f5e84-bdd5-435c-a0f8-d8b8ba3bbe20')">
+            </div>
+        </div>
 
-
-            <div class="hero__image">
-                <div class="hero__image-wrapper">
-                    <img class="hero__img"
-                        src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fcommercial-transit-van-full-wrap.webp?alt=media&token=970e7ab6-35fe-44c9-a763-fb04a7662ec3"
-                        alt="Professional vehicle wrap with colorful graphics - Canvas Advertising Austin TX">
-                    <div class="hero__image-overlay"></div>
-                    <div class="hero__image-caption">
-                        <span class="hero__image-label">Featured Work</span>
-                        <span class="hero__image-title">FULL VEHICLE WRAP</span>
+        <!-- Slide Content -->
+        <div class="hero-cinema__content">
+            <div class="hero-cinema__text active" data-slide="0">
+                <div class="hero-cinema__line-element">
+                    <div></div>
+                    <span>Vehicle Wrap Specialists</span>
+                    <div></div>
+                </div>
+                <h1 class="hero-cinema__title" data-split>WRAP YOUR BRAND.<br>OWN THE ROAD.</h1>
+                <p class="hero-cinema__desc">Full wraps, partial wraps, food truck branding, and fleet graphics. From concept to curb — with FREE professional design.</p>
+                <a href="#contact" class="hero-cinema__btn">
+                    Get a Free Quote
+                    <div class="hero-cinema__btn-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </div>
+                </a>
+            </div>
+            <div class="hero-cinema__text" data-slide="1">
+                <div class="hero-cinema__line-element">
+                    <div></div>
+                    <span>Fleet Branding</span>
+                    <div></div>
+                </div>
+                <h1 class="hero-cinema__title" data-split>FLEET BRANDING<br>THAT TURNS HEADS</h1>
+                <p class="hero-cinema__desc">Turn your vehicles into mobile billboards. Consistent, high-impact branding across your entire fleet.</p>
+                <button class="hero-cinema__btn"
+                    data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting"
+                    data-cal-namespace="canvas-advertising-strategy-meeting"
+                    data-cal-config='{"layout":"month_view"}'>
+                    Book a Strategy Meeting
+                    <div class="hero-cinema__btn-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    </div>
+                </button>
+            </div>
+            <div class="hero-cinema__text" data-slide="2">
+                <div class="hero-cinema__line-element">
+                    <div></div>
+                    <span>See the Transformation</span>
+                    <div></div>
+                </div>
+                <h1 class="hero-cinema__title" data-split>FROM CONCEPT<br>TO CURB</h1>
+                <p class="hero-cinema__desc">We handle every step — design, print, laminate, and install. Your vision, our execution.</p>
+                <a href="#gallery" class="hero-cinema__btn">
+                    See Our Work
+                    <div class="hero-cinema__btn-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </div>
+                </a>
+            </div>
+            <div class="hero-cinema__text" data-slide="3">
+                <div class="hero-cinema__line-element">
+                    <div></div>
+                    <span>B2B Print Production</span>
+                    <div></div>
+                </div>
+                <h1 class="hero-cinema__title" data-split>YOUR AUSTIN<br>BRAND PARTNER</h1>
+                <p class="hero-cinema__desc">We print. You wrap. Wholesale printing, no MOQ, same-week turnaround for wrap shops.</p>
+                <a href="partner.html" class="hero-cinema__btn">
+                    Partner With Us
+                    <div class="hero-cinema__btn-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Carousel Navigation -->
+        <div class="hero-cinema__nav">
+            <div class="hero-cinema__arrows">
+                <button class="hero-cinema__arrow hero-cinema__arrow--prev" id="heroPrev" aria-label="Previous slide">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <button class="hero-cinema__arrow hero-cinema__arrow--next" id="heroNext" aria-label="Next slide">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+            <div class="hero-cinema__indicators">
+                <div class="hero-cinema__steps">
+                    <button class="hero-cinema__step active" data-index="0">Wraps</button>
+                    <button class="hero-cinema__step" data-index="1">Fleet</button>
+                    <button class="hero-cinema__step" data-index="2">Process</button>
+                    <button class="hero-cinema__step" data-index="3">Partner</button>
+                </div>
+                <div class="hero-cinema__progress">
+                    <span class="hero-cinema__progress-fill"></span>
                 </div>
             </div>
         </div>
+
+        <!-- Scroll Down -->
+        <div class="hero-cinema__scroll">
+            <span>scroll</span>
+            <div class="hero-cinema__scroll-line"></div>
+            <span>down</span>
+        </div>
+
+        <!-- Badges -->
+        <div class="hero-cinema__badges">
+            <span class="hero-cinema__badge">🇲🇽 Hablamos Español</span>
+            <span class="hero-cinema__badge">🎨 FREE DESIGN</span>
+        </div>
     </section>
 
-    <!-- Trust Bar -->
-    <section class="trust-bar">
+    <!-- ===== Trust Bar ===== -->
+    <section class="trust-bar" data-reveal>
         <div class="container">
             <div class="trust-bar__grid">
                 <div class="trust-bar__item">
@@ -188,7 +256,7 @@
                             <path d="M3 21v-2a7 7 0 0 1 7-7h4a7 7 0 0 1 7 7v2" />
                         </svg>
                     </div>
-                    <span class="trust-bar__number">20+</span>
+                    <span class="trust-bar__number" data-count="20">20+</span>
                     <span class="trust-bar__label">Years Combined Experience</span>
                 </div>
                 <div class="trust-bar__item">
@@ -198,7 +266,7 @@
                             <path d="M22 4L12 14.01l-3-3" />
                         </svg>
                     </div>
-                    <span class="trust-bar__number">150+</span>
+                    <span class="trust-bar__number" data-count="150">150+</span>
                     <span class="trust-bar__label">Projects Completed</span>
                 </div>
                 <div class="trust-bar__item">
@@ -234,11 +302,11 @@
         </div>
     </section>
 
-    <!-- Services Section -->
+    <!-- ===== Services Section (Reordered — Wraps First) ===== -->
     <section class="services section--dark" id="services">
         <div class="section__grain"></div>
         <div class="container">
-            <div class="section-header section-header--light">
+            <div class="section-header section-header--light" data-reveal>
                 <p class="section-label">What We Do</p>
                 <h2 class="section-title">OUR SERVICES</h2>
                 <p class="section-subtitle">From concept to installation, we handle every step. Every project includes
@@ -247,33 +315,8 @@
             </div>
 
             <div class="services__grid">
-                <!-- Commercial Printing -->
-                <div class="service-card">
-                    <div class="service-card__icon">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FCommercial-Printing.svg?alt=media&token=0936b258-b059-47ea-9f15-208be7953790"
-                            alt="Commercial Printing Icon">
-                    </div>
-                    <h3 class="service-card__title">Commercial Printing</h3>
-                    <p class="service-card__desc">Business cards, brochures, flyers, menus, posters, folders, booklets,
-                        labels, and all your marketing materials.</p>
-                    <span class="service-card__tag">Most Popular</span>
-                    <span class="service-card__free">FREE DESIGN</span>
-                </div>
-
-                <!-- Large Format -->
-                <div class="service-card">
-                    <div class="service-card__icon">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FLarge-Format-Graphics.svg?alt=media&token=5d95dde3-bd19-4b98-ad3a-40d7d72334d8"
-                            alt="Large Format Graphics Icon">
-                    </div>
-                    <h3 class="service-card__title">Large-Format Graphics</h3>
-                    <p class="service-card__desc">Banners, wall graphics, billboards, flags, mesh banners, window
-                        graphics, canvas prints, and fabric displays.</p>
-                    <span class="service-card__free">FREE DESIGN</span>
-                </div>
-
-                <!-- Vehicle Wraps -->
-                <div class="service-card">
+                <!-- Vehicle Wraps (HERO SERVICE) -->
+                <div class="service-card" data-reveal>
                     <div class="service-card__icon">
                         <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FVehicle-Wraps.svg?alt=media&token=344eb630-97ea-41c9-b510-44343264fe96"
                             alt="Vehicle Wraps Icon">
@@ -285,8 +328,20 @@
                     <span class="service-card__free">FREE DESIGN</span>
                 </div>
 
+                <!-- Large Format -->
+                <div class="service-card" data-reveal>
+                    <div class="service-card__icon">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FLarge-Format-Graphics.svg?alt=media&token=5d95dde3-bd19-4b98-ad3a-40d7d72334d8"
+                            alt="Large Format Graphics Icon">
+                    </div>
+                    <h3 class="service-card__title">Large-Format Graphics</h3>
+                    <p class="service-card__desc">Banners, wall graphics, billboards, flags, mesh banners, window
+                        graphics, canvas prints, and fabric displays.</p>
+                    <span class="service-card__free">FREE DESIGN</span>
+                </div>
+
                 <!-- Storefront Signage -->
-                <div class="service-card">
+                <div class="service-card" data-reveal>
                     <div class="service-card__icon">
                         <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FStorefront-Signage.svg?alt=media&token=549d8c7f-7099-4161-8897-d2283a5fafec"
                             alt="Storefront Signage Icon">
@@ -298,7 +353,7 @@
                 </div>
 
                 <!-- Interior Branding -->
-                <div class="service-card">
+                <div class="service-card" data-reveal>
                     <div class="service-card__icon">
                         <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FInterior-Branding.svg?alt=media&token=3a20a318-7bc5-4166-b265-c9eb26895417"
                             alt="Interior Branding Icon">
@@ -309,8 +364,21 @@
                     <span class="service-card__free">FREE DESIGN</span>
                 </div>
 
+                <!-- Commercial Printing -->
+                <div class="service-card" data-reveal>
+                    <div class="service-card__icon">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FCommercial-Printing.svg?alt=media&token=0936b258-b059-47ea-9f15-208be7953790"
+                            alt="Commercial Printing Icon">
+                    </div>
+                    <h3 class="service-card__title">Commercial Printing</h3>
+                    <p class="service-card__desc">Business cards, brochures, flyers, menus, posters, folders, booklets,
+                        labels, and all your marketing materials.</p>
+                    <span class="service-card__tag">Most Popular</span>
+                    <span class="service-card__free">FREE DESIGN</span>
+                </div>
+
                 <!-- Merch & Promo -->
-                <div class="service-card">
+                <div class="service-card" data-reveal>
                     <div class="service-card__icon">
                         <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FMerch-%26-Promotional.svg?alt=media&token=8b32c119-bd70-4613-9ace-e7f7f9ccc870"
                             alt="Merch & Promotional Icon">
@@ -335,51 +403,51 @@
         </div>
     </section>
 
-    <!-- Why Canvas Section -->
+    <!-- ===== Why Canvas Section ===== -->
     <section class="why-canvas" id="about">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header" data-reveal>
                 <h2 class="section-title">WHY CANVAS ADVERTISING?</h2>
                 <p class="section-subtitle">Your brand should work as hard as you do</p>
             </div>
 
             <div class="why-canvas__grid">
-                <div class="why-item">
+                <div class="why-item" data-reveal>
                     <div class="why-item__icon">🇲🇽</div>
                     <h3 class="why-item__title">Bilingual Team</h3>
                     <p class="why-item__desc">Hablamos Español. We serve Austin's diverse business community with pride.
                     </p>
                 </div>
 
-                <div class="why-item">
+                <div class="why-item" data-reveal>
                     <div class="why-item__icon">🏭</div>
                     <h3 class="why-item__title">In-House Production</h3>
                     <p class="why-item__desc">Complete quality control from design to delivery. No outsourcing, no
                         surprises.</p>
                 </div>
 
-                <div class="why-item">
+                <div class="why-item" data-reveal>
                     <div class="why-item__icon">🎨</div>
                     <h3 class="why-item__title">Free Graphic Design</h3>
                     <p class="why-item__desc">Every print project includes FREE professional design. Tell us your idea,
                         we'll bring it to life.</p>
                 </div>
 
-                <div class="why-item">
+                <div class="why-item" data-reveal>
                     <div class="why-item__icon">🔧</div>
                     <h3 class="why-item__title">Expert Installation</h3>
                     <p class="why-item__desc">Professional installation across Austin and all of Texas. We handle
                         everything.</p>
                 </div>
 
-                <div class="why-item">
+                <div class="why-item" data-reveal>
                     <div class="why-item__icon">⚡</div>
                     <h3 class="why-item__title">Fast Turnaround</h3>
                     <p class="why-item__desc">Most projects completed in 3-5 business days. Same-week turnaround
                         available.</p>
                 </div>
 
-                <div class="why-item">
+                <div class="why-item" data-reveal>
                     <div class="why-item__icon">🤝</div>
                     <h3 class="why-item__title">Long-Term Partnership</h3>
                     <p class="why-item__desc">We're not just vendors, we're partners in your brand's success.</p>
@@ -388,116 +456,8 @@
         </div>
     </section>
 
-    <!-- Company Stats Section -->
-    <section class="company-stats section--dark">
-        <div class="section__grain"></div>
-        <div class="container">
-            <div class="section-header section-header--light">
-                <p class="section-label">Our Story</p>
-                <h2 class="section-title">CANVAS BY THE NUMBERS</h2>
-                <p class="section-subtitle">Built on experience, driven by results</p>
-            </div>
-
-            <div class="company-stats__grid">
-                <!-- Years in Business -->
-                <div class="stat-card">
-                    <div class="stat-card__header">
-                        <div class="stat-card__icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10" />
-                                <path d="M12 6v6l4 2" />
-                            </svg>
-                        </div>
-                        <span class="stat-card__number">20+</span>
-                        <h3 class="stat-card__title">Years Combined Experience</h3>
-                    </div>
-                    <p class="stat-card__desc">Canvas Advertising LLC was founded in Austin, TX in 2023, built on more
-                        than 20 years of combined industry experience in graphic design, commercial printing,
-                        large-format production, signage, and marketing. This background allows us to deliver not only
-                        visually strong work, but solutions that are practical, scalable, and results-driven.</p>
-                </div>
-
-                <!-- Projects Completed -->
-                <div class="stat-card">
-                    <div class="stat-card__header">
-                        <div class="stat-card__icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
-                                <path d="M22 4L12 14.01l-3-3" />
-                            </svg>
-                        </div>
-                        <span class="stat-card__number">150+</span>
-                        <h3 class="stat-card__title">Projects Completed</h3>
-                    </div>
-                    <p class="stat-card__desc">We have successfully completed over 150 projects, ranging from branding
-                        systems and marketing assets to large-format graphics, vehicle wraps, and custom signage. Each
-                        project is approached with a clear focus on visibility, consistency, and real-world performance.
-                    </p>
-                </div>
-
-                <!-- Scope of Work -->
-                <div class="stat-card">
-                    <div class="stat-card__header">
-                        <div class="stat-card__icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="3" width="18" height="18" rx="2" />
-                                <path d="M3 9h18" />
-                                <path d="M9 21V9" />
-                            </svg>
-                        </div>
-                        <span class="stat-card__number">Full</span>
-                        <h3 class="stat-card__title">Scope of Work</h3>
-                    </div>
-                    <p class="stat-card__desc">Our services cover the full production and execution process, including
-                        commercial printing, large-format graphics, vehicle wraps, storefront signage, interior
-                        branding, and supporting marketing materials. This integrated approach ensures brand consistency
-                        across all physical touchpoints.</p>
-                </div>
-
-                <!-- Clients -->
-                <div class="stat-card">
-                    <div class="stat-card__header">
-                        <div class="stat-card__icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                <circle cx="9" cy="7" r="4" />
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                            </svg>
-                        </div>
-                        <span class="stat-card__number">SMB</span>
-                        <h3 class="stat-card__title">Client Focus</h3>
-                    </div>
-                    <p class="stat-card__desc">We work primarily with small and medium-sized businesses in Austin,
-                        including restaurants, food trucks, offices, retail spaces, and service-based companies. Many of
-                        our clients choose us as a long-term partner, relying on Canvas for both new projects and
-                        ongoing brand support.</p>
-                </div>
-
-                <!-- Production Model -->
-                <div class="stat-card stat-card--wide">
-                    <div class="stat-card__header">
-                        <div class="stat-card__icon stat-card__icon--accent">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                                <path d="M2 17l10 5 10-5" />
-                                <path d="M2 12l10 5 10-5" />
-                            </svg>
-                        </div>
-                        <span class="stat-card__number stat-card__number--accent">100%</span>
-                        <h3 class="stat-card__title">In-House Production</h3>
-                    </div>
-                    <p class="stat-card__desc">All production is handled in-house using professional large-format
-                        printing and finishing equipment. This allows us to maintain strict quality control, offer fast
-                        turnaround times, and provide cost-efficient pricing — all while keeping projects on schedule
-                        and under your supervision from start to finish.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Before/After Slider Section -->
-    <section class="before-after">
+    <!-- ===== Before/After Slider ===== -->
+    <section class="before-after" data-reveal>
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">SEE THE TRANSFORMATION</h2>
@@ -520,27 +480,27 @@
         </div>
     </section>
 
-    <!-- Gallery Section -->
+    <!-- ===== Gallery Section ===== -->
     <section class="gallery section--dark" id="gallery">
         <div class="section__grain"></div>
         <div class="container">
-            <div class="section-header section-header--light">
+            <div class="section-header section-header--light" data-reveal>
                 <p class="section-label">Our Portfolio</p>
                 <h2 class="section-title">RECENT WORK</h2>
                 <p class="section-subtitle">You've probably seen our work around Austin. From South Congress to Round
                     Rock, our signs and wraps are everywhere.</p>
             </div>
 
-            <div class="gallery__filters">
+            <div class="gallery__filters" data-reveal>
                 <button class="gallery__filter active" data-filter="all">All</button>
                 <button class="gallery__filter" data-filter="wraps">Vehicle Wraps</button>
                 <button class="gallery__filter" data-filter="signs">Signage</button>
                 <button class="gallery__filter" data-filter="print">Printing</button>
             </div>
 
-            <div class="gallery__scroll" id="galleryScroll">
+            <div class="gallery__grid" id="galleryGrid">
                 <!-- Waterloo Fleet Wrap -->
-                <a href="/projects/waterloo-fleet-wrap" class="gallery__item" data-category="wraps">
+                <div class="gallery__item" data-category="wraps" data-reveal>
                     <div class="gallery__image-wrapper">
                         <img class="gallery__image" loading="lazy"
                             src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fwaterloo-sparkling-water-fleet-wrap-austin.webp?alt=media&token=c4805ad5-1929-4d37-a23d-fef7e1733aa4"
@@ -551,24 +511,10 @@
                             <span class="gallery__location">Waterloo Sparkling Water, Austin</span>
                         </div>
                     </div>
-                </a>
+                </div>
 
-                <!-- Commercial Transit Van (Now part of Waterloo Fleet) -->
-                <a href="/projects/waterloo-fleet-wrap" class="gallery__item" data-category="wraps">
-                    <div class="gallery__image-wrapper">
-                        <img class="gallery__image" loading="lazy"
-                            src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fcommercial-transit-van-full-wrap.webp?alt=media&token=970e7ab6-35fe-44c9-a763-fb04a7662ec3"
-                            alt="Waterloo Sparkling Water Fleet Wrap - Design 2">
-                        <div class="gallery__overlay">
-                            <span class="gallery__category">Vehicle Wraps</span>
-                            <span class="gallery__title">Fleet Wrap (Design 2)</span>
-                            <span class="gallery__location">Waterloo Sparkling Water</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Monument Sign (Linked to tech-center-signage) -->
-                <a href="/projects/tech-center-signage" class="gallery__item" data-category="signs">
+                <!-- Monument Sign -->
+                <div class="gallery__item" data-category="signs" data-reveal>
                     <div class="gallery__image-wrapper">
                         <img class="gallery__image" loading="lazy"
                             src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fmonument-sign-vinyl-refacing-austin-tx.webp?alt=media&token=49b080dc-897f-42bd-90c2-08f7dda1de3f"
@@ -579,24 +525,10 @@
                             <span class="gallery__location">Austin, TX</span>
                         </div>
                     </div>
-                </a>
+                </div>
 
-                <!-- Property Directory Signage (Same Project as Monument Sign) -->
-                <a href="/projects/tech-center-signage" class="gallery__item" data-category="signs">
-                    <div class="gallery__image-wrapper">
-                        <img class="gallery__image" loading="lazy"
-                            src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fcommercial-property-directory-signage-update.webp?alt=media&token=7c2cf011-7fc3-4099-baae-bf3735b633c0"
-                            alt="Commercial Property Directory Signage">
-                        <div class="gallery__overlay">
-                            <span class="gallery__category">Signage</span>
-                            <span class="gallery__title">Property Directory</span>
-                            <span class="gallery__location">Commercial Property</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Fleet Branding / Mobile Billboard -->
-                <a href="/projects/mobile-billboard" class="gallery__item" data-category="wraps">
+                <!-- Mobile Billboard -->
+                <div class="gallery__item" data-category="wraps" data-reveal>
                     <div class="gallery__image-wrapper">
                         <img class="gallery__image" loading="lazy"
                             src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fleet-branding-mobile-billboard-graphics.webp?alt=media&token=c7704a48-69a8-4292-aedf-e021bb631d9f"
@@ -607,10 +539,10 @@
                             <span class="gallery__location">Fleet Branding</span>
                         </div>
                     </div>
-                </a>
+                </div>
 
-                <!-- Retail Store Fixture Wrap -->
-                <a href="/projects/supermarket-retail-branding" class="gallery__item" data-category="print">
+                <!-- Retail Store Fixture -->
+                <div class="gallery__item" data-category="print" data-reveal>
                     <div class="gallery__image-wrapper">
                         <img class="gallery__image" loading="lazy"
                             src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fretail-store-fixture-wrap-austin-tx.webp?alt=media&token=2e6d6698-c7b8-45c5-ad2c-da6faf658d08"
@@ -621,24 +553,10 @@
                             <span class="gallery__location">Retail Store, Austin TX</span>
                         </div>
                     </div>
-                </a>
+                </div>
 
-                <!-- Supermarket Freezer Wrap -->
-                <a href="/projects/supermarket-retail-branding" class="gallery__item" data-category="print">
-                    <div class="gallery__image-wrapper">
-                        <img class="gallery__image" loading="lazy"
-                            src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fsupermarket-freezer-merchandising-wrap-jds.webp?alt=media&token=5c0664cf-70f9-4332-995b-f2c867c31603"
-                            alt="Supermarket Freezer Merchandising Wrap">
-                        <div class="gallery__overlay">
-                            <span class="gallery__category">Interior</span>
-                            <span class="gallery__title">Freezer Wrap</span>
-                            <span class="gallery__location">Supermarket Merchandising</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Van Wrap Before (Transformation Project) -->
-                <a href="/projects/van-transformation" class="gallery__item" data-category="wraps">
+                <!-- Commercial Van Wrap -->
+                <div class="gallery__item" data-category="wraps" data-reveal>
                     <div class="gallery__image-wrapper">
                         <img class="gallery__image" loading="lazy"
                             src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2FIMG_0536.jpg?alt=media&token=de87063d-b9ed-44e0-a7cd-d6cc3d01bac4"
@@ -649,24 +567,10 @@
                             <span class="gallery__location">Local Business, Austin TX</span>
                         </div>
                     </div>
-                </a>
-
-                <!-- Large Format Banner (Transformation Project - Before) -->
-                <a href="/projects/van-transformation" class="gallery__item" data-category="signs">
-                    <div class="gallery__image-wrapper">
-                        <img class="gallery__image" loading="lazy"
-                            src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2FIMG_0535.jpg?alt=media&token=6c958f58-e134-46d4-b246-2a14d5e5aae6"
-                            alt="Vehicle Before Transformation - Plain Van">
-                        <div class="gallery__overlay">
-                            <span class="gallery__category">Before & After</span>
-                            <span class="gallery__title">Transformation Project</span>
-                            <span class="gallery__location">See the Difference</span>
-                        </div>
-                    </div>
-                </a>
+                </div>
 
                 <!-- Construction Company Wrap -->
-                <a href="/projects/construction-fleet-wrap" class="gallery__item" data-category="wraps">
+                <div class="gallery__item" data-category="wraps" data-reveal>
                     <div class="gallery__image-wrapper">
                         <img class="gallery__image" loading="lazy"
                             src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_5200.jpg?alt=media&token=a00f5e84-bdd5-435c-a0f8-d8b8ba3bbe20"
@@ -677,10 +581,10 @@
                             <span class="gallery__location">Fleet Branding, Austin TX</span>
                         </div>
                     </div>
-                </a>
+                </div>
 
-                <!-- Printed Shirts Job -->
-                <a href="/projects/construction-tshirts" class="gallery__item" data-category="print">
+                <!-- Custom T-Shirts -->
+                <div class="gallery__item" data-category="print" data-reveal>
                     <div class="gallery__image-wrapper">
                         <img class="gallery__image" loading="lazy"
                             src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_8357.jpg?alt=media&token=054eda4c-2eef-48ec-b090-11e793187b94"
@@ -691,27 +595,93 @@
                             <span class="gallery__location">Construction Company</span>
                         </div>
                     </div>
-                </a>
-            </div>
-        </div>
+                </div>
 
-        <!-- View More Button -->
-        <div class="gallery__expand">
-            <button class="btn btn--secondary gallery__expand-btn" id="galleryExpandBtn">
-                <span class="gallery__expand-text">View More Projects</span>
-                <svg class="gallery__expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2">
-                    <path d="M6 9l6 6 6-6" />
-                </svg>
-            </button>
-        </div>
+                <!-- Posey Car Vinyl -->
+                <div class="gallery__item" data-category="wraps" data-reveal>
+                    <div class="gallery__image-wrapper">
+                        <img class="gallery__image" loading="lazy"
+                            src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fposey-car-sign-vinyl.webp?alt=media&token=8d7067f0-42c6-4a43-8de8-a6acdd874bae"
+                            alt="Posey Car Sign Vinyl Graphics">
+                        <div class="gallery__overlay">
+                            <span class="gallery__category">Vehicle Wraps</span>
+                            <span class="gallery__title">Car Sign Vinyl</span>
+                            <span class="gallery__location">Posey, Austin TX</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MTZ Banner -->
+                <div class="gallery__item" data-category="signs" data-reveal>
+                    <div class="gallery__image-wrapper">
+                        <img class="gallery__image" loading="lazy"
+                            src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fbanner-sign-mtz-austin.jpg?alt=media&token=400ca822-1e7d-4927-bc98-c8dbb3808d82"
+                            alt="MTZ Banner Sign - Austin TX">
+                        <div class="gallery__overlay">
+                            <span class="gallery__category">Signage</span>
+                            <span class="gallery__title">Banner Sign</span>
+                            <span class="gallery__location">MTZ, Austin TX</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wild Heart Storefront -->
+                <div class="gallery__item" data-category="signs" data-reveal>
+                    <div class="gallery__image-wrapper">
+                        <img class="gallery__image" loading="lazy"
+                            src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fstorefront-vinyl-wild-heart.jpg?alt=media&token=382c9b3e-d770-4c11-9157-333114e30977"
+                            alt="Wild Heart Storefront Vinyl Graphics">
+                        <div class="gallery__overlay">
+                            <span class="gallery__category">Signage</span>
+                            <span class="gallery__title">Storefront Vinyl</span>
+                            <span class="gallery__location">Wild Heart, Austin TX</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lightnin Dent -->
+                <div class="gallery__item" data-category="wraps" data-reveal>
+                    <div class="gallery__image-wrapper">
+                        <img class="gallery__image" loading="lazy"
+                            src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fvinyl-truck-lightnin-dent.jpg?alt=media&token=a4152130-b799-4d79-b50c-c33d6819e336"
+                            alt="Lightnin Dent Truck Vinyl Wrap">
+                        <div class="gallery__overlay">
+                            <span class="gallery__category">Vehicle Wraps</span>
+                            <span class="gallery__title">Truck Vinyl Wrap</span>
+                            <span class="gallery__location">Lightnin Dent, Austin TX</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Process Section -->
+    <!-- ===== B2B Partner Teaser ===== -->
+    <section class="partner-teaser" data-reveal>
+        <div class="partner-teaser__bg"></div>
+        <div class="container">
+            <div class="partner-teaser__content">
+                <p class="section-label">For Wrap Shops</p>
+                <h2 class="partner-teaser__title">WE PRINT.<br>YOU WRAP.</h2>
+                <p class="partner-teaser__desc">Are you a wrap installer without printing equipment? We're your production partner. HP Latex 800W wide-format printing, precision Graphtec cutting, professional lamination — all ready for your next job.</p>
+                <div class="partner-teaser__features">
+                    <span>✓ No Minimum Order</span>
+                    <span>✓ Same-Week Turnaround</span>
+                    <span>✓ White-Label Ready</span>
+                    <span>✓ Wholesale Pricing</span>
+                </div>
+                <a href="partner.html" class="btn btn--primary btn--large">
+                    Learn About Our Partner Program
+                    <svg class="btn__icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Process Section ===== -->
     <section class="process">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header" data-reveal>
                 <p class="section-label">Our Process</p>
                 <h2 class="section-title">HOW WE WORK</h2>
                 <p class="section-subtitle">Simple, transparent, and stress-free. We handle every step so you can focus
@@ -719,14 +689,14 @@
             </div>
 
             <div class="process__grid">
-                <div class="process__step">
+                <div class="process__step" data-reveal>
                     <div class="process__number">01</div>
                     <h3 class="process__title">Consultation</h3>
                     <p class="process__desc">Tell us about your project. We'll discuss your goals, timeline, and budget
                         to find the perfect solution.</p>
                 </div>
 
-                <div class="process__step">
+                <div class="process__step" data-reveal>
                     <div class="process__number">02</div>
                     <h3 class="process__title">Design</h3>
                     <p class="process__desc">Our team creates your custom design — FREE with every project. You'll see
@@ -734,14 +704,14 @@
                     <span class="process__badge">FREE</span>
                 </div>
 
-                <div class="process__step">
+                <div class="process__step" data-reveal>
                     <div class="process__number">03</div>
                     <h3 class="process__title">Production</h3>
                     <p class="process__desc">We produce everything in-house at our Austin facility. Quality control from
                         start to finish.</p>
                 </div>
 
-                <div class="process__step">
+                <div class="process__step" data-reveal>
                     <div class="process__number">04</div>
                     <h3 class="process__title">Delivery & Install</h3>
                     <p class="process__desc">We handle everything. Professional delivery and installation across Austin
@@ -757,17 +727,96 @@
         </div>
     </section>
 
-    <!-- Testimonials Section -->
+    <!-- ===== Company Stats ===== -->
+    <section class="company-stats section--dark">
+        <div class="section__grain"></div>
+        <div class="container">
+            <div class="section-header section-header--light" data-reveal>
+                <p class="section-label">Our Story</p>
+                <h2 class="section-title">CANVAS BY THE NUMBERS</h2>
+                <p class="section-subtitle">Built on experience, driven by results</p>
+            </div>
+
+            <div class="company-stats__grid">
+                <div class="stat-card" data-reveal>
+                    <div class="stat-card__header">
+                        <div class="stat-card__icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 6v6l4 2" />
+                            </svg>
+                        </div>
+                        <span class="stat-card__number">20+</span>
+                        <h3 class="stat-card__title">Years Combined Experience</h3>
+                    </div>
+                    <p class="stat-card__desc">Canvas Advertising LLC was founded in Austin, TX in 2023, built on more
+                        than 20 years of combined industry experience in graphic design, commercial printing,
+                        large-format production, signage, and marketing.</p>
+                </div>
+
+                <div class="stat-card" data-reveal>
+                    <div class="stat-card__header">
+                        <div class="stat-card__icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                                <path d="M22 4L12 14.01l-3-3" />
+                            </svg>
+                        </div>
+                        <span class="stat-card__number">150+</span>
+                        <h3 class="stat-card__title">Projects Completed</h3>
+                    </div>
+                    <p class="stat-card__desc">We have successfully completed over 150 projects, ranging from branding
+                        systems and marketing assets to large-format graphics, vehicle wraps, and custom signage.</p>
+                </div>
+
+                <div class="stat-card" data-reveal>
+                    <div class="stat-card__header">
+                        <div class="stat-card__icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" />
+                                <path d="M3 9h18" />
+                                <path d="M9 21V9" />
+                            </svg>
+                        </div>
+                        <span class="stat-card__number">Full</span>
+                        <h3 class="stat-card__title">Scope of Work</h3>
+                    </div>
+                    <p class="stat-card__desc">Our services cover the full production and execution process, including
+                        commercial printing, large-format graphics, vehicle wraps, storefront signage, interior
+                        branding, and supporting marketing materials.</p>
+                </div>
+
+                <div class="stat-card stat-card--wide" data-reveal>
+                    <div class="stat-card__header">
+                        <div class="stat-card__icon stat-card__icon--accent">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                                <path d="M2 17l10 5 10-5" />
+                                <path d="M2 12l10 5 10-5" />
+                            </svg>
+                        </div>
+                        <span class="stat-card__number stat-card__number--accent">100%</span>
+                        <h3 class="stat-card__title">In-House Production</h3>
+                    </div>
+                    <p class="stat-card__desc">All production is handled in-house using professional large-format
+                        printing and finishing equipment. This allows us to maintain strict quality control, offer fast
+                        turnaround times, and provide cost-efficient pricing.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Testimonials ===== -->
     <section class="testimonials section--dark">
         <div class="section__grain"></div>
         <div class="container">
-            <div class="section-header section-header--light">
+            <div class="section-header section-header--light" data-reveal>
                 <p class="section-label">Testimonials</p>
                 <h2 class="section-title">WHAT CLIENTS SAY</h2>
             </div>
 
             <div class="testimonials__grid" id="reviewsGrid">
-                <div class="testimonial">
+                <div class="testimonial" data-reveal>
                     <div class="testimonial__stars">
                         <span class="testimonial__star">★</span>
                         <span class="testimonial__star">★</span>
@@ -785,7 +834,7 @@
                     </div>
                 </div>
 
-                <div class="testimonial">
+                <div class="testimonial" data-reveal>
                     <div class="testimonial__stars">
                         <span class="testimonial__star">★</span>
                         <span class="testimonial__star">★</span>
@@ -804,7 +853,7 @@
                     </div>
                 </div>
 
-                <div class="testimonial">
+                <div class="testimonial" data-reveal>
                     <div class="testimonial__stars">
                         <span class="testimonial__star">★</span>
                         <span class="testimonial__star">★</span>
@@ -823,7 +872,6 @@
                 </div>
             </div>
 
-            <!-- Satisfaction guarantee badge -->
             <div class="testimonials__guarantee">
                 <div class="testimonials__guarantee-badge">
                     <span>✓</span>
@@ -833,17 +881,14 @@
         </div>
     </section>
 
-    <!-- Final CTA Section -->
+    <!-- ===== CTA / Contact ===== -->
     <section class="cta section--accent" id="contact">
         <div class="container">
             <div class="cta__grid">
-                <div class="cta__content">
+                <div class="cta__content" data-reveal>
                     <h2 class="cta__title">READY TO MAKE YOUR<br>BRAND STAND OUT?</h2>
                     <p class="cta__subtitle">Get started with a free consultation</p>
 
-                    <!-- Updated to trigger Cal.com modal -->
-                    <!-- Updated to phone link -->
-                    <!-- Updated to trigger Cal.com modal -->
                     <button class="cta__phone"
                         data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting"
                         data-cal-namespace="canvas-advertising-strategy-meeting"
@@ -888,7 +933,7 @@
                     </div>
                 </div>
 
-                <div class="cta__form">
+                <div class="cta__form" data-reveal>
                     <h3 class="cta__form-title">Request a Free Quote</h3>
                     <form id="quoteForm" class="form">
                         <div class="form__group">
@@ -910,12 +955,14 @@
                             <label for="service" class="form__label">Service Interest</label>
                             <select id="service" name="service" class="form__select">
                                 <option value="">Select a service...</option>
-                                <option value="commercial-printing">Commercial Printing</option>
-                                <option value="large-format">Large-Format Graphics</option>
                                 <option value="vehicle-wraps">Vehicle Wraps</option>
+                                <option value="large-format">Large-Format Graphics</option>
                                 <option value="storefront-signage">Storefront Signage</option>
                                 <option value="interior-branding">Interior Branding</option>
+                                <option value="commercial-printing">Commercial Printing</option>
                                 <option value="merch">Merch & Promotional</option>
+                                <option value="print-partner">Print Partner / Wholesale Printing</option>
+                                <option value="wrap-production">Wrap Production Only</option>
                                 <option value="other">Other</option>
                             </select>
                         </div>
@@ -939,7 +986,7 @@
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- ===== Footer ===== -->
     <footer class="footer">
         <div class="container">
             <div class="footer__grid">
@@ -948,7 +995,7 @@
                         <span class="footer__logo-text">CANVAS</span>
                         <span class="footer__logo-sub">ADVERTISING</span>
                     </a>
-                    <p class="footer__tagline">Austin's Full-Service Print Shop</p>
+                    <p class="footer__tagline">Austin's Vehicle Wrap Specialists & Print Partner</p>
                     <p class="footer__guarantee">100% satisfaction guaranteed on every project.</p>
                 </div>
 
@@ -965,6 +1012,14 @@
                 <div class="footer__hours">
                     <h4>Hours</h4>
                     <p>Monday - Friday<br>9:00 AM - 5:00 PM</p>
+                </div>
+
+                <div class="footer__links">
+                    <h4>Quick Links</h4>
+                    <a href="#services">Services</a>
+                    <a href="#gallery">Gallery</a>
+                    <a href="partner.html">Partner With Us</a>
+                    <a href="#contact">Contact</a>
                 </div>
 
                 <div class="footer__social">
@@ -1011,12 +1066,31 @@
             </div>
 
             <div class="footer__bottom">
-                <p>&copy; 2024 Canvas Advertising LLC. All rights reserved.</p>
+                <p>&copy; 2025 Canvas Advertising LLC. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Mobile Booking Button -->
+    <!-- Lightbox Modal -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Project image viewer">
+        <button class="lightbox__close" id="lightboxClose" aria-label="Close lightbox">&times;</button>
+        <div class="lightbox__content">
+            <img class="lightbox__image" id="lightboxImage" src="" alt="">
+            <div class="lightbox__info" id="lightboxInfo">
+                <span class="lightbox__category"></span>
+                <h3 class="lightbox__title"></h3>
+                <p class="lightbox__location"></p>
+            </div>
+        </div>
+        <button class="lightbox__nav lightbox__nav--prev" id="lightboxPrev" aria-label="Previous image">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <button class="lightbox__nav lightbox__nav--next" id="lightboxNext" aria-label="Next image">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+    </div>
+
+    <!-- Mobile Phone Button -->
     <a href="tel:+15129459783" class="mobile-phone" aria-label="Call us">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path
@@ -1035,25 +1109,12 @@
     <script type="text/javascript">
         (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
         Cal("init", "canvas-advertising-strategy-meeting", { origin: "https://app.cal.com" });
-
-
-        // Important: Please add the following attributes to the element that should trigger the calendar to open upon clicking.
-        // `data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting"`
-        // data-cal-namespace="canvas-advertising-strategy-meeting"
-        // `data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}'`
-
         Cal.ns["canvas-advertising-strategy-meeting"]("ui", { "hideEventTypeDetails": false, "layout": "month_view" });
     </script>
     <!-- Cal element-click embed code ends -->
 
     <script src="js/main.js"></script>
-    <!-- WhatsApp Floating Button -->
-    <a href="https://wa.me/15129459783" class="whatsapp-float" target="_blank" aria-label="Chat on WhatsApp">
-        <svg viewBox="0 0 24 24" fill="currentColor" class="whatsapp-icon">
-            <path
-                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-        </svg>
-    </a>
+
     <!-- WhatsApp Chat Widget -->
     <div class="whatsapp-widget">
         <!-- Toggle Button -->
@@ -1106,7 +1167,7 @@
             </div>
         </div>
     </div>
-</body>
 
+</body>
 
 </html>

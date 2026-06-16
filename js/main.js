@@ -1,8 +1,9 @@
 /* ===================================
-   Canvas Advertising - Main JavaScript
+   Canvas Advertising — Main JavaScript
+   Complete production build
    =================================== */
 
-// Language strings
+// ─── Language Strings ───────────────────────────
 const strings = {
     en: {
         viewMore: 'View More Projects',
@@ -31,52 +32,69 @@ const strings = {
 const lang = document.documentElement.lang || 'en';
 const t = strings[lang] || strings.en;
 
+// ─── GSAP ScrollTrigger Registration ────────────
+if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+}
+
+// ─── Bootstrap ──────────────────────────────────
 document.addEventListener('DOMContentLoaded', function () {
-    // Initialize all modules
+    // Register GSAP plugin (deferred scripts are ready by now)
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+    }
+
+    initPreloader();
     initNavigation();
     initSmoothScroll();
-    initScrollAnimations();
-    initGalleryFilters();
-    initGalleryExpand();
-    initHorizontalGalleryScroll();
+    initHeroCarousel();
+    initScrollReveal();
+    initDynamicGallery();
     initBeforeAfterSlider();
     initForm();
     initReviews();
+    initWhatsAppWidget();
 });
 
+
 /* ===================================
-   Gallery Expand/Collapse
+   Preloader
    =================================== */
-function initGalleryExpand() {
-    const expandBtn = document.getElementById('galleryExpandBtn');
-    const gallery = document.getElementById('galleryScroll');
+function initPreloader() {
+    const preloader = document.getElementById('preloader');
+    if (!preloader) return;
 
-    if (!expandBtn || !gallery) return;
+    const barFill = preloader.querySelector('.preloader__bar-fill');
 
-    expandBtn.addEventListener('click', function () {
-        const isExpanded = gallery.classList.contains('expanded');
+    // Animate bar fill to 100 %
+    if (barFill) {
+        barFill.style.transition = 'width 1.2s cubic-bezier(.4,0,.2,1)';
+        // Force reflow so the transition fires
+        void barFill.offsetWidth;
+        barFill.style.width = '100%';
+    }
 
-        if (isExpanded) {
-            gallery.classList.remove('expanded');
-            expandBtn.classList.remove('expanded');
-            expandBtn.querySelector('.gallery__expand-text').textContent = t.viewMore;
+    // After page fully loads, fade out the preloader
+    window.addEventListener('load', function () {
+        preloader.style.transition = 'opacity 0.5s ease';
+        preloader.style.opacity = '0';
 
-            // Scroll to gallery section
-            const gallerySection = document.getElementById('gallery');
-            if (gallerySection) {
-                const navHeight = document.getElementById('nav').offsetHeight;
-                window.scrollTo({
-                    top: gallerySection.offsetTop - navHeight,
-                    behavior: 'smooth'
-                });
+        preloader.addEventListener('transitionend', function handler() {
+            preloader.removeEventListener('transitionend', handler);
+            preloader.remove();
+            document.body.classList.add('loaded');
+        });
+
+        // Safety: if transitionend never fires, remove after 600 ms
+        setTimeout(function () {
+            if (preloader.parentNode) {
+                preloader.remove();
+                document.body.classList.add('loaded');
             }
-        } else {
-            gallery.classList.add('expanded');
-            expandBtn.classList.add('expanded');
-            expandBtn.querySelector('.gallery__expand-text').textContent = t.showLess;
-        }
+        }, 600);
     });
 }
+
 
 /* ===================================
    Navigation
@@ -86,6 +104,8 @@ function initNavigation() {
     const navToggle = document.getElementById('navToggle');
     const navMenu = document.getElementById('navMenu');
 
+    if (!nav || !navToggle || !navMenu) return;
+
     // Mobile menu toggle
     navToggle.addEventListener('click', function () {
         navToggle.classList.toggle('active');
@@ -94,7 +114,7 @@ function initNavigation() {
     });
 
     // Close menu when clicking a link
-    navMenu.querySelectorAll('.nav__link').forEach(link => {
+    navMenu.querySelectorAll('.nav__link').forEach(function (link) {
         link.addEventListener('click', function () {
             navToggle.classList.remove('active');
             navMenu.classList.remove('active');
@@ -111,120 +131,337 @@ function initNavigation() {
         }
     });
 
-    // Scroll behavior for navigation
-    let lastScroll = 0;
-
+    // Scroll shadow
     window.addEventListener('scroll', function () {
-        const currentScroll = window.pageYOffset;
-
-        // Add shadow on scroll
-        if (currentScroll > 50) {
+        if (window.pageYOffset > 50) {
             nav.classList.add('nav--scrolled');
         } else {
             nav.classList.remove('nav--scrolled');
         }
-
-        lastScroll = currentScroll;
     });
 }
+
 
 /* ===================================
    Smooth Scroll
    =================================== */
 function initSmoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
         anchor.addEventListener('click', function (e) {
-            const href = this.getAttribute('href');
-
-            // Skip if it's just "#"
+            var href = this.getAttribute('href');
             if (href === '#') return;
 
-            const target = document.querySelector(href);
-
+            var target = document.querySelector(href);
             if (target) {
                 e.preventDefault();
-
-                const navHeight = document.getElementById('nav').offsetHeight;
-                const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
-
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
+                var navHeight = document.getElementById('nav').offsetHeight;
+                var targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+                window.scrollTo({ top: targetPosition, behavior: 'smooth' });
             }
         });
     });
 }
+
 
 /* ===================================
-   Scroll Animations
+   Hero Cinematic Carousel
    =================================== */
-function initScrollAnimations() {
-    // Add fade-in class to animatable elements
-    const animatableSelectors = [
-        '.service-card',
-        '.why-item',
-        '.gallery__item',
-        '.process__step',
-        '.testimonial',
-        '.section-header'
-    ];
+function initHeroCarousel() {
+    var slidesContainer = document.getElementById('heroSlides');
+    if (!slidesContainer) return;
 
-    animatableSelectors.forEach(selector => {
-        document.querySelectorAll(selector).forEach(el => {
-            el.classList.add('fade-in');
-        });
-    });
+    var slides      = slidesContainer.querySelectorAll('.hero-cinema__slide');
+    var texts       = document.querySelectorAll('.hero-cinema__text');
+    var steps       = document.querySelectorAll('.hero-cinema__step');
+    var progressBar = document.querySelector('.hero-cinema__progress-fill');
+    var prevBtn     = document.getElementById('heroPrev');
+    var nextBtn     = document.getElementById('heroNext');
+    var heroSection = document.getElementById('hero');
 
-    // Intersection Observer for animations
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.1
-    };
+    var total        = slides.length;
+    if (total === 0) return;
 
-    const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                // Add staggered delay for grid items
-                const parent = entry.target.parentElement;
-                if (parent) {
-                    const siblings = Array.from(parent.children).filter(child =>
-                        child.classList.contains('fade-in')
-                    );
-                    const index = siblings.indexOf(entry.target);
-                    entry.target.style.transitionDelay = `${index * 0.1}s`;
-                }
+    var current      = 0;
+    var interval     = 6000; // ms per slide
+    var timer        = null;
+    var isPaused     = false;
+    var progressAnim = null; // animation frame id or animation reference
 
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target);
+    // ── Go to slide ──────────────────────────────
+    function goToSlide(index) {
+        // Wrap index
+        if (index < 0) index = total - 1;
+        if (index >= total) index = 0;
+        current = index;
+
+        // Slides
+        slides.forEach(function (s) { s.classList.remove('active'); });
+        slides[current].classList.add('active');
+
+        // Text
+        texts.forEach(function (t) { t.classList.remove('active'); });
+        if (texts[current]) texts[current].classList.add('active');
+
+        // Steps
+        steps.forEach(function (s) { s.classList.remove('active'); });
+        if (steps[current]) steps[current].classList.add('active');
+
+        // Restart progress bar
+        startProgress();
+    }
+
+    // ── Progress bar animation ───────────────────
+    function startProgress() {
+        if (!progressBar) return;
+
+        // Reset
+        progressBar.style.transition = 'none';
+        progressBar.style.width = '0%';
+
+        // Force reflow
+        void progressBar.offsetWidth;
+
+        // Animate to 100% over interval duration
+        progressBar.style.transition = 'width ' + (interval / 1000) + 's linear';
+        progressBar.style.width = '100%';
+    }
+
+    // When progress bar finishes → next slide
+    if (progressBar) {
+        progressBar.addEventListener('transitionend', function () {
+            if (!isPaused) {
+                goToSlide(current + 1);
             }
         });
-    }, observerOptions);
+    }
 
-    document.querySelectorAll('.fade-in').forEach(el => {
-        observer.observe(el);
+    // ── Auto-rotation helpers ────────────────────
+    function startAutoRotation() {
+        stopAutoRotation();
+        // Auto-rotation is driven by the progress bar transitionend
+        // We just need to make sure progress is running
+        startProgress();
+    }
+
+    function stopAutoRotation() {
+        // Pause progress bar at current position
+        if (progressBar) {
+            var computed = getComputedStyle(progressBar).width;
+            progressBar.style.transition = 'none';
+            progressBar.style.width = computed;
+        }
+    }
+
+    // ── Arrow buttons ────────────────────────────
+    if (prevBtn) {
+        prevBtn.addEventListener('click', function () {
+            goToSlide(current - 1);
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', function () {
+            goToSlide(current + 1);
+        });
+    }
+
+    // ── Step / indicator buttons ─────────────────
+    steps.forEach(function (step) {
+        step.addEventListener('click', function () {
+            var idx = parseInt(this.dataset.index, 10);
+            if (!isNaN(idx)) goToSlide(idx);
+        });
     });
+
+    // ── Pause on hover / resume on leave ─────────
+    if (heroSection) {
+        heroSection.addEventListener('mouseenter', function () {
+            isPaused = true;
+            stopAutoRotation();
+        });
+
+        heroSection.addEventListener('mouseleave', function () {
+            isPaused = false;
+            startAutoRotation();
+        });
+    }
+
+    // ── Kick things off ──────────────────────────
+    goToSlide(0);
 }
+
+
+/* ===================================
+   GSAP Scroll-Triggered Reveal
+   =================================== */
+function initScrollReveal() {
+    var revealEls = document.querySelectorAll('[data-reveal]');
+    if (revealEls.length === 0) return;
+
+    // Grid container selectors for stagger delay
+    var gridSelectors = [
+        '.services__grid',
+        '.why-canvas__grid',
+        '.gallery__grid',
+        '.process__grid',
+        '.company-stats__grid',
+        '.testimonials__grid'
+    ];
+
+    // Apply staggered transition-delay to children inside grids
+    gridSelectors.forEach(function (sel) {
+        var grid = document.querySelector(sel);
+        if (!grid) return;
+        var children = grid.querySelectorAll('[data-reveal]');
+        children.forEach(function (child, i) {
+            child.style.transitionDelay = (i * 0.1) + 's';
+        });
+    });
+
+    // Use GSAP ScrollTrigger if available, otherwise fall back to IntersectionObserver
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        revealEls.forEach(function (el) {
+            ScrollTrigger.create({
+                trigger: el,
+                start: 'top 85%',
+                once: true,
+                onEnter: function () {
+                    el.classList.add('revealed');
+                }
+            });
+        });
+    } else {
+        // Fallback: IntersectionObserver
+        var observer = new IntersectionObserver(function (entries, obs) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, { rootMargin: '0px 0px -15% 0px', threshold: 0 });
+
+        revealEls.forEach(function (el) { observer.observe(el); });
+    }
+}
+
+
+/* ===================================
+   Dynamic Gallery from Firestore
+   =================================== */
+function initDynamicGallery() {
+    var galleryGrid = document.getElementById('galleryGrid');
+    if (!galleryGrid) {
+        initGalleryFilters();
+        initLightbox();
+        return;
+    }
+
+    // Try to get database from window.CanvasFirebase
+    var database = null;
+    if (window.CanvasFirebase && typeof window.CanvasFirebase.getDb === 'function') {
+        database = window.CanvasFirebase.getDb();
+    } else if (typeof firebase !== 'undefined' && firebase.firestore) {
+        database = firebase.firestore();
+    }
+
+    if (!database) {
+        console.warn("Firestore not available. Using static gallery.");
+        initGalleryFilters();
+        initLightbox();
+        return;
+    }
+
+    database.collection('canvas_projects')
+        .orderBy('createdAt', 'desc')
+        .get()
+        .then(function (snapshot) {
+            if (snapshot.empty) {
+                console.log("No dynamic projects found in Firestore. Using static gallery.");
+                initGalleryFilters();
+                initLightbox();
+                return;
+            }
+
+            // Clear static gallery items
+            galleryGrid.innerHTML = '';
+
+            snapshot.forEach(function (doc) {
+                var project = doc.data();
+                var category = project.category || 'print';
+                
+                // Map category names based on language
+                var catLabel = 'Printing';
+                if (lang === 'es') {
+                    catLabel = category === 'wraps' ? 'Rotulación de Vehículos' : (category === 'signs' ? 'Letreros y Anuncios' : 'Impresión Comercial');
+                } else {
+                    catLabel = category === 'wraps' ? 'Vehicle Wraps' : (category === 'signs' ? 'Signage' : 'Printing');
+                }
+
+                var item = document.createElement('div');
+                item.className = 'gallery__item';
+                item.dataset.category = category;
+                if (project.featured) {
+                    item.dataset.featured = 'true';
+                }
+
+                item.innerHTML = `
+                    <div class="gallery__image-wrapper">
+                        <img class="gallery__image" loading="lazy" src="${project.featuredImage}" alt="${project.title}">
+                        <div class="gallery__overlay">
+                            <span class="gallery__category">${catLabel}</span>
+                            <span class="gallery__title">${project.title}</span>
+                            <span class="gallery__location">${project.location || 'Austin, TX'}</span>
+                        </div>
+                    </div>
+                `;
+                galleryGrid.appendChild(item);
+            });
+
+            console.log("Loaded " + snapshot.size + " projects dynamically from Firestore.");
+            
+            // Re-run animation reveal classes
+            if (typeof initScrollReveal === 'function') {
+                galleryGrid.querySelectorAll('.gallery__item').forEach(function (item) {
+                    item.setAttribute('data-reveal', '');
+                });
+                initScrollReveal();
+            }
+
+            // Initialize filters and lightbox with the new elements
+            initGalleryFilters();
+            initLightbox();
+        })
+        .catch(function (error) {
+            console.error("Error fetching projects from Firestore:", error);
+            // Fallback to static
+            initGalleryFilters();
+            initLightbox();
+        });
+}
+
 
 /* ===================================
    Gallery Filters
    =================================== */
 function initGalleryFilters() {
-    const filterButtons = document.querySelectorAll('.gallery__filter');
-    const galleryItems = document.querySelectorAll('.gallery__item');
+    var filterButtons = document.querySelectorAll('.gallery__filter');
+    var galleryGrid   = document.getElementById('galleryGrid');
+    if (!galleryGrid) return;
 
-    filterButtons.forEach(button => {
+    var galleryItems = galleryGrid.querySelectorAll('.gallery__item');
+
+    filterButtons.forEach(function (button) {
         button.addEventListener('click', function () {
-            const filter = this.dataset.filter;
+            var filter = this.dataset.filter;
 
             // Update active button
-            filterButtons.forEach(btn => btn.classList.remove('active'));
+            filterButtons.forEach(function (btn) { btn.classList.remove('active'); });
             this.classList.add('active');
 
             // Filter items
-            galleryItems.forEach(item => {
-                const category = item.dataset.category;
+            galleryItems.forEach(function (item) {
+                var category = item.dataset.category;
 
                 if (filter === 'all' || category === filter) {
                     item.style.display = '';
@@ -232,7 +469,7 @@ function initGalleryFilters() {
                     item.style.transform = 'scale(0.9)';
 
                     // Animate in
-                    setTimeout(() => {
+                    setTimeout(function () {
                         item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
                         item.style.opacity = '1';
                         item.style.transform = 'scale(1)';
@@ -241,7 +478,7 @@ function initGalleryFilters() {
                     item.style.opacity = '0';
                     item.style.transform = 'scale(0.9)';
 
-                    setTimeout(() => {
+                    setTimeout(function () {
                         item.style.display = 'none';
                     }, 300);
                 }
@@ -250,102 +487,168 @@ function initGalleryFilters() {
     });
 }
 
+
 /* ===================================
-   Horizontal Gallery Scroll (Drag to scroll)
+   Lightbox Gallery
    =================================== */
-function initHorizontalGalleryScroll() {
-    const gallery = document.getElementById('galleryScroll');
-    if (!gallery) return;
+function initLightbox() {
+    var lightbox      = document.getElementById('lightbox');
+    var lightboxImage = document.getElementById('lightboxImage');
+    var lightboxInfo  = document.getElementById('lightboxInfo');
+    var lightboxClose = document.getElementById('lightboxClose');
+    var lightboxPrev  = document.getElementById('lightboxPrev');
+    var lightboxNext  = document.getElementById('lightboxNext');
 
-    let isDown = false;
-    let startX;
-    let scrollLeft;
+    if (!lightbox || !lightboxImage) return;
 
-    gallery.addEventListener('mousedown', (e) => {
-        isDown = true;
-        gallery.classList.add('active');
-        startX = e.pageX - gallery.offsetLeft;
-        scrollLeft = gallery.scrollLeft;
+    var currentIndex = 0;
+
+    // Helper: get currently visible gallery items
+    function getVisibleItems() {
+        return Array.from(document.querySelectorAll('.gallery__item')).filter(function (item) {
+            return item.style.display !== 'none';
+        });
+    }
+
+    // Open lightbox for a given gallery item
+    function openLightbox(item, visibleItems) {
+        var img = item.querySelector('.gallery__image');
+        if (!img) return;
+
+        lightboxImage.src = img.src;
+        lightboxImage.alt = img.alt;
+
+        // Populate info from overlay
+        var overlay  = item.querySelector('.gallery__overlay');
+        if (overlay && lightboxInfo) {
+            var catEl  = lightboxInfo.querySelector('.lightbox__category');
+            var titEl  = lightboxInfo.querySelector('.lightbox__title');
+            var locEl  = lightboxInfo.querySelector('.lightbox__location');
+
+            var srcCat = overlay.querySelector('.gallery__category');
+            var srcTit = overlay.querySelector('.gallery__title');
+            var srcLoc = overlay.querySelector('.gallery__location');
+
+            if (catEl) catEl.textContent = srcCat ? srcCat.textContent : '';
+            if (titEl) titEl.textContent = srcTit ? srcTit.textContent : '';
+            if (locEl) locEl.textContent = srcLoc ? srcLoc.textContent : '';
+        }
+
+        currentIndex = visibleItems.indexOf(item);
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Close lightbox
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+        lightboxImage.src = '';
+    }
+
+    // Navigate to prev / next
+    function navigate(direction) {
+        var items = getVisibleItems();
+        if (items.length === 0) return;
+
+        currentIndex += direction;
+        if (currentIndex < 0) currentIndex = items.length - 1;
+        if (currentIndex >= items.length) currentIndex = 0;
+
+        openLightbox(items[currentIndex], items);
+    }
+
+    // ── Event listeners ──────────────────────────
+
+    // Click on gallery item
+    document.querySelectorAll('.gallery__item').forEach(function (item) {
+        item.addEventListener('click', function () {
+            var visibleItems = getVisibleItems();
+            openLightbox(this, visibleItems);
+        });
     });
 
-    gallery.addEventListener('mouseleave', () => {
-        isDown = false;
-        gallery.classList.remove('active');
+    // Close button
+    if (lightboxClose) {
+        lightboxClose.addEventListener('click', closeLightbox);
+    }
+
+    // Click backdrop (outside image content)
+    lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox) closeLightbox();
     });
 
-    gallery.addEventListener('mouseup', () => {
-        isDown = false;
-        gallery.classList.remove('active');
-    });
+    // Prev / Next
+    if (lightboxPrev) lightboxPrev.addEventListener('click', function (e) { e.stopPropagation(); navigate(-1); });
+    if (lightboxNext) lightboxNext.addEventListener('click', function (e) { e.stopPropagation(); navigate(1);  });
 
-    gallery.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - gallery.offsetLeft;
-        const walk = (x - startX) * 2; // Scroll speed multiplier
-        gallery.scrollLeft = scrollLeft - walk;
+    // Keyboard
+    document.addEventListener('keydown', function (e) {
+        if (!lightbox.classList.contains('active')) return;
+
+        if (e.key === 'Escape')      closeLightbox();
+        if (e.key === 'ArrowLeft')   navigate(-1);
+        if (e.key === 'ArrowRight')  navigate(1);
     });
 }
+
 
 /* ===================================
    Before/After Slider
    =================================== */
 function initBeforeAfterSlider() {
-    const slider = document.getElementById('beforeAfterSlider');
-    const handle = document.getElementById('sliderHandle');
-    const afterImage = document.getElementById('afterImage');
+    var slider     = document.getElementById('beforeAfterSlider');
+    var handle     = document.getElementById('sliderHandle');
+    var afterImage = document.getElementById('afterImage');
 
     if (!slider || !handle || !afterImage) return;
 
-    let isDragging = false;
+    var isDragging = false;
 
     function updateSlider(clientX) {
-        const rect = slider.getBoundingClientRect();
-        let position = (clientX - rect.left) / rect.width;
-        position = Math.max(0, Math.min(1, position));
+        var rect     = slider.getBoundingClientRect();
+        var position = (clientX - rect.left) / rect.width;
+        position     = Math.max(0, Math.min(1, position));
 
-        const percentage = position * 100;
-        handle.style.left = percentage + '%';
-        afterImage.style.clipPath = `inset(0 0 0 ${percentage}%)`;
+        var percentage = position * 100;
+        handle.style.left          = percentage + '%';
+        afterImage.style.clipPath  = 'inset(0 0 0 ' + percentage + '%)';
     }
 
     // Mouse events
-    slider.addEventListener('mousedown', (e) => {
+    slider.addEventListener('mousedown', function (e) {
         isDragging = true;
         updateSlider(e.clientX);
     });
-
-    document.addEventListener('mousemove', (e) => {
+    document.addEventListener('mousemove', function (e) {
         if (!isDragging) return;
         updateSlider(e.clientX);
     });
-
-    document.addEventListener('mouseup', () => {
+    document.addEventListener('mouseup', function () {
         isDragging = false;
     });
 
     // Touch events
-    slider.addEventListener('touchstart', (e) => {
+    slider.addEventListener('touchstart', function (e) {
         isDragging = true;
         updateSlider(e.touches[0].clientX);
     });
-
-    document.addEventListener('touchmove', (e) => {
+    document.addEventListener('touchmove', function (e) {
         if (!isDragging) return;
         updateSlider(e.touches[0].clientX);
     });
-
-    document.addEventListener('touchend', () => {
+    document.addEventListener('touchend', function () {
         isDragging = false;
     });
 }
+
 
 /* ===================================
    Form Handling (Firebase Integration)
    =================================== */
 function initForm() {
-    const form = document.getElementById('quoteForm');
-    const formSuccess = document.getElementById('formSuccess');
+    var form        = document.getElementById('quoteForm');
+    var formSuccess = document.getElementById('formSuccess');
 
     if (!form) return;
 
@@ -355,8 +658,8 @@ function initForm() {
     }
 
     // Track phone clicks
-    document.querySelectorAll('a[href^="tel:"]').forEach(link => {
-        link.addEventListener('click', () => {
+    document.querySelectorAll('a[href^="tel:"]').forEach(function (link) {
+        link.addEventListener('click', function () {
             if (window.CanvasFirebase) {
                 window.CanvasFirebase.trackPhoneClick();
             }
@@ -364,8 +667,8 @@ function initForm() {
     });
 
     // Track directions clicks
-    document.querySelectorAll('a[href*="maps.google"]').forEach(link => {
-        link.addEventListener('click', () => {
+    document.querySelectorAll('a[href*="maps.google"]').forEach(function (link) {
+        link.addEventListener('click', function () {
             if (window.CanvasFirebase) {
                 window.CanvasFirebase.trackDirectionsClick();
             }
@@ -376,13 +679,13 @@ function initForm() {
         e.preventDefault();
 
         // Basic validation
-        const name = form.querySelector('#name');
-        const phone = form.querySelector('#phone');
-        let isValid = true;
+        var name  = form.querySelector('#name');
+        var phone = form.querySelector('#phone');
+        var isValid = true;
 
         // Reset previous errors
-        form.querySelectorAll('.form__error').forEach(error => error.remove());
-        form.querySelectorAll('.form__input, .form__select, .form__textarea').forEach(input => {
+        form.querySelectorAll('.form__error').forEach(function (error) { error.remove(); });
+        form.querySelectorAll('.form__input, .form__select, .form__textarea').forEach(function (input) {
             input.style.borderColor = '';
         });
 
@@ -402,7 +705,7 @@ function initForm() {
         }
 
         // Validate email if provided
-        const email = form.querySelector('#email');
+        var email = form.querySelector('#email');
         if (email.value.trim() && !isValidEmail(email.value)) {
             showError(email, t.errors.emailInvalid);
             isValid = false;
@@ -411,16 +714,16 @@ function initForm() {
         if (!isValid) return;
 
         // Show loading state
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
+        var submitBtn    = form.querySelector('button[type="submit"]');
+        var originalText = submitBtn.textContent;
         submitBtn.textContent = t.sending;
-        submitBtn.disabled = true;
+        submitBtn.disabled    = true;
 
         // Collect form data
-        const leadData = {
-            name: name.value.trim(),
-            phone: phone.value.trim(),
-            email: email.value.trim() || null,
+        var leadData = {
+            name:    name.value.trim(),
+            phone:   phone.value.trim(),
+            email:   email.value.trim() || null,
             service: form.querySelector('#service').value || null,
             message: form.querySelector('#message').value.trim() || null
         };
@@ -430,10 +733,8 @@ function initForm() {
             if (window.CanvasFirebase && typeof firebase !== 'undefined') {
                 await window.CanvasFirebase.submitLead(leadData);
             } else {
-                // Fallback: log to console and continue
                 console.log('Lead captured (Firebase not configured):', leadData);
             }
-
 
             // Redirect to thank you page
             if (lang === 'es') {
@@ -441,31 +742,30 @@ function initForm() {
             } else {
                 window.location.href = '/thank-you.html';
             }
-
         } catch (error) {
             console.error('Error submitting form:', error);
 
             // Show inline success anyway (don't block user)
             form.style.display = 'none';
-            formSuccess.style.display = 'block';
+            if (formSuccess) formSuccess.style.display = 'block';
 
             // Store lead locally as backup
             try {
-                const pendingLeads = JSON.parse(localStorage.getItem('pending_leads') || '[]');
-                pendingLeads.push({ ...leadData, timestamp: new Date().toISOString() });
+                var pendingLeads = JSON.parse(localStorage.getItem('pending_leads') || '[]');
+                pendingLeads.push(Object.assign({}, leadData, { timestamp: new Date().toISOString() }));
                 localStorage.setItem('pending_leads', JSON.stringify(pendingLeads));
             } catch (e) {
                 console.warn('Could not save lead locally');
             }
         } finally {
             submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
+            submitBtn.disabled    = false;
         }
     });
 
     function showError(input, message) {
         input.style.borderColor = '#E63946';
-        const error = document.createElement('span');
+        var error       = document.createElement('span');
         error.className = 'form__error';
         error.textContent = message;
         error.style.cssText = 'display: block; color: #E63946; font-size: 0.8125rem; margin-top: 0.25rem;';
@@ -473,42 +773,42 @@ function initForm() {
     }
 
     function isValidPhone(phone) {
-        // Basic phone validation - allows various formats
-        const phoneRegex = /^[\d\s\-\(\)\+\.]+$/;
+        var phoneRegex = /^[\d\s\-\(\)\+\.]+$/;
         return phoneRegex.test(phone) && phone.replace(/\D/g, '').length >= 10;
     }
 
     function isValidEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
 }
+
 
 /* ===================================
    Utility: Debounce
    =================================== */
 function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
+    var timeout;
+    return function () {
+        var context = this;
+        var args    = arguments;
         clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
+        timeout = setTimeout(function () {
+            func.apply(context, args);
+        }, wait);
     };
 }
+
 
 /* ===================================
    Google Reviews Integration
    =================================== */
 async function initReviews() {
-    const reviewsGrid = document.getElementById('reviewsGrid');
+    var reviewsGrid = document.getElementById('reviewsGrid');
     if (!reviewsGrid || !window.CanvasFirebase) return;
 
     // Check if we have Firebase Functions
-    // If not initialized, try init
-    let functions = null;
+    var functions = null;
     try {
         if (!firebase.apps.length) window.CanvasFirebase.init();
         functions = window.CanvasFirebase.functions;
@@ -518,9 +818,9 @@ async function initReviews() {
     }
 
     try {
-        const getGoogleReviews = functions.httpsCallable('getGoogleReviews');
-        const result = await getGoogleReviews();
-        const reviews = result.data; // reviews array
+        var getGoogleReviews = functions.httpsCallable('getGoogleReviews');
+        var result = await getGoogleReviews();
+        var reviews = result.data;
 
         if (!reviews || reviews.length === 0) return; // Keep static fallbacks
 
@@ -528,51 +828,64 @@ async function initReviews() {
         reviewsGrid.innerHTML = '';
 
         // Render new reviews (limit to 3 for grid)
-        reviews.slice(0, 3).forEach(review => {
-            const stars = '★'.repeat(review.rating || 5);
-            const text = review.text.length > 150 ? review.text.substring(0, 150) + '...' : review.text;
+        reviews.slice(0, 3).forEach(function (review) {
+            var text = review.text.length > 150 ? review.text.substring(0, 150) + '...' : review.text;
 
-            const card = document.createElement('div');
-            card.className = 'testimonial fade-in';
-            card.innerHTML = `
-                <div class="testimonial__stars">
-                    ${Array(5).fill(0).map((_, i) =>
-                `<span class="testimonial__star" style="color: ${i < (review.rating || 5) ? '#FACC15' : '#444'}">★</span>`
-            ).join('')}
-                </div>
-                <p class="testimonial__text">"${text}"</p>
-                <div class="testimonial__author">
-                    <div class="testimonial__avatar" style="overflow:hidden;">
-                        ${review.profile_photo_url ? `<img src="${review.profile_photo_url}" alt="${review.author_name}" style="width:100%;height:100%;object-fit:cover;">` : review.author_name.charAt(0)}
-                    </div>
-                    <div class="testimonial__info">
-                        <strong>${review.author_name}</strong>
-                        <span>${review.relative_time_description || 'Recent Customer'}</span>
-                    </div>
-                </div>
-            `;
+            var card = document.createElement('div');
+            card.className = 'testimonial';
+            card.setAttribute('data-reveal', '');
+            card.innerHTML =
+                '<div class="testimonial__stars">' +
+                    Array(5).fill(0).map(function (_, i) {
+                        return '<span class="testimonial__star" style="color: ' +
+                            (i < (review.rating || 5) ? '#FACC15' : '#444') + '">★</span>';
+                    }).join('') +
+                '</div>' +
+                '<p class="testimonial__text">"' + text + '"</p>' +
+                '<div class="testimonial__author">' +
+                    '<div class="testimonial__avatar" style="overflow:hidden;">' +
+                        (review.profile_photo_url
+                            ? '<img src="' + review.profile_photo_url + '" alt="' + review.author_name + '" style="width:100%;height:100%;object-fit:cover;">'
+                            : review.author_name.charAt(0)) +
+                    '</div>' +
+                    '<div class="testimonial__info">' +
+                        '<strong>' + review.author_name + '</strong>' +
+                        '<span>' + (review.relative_time_description || 'Recent Customer') + '</span>' +
+                    '</div>' +
+                '</div>';
+
             reviewsGrid.appendChild(card);
         });
 
+        // Re-init scroll reveal for dynamically inserted cards
+        if (typeof ScrollTrigger !== 'undefined') {
+            reviewsGrid.querySelectorAll('[data-reveal]').forEach(function (el, i) {
+                el.style.transitionDelay = (i * 0.1) + 's';
+                ScrollTrigger.create({
+                    trigger: el,
+                    start: 'top 85%',
+                    once: true,
+                    onEnter: function () { el.classList.add('revealed'); }
+                });
+            });
+        }
+
     } catch (error) {
         console.warn('Failed to load Google Reviews:', error);
-        // Fallback to static content is automatic since we didn't clear innerHTML on error
+        // Fallback to static content is automatic
     }
 }
 
-/* ===================================
-   WhatsApp Chat Widget (New)
-   =================================== */
-document.addEventListener('DOMContentLoaded', function () {
-    initWhatsAppWidget();
-});
 
+/* ===================================
+   WhatsApp Chat Widget
+   =================================== */
 function initWhatsAppWidget() {
-    const toggleBtn = document.getElementById('whatsappToggle');
-    const closeBtn = document.getElementById('whatsappClose');
-    const chatWindow = document.getElementById('whatsappWindow');
-    const form = document.getElementById('whatsappForm');
-    const successMsg = document.getElementById('whatsappSuccess');
+    var toggleBtn  = document.getElementById('whatsappToggle');
+    var closeBtn   = document.getElementById('whatsappClose');
+    var chatWindow = document.getElementById('whatsappWindow');
+    var form       = document.getElementById('whatsappForm');
+    var successMsg = document.getElementById('whatsappSuccess');
 
     if (!toggleBtn || !chatWindow || !form) return;
 
@@ -580,10 +893,10 @@ function initWhatsAppWidget() {
     function toggleChat() {
         chatWindow.classList.toggle('active');
 
-        // Focus input if opening
         if (chatWindow.classList.contains('active')) {
-            setTimeout(() => {
-                document.getElementById('waName').focus();
+            setTimeout(function () {
+                var waNameInput = document.getElementById('waName');
+                if (waNameInput) waNameInput.focus();
             }, 300);
         }
     }
@@ -604,24 +917,24 @@ function initWhatsAppWidget() {
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
 
-        const name = document.getElementById('waName').value.trim();
-        const phone = document.getElementById('waPhone').value.trim();
-        const message = document.getElementById('waMessage').value.trim();
-        const submitBtn = form.querySelector('button[type="submit"]');
+        var name      = document.getElementById('waName').value.trim();
+        var phone     = document.getElementById('waPhone').value.trim();
+        var message   = document.getElementById('waMessage').value.trim();
+        var submitBtn = form.querySelector('button[type="submit"]');
 
         if (!name || !phone || !message) return;
 
         // Disable button
-        const originalContent = submitBtn.innerHTML;
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span style="animation: spin 1s linear infinite;">⏳</span>'; // Simple loader
+        var originalContent = submitBtn.innerHTML;
+        submitBtn.disabled  = true;
+        submitBtn.innerHTML = '<span style="animation: spin 1s linear infinite;">⏳</span>';
 
-        const leadData = {
-            name: name,
-            phone: phone,
+        var leadData = {
+            name:    name,
+            phone:   phone,
             message: message,
             service: 'WhatsApp Inquiry',
-            source: 'whatsapp_widget'
+            source:  'whatsapp_widget'
         };
 
         try {
@@ -633,22 +946,22 @@ function initWhatsAppWidget() {
             }
 
             // 2. Show Success
-            successMsg.style.display = 'flex';
+            if (successMsg) successMsg.style.display = 'flex';
 
             // 3. Redirect to WhatsApp after delay
-            setTimeout(() => {
-                const phoneNumber = '15129459783';
-                const waText = encodeURIComponent(`Hi, my name is ${name}. ${message}`);
-                const waUrl = `https://wa.me/${phoneNumber}?text=${waText}`;
+            setTimeout(function () {
+                var phoneNumber = '15129459783';
+                var waText = encodeURIComponent('Hi, my name is ' + name + '. ' + message);
+                var waUrl  = 'https://wa.me/' + phoneNumber + '?text=' + waText;
 
                 window.open(waUrl, '_blank');
 
                 // Reset form and close window
-                setTimeout(() => {
+                setTimeout(function () {
                     form.reset();
-                    successMsg.style.display = 'none';
+                    if (successMsg) successMsg.style.display = 'none';
                     chatWindow.classList.remove('active');
-                    submitBtn.disabled = false;
+                    submitBtn.disabled  = false;
                     submitBtn.innerHTML = originalContent;
                 }, 1000);
 
@@ -659,11 +972,9 @@ function initWhatsAppWidget() {
             alert('Something went wrong. Redirecting to WhatsApp directly...');
 
             // Fallback redirect
-            const phoneNumber = '15129459783';
-            window.open(`https://wa.me/${phoneNumber}`, '_blank');
-            submitBtn.disabled = false;
+            window.open('https://wa.me/15129459783', '_blank');
+            submitBtn.disabled  = false;
             submitBtn.innerHTML = originalContent;
         }
     });
 }
-

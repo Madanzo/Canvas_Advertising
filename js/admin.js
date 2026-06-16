@@ -789,6 +789,7 @@ document.querySelectorAll('.tab').forEach(tab => {
             const labels = {
                 'leads': 'Leads Dashboard',
                 'emails': 'Automation Workflows',
+                'projects': 'Portfolio Projects',
                 'logs': 'Activity Logs',
                 'analytics': 'Analytics'
             };
@@ -811,6 +812,11 @@ document.querySelectorAll('.tab').forEach(tab => {
         if (tabId === 'emails') {
             loadTemplates();
             loadWorkflows();
+        }
+
+        // Load projects when switching to projects tab
+        if (tabId === 'projects') {
+            loadProjects();
         }
 
         // Load logs when switching to logs tab
@@ -2104,3 +2110,161 @@ async function showCampaignStats(workflowId) {
         // Re-trigger (onSnapshot handles live, but user might want force refresh if connection drop)
     };
 }
+
+// ─── Portfolio Projects CRUD (Canvas Advertising) ───────────────────
+
+let projectsUnsubscribe = null;
+
+function loadProjects() {
+    const tbody = document.getElementById('projectsBody');
+    const emptyState = document.getElementById('projectsEmptyState');
+    const loadingState = document.getElementById('projectsLoadingState');
+
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+    loadingState.style.display = 'block';
+    emptyState.style.display = 'none';
+
+    if (projectsUnsubscribe) projectsUnsubscribe();
+
+    if (!db) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:red;">Database not initialized.</td></tr>';
+        loadingState.style.display = 'none';
+        return;
+    }
+
+    projectsUnsubscribe = db.collection('canvas_projects')
+        .orderBy('createdAt', 'desc')
+        .onSnapshot(snapshot => {
+            loadingState.style.display = 'none';
+            tbody.innerHTML = '';
+
+            if (snapshot.empty) {
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+
+            snapshot.forEach(doc => {
+                const project = doc.data();
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        <img src="${escapeHtml(project.featuredImage || '')}" alt="${escapeHtml(project.title || '')}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                    </td>
+                    <td><strong>${escapeHtml(project.title || '')}</strong><br><small style="color: #666;">${escapeHtml(project.client || '')}</small></td>
+                    <td><span class="status-badge" style="background:#6c757d; color:white; padding:2px 6px; border-radius:4px; font-size:0.75rem;">${escapeHtml(project.category || '')}</span></td>
+                    <td>
+                        <button class="btn btn--outline btn--sm btn-delete-project" data-id="${doc.id}" style="color: red; border-color: red; padding: 2px 8px; font-size: 0.8rem;">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Bind delete events
+            tbody.querySelectorAll('.btn-delete-project').forEach(btn => {
+                btn.onclick = function() {
+                    const projectId = this.dataset.id;
+                    if (confirm('Are you sure you want to delete this project?')) {
+                        deleteProject(projectId);
+                    }
+                };
+            });
+
+        }, error => {
+            console.error("Error loading projects:", error);
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:red;">Error loading projects: ${error.message}</td></tr>`;
+            loadingState.style.display = 'none';
+        });
+}
+
+async function deleteProject(projectId) {
+    if (!db) return;
+    try {
+        const doc = await db.collection('canvas_projects').doc(projectId).get();
+        if (doc.exists) {
+            const data = doc.data();
+            if (data.imagePath) {
+                try {
+                    const storageRef = firebase.storage().ref();
+                    await storageRef.child(data.imagePath).delete();
+                } catch (se) {
+                    console.warn("Storage deletion error:", se);
+                }
+            }
+        }
+        await db.collection('canvas_projects').doc(projectId).delete();
+        alert('Project deleted successfully!');
+    } catch (error) {
+        console.error("Error deleting project:", error);
+        alert("Error deleting project: " + error.message);
+    }
+}
+
+// Submit Project Form
+document.addEventListener('DOMContentLoaded', function () {
+    const projectForm = document.getElementById('projectForm');
+    if (projectForm) {
+        projectForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const title = document.getElementById('projectTitle').value.trim();
+            const client = document.getElementById('projectClient').value.trim();
+            const category = document.getElementById('projectCategory').value;
+            const location = document.getElementById('projectLocation').value.trim();
+            const description = document.getElementById('projectDescription').value.trim();
+            const imageFile = document.getElementById('projectImage').files[0];
+            const featured = document.getElementById('projectFeatured').checked;
+            const btnSave = document.getElementById('btnSaveProject');
+
+            if (!imageFile) {
+                alert("Please select a project image file.");
+                return;
+            }
+
+            const originalBtnText = btnSave.textContent;
+            btnSave.disabled = true;
+            btnSave.textContent = 'Uploading...';
+
+            try {
+                // 1. Upload file to Storage
+                const storage = firebase.storage();
+                const fileExtension = imageFile.name.split('.').pop();
+                const path = `projects/${Date.now()}_${Math.random().toString(36).substr(2, 9)}.${fileExtension}`;
+                const fileRef = storage.ref().child(path);
+                
+                await fileRef.put(imageFile);
+                const downloadURL = await fileRef.getDownloadURL();
+
+                // 2. Save metadata to Firestore
+                const newProject = {
+                    title: title,
+                    client: client,
+                    category: category,
+                    location: location || 'Austin, TX',
+                    description: description,
+                    featuredImage: downloadURL,
+                    imagePath: path,
+                    images: [downloadURL],
+                    featured: featured,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
+                await db.collection('canvas_projects').add(newProject);
+
+                // 3. Reset form and feedback
+                projectForm.reset();
+                alert("Project added successfully!");
+            } catch (error) {
+                console.error("Error adding project:", error);
+                alert("Error adding project: " + error.message);
+            } finally {
+                btnSave.disabled = false;
+                btnSave.textContent = originalBtnText;
+            }
+        });
+    }
+});

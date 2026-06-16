@@ -15,14 +15,14 @@
         gtag('config', 'G-98HWWM4BDW');
     </script>
     <meta name="description"
-        content="Imprenta de servicio completo en Austin. Rotulación de vehículos, letreros para tiendas, banners, tarjetas de presentación y más. Diseño gratis incluido. Hablamos Español. Llama al (512) 945-9783">
+        content="El socio de producción de impresión y rotulación de vehículos n.º 1 de Austin. Rotulación de food trucks, branding de flotas, impresión de gran formato. Impresión al por mayor para talleres de rotulación. Diseño gratuito incluido. Hablamos español. Llame al (512) 945-9783">
     <meta name="keywords"
-        content="Imprenta Austin, rotulación de vehículos Austin, letreros Austin TX, impresión comercial, banners, tarjetas de presentación, letreros para tiendas">
+        content="rotulación de vehículos Austin, rotulación de food trucks Austin TX, rotulación de flotas, socio de impresión de taller de rotulación, impresión de vinilo al por mayor, impresión de gran formato Austin, letreros Austin TX">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Canvas Advertising | Imprenta en Austin | Letreros, Rotulación y Más">
+    <meta property="og:title" content="Canvas Advertising | Rotulación de Vehículos y Socio de Impresión | Austin TX">
     <meta property="og:description"
-        content="Imprenta de servicio completo en Austin. Rotulación de vehículos, letreros para tiendas, banners y más. Diseño gratis incluido. Hablamos Español.">
+        content="Especialistas en rotulación de vehículos en Austin y socios de producción de impresión para talleres de rotulación. Rotulación de food trucks, branding de flotas, impresión de gran formato. Diseño gratuito incluido. Hablamos español.">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="es_US">
 
@@ -30,7 +30,7 @@
     <link rel="canonical" href="https://canvas-advertising.com/index-es.html">
     <link rel="icon" type="image/png" href="favicon.png">
 
-    <title>Canvas Advertising | Imprenta en Austin | Letreros, Rotulación y Más</title>
+    <title>Canvas Advertising | Rotulación de Vehículos y Socio de Impresión | Austin TX</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,6 +40,10 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="css/styles.css">
+
+    <!-- GSAP Animation Libraries -->
+    <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
 
     <!-- Local Business Schema -->
     <script type="application/ld+json">
@@ -65,21 +69,32 @@
             "closes": "17:00"
         },
         "priceRange": "$$",
-        "description": "Empresa de impresión comercial y señalización de servicio completo en Austin, TX. Rotulación de vehículos, letreros para tiendas, banners, tarjetas de presentación y más."
+        "description": "Especialistas en rotulación de vehículos y socios de producción de impresión en Austin, TX. Rotulación de food trucks, branding de flotas, impresión de gran formato, letreros e impresión al por mayor para talleres de rotulación."
     }
     </script>
 </head>
 
 <body>
     <!-- Skip to Content (Accessibility) -->
-    <a href="#hero" class="skip-link">Saltar al contenido principal</a>
+    <a href="#hero" class="skip-link">Ir al contenido principal</a>
+
+    <!-- Preloader -->
+    <aside id="preloader" class="preloader">
+        <div class="preloader__logo">
+            <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Logo%2Fblack-version.png?alt=media&token=699b013d-6739-4d26-8c05-deda4af0e2c5"
+                alt="Canvas Advertising" class="preloader__logo-img">
+        </div>
+        <div class="preloader__bar">
+            <div class="preloader__bar-fill"></div>
+        </div>
+    </aside>
 
     <!-- Navigation -->
     <nav class="nav" id="nav">
         <div class="nav__container">
             <a href="#" class="nav__logo">
                 <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Logo%2Fblack-version.png?alt=media&token=699b013d-6739-4d26-8c05-deda4af0e2c5"
-                    alt="Canvas Advertising Logo" class="nav__logo-img">
+                    alt="Logo de Canvas Advertising" class="nav__logo-img">
             </a>
 
             <button class="nav__toggle" id="navToggle" aria-label="Alternar navegación">
@@ -90,14 +105,12 @@
 
             <ul class="nav__menu" id="navMenu">
                 <li><a href="#services" class="nav__link">Servicios</a></li>
-                <li><a href="#about" class="nav__link">Nosotros</a></li>
                 <li><a href="#gallery" class="nav__link">Galería</a></li>
+                <li><a href="partner-es.html" class="nav__link">Asóciese con Nosotros</a></li>
                 <li><a href="#contact" class="nav__link">Contacto</a></li>
                 <li><a href="index.html" class="nav__link nav__link--lang">🇺🇸 English</a></li>
             </ul>
 
-            <!-- Updated to trigger Cal.com modal -->
-            <!-- Updated to phone link -->
             <a href="tel:+15129459783" class="nav__phone">
                 <svg class="nav__phone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path
@@ -108,76 +121,132 @@
         </div>
     </nav>
 
-    <!-- Hero Section - Split Screen -->
-    <section class="hero" id="hero">
-        <div class="hero__grain"></div>
-        <div class="hero__container">
-            <div class="hero__content">
-                <div class="hero__badges">
-                    <span class="hero__badge hero__badge--spanish">🇲🇽 Hablamos Español</span>
-                    <span class="hero__badge hero__badge--free">🎨 DISEÑO GRATIS con tu proyecto</span>
-                </div>
-                <h1 class="hero__title">TU IMPRENTA<br>DE SERVICIO<br>COMPLETO</h1>
-                <p class="hero__subtitle">Desde tarjetas hasta rotulación de edificios.<br>Impresión de calidad con
-                    diseño profesional gratuito.</p>
+    <!-- ===== HERO: Cinematic 3D Carousel ===== -->
+    <section class="hero-cinema" id="hero">
+        <div class="hero-cinema__grain"></div>
 
-                <div class="hero__cta">
-                    <button class="btn btn--primary btn--large btn--pulse"
-                        data-cal-link="canvas-advertising-6kkn3h/30min" data-cal-namespace="30min"
-                        data-cal-config='{"layout":"month_view"}'>
-                        <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                            <line x1="16" y1="2" x2="16" y2="6" />
-                            <line x1="8" y1="2" x2="8" y2="6" />
-                            <line x1="3" y1="10" x2="21" y2="10" />
-                        </svg>
-                        Agenda una Cita
-                    </button>
-                    <a href="#contact" class="btn btn--secondary btn--large">Cotización Gratis</a>
-                </div>
-
-                <div class="hero__trust">
-                    <div class="hero__trust-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
-                            <path d="M22 4L12 14.01l-3-3" />
-                        </svg>
-                        <span>20+ Años de Experiencia</span>
-                    </div>
-                    <div class="hero__trust-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
-                            <path d="M22 4L12 14.01l-3-3" />
-                        </svg>
-                        <span>150+ Proyectos</span>
-                    </div>
-                    <div class="hero__trust-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                        </svg>
-                        <span>Misma Semana Disponible</span>
-                    </div>
-                </div>
+        <!-- Slide Backgrounds -->
+        <div class="hero-cinema__slides" id="heroSlides">
+            <div class="hero-cinema__slide active"
+                style="background-image: url('https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fcommercial-transit-van-full-wrap.webp?alt=media&token=970e7ab6-35fe-44c9-a763-fb04a7662ec3')">
             </div>
+            <div class="hero-cinema__slide"
+                style="background-image: url('https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fwaterloo-sparkling-water-fleet-wrap-austin.webp?alt=media&token=c4805ad5-1929-4d37-a23d-fef7e1733aa4')">
+            </div>
+            <div class="hero-cinema__slide"
+                style="background-image: url('https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2FIMG_0536.jpg?alt=media&token=de87063d-b9ed-44e0-a7cd-d6cc3d01bac4')">
+            </div>
+            <div class="hero-cinema__slide"
+                style="background-image: url('https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_5200.jpg?alt=media&token=a00f5e84-bdd5-435c-a0f8-d8b8ba3bbe20')">
+            </div>
+        </div>
 
-
-            <div class="hero__image">
-                <div class="hero__image-wrapper">
-                    <img class="hero__img"
-                        src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fcommercial-transit-van-full-wrap.webp?alt=media&token=970e7ab6-35fe-44c9-a763-fb04a7662ec3"
-                        alt="Rotulación profesional de vehículos - Canvas Advertising Austin TX">
-                    <div class="hero__image-overlay"></div>
-                    <div class="hero__image-caption">
-                        <span class="hero__image-label">Trabajo Destacado</span>
-                        <span class="hero__image-title">ROTULACIÓN COMPLETA</span>
+        <!-- Slide Content -->
+        <div class="hero-cinema__content">
+            <div class="hero-cinema__text active" data-slide="0">
+                <div class="hero-cinema__line-element">
+                    <div></div>
+                    <span>Especialistas en Rotulación de Vehículos</span>
+                    <div></div>
+                </div>
+                <h1 class="hero-cinema__title" data-split>ROTULA TU MARCA.<br>CONQUISTA EL CAMINO.</h1>
+                <p class="hero-cinema__desc">Rotulación completa, parcial, branding de food trucks y gráficos para flotas. Desde el diseño hasta la calle, con diseño profesional GRATUITO.</p>
+                <a href="#contact" class="hero-cinema__btn">
+                    Obtén una Cotización Gratis
+                    <div class="hero-cinema__btn-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </div>
+                </a>
+            </div>
+            <div class="hero-cinema__text" data-slide="1">
+                <div class="hero-cinema__line-element">
+                    <div></div>
+                    <span>Branding de Flotas</span>
+                    <div></div>
+                </div>
+                <h1 class="hero-cinema__title" data-split>BRANDING DE FLOTAS<br>QUE ATRAE MIRADAS</h1>
+                <p class="hero-cinema__desc">Convierte tus vehículos en vallas publicitarias móviles. Branding consistente y de alto impacto para toda tu flota.</p>
+                <button class="hero-cinema__btn"
+                    data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting"
+                    data-cal-namespace="canvas-advertising-strategy-meeting"
+                    data-cal-config='{"layout":"month_view"}'>
+                    Reserva una Reunión Estratégica
+                    <div class="hero-cinema__btn-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    </div>
+                </button>
+            </div>
+            <div class="hero-cinema__text" data-slide="2">
+                <div class="hero-cinema__line-element">
+                    <div></div>
+                    <span>Mira la Transformación</span>
+                    <div></div>
+                </div>
+                <h1 class="hero-cinema__title" data-split>DESDE EL CONCEPTO<br>HASTA LA CALLE</h1>
+                <p class="hero-cinema__desc">Nos encargamos de cada paso: diseño, impresión, laminado e instalación. Tu visión, nuestra ejecución.</p>
+                <a href="#gallery" class="hero-cinema__btn">
+                    Ver Nuestro Trabajo
+                    <div class="hero-cinema__btn-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </div>
+                </a>
+            </div>
+            <div class="hero-cinema__text" data-slide="3">
+                <div class="hero-cinema__line-element">
+                    <div></div>
+                    <span>Producción de Impresión B2B</span>
+                    <div></div>
+                </div>
+                <h1 class="hero-cinema__title" data-split>TU SOCIO DE MARCA<br>EN AUSTIN</h1>
+                <p class="hero-cinema__desc">Nosotros imprimimos. Tú rotulas. Impresión al por mayor, sin pedido mínimo y entrega en la misma semana para talleres de rotulación.</p>
+                <a href="partner-es.html" class="hero-cinema__btn">
+                    Asóciese con Nosotros
+                    <div class="hero-cinema__btn-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Carousel Navigation -->
+        <div class="hero-cinema__nav">
+            <div class="hero-cinema__arrows">
+                <button class="hero-cinema__arrow hero-cinema__arrow--prev" id="heroPrev" aria-label="Previous slide">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <button class="hero-cinema__arrow hero-cinema__arrow--next" id="heroNext" aria-label="Next slide">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+            <div class="hero-cinema__indicators">
+                <div class="hero-cinema__steps">
+                    <button class="hero-cinema__step active" data-index="0">Rotulación</button>
+                    <button class="hero-cinema__step" data-index="1">Flotas</button>
+                    <button class="hero-cinema__step" data-index="2">Proceso</button>
+                    <button class="hero-cinema__step" data-index="3">Socios</button>
+                </div>
+                <div class="hero-cinema__progress">
+                    <span class="hero-cinema__progress-fill"></span>
                 </div>
             </div>
         </div>
+
+        <!-- Scroll Down -->
+        <div class="hero-cinema__scroll">
+            <span>desliza</span>
+            <div class="hero-cinema__scroll-line"></div>
+            <span>abajo</span>
+        </div>
+
+        <!-- Badges -->
+        <div class="hero-cinema__badges">
+            <span class="hero-cinema__badge">🇲🇽 Hablamos Español</span>
+            <span class="hero-cinema__badge">🎨 DISEÑO GRATIS</span>
+        </div>
     </section>
 
-    <!-- Trust Bar -->
-    <section class="trust-bar">
+    <!-- ===== Trust Bar ===== -->
+    <section class="trust-bar" data-reveal>
         <div class="container">
             <div class="trust-bar__grid">
                 <div class="trust-bar__item">
@@ -187,8 +256,8 @@
                             <path d="M3 21v-2a7 7 0 0 1 7-7h4a7 7 0 0 1 7 7v2" />
                         </svg>
                     </div>
-                    <span class="trust-bar__number">20+</span>
-                    <span class="trust-bar__label">Años de Experiencia</span>
+                    <span class="trust-bar__number" data-count="20">20+</span>
+                    <span class="trust-bar__label">Años de Experiencia Combinada</span>
                 </div>
                 <div class="trust-bar__item">
                     <div class="trust-bar__icon">
@@ -197,7 +266,7 @@
                             <path d="M22 4L12 14.01l-3-3" />
                         </svg>
                     </div>
-                    <span class="trust-bar__number">150+</span>
+                    <span class="trust-bar__number" data-count="150">150+</span>
                     <span class="trust-bar__label">Proyectos Completados</span>
                 </div>
                 <div class="trust-bar__item">
@@ -224,7 +293,7 @@
                 <div class="trust-bar__item trust-bar__item--insured">
                     <div class="trust-bar__icon trust-bar__icon--dark">
                         <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/fully-insured-company.png?alt=media&token=e61bbf0c-2767-4ba2-998e-a83ee183c79f"
-                            alt="Compañía Totalmente Asegurada">
+                            alt="Empresa Totalmente Asegurada">
                     </div>
                     <span class="trust-bar__number">Totalmente</span>
                     <span class="trust-bar__label">Asegurados</span>
@@ -233,96 +302,84 @@
         </div>
     </section>
 
-    <!-- Services Section -->
+    <!-- ===== Services Section (Reordered — Wraps First) ===== -->
     <section class="services section--dark" id="services">
         <div class="section__grain"></div>
         <div class="container">
-            <div class="section-header section-header--light">
+            <div class="section-header section-header--light" data-reveal>
                 <p class="section-label">Lo Que Hacemos</p>
                 <h2 class="section-title">NUESTROS SERVICIOS</h2>
-                <p class="section-subtitle">Desde el concepto hasta la instalación, nos encargamos de todo. Cada
-                    proyecto incluye
+                <p class="section-subtitle">Desde el concepto hasta la instalación, nos encargamos de cada paso. Cada proyecto incluye
                     <strong>diseño profesional gratuito</strong>.
                 </p>
             </div>
 
             <div class="services__grid">
-                <!-- Commercial Printing -->
-                <div class="service-card">
-                    <div class="service-card__icon">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FCommercial-Printing.svg?alt=media&token=0936b258-b059-47ea-9f15-208be7953790"
-                            alt="Icono Impresión Comercial">
-                    </div>
-                    <h3 class="service-card__title">Impresión Comercial</h3>
-                    <p class="service-card__desc">Tarjetas de presentación, folletos, flyers, menús, pósters, carpetas,
-                        libretas,
-                        etiquetas y todos tus materiales de marketing.</p>
-                    <span class="service-card__tag">Más Popular</span>
-                    <span class="service-card__free">DISEÑO GRATIS</span>
-                </div>
-
-                <!-- Large Format -->
-                <div class="service-card">
-                    <div class="service-card__icon">
-                        <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FLarge-Format-Graphics.svg?alt=media&token=5d95dde3-bd19-4b98-ad3a-40d7d72334d8"
-                            alt="Icono Gráficos Gran Formato">
-                    </div>
-                    <h3 class="service-card__title">Gráficos de Gran Formato</h3>
-                    <p class="service-card__desc">Banners, gráficos para paredes, vallas publicitarias, banderas,
-                        mallas, gráficos para ventanas,
-                        lienzos y displays de tela.</p>
-                    <span class="service-card__free">DISEÑO GRATIS</span>
-                </div>
-
-                <!-- Vehicle Wraps -->
-                <div class="service-card">
+                <!-- Vehicle Wraps (HERO SERVICE) -->
+                <div class="service-card" data-reveal>
                     <div class="service-card__icon">
                         <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FVehicle-Wraps.svg?alt=media&token=344eb630-97ea-41c9-b510-44343264fe96"
-                            alt="Icono Rotulación Vehicular">
+                            alt="Vehicle Wraps Icon">
                     </div>
                     <h3 class="service-card__title">Rotulación de Vehículos</h3>
-                    <p class="service-card__desc">Rotulación completa, parcial, flotillas, food trucks, remolques,
-                        imanes para autos y vinil microperforado.</p>
+                    <p class="service-card__desc">Rotulación completa y parcial, branding de flotas, rotulación de food trucks, remolques, imanes para autos y vinilo microperforado.</p>
                     <span class="service-card__tag">Alto Impacto</span>
                     <span class="service-card__free">DISEÑO GRATIS</span>
                 </div>
 
+                <!-- Large Format -->
+                <div class="service-card" data-reveal>
+                    <div class="service-card__icon">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FLarge-Format-Graphics.svg?alt=media&token=5d95dde3-bd19-4b98-ad3a-40d7d72334d8"
+                            alt="Large Format Graphics Icon">
+                    </div>
+                    <h3 class="service-card__title">Gráficos de Gran Formato</h3>
+                    <p class="service-card__desc">Banners, gráficos de pared, vallas publicitarias, banderas, banners de malla, gráficos de ventanas, lienzos y exhibidores de tela.</p>
+                    <span class="service-card__free">DISEÑO GRATIS</span>
+                </div>
+
                 <!-- Storefront Signage -->
-                <div class="service-card">
+                <div class="service-card" data-reveal>
                     <div class="service-card__icon">
                         <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FStorefront-Signage.svg?alt=media&token=549d8c7f-7099-4161-8897-d2283a5fafec"
-                            alt="Icono Señalización Fachadas">
+                            alt="Storefront Signage Icon">
                     </div>
-                    <h3 class="service-card__title">Señalización de Fachadas</h3>
-                    <p class="service-card__desc">Letras de canal, letreros dimensionales, caballetes, letreros de
-                        patio, neón,
-                        gráficos para ventanas y placas.</p>
+                    <h3 class="service-card__title">Letreros Comerciales</h3>
+                    <p class="service-card__desc">Letras acanaladas, letreros dimensionales, caballetes publicitarios (A-frames), letreros de jardín, luces de neón, gráficos de ventanas y placas.</p>
                     <span class="service-card__free">DISEÑO GRATIS</span>
                 </div>
 
                 <!-- Interior Branding -->
-                <div class="service-card">
+                <div class="service-card" data-reveal>
                     <div class="service-card__icon">
                         <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FInterior-Branding.svg?alt=media&token=3a20a318-7bc5-4166-b265-c9eb26895417"
-                            alt="Icono Branding Interior">
+                            alt="Interior Branding Icon">
                     </div>
-                    <h3 class="service-card__title">Branding Interior</h3>
-                    <p class="service-card__desc">Murales de pared, señalización direccional, letreros de oficina,
-                        recepción y
-                        gráficos ambientales.</p>
+                    <h3 class="service-card__title">Branding de Interiores</h3>
+                    <p class="service-card__desc">Murales de pared, señalización de orientación, letreros de oficina, letreros de vestíbulo y gráficos ambientales.</p>
+                    <span class="service-card__free">DISEÑO GRATIS</span>
+                </div>
+
+                <!-- Commercial Printing -->
+                <div class="service-card" data-reveal>
+                    <div class="service-card__icon">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FCommercial-Printing.svg?alt=media&token=0936b258-b059-47ea-9f15-208be7953790"
+                            alt="Commercial Printing Icon">
+                    </div>
+                    <h3 class="service-card__title">Impresión Comercial</h3>
+                    <p class="service-card__desc">Tarjetas de presentación, folletos, volantes (flyers), menús, pósteres, carpetas, libretas, etiquetas y todos sus materiales de marketing.</p>
+                    <span class="service-card__tag">Más Popular</span>
                     <span class="service-card__free">DISEÑO GRATIS</span>
                 </div>
 
                 <!-- Merch & Promo -->
-                <div class="service-card">
+                <div class="service-card" data-reveal>
                     <div class="service-card__icon">
                         <img src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FMerch-%26-Promotional.svg?alt=media&token=8b32c119-bd70-4613-9ace-e7f7f9ccc870"
-                            alt="Icono Merch y Promocionales">
+                            alt="Merch & Promotional Icon">
                     </div>
-                    <h3 class="service-card__title">Merch y Promocionales</h3>
-                    <p class="service-card__desc">Camisetas, sudaderas, gorras, bolsas, bolígrafos, tazas, llaveros,
-                        lanyards
-                        y regalos corporativos.</p>
+                    <h3 class="service-card__title">Mercancía y Promocionales</h3>
+                    <p class="service-card__desc">Camisetas, sudaderas, gorras, bolsas de tela, bolígrafos, tazas, llaveros, cordones para credenciales (lanyards) y regalos corporativos.</p>
                     <span class="service-card__free">DISEÑO GRATIS</span>
                 </div>
             </div>
@@ -340,73 +397,331 @@
         </div>
     </section>
 
-    <!-- Why Canvas Section -->
+    <!-- ===== Why Canvas Section ===== -->
     <section class="why-canvas" id="about">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header" data-reveal>
                 <h2 class="section-title">¿POR QUÉ CANVAS ADVERTISING?</h2>
-                <p class="section-subtitle">Tu marca debe trabajar tan duro como tú</p>
+                <p class="section-subtitle">Tu marca debería trabajar tan duro como tú</p>
             </div>
 
             <div class="why-canvas__grid">
-                <div class="why-item">
+                <div class="why-item" data-reveal>
                     <div class="why-item__icon">🇲🇽</div>
                     <h3 class="why-item__title">Equipo Bilingüe</h3>
-                    <p class="why-item__desc">Hablamos Español. Servimos a la diversa comunidad de negocios de Austin
-                        con orgullo.
-                    </p>
+                    <p class="why-item__desc">Hablamos español. Servimos con orgullo a la diversa comunidad empresarial de Austin.</p>
                 </div>
 
-                <div class="why-item">
+                <div class="why-item" data-reveal>
                     <div class="why-item__icon">🏭</div>
-                    <h3 class="why-item__title">Producción Interna</h3>
-                    <p class="why-item__desc">Control de calidad completo desde el diseño hasta la entrega. Sin
-                        tercerización, sin sorpresas.</p>
+                    <h3 class="why-item__title">Producción Propia</h3>
+                    <p class="why-item__desc">Control de calidad completo desde el diseño hasta la entrega. Sin subcontrataciones, sin sorpresas.</p>
                 </div>
 
-                <div class="why-item">
+                <div class="why-item" data-reveal>
                     <div class="why-item__icon">🎨</div>
                     <h3 class="why-item__title">Diseño Gráfico Gratis</h3>
-                    <p class="why-item__desc">Cada proyecto incluye diseño profesional GRATIS. Cuéntanos tu idea,
-                        nosotros la hacemos realidad.</p>
+                    <p class="why-item__desc">Cada proyecto de impresión incluye diseño profesional GRATUITO. Cuéntanos tu idea, la haremos realidad.</p>
                 </div>
 
-                <div class="why-item">
+                <div class="why-item" data-reveal>
                     <div class="why-item__icon">🔧</div>
                     <h3 class="why-item__title">Instalación Experta</h3>
-                    <p class="why-item__desc">Instalación profesional en Austin y todo Texas. Nos encargamos de todo.
-                    </p>
+                    <p class="why-item__desc">Instalación profesional en Austin y todo Texas. Nos encargamos de todo.</p>
                 </div>
 
-                <div class="why-item">
+                <div class="why-item" data-reveal>
                     <div class="why-item__icon">⚡</div>
                     <h3 class="why-item__title">Entrega Rápida</h3>
-                    <p class="why-item__desc">La mayoría de proyectos se completan en 3-5 días hábiles. Servicio de
-                        misma semana disponible.</p>
+                    <p class="why-item__desc">La mayoría de los proyectos se completan en 3 a 5 días hábiles. Entrega en la misma semana disponible.</p>
                 </div>
 
-                <div class="why-item">
+                <div class="why-item" data-reveal>
                     <div class="why-item__icon">🤝</div>
-                    <h3 class="why-item__title">Asociación a Largo Plazo</h3>
+                    <h3 class="why-item__title">Relación a Largo Plazo</h3>
                     <p class="why-item__desc">No somos solo proveedores, somos socios en el éxito de tu marca.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Company Stats Section -->
+    <!-- ===== Before/After Slider ===== -->
+    <section class="before-after" data-reveal>
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">MIRA LA TRANSFORMACIÓN</h2>
+                <p class="section-subtitle">Arrastra el deslizador para revelar el antes y el después</p>
+            </div>
+
+            <div class="before-after__container">
+                <div class="before-after__slider" id="beforeAfterSlider">
+                    <img class="before-after__image before-after__image--before"
+                        src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2FIMG_0535.jpg?alt=media&token=6c958f58-e134-46d4-b246-2a14d5e5aae6"
+                        alt="Vehículo antes de la rotulación: camioneta blanca sencilla">
+                    <img class="before-after__image before-after__image--after" id="afterImage"
+                        src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2FIMG_0536.jpg?alt=media&token=de87063d-b9ed-44e0-a7cd-d6cc3d01bac4"
+                        alt="Vehículo después de la rotulación: totalmente rotulado con la marca">
+                    <div class="before-after__handle" id="sliderHandle"></div>
+                    <span class="before-after__label before-after__label--before">Antes</span>
+                    <span class="before-after__label before-after__label--after">Después</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Gallery Section ===== -->
+    <section class="gallery section--dark" id="gallery">
+        <div class="section__grain"></div>
+        <div class="container">
+            <div class="section-header section-header--light" data-reveal>
+                <p class="section-label">Nuestro Portafolio</p>
+                <h2 class="section-title">TRABAJOS RECIENTES</h2>
+                <p class="section-subtitle">Es probable que hayas visto nuestro trabajo en Austin. Desde South Congress hasta Round Rock, nuestros letreros y rotulaciones están en todas partes.</p>
+            </div>
+
+            <div class="gallery__filters" data-reveal>
+                <button class="gallery__filter active" data-filter="all">Todos</button>
+                <button class="gallery__filter" data-filter="wraps">Rotulación de Vehículos</button>
+                <button class="gallery__filter" data-filter="signs">Letreros</button>
+                <button class="gallery__filter" data-filter="print">Impresión</button>
+            </div>
+
+            <div class="gallery__grid" id="galleryGrid">
+                <!-- Waterloo Fleet Wrap -->
+                <div class="gallery__item" data-category="wraps" data-reveal>
+                    <div class="gallery__image-wrapper">
+                        <img class="gallery__image" loading="lazy"
+                            src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fwaterloo-sparkling-water-fleet-wrap-austin.webp?alt=media&token=c4805ad5-1929-4d37-a23d-fef7e1733aa4"
+                            alt="Waterloo Sparkling Water Fleet Wrap - Austin TX">
+                        <div class="gallery__overlay">
+                            <span class="gallery__category">Rotulación de Vehículos</span>
+                            <span class="gallery__title">Rotulación de Flota</span>
+                            <span class="gallery__location">Waterloo Sparkling Water, Austin</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monument Sign -->
+                <div class="gallery__item" data-category="signs" data-reveal>
+                    <div class="gallery__image-wrapper">
+                        <img class="gallery__image" loading="lazy"
+                            src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fmonument-sign-vinyl-refacing-austin-tx.webp?alt=media&token=49b080dc-897f-42bd-90c2-08f7dda1de3f"
+                            alt="Monument Sign Vinyl Refacing - Austin TX">
+                        <div class="gallery__overlay">
+                            <span class="gallery__category">Letreros</span>
+                            <span class="gallery__title">Renovación de Letrero de Monumento</span>
+                            <span class="gallery__location">Austin, TX</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Billboard -->
+                <div class="gallery__item" data-category="wraps" data-reveal>
+                    <div class="gallery__image-wrapper">
+                        <img class="gallery__image" loading="lazy"
+                            src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fleet-branding-mobile-billboard-graphics.webp?alt=media&token=c7704a48-69a8-4292-aedf-e021bb631d9f"
+                            alt="Fleet Branding Mobile Billboard Graphics">
+                        <div class="gallery__overlay">
+                            <span class="gallery__category">Rotulación de Vehículos</span>
+                            <span class="gallery__title">Valla Publicitaria Móvil</span>
+                            <span class="gallery__location">Branding de Flota</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Retail Store Fixture -->
+                <div class="gallery__item" data-category="print" data-reveal>
+                    <div class="gallery__image-wrapper">
+                        <img class="gallery__image" loading="lazy"
+                            src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fretail-store-fixture-wrap-austin-tx.webp?alt=media&token=2e6d6698-c7b8-45c5-ad2c-da6faf658d08"
+                            alt="Retail Store Fixture Wrap - Austin TX">
+                        <div class="gallery__overlay">
+                            <span class="gallery__category">Interiores</span>
+                            <span class="gallery__title">Rotulación de Mobiliario Comercial</span>
+                            <span class="gallery__location">Tienda Minorista, Austin TX</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Commercial Van Wrap -->
+                <div class="gallery__item" data-category="wraps" data-reveal>
+                    <div class="gallery__image-wrapper">
+                        <img class="gallery__image" loading="lazy"
+                            src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2FIMG_0536.jpg?alt=media&token=de87063d-b9ed-44e0-a7cd-d6cc3d01bac4"
+                            alt="Commercial Van Full Wrap - Completed Project">
+                        <div class="gallery__overlay">
+                            <span class="gallery__category">Rotulación de Vehículos</span>
+                            <span class="gallery__title">Rotulación de Camioneta Comercial</span>
+                            <span class="gallery__location">Negocio Local, Austin TX</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Construction Company Wrap -->
+                <div class="gallery__item" data-category="wraps" data-reveal>
+                    <div class="gallery__image-wrapper">
+                        <img class="gallery__image" loading="lazy"
+                            src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_5200.jpg?alt=media&token=a00f5e84-bdd5-435c-a0f8-d8b8ba3bbe20"
+                            alt="Construction Company Vehicle Wrap">
+                        <div class="gallery__overlay">
+                            <span class="gallery__category">Rotulación de Vehículos</span>
+                            <span class="gallery__title">Empresa de Construcción</span>
+                            <span class="gallery__location">Branding de Flota, Austin TX</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom T-Shirts -->
+                <div class="gallery__item" data-category="print" data-reveal>
+                    <div class="gallery__image-wrapper">
+                        <img class="gallery__image" loading="lazy"
+                            src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_8357.jpg?alt=media&token=054eda4c-2eef-48ec-b090-11e793187b94"
+                            alt="Printed T-Shirts for Construction Company">
+                        <div class="gallery__overlay">
+                            <span class="gallery__category">Impresión</span>
+                            <span class="gallery__title">Camisetas Personalizadas</span>
+                            <span class="gallery__location">Empresa de Construcción</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Posey Car Vinyl -->
+                <div class="gallery__item" data-category="wraps" data-reveal>
+                    <div class="gallery__image-wrapper">
+                        <img class="gallery__image" loading="lazy"
+                            src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fposey-car-sign-vinyl.webp?alt=media&token=8d7067f0-42c6-4a43-8de8-a6acdd874bae"
+                            alt="Posey Car Sign Vinyl Graphics">
+                        <div class="gallery__overlay">
+                            <span class="gallery__category">Rotulación de Vehículos</span>
+                            <span class="gallery__title">Vinilo para Automóvil</span>
+                            <span class="gallery__location">Posey, Austin TX</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MTZ Banner -->
+                <div class="gallery__item" data-category="signs" data-reveal>
+                    <div class="gallery__image-wrapper">
+                        <img class="gallery__image" loading="lazy"
+                            src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fbanner-sign-mtz-austin.jpg?alt=media&token=400ca822-1e7d-4927-bc98-c8dbb3808d82"
+                            alt="MTZ Banner Sign - Austin TX">
+                        <div class="gallery__overlay">
+                            <span class="gallery__category">Letreros</span>
+                            <span class="gallery__title">Letrero de Banner</span>
+                            <span class="gallery__location">MTZ, Austin TX</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wild Heart Storefront -->
+                <div class="gallery__item" data-category="signs" data-reveal>
+                    <div class="gallery__image-wrapper">
+                        <img class="gallery__image" loading="lazy"
+                            src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fstorefront-vinyl-wild-heart.jpg?alt=media&token=382c9b3e-d770-4c11-9157-333114e30977"
+                            alt="Wild Heart Storefront Vinyl Graphics">
+                        <div class="gallery__overlay">
+                            <span class="gallery__category">Letreros</span>
+                            <span class="gallery__title">Vinilo Comercial para Fachada</span>
+                            <span class="gallery__location">Wild Heart, Austin TX</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lightnin Dent -->
+                <div class="gallery__item" data-category="wraps" data-reveal>
+                    <div class="gallery__image-wrapper">
+                        <img class="gallery__image" loading="lazy"
+                            src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fvinyl-truck-lightnin-dent.jpg?alt=media&token=a4152130-b799-4d79-b50c-c33d6819e336"
+                            alt="Lightnin Dent Truck Vinyl Wrap">
+                        <div class="gallery__overlay">
+                            <span class="gallery__category">Rotulación de Vehículos</span>
+                            <span class="gallery__title">Rotulación en Vinilo para Camión</span>
+                            <span class="gallery__location">Lightnin Dent, Austin TX</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== B2B Partner Teaser ===== -->
+    <section class="partner-teaser" data-reveal>
+        <div class="partner-teaser__bg"></div>
+        <div class="container">
+            <div class="partner-teaser__content">
+                <p class="section-label">Para Talleres de Rotulación</p>
+                <h2 class="partner-teaser__title">NOSOTROS IMPRIMIMOS.<br>TÚ ROTULAS.</h2>
+                <p class="partner-teaser__desc">¿Eres un instalador de rotulación sin equipo de impresión? Somos tu socio de producción. Impresión de gran formato HP Latex 800W, corte de precisión Graphtec, laminación profesional... todo listo para tu próximo trabajo.</p>
+                <div class="partner-teaser__features">
+                    <span>✓ Sin Pedido Mínimo</span>
+                    <span>✓ Entrega en la misma semana</span>
+                    <span>✓ Listo para marca blanca</span>
+                    <span>✓ Precios al por mayor</span>
+                </div>
+                <a href="partner-es.html" class="btn btn--primary btn--large">
+                    Conoce Nuestro Programa de Socios
+                    <svg class="btn__icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Process Section ===== -->
+    <section class="process">
+        <div class="container">
+            <div class="section-header" data-reveal>
+                <p class="section-label">Nuestro Proceso</p>
+                <h2 class="section-title">CÓMO TRABAJAMOS</h2>
+                <p class="section-subtitle">Simple, transparente y sin estrés. Nos encargamos de cada paso para que puedas concentrarte en tu negocio.</p>
+            </div>
+
+            <div class="process__grid">
+                <div class="process__step" data-reveal>
+                    <div class="process__number">01</div>
+                    <h3 class="process__title">Consulta</h3>
+                    <p class="process__desc">Cuéntanos sobre tu proyecto. Hablaremos de tus metas, plazos y presupuesto para encontrar la solución perfecta.</p>
+                </div>
+
+                <div class="process__step" data-reveal>
+                    <div class="process__number">02</div>
+                    <h3 class="process__title">Diseño</h3>
+                    <p class="process__desc">Nuestro equipo crea tu diseño personalizado — GRATIS con cada proyecto. Verás maquetas digitales antes de imprimir.</p>
+                    <span class="process__badge">GRATIS</span>
+                </div>
+
+                <div class="process__step" data-reveal>
+                    <div class="process__number">03</div>
+                    <h3 class="process__title">Producción</h3>
+                    <p class="process__desc">Producimos todo internamente en nuestras instalaciones de Austin. Control de calidad de principio a fin.</p>
+                </div>
+
+                <div class="process__step" data-reveal>
+                    <div class="process__number">04</div>
+                    <h3 class="process__title">Entrega e Instalación</h3>
+                    <p class="process__desc">Nos encargamos de todo. Entrega e instalación profesional en Austin y todo Texas.</p>
+                </div>
+            </div>
+
+            <div class="process__note">
+                <p><strong>La mayoría de los proyectos se completan en 3 a 5 días hábiles.</strong><br>
+                    <span>¿Lo necesitas más rápido? Entrega en la misma semana disponible para pedidos urgentes.</span>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== Company Stats ===== -->
     <section class="company-stats section--dark">
         <div class="section__grain"></div>
         <div class="container">
-            <div class="section-header section-header--light">
+            <div class="section-header section-header--light" data-reveal>
                 <p class="section-label">Nuestra Historia</p>
                 <h2 class="section-title">CANVAS EN NÚMEROS</h2>
-                <p class="section-subtitle">Construido sobre experiencia, impulsado por resultados</p>
+                <p class="section-subtitle">Construido sobre la experiencia, impulsado por resultados</p>
             </div>
 
             <div class="company-stats__grid">
-                <!-- Years in Business -->
-                <div class="stat-card">
+                <div class="stat-card" data-reveal>
                     <div class="stat-card__header">
                         <div class="stat-card__icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -415,16 +730,12 @@
                             </svg>
                         </div>
                         <span class="stat-card__number">20+</span>
-                        <h3 class="stat-card__title">Años de Experiencia</h3>
+                        <h3 class="stat-card__title">Años de Experiencia Combinada</h3>
                     </div>
-                    <p class="stat-card__desc">Canvas Advertising LLC fue fundada en Austin, TX en 2023, construida
-                        sobre más de
-                        20 años de experiencia combinada en diseño gráfico, impresión comercial,
-                        producción de gran formato, señalización y marketing.</p>
+                    <p class="stat-card__desc">Canvas Advertising LLC fue fundada en Austin, TX en 2023, basándose en más de 20 años de experiencia combinada en la industria del diseño gráfico, impresión comercial, producción de gran formato, letreros y marketing.</p>
                 </div>
 
-                <!-- Projects Completed -->
-                <div class="stat-card">
+                <div class="stat-card" data-reveal>
                     <div class="stat-card__header">
                         <div class="stat-card__icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -435,14 +746,10 @@
                         <span class="stat-card__number">150+</span>
                         <h3 class="stat-card__title">Proyectos Completados</h3>
                     </div>
-                    <p class="stat-card__desc">Hemos completado exitosamente más de 150 proyectos, desde sistemas de
-                        branding
-                        y materiales de marketing hasta gráficos de gran formato, rotulación de vehículos y señalización
-                        personalizada.</p>
+                    <p class="stat-card__desc">Hemos completado con éxito más de 150 proyectos, que abarcan desde sistemas de marca y activos de marketing hasta gráficos de gran formato, rotulación de vehículos y letreros personalizados.</p>
                 </div>
 
-                <!-- Scope of Work -->
-                <div class="stat-card">
+                <div class="stat-card" data-reveal>
                     <div class="stat-card__header">
                         <div class="stat-card__icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -451,334 +758,39 @@
                                 <path d="M9 21V9" />
                             </svg>
                         </div>
-                        <span class="stat-card__number">Full</span>
+                        <span class="stat-card__number">Completo</span>
                         <h3 class="stat-card__title">Alcance del Trabajo</h3>
                     </div>
-                    <p class="stat-card__desc">Nuestros servicios cubren todo el proceso de producción y ejecución,
-                        incluyendo
-                        impresión comercial, gran formato, rotulación vehicular, señalización, branding interior
-                        y materiales de marketing de apoyo.</p>
+                    <p class="stat-card__desc">Nuestros servicios cubren todo el proceso de producción y ejecución, incluyendo impresión comercial, gráficos de gran formato, rotulación de vehículos, letreros comerciales, branding de interiores y materiales de marketing de apoyo.</p>
                 </div>
 
-                <!-- Clients -->
-                <div class="stat-card">
+                <div class="stat-card" data-reveal>
                     <div class="stat-card__header">
                         <div class="stat-card__icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                <circle cx="9" cy="7" r="4" />
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                             </svg>
                         </div>
-                        <span class="stat-card__number">PYMES</span>
-                        <h3 class="stat-card__title">Enfoque en Clientes</h3>
+                        <span class="stat-card__number">Interna</span>
+                        <h3 class="stat-card__title">Producción y Equipos</h3>
                     </div>
-                    <p class="stat-card__desc">Trabajamos principalmente con pequeñas y medianas empresas en Austin,
-                        incluyendo restaurantes, food trucks, oficinas, espacios comerciales y empresas de servicios.
-                    </p>
-                </div>
-
-                <!-- Production Model -->
-                <div class="stat-card stat-card--wide">
-                    <div class="stat-card__header">
-                        <div class="stat-card__icon stat-card__icon--accent">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                                <path d="M2 17l10 5 10-5" />
-                                <path d="M2 12l10 5 10-5" />
-                            </svg>
-                        </div>
-                        <span class="stat-card__number stat-card__number--accent">100%</span>
-                        <h3 class="stat-card__title">Producción Interna</h3>
-                    </div>
-                    <p class="stat-card__desc">Toda la producción se maneja internamente utilizando equipos
-                        profesionales de
-                        impresión de gran formato y acabado. Esto nos permite mantener un estricto control de calidad,
-                        ofrecer tiempos de
-                        entrega rápidos y precios eficientes.</p>
+                    <p class="stat-card__desc">Toda la producción se maneja de manera interna utilizando equipos profesionales de impresión y acabado de gran formato. Esto nos permite mantener un estricto control de calidad, ofrecer tiempos de entrega rápidos y precios rentables.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Before/After Slider Section -->
-    <section class="before-after">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">MIRA LA TRANSFORMACIÓN</h2>
-                <p class="section-subtitle">Desliza para ver el antes y después</p>
-            </div>
-
-            <div class="before-after__container">
-                <div class="before-after__slider" id="beforeAfterSlider">
-                    <img class="before-after__image before-after__image--before"
-                        src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2FIMG_0535.jpg?alt=media&token=6c958f58-e134-46d4-b246-2a14d5e5aae6"
-                        alt="Vehículo antes de rotulación - van blanca">
-                    <img class="before-after__image before-after__image--after" id="afterImage"
-                        src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2FIMG_0536.jpg?alt=media&token=de87063d-b9ed-44e0-a7cd-d6cc3d01bac4"
-                        alt="Vehículo después de rotulación - marca completa">
-                    <div class="before-after__handle" id="sliderHandle"></div>
-                    <span class="before-after__label before-after__label--before">Antes</span>
-                    <span class="before-after__label before-after__label--after">Después</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Gallery Section -->
-    <section class="gallery section--dark" id="gallery">
-        <div class="section__grain"></div>
-        <div class="container">
-            <div class="section-header section-header--light">
-                <p class="section-label">Nuestro Portafolio</p>
-                <h2 class="section-title">TRABAJOS RECIENTES</h2>
-                <p class="section-subtitle">Probablemente has visto nuestro trabajo en Austin. Desde South Congress
-                    hasta Round
-                    Rock, nuestros letreros y rotulaciones están en todas partes.</p>
-            </div>
-
-            <div class="gallery__filters">
-                <button class="gallery__filter active" data-filter="all">Todos</button>
-                <button class="gallery__filter" data-filter="wraps">Rotulación Vehicular</button>
-                <button class="gallery__filter" data-filter="signs">Señalización</button>
-                <button class="gallery__filter" data-filter="print">Impresión</button>
-            </div>
-
-            <div class="gallery__scroll" id="galleryScroll">
-                <!-- Gallery items (images) remain same, just updating alt/titles if needed, but keeping image logic same -->
-                <!-- Waterloo Fleet Wrap -->
-                <a href="/es/proyectos/waterloo-fleet-wrap" class="gallery__item" data-category="wraps">
-                    <div class="gallery__image-wrapper">
-                        <img class="gallery__image" loading="lazy"
-                            src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fwaterloo-sparkling-water-fleet-wrap-austin.webp?alt=media&token=c4805ad5-1929-4d37-a23d-fef7e1733aa4"
-                            alt="Rotulación de Flotilla Waterloo Sparkling Water - Austin TX">
-                        <div class="gallery__overlay">
-                            <span class="gallery__category">Rotulación Vehicular</span>
-                            <span class="gallery__title">Rotulación de Flotilla</span>
-                            <span class="gallery__location">Waterloo Sparkling Water, Austin</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Commercial Transit Van (Now part of Waterloo Fleet) -->
-                <a href="/es/proyectos/waterloo-fleet-wrap" class="gallery__item" data-category="wraps">
-                    <div class="gallery__image-wrapper">
-                        <img class="gallery__image" loading="lazy"
-                            src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fcommercial-transit-van-full-wrap.webp?alt=media&token=970e7ab6-35fe-44c9-a763-fb04a7662ec3"
-                            alt="Rotulación Completa Van Comercial">
-                        <div class="gallery__overlay">
-                            <span class="gallery__category">Rotulación Vehicular</span>
-                            <span class="gallery__title">Rotulación Completa Van</span>
-                            <span class="gallery__location">Cliente Comercial</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Monument Sign -->
-                <a href="/es/proyectos/tech-center-signage" class="gallery__item" data-category="signs">
-                    <div class="gallery__image-wrapper">
-                        <img class="gallery__image" loading="lazy"
-                            src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fmonument-sign-vinyl-refacing-austin-tx.webp?alt=media&token=49b080dc-897f-42bd-90c2-08f7dda1de3f"
-                            alt="Renovación de Letrero Monumental - Austin TX">
-                        <div class="gallery__overlay">
-                            <span class="gallery__category">Señalización</span>
-                            <span class="gallery__title">Renovación de Letrero</span>
-                            <span class="gallery__location">Austin, TX</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Property Directory Signage -->
-                <a href="/es/proyectos/tech-center-signage" class="gallery__item" data-category="signs">
-                    <div class="gallery__image-wrapper">
-                        <img class="gallery__image" loading="lazy"
-                            src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fcommercial-property-directory-signage-update.webp?alt=media&token=7c2cf011-7fc3-4099-baae-bf3735b633c0"
-                            alt="Señalización de Directorio de Propiedad Comercial">
-                        <div class="gallery__overlay">
-                            <span class="gallery__category">Señalización</span>
-                            <span class="gallery__title">Directorio de Propiedad</span>
-                            <span class="gallery__location">Propiedad Comercial</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Fleet Branding / Mobile Billboard -->
-                <a href="/es/proyectos/mobile-billboard" class="gallery__item" data-category="wraps">
-                    <div class="gallery__image-wrapper">
-                        <img class="gallery__image" loading="lazy"
-                            src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fleet-branding-mobile-billboard-graphics.webp?alt=media&token=c7704a48-69a8-4292-aedf-e021bb631d9f"
-                            alt="Gráficos de Valla Móvil Branding Flotilla">
-                        <div class="gallery__overlay">
-                            <span class="gallery__category">Rotulación Vehicular</span>
-                            <span class="gallery__title">Valla Móvil</span>
-                            <span class="gallery__location">Branding de Flotilla</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Retail Store Fixture Wrap -->
-                <a href="/es/proyectos/supermarket-retail-branding" class="gallery__item" data-category="print">
-                    <div class="gallery__image-wrapper">
-                        <img class="gallery__image" loading="lazy"
-                            src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fretail-store-fixture-wrap-austin-tx.webp?alt=media&token=2e6d6698-c7b8-45c5-ad2c-da6faf658d08"
-                            alt="Rotulación de Exhibidor Tienda - Austin TX">
-                        <div class="gallery__overlay">
-                            <span class="gallery__category">Interior</span>
-                            <span class="gallery__title">Rotulación de Exhibidor</span>
-                            <span class="gallery__location">Tienda Minorista, Austin TX</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Supermarket Freezer Wrap -->
-                <a href="/es/proyectos/supermarket-retail-branding" class="gallery__item" data-category="print">
-                    <div class="gallery__image-wrapper">
-                        <img class="gallery__image" loading="lazy"
-                            src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fsupermarket-freezer-merchandising-wrap-jds.webp?alt=media&token=5c0664cf-70f9-4332-995b-f2c867c31603"
-                            alt="Rotulación Congelador Supermercado">
-                        <div class="gallery__overlay">
-                            <span class="gallery__category">Interior</span>
-                            <span class="gallery__title">Rotulación Congelador</span>
-                            <span class="gallery__location">Merchandising Supermercado</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Van Wrap Before -->
-                <a href="/es/proyectos/van-transformation" class="gallery__item" data-category="wraps">
-                    <div class="gallery__image-wrapper">
-                        <img class="gallery__image" loading="lazy"
-                            src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2FIMG_0536.jpg?alt=media&token=de87063d-b9ed-44e0-a7cd-d6cc3d01bac4"
-                            alt="Rotulación Completa Van - Proyecto Terminado">
-                        <div class="gallery__overlay">
-                            <span class="gallery__category">Rotulación Vehicular</span>
-                            <span class="gallery__title">Rotulación Van Comercial</span>
-                            <span class="gallery__location">Negocio Local, Austin TX</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Large Format Banner -->
-                <a href="/es/proyectos/van-transformation" class="gallery__item" data-category="signs">
-                    <div class="gallery__image-wrapper">
-                        <img class="gallery__image" loading="lazy"
-                            src="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2FIMG_0535.jpg?alt=media&token=6c958f58-e134-46d4-b246-2a14d5e5aae6"
-                            alt="Vehículo Antes de Transformación">
-                        <div class="gallery__overlay">
-                            <span class="gallery__category">Antes y Después</span>
-                            <span class="gallery__title">Proyecto de Transformación</span>
-                            <span class="gallery__location">Mira la Diferencia</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Construction Company Wrap -->
-                <a href="/es/proyectos/construction-fleet-wrap" class="gallery__item" data-category="wraps">
-                    <div class="gallery__image-wrapper">
-                        <img class="gallery__image" loading="lazy"
-                            src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_5200.jpg?alt=media&token=a00f5e84-bdd5-435c-a0f8-d8b8ba3bbe20"
-                            alt="Rotulación Vehicular Empresa Construcción">
-                        <div class="gallery__overlay">
-                            <span class="gallery__category">Rotulación Vehicular</span>
-                            <span class="gallery__title">Empresa de Construcción</span>
-                            <span class="gallery__location">Branding de Flotilla, Austin TX</span>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Printed Shirts Job -->
-                <a href="/es/proyectos/construction-tshirts" class="gallery__item" data-category="print">
-                    <div class="gallery__image-wrapper">
-                        <img class="gallery__image" loading="lazy"
-                            src="https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_8357.jpg?alt=media&token=054eda4c-2eef-48ec-b090-11e793187b94"
-                            alt="Camisetas Impresas para Empresa de Construcción">
-                        <div class="gallery__overlay">
-                            <span class="gallery__category">Impresión</span>
-                            <span class="gallery__title">Camisetas Personalizadas</span>
-                            <span class="gallery__location">Empresa de Construcción</span>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-
-        <!-- View More Button -->
-        <div class="gallery__expand">
-            <button class="btn btn--secondary gallery__expand-btn" id="galleryExpandBtn">
-                <span class="gallery__expand-text">Ver Más Proyectos</span>
-                <svg class="gallery__expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2">
-                    <path d="M6 9l6 6 6-6" />
-                </svg>
-            </button>
-        </div>
-        </div>
-    </section>
-
-    <!-- Process Section -->
-    <section class="process">
-        <div class="container">
-            <div class="section-header">
-                <p class="section-label">Nuestro Proceso</p>
-                <h2 class="section-title">CÓMO TRABAJAMOS</h2>
-                <p class="section-subtitle">Simple, transparente y sin estrés. Manejamos cada paso para que puedas
-                    enfocarte
-                    en tu negocio.</p>
-            </div>
-
-            <div class="process__grid">
-                <div class="process__step">
-                    <div class="process__number">01</div>
-                    <h3 class="process__title">Consulta</h3>
-                    <p class="process__desc">Cuéntanos sobre tu proyecto. Discutiremos tus metas, tiempos y presupuesto
-                        para encontrar la solución perfecta.</p>
-                </div>
-
-                <div class="process__step">
-                    <div class="process__number">02</div>
-                    <h3 class="process__title">Diseño</h3>
-                    <p class="process__desc">Nuestro equipo crea tu diseño personalizado — GRATIS con cada proyecto.
-                        Verás
-                        mockups antes de imprimir.</p>
-                    <span class="process__badge">GRATIS</span>
-                </div>
-
-                <div class="process__step">
-                    <div class="process__number">03</div>
-                    <h3 class="process__title">Producción</h3>
-                    <p class="process__desc">Producimos todo internamente en nuestras instalaciones en Austin. Control
-                        de calidad
-                        de principio a fin.</p>
-                </div>
-
-                <div class="process__step">
-                    <div class="process__number">04</div>
-                    <h3 class="process__title">Entrega e Instalación</h3>
-                    <p class="process__desc">Manejamos todo. Entrega e instalación profesional en todo Austin
-                        y Texas.</p>
-                </div>
-            </div>
-
-            <div class="process__note">
-                <p><strong>La mayoría de proyectos se completan en 3-5 días hábiles.</strong><br>
-                    <span>¿Lo necesitas más rápido? Turnos de misma semana disponibles para órdenes urgentes.</span>
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
+    <!-- ===== Testimonials ===== -->
     <section class="testimonials section--dark">
         <div class="section__grain"></div>
         <div class="container">
-            <div class="section-header section-header--light">
+            <div class="section-header section-header--light" data-reveal>
                 <p class="section-label">Testimonios</p>
-                <h2 class="section-title">LO QUE DICEN LOS CLIENTES</h2>
+                <h2 class="section-title">LO QUE DICEN NUESTROS CLIENTES</h2>
             </div>
 
-            <div class="testimonials__grid">
-                <div class="testimonial">
+            <div class="testimonials__grid" id="reviewsGrid">
+                <div class="testimonial" data-reveal>
                     <div class="testimonial__stars">
                         <span class="testimonial__star">★</span>
                         <span class="testimonial__star">★</span>
@@ -796,7 +808,7 @@
                     </div>
                 </div>
 
-                <div class="testimonial">
+                <div class="testimonial" data-reveal>
                     <div class="testimonial__stars">
                         <span class="testimonial__star">★</span>
                         <span class="testimonial__star">★</span>
@@ -804,8 +816,7 @@
                         <span class="testimonial__star">★</span>
                         <span class="testimonial__star">★</span>
                     </div>
-                    <p class="testimonial__text">"Catalina y su equipo son muy eficientes en su trabajo, paso a paso
-                        desde cero hasta el final."</p>
+                    <p class="testimonial__text">"Catalina y su equipo son muy eficientes en su trabajo, paso a paso desde cero hasta el final."</p>
                     <div class="testimonial__author">
                         <div class="testimonial__avatar">M</div>
                         <div class="testimonial__info">
@@ -815,7 +826,7 @@
                     </div>
                 </div>
 
-                <div class="testimonial">
+                <div class="testimonial" data-reveal>
                     <div class="testimonial__stars">
                         <span class="testimonial__star">★</span>
                         <span class="testimonial__star">★</span>
@@ -834,29 +845,27 @@
                 </div>
             </div>
 
-            <!-- Satisfaction guarantee badge -->
             <div class="testimonials__guarantee">
                 <div class="testimonials__guarantee-badge">
                     <span>✓</span>
-                    100% satisfacción garantizada en cada proyecto
+                    Satisfacción 100% garantizada en cada proyecto
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Final CTA Section -->
+    <!-- ===== CTA / Contact ===== -->
     <section class="cta section--accent" id="contact">
         <div class="container">
             <div class="cta__grid">
-                <div class="cta__content">
-                    <h2 class="cta__title">¿LISTO PARA DESTACAR<br>TU MARCA?</h2>
-                    <p class="cta__subtitle">Empieza con una consulta gratuita</p>
+                <div class="cta__content" data-reveal>
+                    <h2 class="cta__title">¿LISTO PARA HACER QUE TU<br>MARCA DESTAQUE?</h2>
+                    <p class="cta__subtitle">Comienza con una consulta gratuita</p>
 
-                    <!-- Updated to trigger Cal.com modal -->
-                    <!-- Updated to phone link -->
-                    <!-- Updated to trigger Cal.com modal -->
-                    <button class="cta__phone" data-cal-link="canvas-advertising-6kkn3h/30min"
-                        data-cal-namespace="30min" data-cal-config='{"layout":"month_view"}'>
+                    <button class="cta__phone"
+                        data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting"
+                        data-cal-namespace="canvas-advertising-strategy-meeting"
+                        data-cal-config='{"layout":"month_view"}'>
                         <svg class="cta__phone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <rect x="3" y="4" width="18" height="18" rx="2" />
@@ -864,7 +873,7 @@
                             <line x1="8" y1="2" x2="8" y2="6" />
                             <line x1="3" y1="10" x2="21" y2="10" />
                         </svg>
-                        Agendar Cita
+                        Reservar Reunión Estratégica
                     </button>
 
                     <div class="cta__info">
@@ -897,7 +906,7 @@
                     </div>
                 </div>
 
-                <div class="cta__form">
+                <div class="cta__form" data-reveal>
                     <h3 class="cta__form-title">Solicita una Cotización Gratis</h3>
                     <form id="quoteForm" class="form">
                         <div class="form__group">
@@ -911,7 +920,7 @@
                         </div>
 
                         <div class="form__group">
-                            <label for="email" class="form__label">Correo</label>
+                            <label for="email" class="form__label">Correo electrónico</label>
                             <input type="email" id="email" name="email" class="form__input">
                         </div>
 
@@ -919,12 +928,14 @@
                             <label for="service" class="form__label">Servicio de Interés</label>
                             <select id="service" name="service" class="form__select">
                                 <option value="">Selecciona un servicio...</option>
-                                <option value="commercial-printing">Impresión Comercial</option>
-                                <option value="large-format">Gráficos de Gran Formato</option>
                                 <option value="vehicle-wraps">Rotulación de Vehículos</option>
-                                <option value="storefront-signage">Señalización de Fachadas</option>
-                                <option value="interior-branding">Branding Interior</option>
-                                <option value="merch">Merch y Promocionales</option>
+                                <option value="large-format">Gráficos de Gran Formato</option>
+                                <option value="storefront-signage">Letreros Comerciales</option>
+                                <option value="interior-branding">Branding de Interiores</option>
+                                <option value="commercial-printing">Impresión Comercial</option>
+                                <option value="merch">Mercancía y Promocionales</option>
+                                <option value="print-partner">Socio de Impresión / Impresión al por mayor</option>
+                                <option value="wrap-production">Solo Producción de Rotulación</option>
                                 <option value="other">Otro</option>
                             </select>
                         </div>
@@ -948,7 +959,7 @@
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- ===== Footer ===== -->
     <footer class="footer">
         <div class="container">
             <div class="footer__grid">
@@ -957,8 +968,8 @@
                         <span class="footer__logo-text">CANVAS</span>
                         <span class="footer__logo-sub">ADVERTISING</span>
                     </a>
-                    <p class="footer__tagline">Imprenta de Servicio Completo en Austin</p>
-                    <p class="footer__guarantee">100% satisfacción garantizada en cada proyecto.</p>
+                    <p class="footer__tagline">Especialistas en Rotulación de Vehículos y Socio de Impresión en Austin</p>
+                    <p class="footer__guarantee">Satisfacción 100% garantizada en cada proyecto.</p>
                 </div>
 
                 <div class="footer__contact">
@@ -974,6 +985,14 @@
                 <div class="footer__hours">
                     <h4>Horario</h4>
                     <p>Lunes - Viernes<br>9:00 AM - 5:00 PM</p>
+                </div>
+
+                <div class="footer__links">
+                    <h4>Enlaces Rápidos</h4>
+                    <a href="#services">Servicios</a>
+                    <a href="#gallery">Galería</a>
+                    <a href="partner-es.html">Asóciese con Nosotros</a>
+                    <a href="#contact">Contacto</a>
                 </div>
 
                 <div class="footer__social">
@@ -1020,13 +1039,32 @@
             </div>
 
             <div class="footer__bottom">
-                <p>&copy; 2024 Canvas Advertising LLC. Todos los derechos reservados.</p>
+                <p>&copy; 2025 Canvas Advertising LLC. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Mobile Booking Button -->
-    <a href="tel:+15129459783" class="mobile-phone" aria-label="Llamar ahora">
+    <!-- Lightbox Modal -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Visor de imágenes de proyectos">
+        <button class="lightbox__close" id="lightboxClose" aria-label="Cerrar visor">&times;</button>
+        <div class="lightbox__content">
+            <img class="lightbox__image" id="lightboxImage" src="" alt="">
+            <div class="lightbox__info" id="lightboxInfo">
+                <span class="lightbox__category"></span>
+                <h3 class="lightbox__title"></h3>
+                <p class="lightbox__location"></p>
+            </div>
+        </div>
+        <button class="lightbox__nav lightbox__nav--prev" id="lightboxPrev" aria-label="Imagen anterior">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <button class="lightbox__nav lightbox__nav--next" id="lightboxNext" aria-label="Imagen siguiente">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+    </div>
+
+    <!-- Mobile Phone Button -->
+    <a href="tel:+15129459783" class="mobile-phone" aria-label="Llámanos">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path
                 d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" />
@@ -1039,20 +1077,21 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-functions-compat.js"></script>
-    <script src="js/firebase-config.js"></script>
-
-    <!-- Cal.com Calendar Popup -->
+    <script src="js/firebase-config.js?v=2"></script>
+    <!-- Cal element-click embed code begins -->
     <script type="text/javascript">
         (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
-        Cal("init", "30min", { origin: "https://app.cal.com" });
-        Cal.ns["30min"]("ui", { "hideEventTypeDetails": false, "layout": "month_view" });
+        Cal("init", "canvas-advertising-strategy-meeting", { origin: "https://app.cal.com" });
+        Cal.ns["canvas-advertising-strategy-meeting"]("ui", { "hideEventTypeDetails": false, "layout": "month_view" });
     </script>
+    <!-- Cal element-click embed code ends -->
 
     <script src="js/main.js"></script>
+
     <!-- WhatsApp Chat Widget -->
     <div class="whatsapp-widget">
         <!-- Toggle Button -->
-        <button class="whatsapp-float" id="whatsappToggle" aria-label="Abrir Chat">
+        <button class="whatsapp-float" id="whatsappToggle" aria-label="Abrir chat">
             <svg viewBox="0 0 24 24" fill="currentColor" class="whatsapp-icon">
                 <path
                     d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
@@ -1074,8 +1113,7 @@
 
             <div class="whatsapp-chat-body">
                 <div class="whatsapp-message system-message">
-                    ¡Hola! 👋 ¿Cómo podemos ayudarte hoy? Por favor completa tu información abajo y comenzaremos el
-                    chat.
+                    ¡Hola! 👋 ¿Cómo podemos ayudarte hoy? Por favor, completa tus datos a continuación y comenzaremos un chat.
                 </div>
             </div>
 
@@ -1083,8 +1121,8 @@
                 <input type="text" id="waName" class="whatsapp-input" placeholder="Tu Nombre" required>
                 <input type="tel" id="waPhone" class="whatsapp-input" placeholder="Tu Teléfono" required>
                 <div class="whatsapp-input-group">
-                    <textarea id="waMessage" class="whatsapp-input whatsapp-textarea"
-                        placeholder="Escribe un mensaje..." required></textarea>
+                    <textarea id="waMessage" class="whatsapp-input whatsapp-textarea" placeholder="Escribe un mensaje..."
+                        required></textarea>
                     <button type="submit" class="whatsapp-send-btn">
                         <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
                             <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
@@ -1102,6 +1140,7 @@
             </div>
         </div>
     </div>
+
 </body>
 
 </html>
