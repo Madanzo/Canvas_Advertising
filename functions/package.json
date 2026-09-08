@@ -3,6 +3,7 @@
     "description": "Canvas Advertising Cloud Functions",
     "scripts": {
         "test": "node --test test/*.test.js",
+        "test:crm-e2e": "node test/crm-lead-contract.e2e.js",
         "serve": "firebase emulators:start --only functions",
         "shell": "firebase functions:shell",
         "start": "npm run shell",
