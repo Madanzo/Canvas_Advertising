@@ -2,7 +2,7 @@
 
 const assert = require('node:assert/strict');
 
-const BASE_URL = String(process.env.CRM_E2E_BASE_URL || 'https://merkad-agency-canvas.web.app').replace(/\/$/, '');
+const BASE_URL = String(process.env.CRM_E2E_BASE_URL || 'https://crm.merkadagency.com').replace(/\/$/, '');
 const TENANT_SLUG = 'canvas_advertising';
 const KEY_ID = process.env.CRM_E2E_KEY_ID || '';
 const SECRET = process.env.CRM_E2E_SECRET || '';

@@ -6,7 +6,12 @@ Status: **prepared but not executed**. CRM forwarding remains disabled.
 
 This is an API contract integration harness, not a full website-to-CRM test. It targets the deployed contract at:
 
-`POST {CRM_E2E_BASE_URL}/api/v1/tenants/canvas_advertising/leads/intake`
+`POST https://crm.merkadagency.com/api/v1/tenants/canvas_advertising/leads/intake`
+
+The CRM agent confirmed this public endpoint and path slug on 2026-09-08. The
+underlying Firebase Hosting origin is `https://merkad-agency-canvas.web.app`, but
+the harness defaults to the public CRM domain. Do not change the base URL without
+reconfirming the deployed contract.
 
 It sends only synthetic records. The email uses the reserved, undeliverable `example.invalid` domain. The exact synthetic phone is `+1 512-555-0199`, which is inside the reserved fictional `555-01xx` range. Both consent flags are false, and the message says not to contact. The CRM `website` honeypot stays empty.
 
@@ -18,14 +23,14 @@ The harness is intentionally excluded from `npm test` and GitHub Actions. It req
 - The timeout fixture may create a second test lead, contact, and opportunity because the server can finish after the client aborts.
 - Identical retries must not create additional records; they return `duplicate_ignored` with the original IDs.
 - The conflicting retry and unsupported-service fixture must not create a lead/contact/opportunity.
-- CRM internal owner/admin notifications may fire for each newly created synthetic lead if tenant notifications are enabled. Confirm the recipients and either approve those internal notifications or disable them in a staging tenant before running.
+- The intake handler itself does not send email. Notification transport, recipients, and whether Canvas or CRM owns lead notifications are currently unconfigured and unapproved. Resolve ownership before running; then verify the approved system's logs after the test.
 - Customer email/SMS must not be sent: the address is undeliverable, the phone is fictional, consent is false, and the record is clearly marked synthetic. Still verify that no tenant automation ignores these safeguards before the run.
 
 ## Preconditions
 
 1. CRM lead-intake rules and indexes from commit `b136819` are deployed, and the CRM agent reports readiness. Retain that deployment evidence with the test record.
-2. Verify tenant slug `canvas_advertising` resolves to the intended non-production or controlled test tenant.
-3. Confirm Website Leads is enabled for that tenant and that its default owner, pipeline/stage, service allowlist, and notification settings are known.
+2. Tenant slug `canvas_advertising` and the public route are confirmed.
+3. Configure Website Leads for that tenant. It is currently disabled, has no Canvas service allowlist or default owner, and uses only fallback pipeline behavior. Approve the intended owner, pipeline/stage, service allowlist, and notification owner before testing.
 4. Confirm `Vehicle Wraps` is allowed and the deliberately unsupported fixture is not allowed.
 5. Create a dedicated, least-privilege tenant credential through the approved CRM administration flow and store it in an approved secret store. Credential creation is outside this PR.
 6. Record the pre-test lead/contact/opportunity counts and notification-log position for later reconciliation.
@@ -41,7 +46,7 @@ CRM_E2E_CONFIRM_WRITE=YES_SYNTHETIC_WRITES \
 npm run test:crm-e2e
 ```
 
-`CRM_E2E_BASE_URL` may be set only if the approved deployed base URL differs from `https://merkad-agency-canvas.web.app`. The tenant slug is fixed in the harness to `canvas_advertising`.
+`CRM_E2E_BASE_URL` may be set only if the approved deployed base URL differs from `https://crm.merkadagency.com`. The tenant slug is fixed in the harness to `canvas_advertising`.
 
 ## Assertions performed
 
