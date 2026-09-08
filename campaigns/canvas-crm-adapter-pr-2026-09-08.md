@@ -25,11 +25,12 @@ The mock transport suite covers created acceptance, duplicate acceptance, valida
 
 ## Deployment blockers
 
-- Confirm that the CRM route is deployed and reachable.
-- Confirm the Canvas tenant document's live `slug`; `canvas_advertising` is documented but explicitly unverified.
+- CRM lead-intake rules and indexes from commit `b136819` are deployed, with readiness reported by the CRM agent. This blocker is resolved; retain deployment evidence for integration testing.
+- Confirm tenant `canvas_advertising` is configured for Website Leads with the intended owner, pipeline/stage, service allowlist, and notification behavior.
 - Provision a tenant-scoped credential in server secret storage. Never share it in chat or browser configuration.
+- Verify the declared `MERKAD_LEADS_KEY_ID` and `MERKAD_LEADS_SECRET` bindings resolve for both delivery functions in a controlled deployment.
 - Confirm the deployed Canvas tenant service allowlist matches every proposed translation.
-- Run staging fixtures for `created`, `duplicate_ignored`, `validation_failed`, `unsupported_service`, `idempotency_conflict`, timeout, and interrupted-worker recovery.
+- Run the API contract integration fixtures, then separately run a full website-to-CRM test through the form, saved submission, outbox, and delivery worker.
 - Reauthenticate the Firebase CLI only when staging/deployment or Cloud Logging verification begins; current local implementation/tests do not require it.
 - Review the existing unrelated dirty changes in `functions/index.js` before merging so they are not accidentally included in this PR.
 

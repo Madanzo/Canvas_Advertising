@@ -1469,7 +1469,9 @@ async function deliverCrmLead(deliveryRef, delivery) {
     return { attempted: true, accepted: false };
 }
 
-exports.syncLeadToCRM = functions.firestore
+exports.syncLeadToCRM = functions
+    .runWith({ secrets: ['MERKAD_LEADS_KEY_ID', 'MERKAD_LEADS_SECRET'] })
+    .firestore
     .document('canvas_leads/{leadId}')
     .onCreate(async (snapshot, context) => {
         const leadId = context.params.leadId;
@@ -1512,7 +1514,9 @@ exports.syncLeadToCRM = functions.firestore
         return null;
     });
 
-exports.processCrmLeadDeliveryQueue = functions.pubsub
+exports.processCrmLeadDeliveryQueue = functions
+    .runWith({ secrets: ['MERKAD_LEADS_KEY_ID', 'MERKAD_LEADS_SECRET'] })
+    .pubsub
     .schedule('every 5 minutes')
     .onRun(async () => {
         const readiness = crmLeadDeliveryReadiness(crmLeadAdapterConfig());
