@@ -46,3 +46,17 @@ test('controlled notification isolation requires server authorization, exact ID,
     assert.match(firestoreRules, /match \/crmIntegrationTestAuthorizations\/\{submissionId\}[\s\S]*?allow read, write: if false;/);
     assert.match(runtimeSource, /Skipping Canvas notification workflows for approved CRM integration test/);
 });
+
+test('proof consumption and authorized lead persistence share one transaction', () => {
+    const transactionBody = runtimeSource.match(/const created = await db\.runTransaction\(async \(transaction\) => \{([\s\S]*?)\n        \}\);/);
+    assert.ok(transactionBody);
+    assert.match(transactionBody[1], /transaction\.update\(testAuthorizationRef/);
+    assert.match(transactionBody[1], /transaction\.create\(ref,/);
+    assert.match(transactionBody[1], /crmIntegrationTestAuthorized: true/);
+});
+
+test('worker retries use persisted outbox authorization rather than the consumed proof', () => {
+    assert.match(runtimeSource, /testAuthorized: leadData\.crmIntegrationTestAuthorized === true|const testAuthorized = leadData\.crmIntegrationTestAuthorized === true/);
+    assert.match(runtimeSource, /delivery\.testAuthorized === true/);
+    assert.doesNotMatch(runtimeSource, /deliverCrmLead[\s\S]*?crmTestAuthorizationToken/);
+});
