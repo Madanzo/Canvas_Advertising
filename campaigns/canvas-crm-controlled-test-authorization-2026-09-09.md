@@ -88,6 +88,13 @@ record. Delivery attempts and expired-lease recovery read that persisted outbox
 field, so they do not need or revalidate the consumed proof. Exact serialized
 bytes and `canvas-lead:{submissionId}` remain unchanged across retries.
 
+If `syncLeadToCRM` fails before the outbox is created, the disabled-mode worker
+checks only the configured exact test ID, requires the saved lead's trusted
+server authorization, and recreates the missing outbox idempotently. It neither
+scans nor replays historical leads. Executable transaction tests cover concurrent
+proof use, commit failure, a lost response after commit, persisted worker
+authorization, and this missing-outbox recovery path.
+
 ## Separate CRM prerequisite
 
 The CRM owner reports that external notification-owner implementation work is

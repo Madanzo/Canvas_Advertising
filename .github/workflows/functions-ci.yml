@@ -34,4 +34,4 @@ jobs:
         run: npm test
 
       - name: Check runtime JavaScript syntax
-        run: node --check index.js && node --check crm-lead-adapter.js && node --check crm-test-authorization.js
+        run: node --check index.js && node --check crm-lead-adapter.js && node --check crm-test-authorization.js && node --check crm-test-state.js
