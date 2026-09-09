@@ -78,7 +78,8 @@ test('test-only gate authorizes exactly one configured submission while general 
 
     assert.equal(testSubmissionGate(config, 'unrelated-submission-0001').authorized, false);
     assert.equal(readiness(config, 'unrelated-submission-0001').ready, false);
-    assert.deepEqual(readiness(config, 'canvas-test-submission-0001'), {
+    assert.equal(readiness(config, 'canvas-test-submission-0001').reason, 'test-authorization-missing');
+    assert.deepEqual(readiness(config, 'canvas-test-submission-0001', true), {
         ready: true,
         reason: 'ready',
         mode: 'test-only'
@@ -86,17 +87,26 @@ test('test-only gate authorizes exactly one configured submission while general 
     assert.equal(isSyntheticTestSubmission(
         config,
         'canvas-test-submission-0001',
-        'crm_integration_test'
+        'crm_integration_test',
+        true
     ), true);
     assert.equal(isSyntheticTestSubmission(
         config,
+        'canvas-test-submission-0001',
+        'crm_integration_test',
+        false
+    ), false);
+    assert.equal(isSyntheticTestSubmission(
+        config,
         'unrelated-submission-0001',
-        'crm_integration_test'
+        'crm_integration_test',
+        true
     ), false);
     assert.equal(isSyntheticTestSubmission(
         config,
         'canvas-test-submission-0001',
-        'form_submit'
+        'form_submit',
+        true
     ), false);
 });
 
