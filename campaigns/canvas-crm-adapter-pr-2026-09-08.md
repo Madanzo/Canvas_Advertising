@@ -25,7 +25,8 @@ The mock transport suite covers created acceptance, duplicate acceptance, valida
 
 ## Deployment blockers
 
-- Reconcile this branch with the currently deployed secure `createLeadUploadSession` / `submitPublicLead` source before deploying Functions. That newer callable implementation is present in the Canvas working copy and production runtime but is not yet committed on this PR's remote base; deploying this branch as-is could regress the secured form path.
+- Reconciled the branch with authenticated exports of the deployed secure callable source. `createLeadUploadSession` is active on Node 22 with Firebase hash `92c938b593904fbb39bed093a6d7a70734eee70c`; `submitPublicLead` and `cleanupExpiredLeadUploads` are active on Node 22 with hash `fa735d6e2e4afa96533868045622225183610546`. The later upload package differs from the submission package only by upload-path authorization hardening, so the combined source retains the later protection.
+- Active Firestore rules were retrieved as immutable ruleset `de2e3d6f-3dbe-486d-8c4b-64b43008020b` (SHA-256 `d9d985f35d713cb3a37d36d2f19f79ebdca2e61f242fe8ac3b044fafe2c36979`) and active Storage rules as ruleset `0579db75-7cbc-4f46-90b0-12ad573d151f` (SHA-256 `8bb3fc4ec6320cf8a977b7762e35d6bc74a399a0165c352fbe080e49286ae094`). Both match the preserved working-copy sources.
 - CRM lead-intake rules and indexes from commit `b136819` are deployed, with readiness reported by the CRM agent. This blocker is resolved; retain deployment evidence for integration testing.
 - The public endpoint and tenant path are confirmed as `POST https://crm.merkadagency.com/api/v1/tenants/canvas_advertising/leads/intake`.
 - Configure tenant `canvas_advertising` for Website Leads. It is currently disabled, has no Canvas service allowlist or default owner, and has no approved notification owner. Confirm the intended pipeline/stage as part of this configuration.

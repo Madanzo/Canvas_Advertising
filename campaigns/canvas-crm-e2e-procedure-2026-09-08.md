@@ -93,6 +93,9 @@ workflow. The CRM-side notification owner must still be approved before the run.
 
 PR #1 reads `MERKAD_LEADS_KEY_ID` and `MERKAD_LEADS_SECRET` from `process.env` and now declares both Firebase Secret Manager bindings on `syncLeadToCRM` and `processCrmLeadDeliveryQueue` using the project's first-generation `functions.runWith({ secrets: [...] })` convention. No secret values are created or read by this change. Before any Functions deployment that could enable delivery:
 
+The reconciled Functions runtime is Node 22, matching the authenticated deployed
+source export. CI installs from the reconciled lockfile with Node 22.
+
 - Store `MERKAD_LEADS_KEY_ID` and `MERKAD_LEADS_SECRET` as separate server-side secrets, or store the complete bearer credential as one secret after a reviewed code change.
 - Verify both secret resources exist and that the bindings on **both** functions resolve during a controlled deployment; both functions can perform delivery.
 - Grant secret access only to the runtime service account for these functions and authorized deployers.

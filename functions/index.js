@@ -1,7 +1,29 @@
-const functions = require('firebase-functions');
+const functions = require('firebase-functions/v1');
 const admin = require('firebase-admin');
 const telnyx = require('telnyx');
 const { Resend } = require('resend');
+const firestore = require('@google-cloud/firestore');
+const crypto = require('crypto');
+
+// Firebase Functions v7 removed functions.config(). Legacy runtime config is
+// exported into this JSON secret during deployment and exposed only to bound
+// functions. Individual environment variables still take precedence.
+const RUNTIME_CONFIG_SECRET = 'FUNCTIONS_CONFIG_EXPORT';
+let runtimeConfigCache;
+
+function runtimeConfig(section, key) {
+    if (runtimeConfigCache === undefined) {
+        try {
+            runtimeConfigCache = JSON.parse(process.env[RUNTIME_CONFIG_SECRET] || '{}');
+        } catch (error) {
+            console.error(`${RUNTIME_CONFIG_SECRET} is not valid JSON:`, error.message);
+            runtimeConfigCache = {};
+        }
+    }
+    return runtimeConfigCache?.[section]?.[key];
+}
+
+const configuredFunctions = functions.runWith({ secrets: [RUNTIME_CONFIG_SECRET] });
 
 // Initialize Firebase Admin
 admin.initializeApp();
@@ -15,7 +37,7 @@ const db = admin.firestore();
 let resend = null;
 function getResend() {
     if (!resend) {
-        const apiKey = process.env.RESEND_API_KEY || functions.config().resend?.api_key;
+        const apiKey = process.env.RESEND_API_KEY || runtimeConfig('resend', 'api_key');
         if (!apiKey) {
             console.warn('Resend API Key missing.');
             return null;
@@ -29,7 +51,7 @@ function getResend() {
 let telnyxClient = null;
 function getTelnyx() {
     if (!telnyxClient) {
-        const apiKey = process.env.TELNYX_API_KEY || functions.config().telnyx?.api_key;
+        const apiKey = process.env.TELNYX_API_KEY || runtimeConfig('telnyx', 'api_key');
         if (!apiKey) {
             console.warn('Telnyx API Key missing.');
             return null;
@@ -39,12 +61,343 @@ function getTelnyx() {
     return telnyxClient;
 }
 
+// 3. Get Square Client (Lazy)
+let squareClient = null;
+function getSquare() {
+    if (!squareClient) {
+        const accessToken = process.env.SQUARE_ACCESS_TOKEN || runtimeConfig('square', 'access_token');
+        const environment = process.env.SQUARE_ENVIRONMENT || runtimeConfig('square', 'environment') || 'sandbox';
+
+        if (!accessToken) {
+            console.warn('Square Access Token missing. Square payments are unavailable.');
+            return null;
+        }
+
+        const { SquareClient, SquareEnvironment } = require('square');
+        squareClient = new SquareClient({
+            token: accessToken,
+            environment: environment.toLowerCase() === 'production' ? SquareEnvironment.Production : SquareEnvironment.Sandbox
+        });
+    }
+    return squareClient;
+}
+
 // Company Info
 const COMPANY_INFO = {
     name: 'Canvas Advertising',
-    phone: '(512) 945-9783',
+    phone: '(512) 434-3793',
     website: 'https://canvas-adnvertising.web.app'
 };
+
+const STORE_PRODUCTS = Object.freeze({
+    "Custom Vinyl Banner (4' x 8')": 12500,
+    'Die-Cut Decals (Pack of 100)': 15000,
+    'Vehicle Magnet Signs (Pair)': 9500,
+    'Retractable Banner + Stand': 18500
+});
+
+function validateStoreOrder(productName, priceInCents, quantity) {
+    const expectedPrice = STORE_PRODUCTS[productName];
+    const parsedPrice = Number(priceInCents);
+    const parsedQuantity = Number(quantity);
+    if (!expectedPrice || parsedPrice !== expectedPrice || parsedQuantity !== 1) {
+        throw new functions.https.HttpsError('invalid-argument', 'Invalid product or price.');
+    }
+    return { priceInCents: expectedPrice, quantity: parsedQuantity };
+}
+
+const PUBLIC_LEAD_FIELDS = new Set([
+    'submissionId', 'name', 'firstName', 'lastName', 'email', 'phone', 'service', 'message', 'source',
+    'formType', 'page', 'referrer', 'landingProduct', 'sourcePage',
+    'campaignSource', 'campaignMedium', 'campaignName', 'projectType',
+    'projectTypeLabel', 'materialType', 'materialTypeLabel', 'finishType',
+    'finishTypeLabel', 'quantity', 'deadline', 'deliveryMethod',
+    'deliveryMethodLabel', 'productionNotes', 'selectedFileNames',
+    'estimatedPrice', 'method', 'coverage', 'vehicleSize', 'wrapFinish',
+    'customWidth', 'customHeight', 'productionSummary', 'fileUploads',
+    'tracking', 'boatSurvey', 'visibilityPackage', 'productionRequest',
+    'businessName', 'businessType', 'locale', 'website'
+]);
+
+const LEAD_UPLOAD_MAX_BYTES = 20 * 1024 * 1024;
+const LEAD_UPLOAD_MAX_FILES = 10;
+const LEAD_UPLOAD_TTL_MS = 15 * 60 * 1000;
+const LEAD_UPLOAD_TYPES = new Set([
+    'image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif',
+    'application/pdf', 'application/postscript', 'application/illustrator',
+    'application/vnd.adobe.illustrator', 'application/octet-stream'
+]);
+const LEAD_UPLOAD_EXTENSIONS = new Set(['jpg', 'jpeg', 'png', 'webp', 'heic', 'heif', 'pdf', 'ai', 'eps']);
+
+function publicLeadError(message) {
+    throw new functions.https.HttpsError('invalid-argument', message);
+}
+
+function sanitizePublicValue(value, path, depth = 0) {
+    if (value === null || value === undefined) return null;
+    if (depth > 4) publicLeadError(`${path} is too deeply nested.`);
+    if (typeof value === 'string') {
+        const limit = path === 'message' || path.endsWith('.notes') || path === 'productionNotes' ? 4000 : 1000;
+        if (value.length > limit) publicLeadError(`${path} is too long.`);
+        return value.trim();
+    }
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'number') {
+        if (!Number.isFinite(value)) publicLeadError(`${path} must be a finite number.`);
+        return value;
+    }
+    if (Array.isArray(value)) {
+        if (value.length > 12) publicLeadError(`${path} has too many items.`);
+        return value.map((item, index) => sanitizePublicValue(item, `${path}.${index}`, depth + 1));
+    }
+    if (typeof value === 'object') {
+        const entries = Object.entries(value);
+        if (entries.length > 40) publicLeadError(`${path} has too many fields.`);
+        return Object.fromEntries(entries.map(([key, item]) => {
+            if (!/^[A-Za-z0-9_-]{1,64}$/.test(key)) publicLeadError(`${path} contains an invalid field name.`);
+            return [key, sanitizePublicValue(item, `${path}.${key}`, depth + 1)];
+        }));
+    }
+    publicLeadError(`${path} contains an unsupported value.`);
+}
+
+function validatePublicLead(rawData) {
+    if (!rawData || typeof rawData !== 'object' || Array.isArray(rawData)) {
+        publicLeadError('Lead data must be an object.');
+    }
+    Object.keys(rawData).forEach((key) => {
+        if (!PUBLIC_LEAD_FIELDS.has(key)) publicLeadError(`Unexpected lead field: ${key}.`);
+    });
+
+    const submissionId = String(rawData.submissionId || '');
+    if (!/^[A-Za-z0-9_-]{16,80}$/.test(submissionId)) publicLeadError('Invalid submission ID.');
+    const name = String(rawData.name || '').trim();
+    const service = String(rawData.service || '').trim();
+    const phone = String(rawData.phone || '').trim();
+    const email = String(rawData.email || '').trim().toLowerCase();
+    if (name.length < 2 || name.length > 120) publicLeadError('Enter a valid name.');
+    if (!service || service.length > 160) publicLeadError('Enter a valid service.');
+    const digits = phone.replace(/\D/g, '');
+    if (service !== 'Private Feedback' && (digits.length < 10 || digits.length > 15)) {
+        publicLeadError('Enter a valid phone number.');
+    }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) publicLeadError('Enter a valid email address.');
+    if (String(rawData.website || '').trim()) return { spam: true, submissionId };
+
+    const lead = {};
+    Object.entries(rawData).forEach(([key, value]) => {
+        if (key !== 'website' && key !== 'submissionId') lead[key] = sanitizePublicValue(value, key);
+    });
+    lead.name = name;
+    lead.service = service;
+    lead.phone = phone;
+    lead.email = email || null;
+    lead.source = String(rawData.source || 'form_submit').trim().slice(0, 120);
+    return { spam: false, submissionId, lead };
+}
+
+async function enforcePublicLeadRateLimit(context) {
+    const forwarded = context.rawRequest?.headers?.['x-forwarded-for'];
+    const ip = String(Array.isArray(forwarded) ? forwarded[0] : (forwarded || context.rawRequest?.ip || 'unknown'))
+        .split(',')[0].trim();
+    const key = crypto.createHash('sha256').update(`canvas-public-lead:${ip}`).digest('hex');
+    const ref = db.collection('publicLeadRateLimits').doc(key);
+    const now = Date.now();
+    const windowMs = 15 * 60 * 1000;
+    await db.runTransaction(async (transaction) => {
+        const snapshot = await transaction.get(ref);
+        const current = snapshot.exists ? snapshot.data() : null;
+        const windowStartedAt = current?.windowStartedAt?.toMillis?.() || 0;
+        const withinWindow = now - windowStartedAt < windowMs;
+        const count = withinWindow ? Number(current.count || 0) + 1 : 1;
+        if (count > 8) throw new functions.https.HttpsError('resource-exhausted', 'Too many requests. Please try again later.');
+        transaction.set(ref, {
+            count,
+            windowStartedAt: withinWindow ? current.windowStartedAt : admin.firestore.Timestamp.fromMillis(now),
+            expiresAt: admin.firestore.Timestamp.fromMillis(now + windowMs)
+        });
+    });
+}
+
+function normalizeRequestedUpload(rawFile, index) {
+    if (!rawFile || typeof rawFile !== 'object' || Array.isArray(rawFile)) {
+        publicLeadError(`File ${index + 1} is invalid.`);
+    }
+    const name = String(rawFile.name || '').trim();
+    const size = Number(rawFile.size);
+    const extension = name.includes('.') ? name.split('.').pop().toLowerCase() : '';
+    let contentType = String(rawFile.type || '').trim().toLowerCase();
+    if (!contentType && (extension === 'ai' || extension === 'eps')) contentType = 'application/octet-stream';
+    if (!name || name.length > 180 || !/^[^/\\]+$/.test(name)) publicLeadError(`File ${index + 1} has an invalid name.`);
+    if (!Number.isInteger(size) || size < 1 || size > LEAD_UPLOAD_MAX_BYTES) {
+        publicLeadError(`File ${index + 1} must be smaller than 20 MB.`);
+    }
+    if (!LEAD_UPLOAD_EXTENSIONS.has(extension) || !LEAD_UPLOAD_TYPES.has(contentType)) {
+        publicLeadError(`File ${index + 1} has an unsupported type.`);
+    }
+    const safeName = name.replace(/[^a-zA-Z0-9._-]/g, '-');
+    return { name, safeName, size, type: contentType };
+}
+
+exports.createLeadUploadSession = configuredFunctions.https.onCall(async (data, context) => {
+    const rawFiles = data?.files;
+    if (!Array.isArray(rawFiles) || rawFiles.length < 1 || rawFiles.length > LEAD_UPLOAD_MAX_FILES) {
+        publicLeadError(`Choose between 1 and ${LEAD_UPLOAD_MAX_FILES} files.`);
+    }
+    await enforcePublicLeadRateLimit(context);
+    const requestedFiles = rawFiles.map(normalizeRequestedUpload);
+    const submissionId = crypto.randomUUID();
+    const token = crypto.randomBytes(32).toString('base64url');
+    const now = admin.firestore.Timestamp.now();
+    const expiresAt = admin.firestore.Timestamp.fromMillis(now.toMillis() + LEAD_UPLOAD_TTL_MS);
+    const sessionRef = db.collection('leadUploadSessions').doc(submissionId);
+    const batch = db.batch();
+    const authorizedFiles = requestedFiles.map((file) => ({
+        fileId: crypto.randomBytes(12).toString('hex'),
+        ...file
+    }));
+    batch.create(sessionRef, {
+        token,
+        fileCount: requestedFiles.length,
+        allowedPaths: authorizedFiles.map((file) => `${file.fileId}/${file.safeName}`),
+        files: Object.fromEntries(authorizedFiles.map((file) => [file.fileId, {
+            name: file.name,
+            safeName: file.safeName,
+            size: file.size,
+            type: file.type
+        }])),
+        consumed: false,
+        createdAt: now,
+        expiresAt
+    });
+    authorizedFiles.forEach((file) => {
+        const { fileId } = file;
+        batch.create(sessionRef.collection('files').doc(fileId), {
+            name: file.name,
+            safeName: file.safeName,
+            size: file.size,
+            type: file.type,
+            token,
+            createdAt: now,
+            expiresAt
+        });
+    });
+    await batch.commit();
+    return { submissionId, token, expiresAt: expiresAt.toDate().toISOString(), files: authorizedFiles };
+});
+
+async function verifyLeadUploads(submissionId, rawUploads) {
+    if (rawUploads === null || rawUploads === undefined || rawUploads.length === 0) {
+        return { sessionRef: null, uploads: [] };
+    }
+    if (!Array.isArray(rawUploads) || rawUploads.length > LEAD_UPLOAD_MAX_FILES) {
+        publicLeadError('Invalid uploaded files.');
+    }
+    const sessionRef = db.collection('leadUploadSessions').doc(submissionId);
+    const sessionSnapshot = await sessionRef.get();
+    if (!sessionSnapshot.exists) publicLeadError('Upload session was not found. Please upload the files again.');
+    const session = sessionSnapshot.data();
+    if (session.consumed || session.expiresAt.toMillis() <= Date.now() || session.fileCount !== rawUploads.length) {
+        publicLeadError('Upload session is invalid or expired. Please upload the files again.');
+    }
+
+    const bucket = admin.storage().bucket();
+    const uploads = await Promise.all(rawUploads.map(async (upload, index) => {
+        if (!upload || typeof upload !== 'object' || Array.isArray(upload)) publicLeadError(`Upload ${index + 1} is invalid.`);
+        const fileId = String(upload.fileId || '');
+        const pathValue = String(upload.path || '');
+        const expectedPrefix = `lead-uploads/${submissionId}/${fileId}/`;
+        if (!/^[a-f0-9]{24}$/.test(fileId) || !pathValue.startsWith(expectedPrefix)) {
+            publicLeadError(`Upload ${index + 1} has an invalid path.`);
+        }
+        const authSnapshot = await sessionRef.collection('files').doc(fileId).get();
+        if (!authSnapshot.exists) publicLeadError(`Upload ${index + 1} is not authorized.`);
+        const authorization = authSnapshot.data();
+        let metadata;
+        try {
+            [metadata] = await bucket.file(pathValue).getMetadata();
+        } catch (error) {
+            publicLeadError(`Upload ${index + 1} was not found.`);
+        }
+        const custom = metadata.metadata || {};
+        if (custom.submissionId !== submissionId
+            || custom.fileId !== fileId
+            || custom.uploadToken !== session.token
+            || custom.originalName !== authorization.name
+            || Number(metadata.size) !== authorization.size
+            || metadata.contentType !== authorization.type) {
+            publicLeadError(`Upload ${index + 1} failed verification.`);
+        }
+        const downloadToken = crypto.randomUUID();
+        await bucket.file(pathValue).setMetadata({
+            metadata: {
+                ...custom,
+                firebaseStorageDownloadTokens: downloadToken
+            }
+        });
+        const encodedBucket = encodeURIComponent(bucket.name);
+        const encodedPath = encodeURIComponent(pathValue);
+        return {
+            name: authorization.name,
+            size: authorization.size,
+            type: authorization.type,
+            path: pathValue,
+            downloadURL: `https://firebasestorage.googleapis.com/v0/b/${encodedBucket}/o/${encodedPath}?alt=media&token=${downloadToken}`
+        };
+    }));
+    return { sessionRef, uploads };
+}
+
+/** Public website lead intake. Firestore client rules intentionally deny direct creates. */
+exports.submitPublicLead = configuredFunctions.https.onCall(async (data, context) => {
+    const validated = validatePublicLead(data);
+    if (validated.spam) return { ok: true, id: validated.submissionId };
+    await enforcePublicLeadRateLimit(context);
+
+    const ref = db.collection('canvas_leads').doc(validated.submissionId);
+    try {
+        const existing = await ref.get();
+        if (existing.exists) return { ok: true, id: ref.id, duplicate: true };
+        const verifiedUploads = await verifyLeadUploads(validated.submissionId, validated.lead.fileUploads);
+        const uploadSessionRef = verifiedUploads.sessionRef;
+        if (uploadSessionRef) validated.lead.fileUploads = verifiedUploads.uploads;
+        const created = await db.runTransaction(async (transaction) => {
+            const leadSnapshot = await transaction.get(ref);
+            if (leadSnapshot.exists) return false;
+            if (uploadSessionRef) {
+                const sessionSnapshot = await transaction.get(uploadSessionRef);
+                if (!sessionSnapshot.exists) {
+                    publicLeadError('Upload session was not found. Please upload the files again.');
+                }
+                const session = sessionSnapshot.data();
+                if (session.consumed || session.expiresAt.toMillis() <= Date.now()) {
+                    publicLeadError('Upload session is invalid or expired. Please upload the files again.');
+                }
+                transaction.update(uploadSessionRef, {
+                    consumed: true,
+                    consumedAt: admin.firestore.FieldValue.serverTimestamp(),
+                    leadId: ref.id
+                });
+            }
+            transaction.create(ref, {
+                ...validated.lead,
+                contractVersion: 2,
+                createdAt: admin.firestore.FieldValue.serverTimestamp(),
+                updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+                status: 'new',
+                notes: ''
+            });
+            return true;
+        });
+        return { ok: true, id: ref.id, duplicate: !created };
+    } catch (error) {
+        if (error.code === 6 || error.code === 'already-exists') {
+            return { ok: true, id: ref.id, duplicate: true };
+        }
+        console.error('Public lead submission failed:', error);
+        throw new functions.https.HttpsError('internal', 'We could not send your request. Please try again.');
+    }
+});
 
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
@@ -110,7 +463,7 @@ async function enrollContactInWorkflow(contactId, workflowId, contactData) {
  * HTTP Callable: Process Bulk Campaign
  * Enrolls a batch of leads into a workflow
  */
-exports.processBulkCampaign = functions.https.onCall(async (data, context) => {
+exports.processBulkCampaign = configuredFunctions.https.onCall(async (data, context) => {
     // 1. Auth Check
     if (!context.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'User must be logged in.');
@@ -180,7 +533,7 @@ exports.processBulkCampaign = functions.https.onCall(async (data, context) => {
  * Finds active workflow instances with due steps and executes them
  */
 // Running every minute to check for due steps
-exports.processWorkflowQueue = functions.pubsub.schedule('every 1 minutes').onRun(async (context) => {
+exports.processWorkflowQueue = configuredFunctions.pubsub.schedule('every 1 minutes').onRun(async (context) => {
     const now = admin.firestore.Timestamp.now();
 
     try {
@@ -457,11 +810,11 @@ async function sendSMS({ to, templateId, variables, options = {} }) {
         // Basic cleanup: remove non-digits, ensure +1 if US (simple logic)
         let formattedPhone = to.replace(/\D/g, '');
         if (formattedPhone.length === 10) formattedPhone = '1' + formattedPhone;
-        // Plivo expects country code, assume US/Canada '1' if not present? 
+        // Plivo expects country code, assume US/Canada '1' if not present?
         // Better: user provides full number or we standardize.
 
         // 3. Send via Plivo
-        const srcNumber = process.env.PLIVO_PHONE_NUMBER || functions.config().plivo?.phone_number;
+        const srcNumber = process.env.PLIVO_PHONE_NUMBER || runtimeConfig('plivo', 'phone_number');
 
         const response = await client.messages.create(
             srcNumber,
@@ -571,7 +924,7 @@ function replaceTemplateVariables(text, data) {
 // TRIGGERS (Placeholders for now, replacing old logic)
 // ----------------------------------------------------------------------
 
-exports.onNewLead = functions.firestore
+exports.onNewLead = configuredFunctions.firestore
     .document('canvas_leads/{leadId}')
     .onCreate(async (snapshot, context) => {
         const leadData = snapshot.data();
@@ -632,13 +985,13 @@ exports.onNewLead = functions.firestore
 /**
  * Cal.com Webhook Handler
  * Receives booking notifications from Cal.com and saves them as leads.
- * 
+ *
  * WHY: We use a custom webhook instead of Zapier because:
  * 1. Low Latency: Lead is created instantly for fast "Welcome" email.
  * 2. Data Integrity: We capture raw event times to schedule accurate "relative" reminders (e.g. 2 hours before).
  * 3. Cost: No defined limit on events compared to Zapier tiers.
  */
-exports.calcomWebhook = functions.https.onRequest(async (req, res) => {
+exports.calcomWebhook = configuredFunctions.https.onRequest(async (req, res) => {
     // Enable CORS
     res.set('Access-Control-Allow-Origin', '*');
     res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -737,7 +1090,7 @@ const REDIRECTS = {
     // Add other redirects here if needed
 };
 
-exports.serveProjectPage = functions.https.onRequest(async (req, res) => {
+exports.serveProjectPage = configuredFunctions.https.onRequest(async (req, res) => {
     // 1. Get the project slug from the URL and detect language
     // URL structure: /projects/my-project-name OR /es/proyectos/my-project-name
     const pathParts = req.path.split('/').filter(p => p);
@@ -832,7 +1185,7 @@ exports.serveProjectPage = functions.https.onRequest(async (req, res) => {
 // SEEDING
 // ----------------------------------------------------------------------
 
-exports.seedWorkflows = functions.https.onRequest(async (req, res) => {
+exports.seedWorkflows = configuredFunctions.https.onRequest(async (req, res) => {
     try {
         const workflows = [
             {
@@ -888,7 +1241,7 @@ exports.seedWorkflows = functions.https.onRequest(async (req, res) => {
     }
 });
 
-exports.seedTemplates = functions.https.onRequest(async (req, res) => {
+exports.seedTemplates = configuredFunctions.https.onRequest(async (req, res) => {
     try {
         const batch = db.batch();
 
@@ -1054,7 +1407,7 @@ exports.seedTemplates = functions.https.onRequest(async (req, res) => {
  * Send a direct message (Email or SMS) to a contact
  * Callable Function for Admin Dashboard
  */
-exports.sendDirectMessage = functions.https.onCall(async (data, context) => {
+exports.sendDirectMessage = configuredFunctions.https.onCall(async (data, context) => {
     // 1. Auth Check
     if (!context.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
@@ -1120,7 +1473,7 @@ exports.sendDirectMessage = functions.https.onCall(async (data, context) => {
  * Handle Resend Webhook (Email Events)
  * Events: email.sent, email.delivered, email.delivery_delayed, email.complained, email.bounced, email.opened, email.clicked
  */
-exports.handleResendWebhook = functions.https.onRequest(async (req, res) => {
+exports.handleResendWebhook = configuredFunctions.https.onRequest(async (req, res) => {
     const signature = req.headers['resend-signature'];
 
     // Verify signature logic would go here in production
@@ -1161,7 +1514,7 @@ exports.handleResendWebhook = functions.https.onRequest(async (req, res) => {
             updates.status = 'delivered';
             updates.deliveredAt = admin.firestore.FieldValue.serverTimestamp();
         } else if (type === 'email.opened') {
-            updates.status = 'opened'; // Or keep 'delivered' and just add openedAt? 
+            updates.status = 'opened'; // Or keep 'delivered' and just add openedAt?
             // Better to show 'opened' as main status if opened.
             updates.openedAt = admin.firestore.FieldValue.serverTimestamp();
             updates.openCount = admin.firestore.FieldValue.increment(1);
@@ -1190,7 +1543,7 @@ exports.handleResendWebhook = functions.https.onRequest(async (req, res) => {
  * Handle Telnyx Webhook (SMS Status)
  * Telnyx sends POST with data.payload containing event_type and id
  */
-exports.handleTelnyxWebhook = functions.https.onRequest(async (req, res) => {
+exports.handleTelnyxWebhook = configuredFunctions.https.onRequest(async (req, res) => {
     try {
         const body = req.body;
         const data = body.data;
@@ -1250,7 +1603,7 @@ exports.handleTelnyxWebhook = functions.https.onRequest(async (req, res) => {
 // ANALYTICS FUNCTIONS
 // ----------------------------------------------------------------------
 
-exports.getAggregatedStats = functions.https.onCall(async (data, context) => {
+exports.getAggregatedStats = configuredFunctions.https.onCall(async (data, context) => {
     // Auth Check
     if (!context.auth) {
         throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
@@ -1303,7 +1656,7 @@ exports.getAggregatedStats = functions.https.onCall(async (data, context) => {
 // ----------------------------------------------------------------------
 // GOOGLE REVIEWS (Cached)
 // ----------------------------------------------------------------------
-exports.getGoogleReviews = functions.https.onCall(async (data, context) => {
+exports.getGoogleReviews = configuredFunctions.https.onCall(async (data, context) => {
     // 1. Check Cache (Firestore)
     // We store the single cached object in 'canvas_settings/reviews_cache'
     const cacheRef = db.collection('canvas_settings').doc('reviews_cache');
@@ -1321,8 +1674,8 @@ exports.getGoogleReviews = functions.https.onCall(async (data, context) => {
 
     // 2. Fetch from Google API
     const input = data || {};
-    const placeId = input.placeId || functions.config().google?.place_id;
-    const apiKey = process.env.GOOGLE_MAPS_API_KEY || functions.config().google?.api_key || functions.config().google?.maps_api_key;
+    const placeId = input.placeId || runtimeConfig('google', 'place_id');
+    const apiKey = process.env.GOOGLE_MAPS_API_KEY || runtimeConfig('google', 'api_key') || runtimeConfig('google', 'maps_api_key');
 
     if (!placeId || !apiKey) {
         console.warn('Missing Google Place ID or API Key');
@@ -1359,6 +1712,312 @@ exports.getGoogleReviews = functions.https.onCall(async (data, context) => {
         throw new functions.https.HttpsError('internal', 'Failed to fetch reviews');
     }
 });
+
+// ----------------------------------------------------------------------
+// SQUARE E-COMMERCE & ONLINE ORDERING
+// ----------------------------------------------------------------------
+
+/**
+ * HTTPS Callable: Create Hosted Square Checkout Link
+ */
+exports.createSquareCheckoutSession = configuredFunctions.https.onCall(async (data, context) => {
+    const { productName, priceInCents, quantity, artworkUrl, customerName, customerEmail, customerPhone, redirectUrl } = data;
+
+    if (!productName || !priceInCents || !quantity || !artworkUrl) {
+        throw new functions.https.HttpsError('invalid-argument', 'Missing required fields.');
+    }
+    const validatedOrder = validateStoreOrder(productName, priceInCents, quantity);
+
+    const client = getSquare();
+    const locationId = process.env.SQUARE_LOCATION_ID || runtimeConfig('square', 'location_id');
+
+    if (!client || !locationId) {
+        throw new functions.https.HttpsError('failed-precondition', 'Online payment is temporarily unavailable.');
+    }
+
+    try {
+        const { randomUUID } = require('crypto');
+        const idempotencyKey = randomUUID();
+
+        const response = await client.checkout.paymentLinks.create({
+            idempotencyKey: idempotencyKey,
+            order: {
+                locationId: locationId,
+                lineItems: [
+                    {
+                        name: productName,
+                        quantity: String(validatedOrder.quantity),
+                        basePriceMoney: {
+                            amount: BigInt(validatedOrder.priceInCents),
+                            currency: 'USD'
+                        }
+                    }
+                ],
+                metadata: {
+                    artworkUrl: String(artworkUrl).substring(0, 255),
+                    customerName: String(customerName || '').substring(0, 255),
+                    customerEmail: String(customerEmail || '').substring(0, 255),
+                    customerPhone: String(customerPhone || '').substring(0, 255)
+                }
+            },
+            checkoutOptions: {
+                redirectUrl: redirectUrl || 'https://canvas-adnvertising.web.app/thank-you',
+                merchantSupportEmail: 'sales@canvas-advertising.com',
+                askForShippingAddress: false
+            }
+        });
+
+        if (response?.paymentLink?.url) {
+            return {
+                url: response.paymentLink.url,
+                paymentLinkId: response.paymentLink.id,
+                orderId: response.paymentLink.orderId
+            };
+        } else {
+            throw new Error('No payment link URL returned from Square.');
+        }
+    } catch (error) {
+        console.error('Square Payment Link creation failed:', error);
+        throw new functions.https.HttpsError('internal', `Square error: ${error.message}`);
+    }
+});
+
+/**
+ * HTTPS Callable: Create Mock Order (Sandbox Testing)
+ */
+exports.createMockOrder = configuredFunctions.https.onCall(async (data, context) => {
+    if (!context.auth || context.auth.token.admin !== true) {
+        throw new functions.https.HttpsError('permission-denied', 'Administrator access is required.');
+    }
+
+    const { productName, priceInCents, quantity, artworkUrl, customerEmail, customerName, customerPhone } = data;
+
+    const orderData = {
+        productName,
+        priceInCents: Number(priceInCents),
+        quantity: Number(quantity),
+        artworkUrl,
+        customerEmail: customerEmail || 'mock@example.com',
+        customerName: customerName || 'Mock Customer',
+        customerPhone: customerPhone || '512-555-0199',
+        status: 'Pending',
+        isMock: true,
+        createdAt: admin.firestore.FieldValue.serverTimestamp()
+    };
+
+    await db.collection('canvas_orders').add(orderData);
+    return { success: true };
+});
+
+/**
+ * HTTPS Callable: Get Square Client Configuration for Frontend
+ */
+exports.getSquareConfig = configuredFunctions.https.onCall(async (data, context) => {
+    const accessToken = process.env.SQUARE_ACCESS_TOKEN || runtimeConfig('square', 'access_token');
+    const applicationId = process.env.SQUARE_APPLICATION_ID || runtimeConfig('square', 'application_id');
+    const locationId = process.env.SQUARE_LOCATION_ID || runtimeConfig('square', 'location_id');
+    const environment = process.env.SQUARE_ENVIRONMENT || runtimeConfig('square', 'environment') || 'sandbox';
+
+    if (!accessToken || !applicationId || !locationId) {
+        throw new functions.https.HttpsError('failed-precondition', 'Online payment is temporarily unavailable.');
+    }
+
+    return {
+        applicationId,
+        locationId,
+        environment: environment.toLowerCase()
+    };
+});
+
+/**
+ * HTTPS Callable: Process Square Web Payments SDK Payment
+ */
+exports.processSquarePayment = configuredFunctions.https.onCall(async (data, context) => {
+    const { token, productName, priceInCents, quantity, artworkUrl, customerName, customerEmail, customerPhone } = data;
+
+    if (!productName || !priceInCents || !quantity || !artworkUrl) {
+        throw new functions.https.HttpsError('invalid-argument', 'Missing required fields.');
+    }
+    const validatedOrder = validateStoreOrder(productName, priceInCents, quantity);
+
+    const accessToken = process.env.SQUARE_ACCESS_TOKEN || runtimeConfig('square', 'access_token');
+    const applicationId = process.env.SQUARE_APPLICATION_ID || runtimeConfig('square', 'application_id');
+    const locationId = process.env.SQUARE_LOCATION_ID || runtimeConfig('square', 'location_id');
+
+    if (!accessToken || !applicationId || !locationId || !token) {
+        throw new functions.https.HttpsError('failed-precondition', 'Online payment is temporarily unavailable.');
+    }
+
+    // Call Square API to process the payment
+    const client = getSquare();
+    if (!client) {
+        throw new functions.https.HttpsError('failed-precondition', 'Square client initialization failed.');
+    }
+
+    try {
+        const { randomUUID } = require('crypto');
+        const idempotencyKey = randomUUID();
+
+        const response = await client.payments.create({
+            sourceId: token,
+            idempotencyKey: idempotencyKey,
+            amountMoney: {
+                amount: BigInt(validatedOrder.priceInCents),
+                currency: 'USD'
+            },
+            buyerEmailAddress: customerEmail,
+            note: productName,
+            referenceId: productName
+        });
+
+        const payment = response.payment;
+        if (payment && (payment.status === 'COMPLETED' || payment.status === 'APPROVED')) {
+            const orderData = {
+                orderId: payment.id,
+                productName,
+                quantity: validatedOrder.quantity,
+                priceInCents: validatedOrder.priceInCents,
+                artworkUrl,
+                customerName: customerName || 'Store Customer',
+                customerEmail: customerEmail || '',
+                customerPhone: customerPhone || '',
+                status: 'Pending',
+                createdAt: admin.firestore.FieldValue.serverTimestamp()
+            };
+
+            const docRef = await db.collection('canvas_orders').add(orderData);
+
+            // Send email confirmation using Resend
+            const resendClient = getResend();
+            if (resendClient && customerEmail) {
+                try {
+                    await resendClient.emails.send({
+                        from: 'orders@canvas-advertising.com',
+                        to: customerEmail,
+                        subject: 'Thank you for your order! - Canvas Advertising',
+                        html: `<p>Hi ${customerName || 'there'},</p><p>We received your order for **${productName}**! Our production team is reviewing your uploaded artwork and will be in touch shortly.</p>`
+                    });
+                } catch (emailErr) {
+                    console.error('Failed to send order email:', emailErr);
+                }
+            }
+
+            return { success: true, orderId: docRef.id, paymentId: payment.id };
+        } else {
+            throw new Error(`Square payment failed with status: ${payment ? payment.status : 'UNKNOWN'}`);
+        }
+
+    } catch (error) {
+        console.error('Square Payment Processing failed:', error);
+        throw new functions.https.HttpsError('internal', `Square payment failed: ${error.message}`);
+    }
+});
+
+
+/**
+ * HTTP Webhook: Handle Square payment notifications
+ */
+exports.squareWebhook = configuredFunctions.https.onRequest(async (req, res) => {
+    if (req.method !== 'POST') {
+        res.status(405).send('Method Not Allowed');
+        return;
+    }
+
+    const signature = req.headers['x-square-hmacsha256-signature'];
+    const signatureKey = process.env.SQUARE_WEBHOOK_SIGNATURE_KEY || runtimeConfig('square', 'webhook_signature_key');
+    const webhookUrl = `https://${req.get('host')}${req.originalUrl}`;
+    const bodyStr = JSON.stringify(req.body);
+
+    if (!signatureKey) {
+        console.error('Square Webhook Signature Key missing. Rejecting webhook.');
+        res.status(503).send('Webhook verification unavailable');
+        return;
+    } else {
+        const crypto = require('crypto');
+        const hmac = crypto.createHmac('sha256', signatureKey);
+        const payload = webhookUrl + (req.rawBody ? req.rawBody.toString('utf8') : bodyStr);
+        hmac.update(payload);
+        const expected = hmac.digest('base64');
+
+        if (signature !== expected) {
+            console.error('Square Webhook Signature Verification failed.');
+            res.status(400).send('Invalid Signature');
+            return;
+        }
+    }
+
+    const event = req.body;
+    console.log('Received Square Webhook Event:', event.type);
+
+    try {
+        if (event.type === 'payment.created' || event.type === 'order.updated') {
+            const dataObj = event.data?.object;
+            let orderId = null;
+            let amountPaid = 0;
+
+            if (event.type === 'payment.created' && dataObj?.payment) {
+                orderId = dataObj.payment.order_id;
+                amountPaid = Number(dataObj.payment.amount_money?.amount || 0);
+            } else if (event.type === 'order.updated' && dataObj?.order) {
+                if (dataObj.order.state === 'COMPLETED' || dataObj.order.tenders?.[0]?.status === 'SUCCESS') {
+                    orderId = dataObj.order.id;
+                    amountPaid = Number(dataObj.order.total_money?.amount || 0);
+                }
+            }
+
+            if (orderId) {
+                const existingOrderSnapshot = await db.collection('canvas_orders').where('orderId', '==', orderId).get();
+                if (!existingOrderSnapshot.empty) {
+                    console.log(`Order ${orderId} already processed. Skipping.`);
+                    res.status(200).send('Duplicate Event Handled');
+                    return;
+                }
+
+                const client = getSquare();
+                if (client) {
+                    const orderResponse = await client.ordersApi.retrieveOrder(orderId);
+                    const order = orderResponse.result.order;
+
+                    if (order) {
+                        const metadata = order.metadata || {};
+                        const lineItem = order.lineItems?.[0] || {};
+
+                        const orderData = {
+                            orderId: orderId,
+                            productName: lineItem.name || 'Custom Print Product',
+                            quantity: Number(lineItem.quantity || 1),
+                            priceInCents: amountPaid || Number(lineItem.totalMoney?.amount || 0),
+                            artworkUrl: metadata.artworkUrl || '',
+                            customerName: metadata.customerName || order.recipient?.displayName || '',
+                            customerEmail: metadata.customerEmail || '',
+                            customerPhone: metadata.customerPhone || '',
+                            status: 'Pending',
+                            createdAt: admin.firestore.FieldValue.serverTimestamp()
+                        };
+
+                        await db.collection('canvas_orders').add(orderData);
+                        console.log(`Successfully recorded order ${orderId} in Firestore.`);
+
+                        const resendClient = getResend();
+                        if (resendClient && orderData.customerEmail) {
+                            await resendClient.emails.send({
+                                from: 'orders@canvas-advertising.com',
+                                to: orderData.customerEmail,
+                                subject: 'Thank you for your order! - Canvas Advertising',
+                                html: `<p>Hi ${orderData.customerName || 'there'},</p><p>We received your order for **${orderData.productName}**! Our production team is reviewing your uploaded artwork and will be in touch shortly.</p>`
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        res.status(200).send('Event Handled');
+    } catch (err) {
+        console.error('Error processing Square webhook event:', err);
+        res.status(500).send(`Internal Error: ${err.message}`);
+    }
+});
+
 // ─── CRM Webhook Triggers ───────────────────
 
 const CRM_LEAD_DELIVERIES_COLLECTION = 'crm_lead_deliveries';
@@ -1555,4 +2214,112 @@ exports.processCrmLeadDeliveryQueue = functions
         const eligible = snapshot.docs.filter((doc) => crmLeadAdapter.isClaimable(doc.data(), now));
         await Promise.all(eligible.map((doc) => deliverCrmLead(doc.ref, doc.data())));
         return null;
+    });
+
+exports.syncOrderToCRM = configuredFunctions.firestore
+    .document('canvas_orders/{orderId}')
+    .onCreate(async (snapshot, context) => {
+        const orderData = snapshot.data();
+        const orderId = context.params.orderId;
+
+        console.log(`syncOrderToCRM triggered for order: ${orderId}`);
+
+        const crmUrl = process.env.CRM_API_URL || runtimeConfig('crm', 'api_url');
+        const crmApiKey = process.env.CRM_API_KEY || runtimeConfig('crm', 'api_key');
+
+        if (!crmUrl) {
+            console.log('CRM API URL not configured. Skipping sync.');
+            return null;
+        }
+
+        const payload = {
+            id: orderId,
+            eventType: 'order.created',
+            timestamp: new Date().toISOString(),
+            data: orderData
+        };
+
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        if (crmApiKey) {
+            headers['Authorization'] = `Bearer ${crmApiKey}`;
+        }
+
+        try {
+            console.log(`Sending order to CRM: ${crmUrl}`);
+            const response = await fetch(crmUrl, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const responseText = await response.text();
+                throw new Error(`CRM returned status ${response.status}: ${responseText}`);
+            }
+
+            console.log(`Successfully synced order ${orderId} to CRM.`);
+        } catch (error) {
+            console.error(`Error syncing order ${orderId} to CRM:`, error);
+        }
+        return null;
+    });
+
+// ----------------------------------------------------------------------
+// SYSTEM MAINTENANCE: Scheduled Firestore Backups
+// ----------------------------------------------------------------------
+
+exports.cleanupExpiredLeadUploads = configuredFunctions.pubsub
+    .schedule('every 6 hours')
+    .onRun(async () => {
+        const now = admin.firestore.Timestamp.now();
+        const sessions = await db.collection('leadUploadSessions')
+            .where('expiresAt', '<=', now)
+            .limit(100)
+            .get();
+        const bucket = admin.storage().bucket();
+
+        await Promise.all(sessions.docs.map(async (sessionSnapshot) => {
+            const session = sessionSnapshot.data();
+            if (!session.consumed) {
+                await bucket.deleteFiles({
+                    prefix: `lead-uploads/${sessionSnapshot.id}/`,
+                    force: true
+                });
+            }
+            const fileAuthorizations = await sessionSnapshot.ref.collection('files').get();
+            const batch = db.batch();
+            fileAuthorizations.docs.forEach((fileSnapshot) => batch.delete(fileSnapshot.ref));
+            batch.delete(sessionSnapshot.ref);
+            await batch.commit();
+        }));
+
+        console.log(`Cleaned ${sessions.size} expired lead upload sessions.`);
+        return null;
+    });
+
+exports.scheduledFirestoreBackup = configuredFunctions.pubsub
+    .schedule('every 24 hours')
+    .onRun(async (context) => {
+        const client = new firestore.v1.FirestoreAdminClient();
+        const projectId = process.env.GCP_PROJECT || process.env.GCLOUD_PROJECT || 'canvas-adnvertising';
+        const databaseName = client.databasePath(projectId, '(default)');
+
+        // Use the dedicated Firebase Storage bucket backups folder
+        const bucket = 'gs://canvas-adnvertising.firebasestorage.app/backups';
+
+        try {
+            console.log(`Starting Firestore export for database: ${databaseName}`);
+            const [responses] = await client.exportDocuments({
+                name: databaseName,
+                outputUriPrefix: bucket,
+                collectionIds: [] // Empty array exports all collections
+            });
+            console.log(`Firestore export operation started successfully: ${responses.name}`);
+            return { success: true, operationName: responses.name };
+        } catch (err) {
+            console.error('Firestore automated backup failed:', err);
+            throw new functions.https.HttpsError('internal', 'Backup export operation failed: ' + err.message);
+        }
     });
