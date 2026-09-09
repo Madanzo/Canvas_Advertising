@@ -1,0 +1,31 @@
+name: Storage Rules CI
+
+on:
+  pull_request:
+    paths:
+      - "storage.rules"
+      - "firestore.rules"
+      - "firebase.json"
+      - "test/storage.rules.test.js"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/storage-rules-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  storage-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+      - run: npm ci
+      - run: npm run test:storage-rules
