@@ -1,5 +1,12 @@
 {
+  "scripts": {
+    "test:storage-rules": "npx --yes firebase-tools@14.16.0 emulators:exec --only firestore,storage --project canvas-storage-rules-test \"node --test test/storage.rules.test.js\""
+  },
   "dependencies": {
     "firebase-admin": "^13.6.1"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.0",
+    "firebase": "^12.3.0"
   }
 }
