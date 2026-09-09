@@ -575,6 +575,14 @@ exports.onNewLead = functions.firestore
     .document('canvas_leads/{leadId}')
     .onCreate(async (snapshot, context) => {
         const leadData = snapshot.data();
+        if (crmLeadAdapter.isSyntheticTestSubmission(
+            crmLeadAdapterConfig(),
+            context.params.leadId,
+            leadData.source
+        )) {
+            console.log(`Skipping Canvas notification workflows for approved CRM integration test ${context.params.leadId}.`);
+            return null;
+        }
         const triggerType = leadData.source === 'booking' ? 'booking' : 'form_submit';
 
         console.log(`New lead: ${context.params.leadId}, trigger: ${triggerType}`);
@@ -1368,6 +1376,7 @@ function crmLeadAdapterConfig() {
         tenantSlug: process.env.MERKAD_LEADS_TENANT_SLUG || '',
         keyId: process.env.MERKAD_LEADS_KEY_ID || '',
         secret: process.env.MERKAD_LEADS_SECRET || '',
+        testSubmissionId: process.env.CRM_LEAD_TEST_SUBMISSION_ID || '',
         serviceAllowlistConfirmed: String(
             process.env.MERKAD_LEADS_SERVICE_ALLOWLIST_CONFIRMED
             || 'false'
@@ -1375,8 +1384,8 @@ function crmLeadAdapterConfig() {
     };
 }
 
-function crmLeadDeliveryReadiness(config) {
-    return crmLeadAdapter.readiness(config);
+function crmLeadDeliveryReadiness(config, leadId) {
+    return crmLeadAdapter.readiness(config, leadId);
 }
 
 function crmLeadIdempotencyKey(leadId) {
@@ -1385,7 +1394,7 @@ function crmLeadIdempotencyKey(leadId) {
 
 async function deliverCrmLead(deliveryRef, delivery) {
     const config = crmLeadAdapterConfig();
-    const readiness = crmLeadDeliveryReadiness(config);
+    const readiness = crmLeadDeliveryReadiness(config, delivery.leadId || deliveryRef.id);
     if (!readiness.ready) return { attempted: false, reason: readiness.reason };
     if (!delivery.serializedBody || !delivery.serviceMapping?.crmValue || delivery.serviceMapping.confirmed !== true) {
         await deliveryRef.update({
@@ -1478,7 +1487,7 @@ exports.syncLeadToCRM = functions
         const leadData = snapshot.data();
         const idempotencyKey = crmLeadIdempotencyKey(leadId);
         const config = crmLeadAdapterConfig();
-        const readiness = crmLeadDeliveryReadiness(config);
+        const readiness = crmLeadDeliveryReadiness(config, leadId);
         const deliveryRef = db.collection(CRM_LEAD_DELIVERIES_COLLECTION).doc(leadId);
         const mapping = crmLeadAdapter.buildRequestMapping(
             leadId,
@@ -1519,13 +1528,24 @@ exports.processCrmLeadDeliveryQueue = functions
     .pubsub
     .schedule('every 5 minutes')
     .onRun(async () => {
-        const readiness = crmLeadDeliveryReadiness(crmLeadAdapterConfig());
+        const config = crmLeadAdapterConfig();
+        const readiness = crmLeadDeliveryReadiness(config, config.testSubmissionId);
         if (!readiness.ready) {
             console.log(`CRM lead queue paused: ${readiness.reason}.`);
             return null;
         }
 
         const now = Date.now();
+        if (readiness.mode === 'test-only') {
+            const testDoc = await db.collection(CRM_LEAD_DELIVERIES_COLLECTION)
+                .doc(config.testSubmissionId)
+                .get();
+            if (testDoc.exists && crmLeadAdapter.isClaimable(testDoc.data(), now)) {
+                await deliverCrmLead(testDoc.ref, testDoc.data());
+            }
+            return null;
+        }
+
         const snapshot = await db.collection(CRM_LEAD_DELIVERIES_COLLECTION)
             // Held records were captured while forwarding was disabled. They
             // require a separately reviewed replay operation and are excluded.

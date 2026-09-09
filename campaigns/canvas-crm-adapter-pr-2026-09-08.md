@@ -25,6 +25,7 @@ The mock transport suite covers created acceptance, duplicate acceptance, valida
 
 ## Deployment blockers
 
+- Reconcile this branch with the currently deployed secure `createLeadUploadSession` / `submitPublicLead` source before deploying Functions. That newer callable implementation is present in the Canvas working copy and production runtime but is not yet committed on this PR's remote base; deploying this branch as-is could regress the secured form path.
 - CRM lead-intake rules and indexes from commit `b136819` are deployed, with readiness reported by the CRM agent. This blocker is resolved; retain deployment evidence for integration testing.
 - The public endpoint and tenant path are confirmed as `POST https://crm.merkadagency.com/api/v1/tenants/canvas_advertising/leads/intake`.
 - Configure tenant `canvas_advertising` for Website Leads. It is currently disabled, has no Canvas service allowlist or default owner, and has no approved notification owner. Confirm the intended pipeline/stage as part of this configuration.

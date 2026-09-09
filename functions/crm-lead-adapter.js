@@ -4,6 +4,7 @@ const CRM_ROUTE_PREFIX = '/api/v1/tenants/';
 const CRM_ROUTE_SUFFIX = '/leads/intake';
 const DEFAULT_TIMEOUT_MS = 8000;
 const PROCESSING_LEASE_MS = 2 * 60 * 1000;
+const TEST_SUBMISSION_ID_PATTERN = /^[A-Za-z0-9_-]{16,80}$/;
 
 // This translation is intentionally explicit. It is a proposed Canvas-to-CRM
 // mapping and still requires confirmation against the deployed tenant allowlist.
@@ -162,13 +163,35 @@ function bearerCredential(keyId, secret) {
     return `mk_live_${keyId}.${secret}`;
 }
 
-function readiness(config) {
-    if (config.enabled !== true) return { ready: false, reason: 'feature-disabled' };
+function testSubmissionGate(config, leadId) {
+    const configuredId = String(config.testSubmissionId || '');
+    if (!configuredId) return { authorized: false, reason: 'test-submission-id-missing' };
+    if (!TEST_SUBMISSION_ID_PATTERN.test(configuredId)) {
+        return { authorized: false, reason: 'test-submission-id-invalid' };
+    }
+    if (configuredId !== String(leadId || '')) {
+        return { authorized: false, reason: 'test-submission-id-mismatch' };
+    }
+    return { authorized: true, reason: 'test-submission-authorized' };
+}
+
+function isSyntheticTestSubmission(config, leadId, source) {
+    return source === 'crm_integration_test'
+        && testSubmissionGate(config, leadId).authorized;
+}
+
+function readiness(config, leadId) {
+    let mode = 'general';
+    if (config.enabled !== true) {
+        const testGate = testSubmissionGate(config, leadId);
+        if (!testGate.authorized) return { ready: false, reason: testGate.reason };
+        mode = 'test-only';
+    }
     if (!config.baseUrl) return { ready: false, reason: 'base-url-missing' };
     if (!config.tenantSlug) return { ready: false, reason: 'tenant-slug-missing' };
     if (!config.keyId || !config.secret) return { ready: false, reason: 'credential-missing' };
     if (config.serviceAllowlistConfirmed !== true) return { ready: false, reason: 'service-allowlist-unconfirmed' };
-    return { ready: true, reason: 'ready' };
+    return { ready: true, reason: 'ready', mode };
 }
 
 function isClaimable(delivery, nowMs) {
@@ -239,7 +262,9 @@ module.exports = {
     classifyResponse,
     endpointFor,
     idempotencyKeyFor,
+    isSyntheticTestSubmission,
     isClaimable,
     postSerializedDelivery,
-    readiness
+    readiness,
+    testSubmissionGate
 };

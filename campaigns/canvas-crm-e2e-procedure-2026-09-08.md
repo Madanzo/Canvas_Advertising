@@ -75,6 +75,20 @@ After this API contract harness passes, a separate controlled test must exercise
 5. Verify the CRM IDs/status are written back to the outbox and the form confirmation reflects an actually accepted active delivery path.
 6. Verify notification and retry behavior, then return forwarding to disabled unless production enablement is separately approved.
 
+### Exact-ID test isolation
+
+Keep `CRM_LEAD_ADAPTER_ENABLED=false`. Before the controlled run, configure one
+pre-agreed, valid `CRM_LEAD_TEST_SUBMISSION_ID` (16–80 ASCII letters, digits,
+underscores, or hyphens). Only that exact outbox document is eligible in test
+mode; the scheduled worker fetches it directly instead of querying the queue.
+Missing, malformed, or different IDs fail closed, and all unrelated/new/backlog
+records remain held.
+
+Mark the same saved test lead with `source: crm_integration_test`. Canvas workflow
+enrollment is skipped only when both that marker and the exact configured ID
+match. This prevents customer email/SMS side effects without disabling any live
+workflow. The CRM-side notification owner must still be approved before the run.
+
 ## Secret Manager bindings for Canvas Functions
 
 PR #1 reads `MERKAD_LEADS_KEY_ID` and `MERKAD_LEADS_SECRET` from `process.env` and now declares both Firebase Secret Manager bindings on `syncLeadToCRM` and `processCrmLeadDeliveryQueue` using the project's first-generation `functions.runWith({ secrets: [...] })` convention. No secret values are created or read by this change. Before any Functions deployment that could enable delivery:

@@ -8,9 +8,11 @@ const {
     classifyResponse,
     endpointFor,
     idempotencyKeyFor,
+    isSyntheticTestSubmission,
     isClaimable,
     postSerializedDelivery,
-    readiness
+    readiness,
+    testSubmissionGate
 } = require('../crm-lead-adapter');
 
 function mockResponse(status, body) {
@@ -55,11 +57,95 @@ test('builds the tenant-slug route and stable idempotency key', () => {
 });
 
 test('forwarding readiness fails closed until every deployment input is confirmed', () => {
-    assert.equal(readiness({ enabled: false }).reason, 'feature-disabled');
+    assert.equal(readiness({ enabled: false }).reason, 'test-submission-id-missing');
+    assert.equal(readiness({ enabled: false, testSubmissionId: 'short' }, 'short').reason, 'test-submission-id-invalid');
     assert.equal(readiness({ enabled: true }).reason, 'base-url-missing');
     assert.equal(readiness({ enabled: true, baseUrl: 'https://crm.example' }).reason, 'tenant-slug-missing');
     assert.equal(readiness({ enabled: true, baseUrl: 'https://crm.example', tenantSlug: 'canvas' }).reason, 'credential-missing');
     assert.equal(readiness({ enabled: true, baseUrl: 'https://crm.example', tenantSlug: 'canvas', keyId: 'key', secret: 'secret' }).reason, 'service-allowlist-unconfirmed');
+});
+
+test('test-only gate authorizes exactly one configured submission while general forwarding is disabled', () => {
+    const config = {
+        enabled: false,
+        testSubmissionId: 'canvas-test-submission-0001',
+        baseUrl: 'https://crm.example',
+        tenantSlug: 'canvas_advertising',
+        keyId: 'key',
+        secret: 'secret',
+        serviceAllowlistConfirmed: true
+    };
+
+    assert.equal(testSubmissionGate(config, 'unrelated-submission-0001').authorized, false);
+    assert.equal(readiness(config, 'unrelated-submission-0001').ready, false);
+    assert.deepEqual(readiness(config, 'canvas-test-submission-0001'), {
+        ready: true,
+        reason: 'ready',
+        mode: 'test-only'
+    });
+    assert.equal(isSyntheticTestSubmission(
+        config,
+        'canvas-test-submission-0001',
+        'crm_integration_test'
+    ), true);
+    assert.equal(isSyntheticTestSubmission(
+        config,
+        'unrelated-submission-0001',
+        'crm_integration_test'
+    ), false);
+    assert.equal(isSyntheticTestSubmission(
+        config,
+        'canvas-test-submission-0001',
+        'form_submit'
+    ), false);
+});
+
+test('timeout retry reuses exact bytes and creates only one CRM record', async () => {
+    const serializedBody = '{"externalDocId":"canvas-test-timeout-0001","website":""}';
+    const idempotencyKey = 'canvas-lead:canvas-test-timeout-0001';
+    const stored = new Map();
+    let calls = 0;
+    const fetchImpl = async (_url, options) => {
+        calls += 1;
+        const existing = stored.get(options.headers['Idempotency-Key']);
+        if (!existing) {
+            stored.set(options.headers['Idempotency-Key'], {
+                body: options.body,
+                data: created.data
+            });
+            const error = Object.assign(new Error('client timed out after commit'), { name: 'AbortError' });
+            throw error;
+        }
+        assert.equal(options.body, existing.body);
+        return mockResponse(200, {
+            ...created,
+            code: 'duplicate_ignored',
+            data: existing.data
+        });
+    };
+
+    const first = await postSerializedDelivery({
+        fetchImpl,
+        baseUrl: 'https://crm.example',
+        tenantSlug: 'canvas_advertising',
+        credential: 'server-only',
+        idempotencyKey,
+        serializedBody
+    });
+    assert.equal(first.outcome, 'retry');
+
+    const recovered = await postSerializedDelivery({
+        fetchImpl,
+        baseUrl: 'https://crm.example',
+        tenantSlug: 'canvas_advertising',
+        credential: 'server-only',
+        idempotencyKey,
+        serializedBody
+    });
+    assert.equal(recovered.outcome, 'accepted');
+    assert.equal(recovered.duplicate, true);
+    assert.equal(calls, 2);
+    assert.equal(stored.size, 1, 'CRM must contain only one idempotent write');
 });
 
 test('classifies accepted, duplicate, validation, and conflict responses', () => {
