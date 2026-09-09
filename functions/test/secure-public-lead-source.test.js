@@ -37,7 +37,12 @@ test('browser submission uses the callable and does not directly create a lead',
     assert.doesNotMatch(browserSource, /db\.collection\('canvas_leads'\)\.add\(lead\)/);
 });
 
-test('controlled notification isolation requires both exact ID and synthetic source', () => {
-    assert.match(runtimeSource, /isSyntheticTestSubmission\([\s\S]*?context\.params\.leadId,[\s\S]*?leadData\.source/);
+test('controlled notification isolation requires server authorization, exact ID, and trusted source', () => {
+    assert.match(runtimeSource, /isSyntheticTestSubmission\([\s\S]*?context\.params\.leadId,[\s\S]*?leadData\.source,[\s\S]*?leadData\.crmIntegrationTestAuthorized === true/);
+    assert.match(runtimeSource, /exports\.createCrmIntegrationTestAuthorization = configuredFunctions\.https\.onCall/);
+    assert.match(runtimeSource, /isVerifiedCanvasStaff\(context\)/);
+    assert.match(runtimeSource, /crmTestAuthorization\.isValidAuthorization/);
+    assert.match(runtimeSource, /transaction\.update\(testAuthorizationRef/);
+    assert.match(firestoreRules, /match \/crmIntegrationTestAuthorizations\/\{submissionId\}[\s\S]*?allow read, write: if false;/);
     assert.match(runtimeSource, /Skipping Canvas notification workflows for approved CRM integration test/);
 });
