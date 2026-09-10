@@ -40,10 +40,16 @@ const getResend=()=>{throw Error('Forbidden provider access in split-overlay tes
 `;
         const filename=path.join(functionRoot,'.emulator-'+name+'.js');
         const loaded=new Module(filename,module);loaded.filename=filename;loaded.paths=Module._nodeModulePaths(dependencyRoot);
+        const relativeRequire=loaded.require.bind(loaded);
+        // Node caches external resolution by parent directory, so use each package's
+        // own require function rather than only replacing Module.paths.
+        loaded.require=request=>request.startsWith('.') ? relativeRequire(request) : packageRequire(request);
         loaded._compile(bootstrap+'\n'+body,filename);
         admins.push(packageRequire('firebase-admin'));
         Object.assign(all,loaded.exports);
     }
+    assert.notEqual(admins[0],admins[1], 'Each package must load its own Admin SDK');
+    for(const admin of admins) assert.equal(admin.app().options.projectId,'demo-canvas-integration');
     all.__splitAdmin=admins[0];
     all.__splitDispose=async()=>{for(const admin of admins) await admin.app().delete();};
     return all;
