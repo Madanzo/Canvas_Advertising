@@ -1,0 +1,15 @@
+# Deployed frontend reconciliation — repository only
+
+Based directly on current main cf674ba4a451e42635bddb1ac6db3a18b2b54c6d, without the CRM/App Check feature-branch ancestry.
+
+This imports exactly five already-deployed frontend files from Hosting version 61df100c11fd1d4f (release 1789074479486000): quote.html, quote-es.html, js/main.js, css/styles.css, and js/firebase-config.js. Each was fetched read-only from the Firebase domain and verified against the complete live manifest. The live version, all 2,020 manifest entries and Hosting configuration matched the recorded deployment. Hashes and check time are in frontend-reconciliation-baseline.json. No deployment occurred.
+
+The complete live main.js and CSS are retained, including frontend work already present before PR #4. Thus their diff against old main is larger than the combined quote patches; restricting it to the appended quote code would fail to reconcile the deployed frontend. This is deliberately a five-file reconciliation, not a claim that all other repository assets equal Hosting.
+
+PR #4 deployed the bilingual product-first quote experience through a live-source overlay; PR #7 deployed vinyl grades and material guidance at source 6edbc03319ee3df22c4391471734b309f78421c8. This branch consolidates their deployed frontend outcome directly onto main. It does not incorporate their parent CRM/backend/rules commits or PR #4's adapter edits. Once separately reviewed and merged, the frontend portions of #4 and #7 can be marked superseded; preserve or split any unmerged backend work into its own reviewed PR. No PR state or base is changed by this branch.
+
+App Check initialization and dynamic compat loading are byte-identical to the deployed client; token-readiness, upload-session ordering and fail-closed token tests run locally. Both quote-page script references and phone numbers match deployed bytes. Enforcement, CRM intake and forwarding are not configured by this branch.
+
+Tests cover bilingual fields, material/grade clearing, canonical service IDs and legacy links, dimensions, outgoing specifications/readable summaries, mocked upload/submission/retry behavior, App Check initialization/token gating, and five-file production fingerprints. They run only browser code with local mocks; they do not import backend handlers or rules, validate live persistence, or claim new CRM/runtime integration testing. Existing main backend/rules/configuration remains unchanged and is not a deployment baseline for the separately deployed Functions.
+
+Relevant tooling additions are jsdom, the test scripts/lockfile, and a read-only GitHub Actions workflow. CI runs on this branch's push and on relevant pull requests; it installs dependencies and runs tests/syntax checks, with no deployment commands or secrets. No merge, Hosting deployment, backend deployment, production submissions, notifications, recovery, or replay is authorized. After any eventual repository merge, deployment remains a separately reviewed live-source operation.

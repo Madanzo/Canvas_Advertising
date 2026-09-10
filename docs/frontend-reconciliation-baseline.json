@@ -1,0 +1,34 @@
+{
+  "checkedAt": "2026-09-10T21:36:20.404Z",
+  "version": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/61df100c11fd1d4f",
+  "release": "projects/canvas-adnvertising/sites/canvas-adnvertising/channels/live/releases/1789074479486000",
+  "files": [
+    {
+      "path": "quote.html",
+      "sha256": "829eebfae2f97c55651f24d26785122700e353405f7de69de8321a07cca9a098",
+      "hostingHash": "37a251335fdd926630a39a5b88a58ee81b019ca17671558f32eaac65c90eb0fe"
+    },
+    {
+      "path": "quote-es.html",
+      "sha256": "ad61b9097d7e5b4c4bc7fd02d0e4e538ec12cd9acb6bdbc402d0886fdb12766c",
+      "hostingHash": "8c4507833bf28d0ce19aa58cf155aba72f597968c679c98866f2e78f49464b37"
+    },
+    {
+      "path": "js/main.js",
+      "sha256": "8df0264ecf04c3275128cd047b02d16a952a0ac50a21498f5cbaae6963d5446c",
+      "hostingHash": "4526f6d6595f277cba666d60e5a2ebb19c6a3b36506cb6dee2bfb37863a9c141"
+    },
+    {
+      "path": "css/styles.css",
+      "sha256": "68911f21e060997bddaae8deb9768648f7e4b9cfc3b83a3eaecbeabbd3364e2a",
+      "hostingHash": "ffccea33db9d22b780e4a91497edcdd5d7a4af39507b9c54efa511c9d6e7249a"
+    },
+    {
+      "path": "js/firebase-config.js",
+      "sha256": "99a6a6f892ef9e98509bd333b9b28577b1fe78ba157cc4b8df3f01a9384b05ee",
+      "hostingHash": "42659089df2093aebca340ff4111f8bd32ef9a546a08452e0b5d73e49e38dce2"
+    }
+  ],
+  "manifestFiles": 2020,
+  "configUnchanged": true
+}
