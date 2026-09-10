@@ -19,6 +19,56 @@ let db = null;
 let auth = null;
 let storage = null;
 let appCheck = null;
+let firebaseClientReadyPromise = null;
+
+function loadFirebaseCompatComponent(component) {
+    if (typeof firebase === 'undefined') {
+        return Promise.reject(new Error('Firebase core SDK is unavailable'));
+    }
+    const version = firebase.SDK_VERSION || '10.12.2';
+    const source = `https://www.gstatic.com/firebasejs/${version}/firebase-${component}-compat.js`;
+
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        const onLoad = () => {
+            script.dataset.canvasLoaded = 'true';
+            resolve();
+        };
+        script.addEventListener('load', onLoad, { once: true });
+        script.addEventListener('error', () => reject(new Error(`Firebase ${component} SDK failed to load`)), { once: true });
+        script.src = source;
+        script.async = true;
+        document.head.appendChild(script);
+    });
+}
+
+async function ensureFirebaseClient(options = {}) {
+    if (typeof firebase === 'undefined') throw new Error('Firebase core SDK is unavailable');
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+
+    if (!firebaseClientReadyPromise) {
+        firebaseClientReadyPromise = (async () => {
+            if (!firebase.appCheck || !firebase.appCheck.ReCaptchaEnterpriseProvider) {
+                await loadFirebaseCompatComponent('app-check');
+            }
+            initializeFirebase();
+            if (!firebase.functions) await loadFirebaseCompatComponent('functions');
+            return true;
+        })().catch((error) => {
+            firebaseClientReadyPromise = null;
+            throw error;
+        });
+    }
+    await firebaseClientReadyPromise;
+
+    if (options.storage && !firebase.storage) await loadFirebaseCompatComponent('storage');
+    initializeFirebase();
+    if (!appCheck || typeof appCheck.getToken !== 'function') {
+        throw new Error('Firebase App Check is unavailable');
+    }
+    await appCheck.getToken(false);
+    return true;
+}
 
 function initializeFirebase() {
     if (typeof firebase !== 'undefined') {
@@ -61,15 +111,8 @@ function initializeFirebase() {
  * @returns {Promise<Array>} uploaded file metadata.
  */
 async function uploadLeadFiles(files, pathPrefix) {
-    if (!storage) {
-        if (!initializeFirebase() || !storage) {
-            throw new Error('Firebase Storage not available');
-        }
-    }
-
-    if (!firebase.functions) {
-        throw new Error('Secure upload service is unavailable');
-    }
+    await ensureFirebaseClient({ storage: true });
+    if (!storage || !firebase.functions) throw new Error('Secure upload service is unavailable');
     const requestedFiles = files.map((file) => ({
         name: file.name,
         size: file.size,
@@ -116,9 +159,8 @@ async function uploadLeadFiles(files, pathPrefix) {
  * @returns {Promise<Object>} submission result
  */
 async function submitLead(leadData) {
-    if (!initializeFirebase() || !firebase.functions) {
-        throw new Error('Secure lead service is unavailable');
-    }
+    await ensureFirebaseClient();
+    if (!firebase.functions) throw new Error('Secure lead service is unavailable');
 
     const uploadSubmissionId = Array.isArray(leadData.fileUploads)
         ? leadData.fileUploads.find((file) => file && file.submissionId)?.submissionId
@@ -251,6 +293,7 @@ async function deleteTemplate(templateId) {
 // Export functions for use in main.js and admin.js
 window.CanvasFirebase = {
     init: initializeFirebase,
+    ready: ensureFirebaseClient,
     submitLead: submitLead,
     addLead: submitLead,
     uploadLeadFiles: uploadLeadFiles,
