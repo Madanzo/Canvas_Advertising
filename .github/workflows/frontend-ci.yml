@@ -1,0 +1,28 @@
+name: Frontend reconciliation checks
+on:
+  push:
+    branches: ['codex/canvas-frontend-reconciliation']
+  pull_request:
+    paths:
+      - 'quote*.html'
+      - 'js/main.js'
+      - 'js/firebase-config.js'
+      - 'css/styles.css'
+      - 'tests/**'
+      - 'docs/frontend-reconciliation*'
+      - 'package*.json'
+      - '.github/workflows/frontend-ci.yml'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:frontend
+      - run: npm run check:frontend

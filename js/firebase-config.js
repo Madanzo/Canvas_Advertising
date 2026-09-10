@@ -12,10 +12,63 @@ const firebaseConfig = {
     appId: "1:835646149135:web:b34edc32dd43c69923c97a",
     measurementId: "G-K6P9JYBWP3"
 };
+const APP_CHECK_SITE_KEY = '6Le6eq8tAAAAACnz0Kp-IId4zWzgiorK3tBMIP4-';
 
 // Initialize Firebase (loaded from CDN in HTML)
 let db = null;
 let auth = null;
+let storage = null;
+let appCheck = null;
+let firebaseClientReadyPromise = null;
+
+function loadFirebaseCompatComponent(component) {
+    if (typeof firebase === 'undefined') {
+        return Promise.reject(new Error('Firebase core SDK is unavailable'));
+    }
+    const version = firebase.SDK_VERSION || '10.12.2';
+    const source = `https://www.gstatic.com/firebasejs/${version}/firebase-${component}-compat.js`;
+
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        const onLoad = () => {
+            script.dataset.canvasLoaded = 'true';
+            resolve();
+        };
+        script.addEventListener('load', onLoad, { once: true });
+        script.addEventListener('error', () => reject(new Error(`Firebase ${component} SDK failed to load`)), { once: true });
+        script.src = source;
+        script.async = true;
+        document.head.appendChild(script);
+    });
+}
+
+async function ensureFirebaseClient(options = {}) {
+    if (typeof firebase === 'undefined') throw new Error('Firebase core SDK is unavailable');
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+
+    if (!firebaseClientReadyPromise) {
+        firebaseClientReadyPromise = (async () => {
+            if (!firebase.appCheck || !firebase.appCheck.ReCaptchaEnterpriseProvider) {
+                await loadFirebaseCompatComponent('app-check');
+            }
+            initializeFirebase();
+            if (!firebase.functions) await loadFirebaseCompatComponent('functions');
+            return true;
+        })().catch((error) => {
+            firebaseClientReadyPromise = null;
+            throw error;
+        });
+    }
+    await firebaseClientReadyPromise;
+
+    if (options.storage && !firebase.storage) await loadFirebaseCompatComponent('storage');
+    initializeFirebase();
+    if (!appCheck || typeof appCheck.getToken !== 'function') {
+        throw new Error('Firebase App Check is unavailable');
+    }
+    await appCheck.getToken(false);
+    return true;
+}
 
 function initializeFirebase() {
     if (typeof firebase !== 'undefined') {
@@ -23,12 +76,21 @@ function initializeFirebase() {
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
+        if (!appCheck && firebase.appCheck && firebase.appCheck.ReCaptchaEnterpriseProvider) {
+            appCheck = firebase.appCheck();
+            appCheck.activate(
+                new firebase.appCheck.ReCaptchaEnterpriseProvider(APP_CHECK_SITE_KEY),
+                true
+            );
+        }
         db = firebase.firestore();
         // Safe init for Auth (optional for public site)
         if (firebase.auth) {
             auth = firebase.auth();
-        } else {
-            console.warn('Firebase Auth module not loaded.');
+        }
+
+        if (firebase.storage) {
+            storage = firebase.storage();
         }
 
         // Safe init for Functions (optional)
@@ -43,40 +105,87 @@ function initializeFirebase() {
 }
 
 /**
- * Submit lead to Firebase Firestore
- * @param {Object} leadData - Form data object
- * @returns {Promise} - Firestore document reference
+ * Upload lead files to Firebase Storage.
+ * @param {File[]} files - Browser File objects.
+ * @param {string} pathPrefix - Storage folder prefix.
+ * @returns {Promise<Array>} uploaded file metadata.
  */
-async function submitLead(leadData) {
-    if (!db) {
-        // Try to initialize
-        if (!initializeFirebase()) {
-            throw new Error('Firebase not available');
-        }
+async function uploadLeadFiles(files, pathPrefix) {
+    await ensureFirebaseClient({ storage: true });
+    if (!storage || !firebase.functions) throw new Error('Secure upload service is unavailable');
+    const requestedFiles = files.map((file) => ({
+        name: file.name,
+        size: file.size,
+        type: file.type || (/\.(ai|eps)$/i.test(file.name) ? 'application/octet-stream' : '')
+    }));
+    const sessionResponse = await firebase.functions().httpsCallable('createLeadUploadSession')({ files: requestedFiles });
+    const session = sessionResponse && sessionResponse.data;
+    if (!session || !session.submissionId || !session.token || !Array.isArray(session.files)
+        || session.files.length !== files.length) {
+        throw new Error('Secure upload service returned an invalid response');
     }
 
+    const uploads = files.map(async (file, index) => {
+        const authorizedFile = session.files[index];
+        const safeName = authorizedFile.safeName || file.name.replace(/[^a-zA-Z0-9._-]/g, '-');
+        const filePath = `lead-uploads/${session.submissionId}/${authorizedFile.fileId}/${safeName}`;
+        const ref = storage.ref().child(filePath);
+        await ref.put(file, {
+            contentType: authorizedFile.type,
+            customMetadata: {
+                source: String(pathPrefix || 'lead_upload').slice(0, 100),
+                submissionId: session.submissionId,
+                fileId: authorizedFile.fileId,
+                originalName: authorizedFile.name,
+                uploadToken: session.token
+            }
+        });
+        return {
+            name: authorizedFile.name,
+            size: authorizedFile.size,
+            type: authorizedFile.type,
+            path: filePath,
+            fileId: authorizedFile.fileId,
+            submissionId: session.submissionId
+        };
+    });
+
+    return Promise.all(uploads);
+}
+
+/**
+ * Submit a public lead through the validated Cloud Function.
+ * @param {Object} leadData - Form data object
+ * @returns {Promise<Object>} submission result
+ */
+async function submitLead(leadData) {
+    await ensureFirebaseClient();
+    if (!firebase.functions) throw new Error('Secure lead service is unavailable');
+
+    const uploadSubmissionId = Array.isArray(leadData.fileUploads)
+        ? leadData.fileUploads.find((file) => file && file.submissionId)?.submissionId
+        : null;
+    const submissionId = leadData.submissionId || uploadSubmissionId || (
+        window.crypto && typeof window.crypto.randomUUID === 'function'
+            ? window.crypto.randomUUID()
+            : `${Date.now()}_${Math.random().toString(36).slice(2)}_${Math.random().toString(36).slice(2)}`
+    );
+    leadData.submissionId = submissionId;
     const lead = {
         ...leadData,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        submissionId,
         source: leadData.source || 'form_submit',
-        status: 'new',
-        notes: ''
+        service: leadData.service || 'General Inquiry'
     };
 
     try {
-        const docRef = await db.collection('canvas_leads').add(lead);
-        console.log('Lead submitted with ID:', docRef.id);
-
-        // Track conversion event
-        if (typeof gtag !== 'undefined') {
-            gtag('event', 'generate_lead', {
-                'event_category': 'engagement',
-                'event_label': leadData.service || 'general'
-            });
+        const callable = firebase.functions().httpsCallable('submitPublicLead');
+        const response = await callable(lead);
+        if (!response || !response.data || response.data.ok !== true) {
+            throw new Error('Secure lead service returned an invalid response');
         }
-
-        return docRef;
+        console.log('Lead submitted with ID:', response.data.id);
+        return response.data;
     } catch (error) {
         console.error('Error submitting lead:', error);
         throw error;
@@ -184,7 +293,10 @@ async function deleteTemplate(templateId) {
 // Export functions for use in main.js and admin.js
 window.CanvasFirebase = {
     init: initializeFirebase,
+    ready: ensureFirebaseClient,
     submitLead: submitLead,
+    addLead: submitLead,
+    uploadLeadFiles: uploadLeadFiles,
     getLeads: getLeads,
     updateLead: updateLead,
     deleteLead: deleteLead,

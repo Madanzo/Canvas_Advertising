@@ -1,5 +1,12 @@
 {
   "dependencies": {
     "firebase-admin": "^13.6.1"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0"
+  },
+  "scripts": {
+    "test:frontend": "node --test tests/*.test.cjs",
+    "check:frontend": "node --check js/main.js && node --check js/firebase-config.js"
   }
 }
