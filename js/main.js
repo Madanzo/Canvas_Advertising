@@ -39,6 +39,10 @@ if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
 
 // ─── Bootstrap ──────────────────────────────────
 document.addEventListener('DOMContentLoaded', function () {
+    if (document.getElementById('canvasQuoteForm')) {
+        window.initCanvasQuote();
+        return;
+    }
     // Register GSAP plugin (deferred scripts are ready by now)
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
         gsap.registerPlugin(ScrollTrigger);
@@ -978,3 +982,702 @@ function initWhatsAppWidget() {
         }
     });
 }
+
+/* Quote request: stable Canvas service keys, bilingual presentation, callable-only writes. */
+(function (scope) {
+  "use strict";
+  const SERVICES = Object.freeze([
+    [
+      "wrap_production_only",
+      "Wrap Production Only",
+      "Paneles de wrap listos para instalar",
+      "wrap-production",
+    ],
+    [
+      "wholesale_printing",
+      "Print Partner / Wholesale Vinyl Printing",
+      "Impresión de vinil al mayoreo",
+      "print-partner",
+    ],
+    [
+      "vinyl_large_format_printing",
+      "Vinyl & Large-Format Printing",
+      "Impresión de vinil y gran formato",
+      "large-format",
+    ],
+    [
+      "window_graphics",
+      "Perforated Window Vinyl / Storefront Glass",
+      "Gráficos para ventanas y escaparates",
+      "perforated-window-vinyl",
+    ],
+    [
+      "wall_murals",
+      "Wall Murals & Interior Vinyl",
+      "Murales y vinil interior",
+      "interior-branding",
+    ],
+    [
+      "contour_cut_decals",
+      "Contour-Cut Decals",
+      "Calcomanías con corte de contorno",
+      "decals",
+    ],
+    [
+      "cutting_lamination",
+      "Cutting & Lamination",
+      "Corte y laminado",
+      "lamination-cutting",
+    ],
+    [
+      "vehicle_wraps",
+      "Vehicle Wraps",
+      "Wraps comerciales y flotillas",
+      "vehicle-wraps",
+    ],
+    [
+      "print_collateral",
+      "Flyers & Business Cards (Secondary)",
+      "Flyers, tarjetas y menús",
+      "short-run-digital",
+    ],
+    ["other", "Other", "Otro / ayuda para elegir", "other"],
+  ]);
+  const OPTIONS = {
+    recommend: ["Recommend a material", "Recomendar un material"],
+    wrap: ["Printed wrap film", "Vinil impreso para wrap"],
+    vinyl: ["Printed adhesive vinyl", "Vinil adhesivo impreso"],
+    perforated: ["Perforated window vinyl", "Vinil perforado para ventanas"],
+    wall: ["Wall mural vinyl", "Vinil para mural"],
+    banner: ["Banner vinyl", "Vinil para banner"],
+    sign: [
+      "Sign substrate — please advise",
+      "Sustrato para letrero — recomendar",
+    ],
+    paper: ["Paper", "Papel"],
+    card: ["Card stock", "Cartulina"],
+    supplied: [
+      "Customer-supplied material — review needed",
+      "Material del cliente — requiere revisión",
+    ],
+    advise: ["Recommend a finish", "Recomendar un acabado"],
+    matte: ["Matte laminate", "Laminado mate"],
+    gloss: ["Gloss laminate", "Laminado brillante"],
+    none: ["No lamination", "Sin laminado"],
+    pickup: [
+      "Austin pickup · print-only",
+      "Recoger en Austin · solo impresión",
+    ],
+    delivery: ["Local delivery · print-only", "Entrega local · solo impresión"],
+    shipping: ["Shipping · print-only", "Envío · solo impresión"],
+    installation: ["Request installation", "Solicitar instalación"],
+  };
+  const aliases = {
+    "wrap-panels": "wrap_production_only",
+    "replacement-panels": "wrap_production_only",
+    "wholesale-vinyl": "wholesale_printing",
+    "contour-cut-decals": "contour_cut_decals",
+    "perforated-window-vinyl": "window_graphics",
+    "window-graphics": "window_graphics",
+    "wall-murals": "wall_murals",
+    "vinyl-banners": "vinyl_large_format_printing",
+    "fleet-graphics": "vehicle_wraps",
+    "ricoh-print": "print_collateral",
+  };
+  function config(service, detail) {
+    if (service !== "vinyl_large_format_printing") detail = "general";
+    const material =
+      service === "print_collateral"
+        ? ["recommend", "paper", "card"]
+        : service === "wall_murals"
+          ? ["recommend", "wall"]
+          : service === "window_graphics"
+            ? ["recommend", "perforated", "vinyl"]
+            : service === "cutting_lamination"
+              ? ["recommend", "supplied", "vinyl", "wrap"]
+              : service === "vinyl_large_format_printing" && detail === "banner"
+                ? ["recommend", "banner"]
+                : service === "vinyl_large_format_printing" && detail === "sign"
+                  ? ["recommend", "sign", "vinyl"]
+                  : ["recommend", "wrap", "vinyl"];
+    const install = [
+      "vehicle_wraps",
+      "window_graphics",
+      "wall_murals",
+      "vinyl_large_format_printing",
+      "other",
+    ].includes(service);
+    return {
+      vehicle: service === "vehicle_wraps",
+      dimensions: service !== "vehicle_wraps",
+      material,
+      lamination:
+        service === "print_collateral" || detail === "banner"
+          ? ["advise", "none"]
+          : ["advise", "matte", "gloss", "none"],
+      fulfillment: [
+        "pickup",
+        "delivery",
+        "shipping",
+        ...(install ? ["installation"] : []),
+      ],
+    };
+  }
+  const toFeet = { in: 1 / 12, ft: 1, cm: 1 / 30.48, mm: 1 / 304.8 };
+  function area(pieces) {
+    return pieces.reduce(
+      (sum, p) =>
+        sum +
+        Number(p.width) *
+          Number(p.height) *
+          toFeet[p.unit] ** 2 *
+          Number(p.quantity),
+      0,
+    );
+  }
+  function validate(data, step) {
+    const errors = [];
+    const rules = config(data.service, data.productDetail);
+    if (step === 0 && !SERVICES.some((s) => s[0] === data.service))
+      errors.push("service");
+    if (step === 1) {
+      if (rules.vehicle) {
+        if (
+          !data.vehicle.trim() ||
+          !Number.isInteger(+data.vehicleCount) ||
+          +data.vehicleCount < 1 ||
+          +data.vehicleCount > 1000
+        )
+          errors.push("vehicle");
+      } else if (
+        !data.measurementHelp &&
+        (!data.pieces.length ||
+          data.pieces.length > 10 ||
+          data.pieces.some(
+            (p) =>
+              !toFeet[p.unit] ||
+              ![+p.width, +p.height].every(
+                (n) => Number.isFinite(n) && n > 0 && n <= 100000,
+              ) ||
+              !Number.isInteger(+p.quantity) ||
+              +p.quantity < 1 ||
+              +p.quantity > 100000,
+          ))
+      )
+        errors.push("dimensions");
+    }
+    if (step === 2) {
+      if (
+        !rules.material.includes(data.material) ||
+        !rules.lamination.includes(data.lamination)
+      )
+        errors.push("material");
+      if (data.notes.length > 1200) errors.push("notes");
+    }
+    if (step === 3) {
+      if (!rules.fulfillment.includes(data.fulfillment))
+        errors.push("fulfillment");
+      if (
+        data.fulfillment !== "pickup" &&
+        !/^\d{5}(?:-\d{4})?$/.test(data.zip.trim())
+      )
+        errors.push("zip");
+      if (
+        data.completionDate &&
+        (!/^\d{4}-\d{2}-\d{2}$/.test(data.completionDate) ||
+          data.completionDate < new Date().toLocaleDateString("en-CA"))
+      )
+        errors.push("date");
+    }
+    if (step === 4) {
+      if (data.name.trim().length < 2 || data.name.length > 120)
+        errors.push("name");
+      if (
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email) ||
+        data.email.length > 254
+      )
+        errors.push("email");
+      const n = data.phone.replace(/\D/g, "");
+      if (n.length < 10 || n.length > 15) errors.push("phone");
+    }
+    return errors;
+  }
+  function validateFiles(files) {
+    const types = [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "image/heic",
+      "image/heif",
+      "application/pdf",
+      "application/postscript",
+      "application/illustrator",
+      "application/octet-stream",
+    ];
+    if (
+      files.length > 10 ||
+      files.some(
+        (f) =>
+          !f.size ||
+          f.size > 20 * 1024 * 1024 ||
+          !/\.(jpg|jpeg|png|webp|heic|heif|pdf|ai|eps)$/i.test(f.name) ||
+          (f.type && !types.includes(f.type)),
+      )
+    )
+      throw new Error("files");
+  }
+  function buildPayload(d, locale, context = {}) {
+    const service = SERVICES.find((s) => s[0] === d.service);
+    if (!service) throw new Error("service");
+    const rules = config(d.service, d.productDetail);
+    const request = {
+      version: 1,
+      serviceId: d.service,
+      productDetail:
+        d.service === "vinyl_large_format_printing" ? d.productDetail : "",
+      measurementHelp: rules.dimensions && d.measurementHelp,
+      pieces:
+        rules.dimensions && !d.measurementHelp
+          ? d.pieces.map((p) => ({
+              width: +p.width,
+              height: +p.height,
+              unit: p.unit,
+              quantity: +p.quantity,
+            }))
+          : [],
+      areaSqFt:
+        rules.dimensions && !d.measurementHelp
+          ? Number(area(d.pieces).toFixed(4))
+          : null,
+      vehicle: rules.vehicle ? d.vehicle : "",
+      vehicleCount: rules.vehicle ? +d.vehicleCount : null,
+      coverage: rules.vehicle ? d.coverage : "",
+      material: d.material,
+      lamination: d.lamination,
+      artwork: d.artwork,
+      fulfillment: d.fulfillment,
+      installationRequested: d.fulfillment === "installation",
+      zip: d.fulfillment === "pickup" ? "" : d.zip,
+      completionDate: d.completionDate,
+      rush: d.rush,
+      notes: d.notes,
+      smsConsent: d.smsConsent,
+      smsConsentText: d.smsConsentText,
+      smsConsentVersion: "quote-sms-2026-09-10",
+      smsConsentRecordedAt: context.now || new Date().toISOString(),
+      consentLocale: locale,
+    };
+    // The human-readable message is explicitly mapped by the CRM contract.
+    const es = locale === "es",
+      tr = (en, sp) => (es ? sp : en);
+    const option = (key) => OPTIONS[key]?.[es ? 1 : 0] || key;
+    const artworkLabel = {
+      ready: tr("Print-ready artwork", "Arte listo para imprimir"),
+      review: tr("File review requested", "Revisión de archivos"),
+      design: tr("Design assistance", "Ayuda con diseño"),
+    }[d.artwork];
+    const coverageLabel = {
+      recommend: tr("Help choosing coverage", "Ayuda para elegir cobertura"),
+      graphics: tr("Logos / lettering", "Logos / letras"),
+      partial: tr("Partial wrap", "Wrap parcial"),
+      full: tr("Full commercial wrap", "Wrap comercial completo"),
+    }[d.coverage];
+    const productLabel =
+      {
+        general: tr("General printing", "Impresión general"),
+        banner: "Banner",
+        sign: tr("Printed sign", "Letrero impreso"),
+        vinyl: tr("Printed vinyl", "Vinil impreso"),
+      }[request.productDetail] || "";
+    const summary = [
+      service[es ? 2 : 1],
+      productLabel,
+      request.measurementHelp
+        ? tr("Measurement help requested", "Solicito ayuda para medir")
+        : request.pieces
+            .map(
+              (p) =>
+                `${p.width} × ${p.height} ${p.unit} × ${p.quantity} ${tr("pieces", "piezas")}`,
+            )
+            .join("; "),
+      request.areaSqFt === null
+        ? ""
+        : `${tr("Finished area", "Área final")}: ${request.areaSqFt} ${tr("sq ft", "pies²")}`,
+      request.vehicle
+        ? `${request.vehicle} × ${request.vehicleCount}; ${coverageLabel}`
+        : "",
+      `${tr("Material", "Material")}: ${option(d.material)}; ${tr("lamination", "laminado")}: ${option(d.lamination)}; ${tr("artwork", "arte")}: ${artworkLabel}`,
+      `${tr("Fulfillment", "Entrega")}: ${option(d.fulfillment)}${request.zip ? "; ZIP: " + request.zip : ""}`,
+      `${tr("Date", "Fecha")}: ${d.completionDate || tr("to confirm", "por confirmar")}; ${tr("rush requested", "urgente solicitado")}: ${d.rush ? tr("yes", "sí") : "no"}`,
+      d.company ? `${tr("Company", "Empresa")}: ${d.company}` : "",
+      d.notes,
+    ]
+      .filter(Boolean)
+      .join("\n");
+    return {
+      name: d.name.trim(),
+      businessName: d.company.trim(),
+      email: d.email.trim(),
+      phone: d.phone.trim(),
+      service: d.service,
+      source: "production_quote",
+      formType: "production_quote",
+      locale,
+      page: context.page || "",
+      referrer: context.referrer || "",
+      sourcePage: context.sourcePage || "",
+      landingProduct: context.landingProduct || "",
+      tracking: context.tracking || {},
+      productionRequest: request,
+      productionSummary: summary.slice(0, 1000),
+      message: summary,
+      deadline: d.completionDate,
+      productionNotes: d.notes,
+      fileUploads: [],
+    };
+  }
+  function createSubmission(client, uuid) {
+    let busy = false,
+      complete = null,
+      frozen = null,
+      uploaded = null;
+    return {
+      async send(payload, files) {
+        if (complete) return complete;
+        if (busy) return null;
+        busy = true;
+        try {
+          validateFiles(files);
+          if (!frozen) frozen = JSON.parse(JSON.stringify(payload));
+          if (!uploaded) {
+            uploaded = files.length
+              ? await client.uploadLeadFiles(files, "production-quote")
+              : [];
+            frozen.fileUploads = uploaded;
+            frozen.submissionId = uploaded[0]?.submissionId || uuid();
+          }
+          const result = await client.submitLead(frozen);
+          if (!result || result.ok !== true) throw new Error("submission");
+          complete = result;
+          return result;
+        } finally {
+          busy = false;
+        }
+      },
+    };
+  }
+  scope.CanvasQuote = {
+    SERVICES,
+    OPTIONS,
+    config,
+    area,
+    validate,
+    validateFiles,
+    buildPayload,
+    createSubmission,
+  };
+  scope.initCanvasQuote = function () {
+    const form = document.getElementById("canvasQuoteForm");
+    if (!form) return;
+    const es = document.documentElement.lang === "es";
+    const tr = (en, sp) => (es ? sp : en);
+    const $ = (id) => document.getElementById(id);
+    let step = 0,
+      locked = false;
+    const params = new URLSearchParams(location.search);
+    const initial = params.get("service") || aliases[params.get("project")];
+    if (SERVICES.some((s) => s[0] === initial))
+      $("quoteService").value = initial;
+    if (params.get("project") === "vinyl-banners")
+      $("productDetail").value = "banner";
+    const errors = {
+      service: tr("Choose a product.", "Elija un producto."),
+      vehicle: tr(
+        "Add vehicle details and a whole-number vehicle count.",
+        "Agregue los datos del vehículo y una cantidad entera.",
+      ),
+      dimensions: tr(
+        "Enter positive finished dimensions, units and a whole-number quantity, or choose help measuring.",
+        "Ingrese medidas finales positivas, unidades y una cantidad entera, o solicite ayuda para medir.",
+      ),
+      zip: tr(
+        "Enter a valid US ZIP code for delivery or installation.",
+        "Ingrese un código postal válido de EE. UU. para entrega o instalación.",
+      ),
+      name: tr("Enter your full name.", "Ingrese su nombre completo."),
+      email: tr(
+        "Enter a valid email address.",
+        "Ingrese un correo electrónico válido.",
+      ),
+      phone: tr("Enter a valid phone number.", "Ingrese un teléfono válido."),
+      files: tr(
+        "Use up to 10 supported files, each nonempty and no larger than 20 MB.",
+        "Use hasta 10 archivos admitidos, no vacíos y de hasta 20 MB cada uno.",
+      ),
+      date: tr(
+        "Choose today or a future completion date.",
+        "Elija hoy o una fecha futura.",
+      ),
+      material: tr(
+        "Choose a relevant material and finish.",
+        "Elija un material y acabado adecuados.",
+      ),
+      fulfillment: tr(
+        "Choose a fulfillment option.",
+        "Elija una opción de entrega.",
+      ),
+      notes: tr(
+        "Keep notes under 1,200 characters.",
+        "Use menos de 1,200 caracteres en las notas.",
+      ),
+    };
+    function data() {
+      return {
+        service: $("quoteService").value,
+        productDetail: $("productDetail").value,
+        measurementHelp: $("measurementHelp").checked,
+        pieces: Array.from($("pieceRows").children).map((row) =>
+          Object.fromEntries(
+            Array.from(row.querySelectorAll("[data-piece]")).map((el) => [
+              el.dataset.piece,
+              el.value,
+            ]),
+          ),
+        ),
+        vehicle: $("vehicle").value,
+        vehicleCount: $("vehicleCount").value,
+        coverage: $("coverage").value,
+        material: $("material").value,
+        lamination: $("lamination").value,
+        artwork: $("artwork").value,
+        fulfillment: $("fulfillment").value,
+        zip: $("zip").value,
+        completionDate: $("completionDate").value,
+        rush: $("rush").checked,
+        name: $("contactName").value,
+        company: $("company").value,
+        email: $("email").value,
+        phone: $("phone").value,
+        notes: $("notes").value,
+        smsConsent: $("smsConsent").checked,
+        smsConsentText: $("smsConsent").parentElement.textContent.trim(),
+      };
+    }
+    function fillOptions(id, keys) {
+      const el = $(id),
+        old = el.value;
+      el.replaceChildren(
+        ...keys.map((k) => new Option(OPTIONS[k][es ? 1 : 0], k)),
+      );
+      if (keys.includes(old)) el.value = old;
+    }
+    function error(list) {
+      $("quoteError").hidden = !list.length;
+      $("quoteError").textContent = list.map((k) => errors[k] || k).join(" ");
+    }
+    function refresh() {
+      const d = data(),
+        r = config(d.service, d.productDetail);
+      $("productDetail").parentElement.hidden =
+        d.service !== "vinyl_large_format_printing";
+      $("vehicleQuestions").hidden = !r.vehicle;
+      $("dimensionQuestions").hidden = !r.dimensions;
+      $("pieceRows").hidden = d.measurementHelp;
+      $("addPiece").hidden = d.measurementHelp;
+      $("zip").parentElement.hidden = d.fulfillment === "pickup";
+      $("areaTotal").textContent = d.measurementHelp
+        ? tr(
+            "We’ll help confirm the measurements.",
+            "Le ayudaremos a confirmar las medidas.",
+          )
+        : validate(d, 1).length
+          ? ""
+          : `${area(d.pieces).toLocaleString(es ? "es-MX" : "en-US", { maximumFractionDigits: 2 })} ${tr("sq ft total finished area · not a price", "pies² de área final total · no es un precio")}`;
+      const s = SERVICES.find((s) => s[0] === d.service);
+      $("serviceHint").textContent = [
+        "wrap_production_only",
+        "wholesale_printing",
+        "cutting_lamination",
+      ].includes(d.service)
+        ? tr(
+            "For print partners and installers. Production only; installation is not included.",
+            "Para socios de impresión e instaladores. Solo producción; no incluye instalación.",
+          )
+        : tr(
+            "Share the specifications you know. We’ll confirm materials, production and any installation needs.",
+            "Comparta los datos que conoce. Confirmaremos materiales, producción y cualquier instalación.",
+          );
+      $("reviewDetails").textContent = buildPayload(
+        d,
+        es ? "es" : "en",
+      ).message;
+    }
+    function serviceChange() {
+      const r = config($("quoteService").value, $("productDetail").value);
+      fillOptions("material", r.material);
+      fillOptions("lamination", r.lamination);
+      fillOptions("fulfillment", r.fulfillment);
+      refresh();
+    }
+    function addPiece() {
+      if ($("pieceRows").children.length >= 10) return;
+      const row = document.createElement("div");
+      row.className = "q-piece";
+      const n = $("pieceRows").children.length + 1;
+      row.innerHTML = `<span class="q-piece-label">${tr("Piece / size", "Pieza / medida")} ${n}</span><div class="q-piece-grid"><label>${tr("Width", "Ancho")}<input data-piece="width" aria-label="${tr("Width", "Ancho")} ${n}" type="number" min="0.001" max="100000" step="any" inputmode="decimal"></label><span aria-hidden="true">×</span><label>${tr("Height", "Alto")}<input data-piece="height" aria-label="${tr("Height", "Alto")} ${n}" type="number" min="0.001" max="100000" step="any" inputmode="decimal"></label><label>${tr("Units", "Unidades")}<select data-piece="unit" aria-label="${tr("Units", "Unidades")} ${n}"><option value="in">${tr("inches", "pulgadas")}</option><option value="ft">${tr("feet", "pies")}</option><option value="cm">cm</option><option value="mm">mm</option></select></label><label>${tr("Quantity", "Cantidad")}<input data-piece="quantity" aria-label="${tr("Quantity", "Cantidad")} ${n}" type="number" min="1" max="100000" step="1" value="1" inputmode="numeric"></label><button class="q-text-button" type="button" aria-label="${tr("Remove size", "Eliminar medida")} ${n}">${tr("Remove", "Eliminar")}</button></div>`;
+      row.querySelector("button").addEventListener("click", () => {
+        if (locked) return;
+        row.remove();
+        refresh();
+      });
+      $("pieceRows").append(row);
+      refresh();
+    }
+    function show(focus = true) {
+      document
+        .querySelectorAll(".q-step")
+        .forEach((el, i) => (el.hidden = i !== step));
+      document.querySelectorAll("[data-progress]").forEach((el, i) => {
+        el.classList.toggle("is-current", i === step);
+        el.classList.toggle("is-complete", i < step);
+        if (i === step) el.setAttribute("aria-current", "step");
+        else el.removeAttribute("aria-current");
+      });
+      $("quoteBack").hidden = step === 0;
+      $("quoteNext").hidden = step === 4;
+      $("quoteSubmit").hidden = step !== 4;
+      $("stepCount").textContent = `${step + 1} / 5`;
+      refresh();
+      if (focus) $("q-title-" + step).focus({ preventScroll: true });
+    }
+    $("quoteService").addEventListener("change", serviceChange);
+    $("productDetail").addEventListener("change", serviceChange);
+    $("addPiece").addEventListener("click", addPiece);
+    form.addEventListener("input", refresh);
+    form.addEventListener("change", refresh);
+    $("quoteFiles").addEventListener("change", () => {
+      $("fileList").replaceChildren(
+        ...Array.from($("quoteFiles").files).map((f) => {
+          const li = document.createElement("li");
+          li.textContent = `${f.name} · ${(f.size / 1024).toFixed(1)} KB`;
+          return li;
+        }),
+      );
+    });
+    $("quoteNext").addEventListener("click", () => {
+      let list = validate(data(), step);
+      if (step === 2)
+        try {
+          validateFiles(Array.from($("quoteFiles").files));
+        } catch (e) {
+          list.push("files");
+        }
+      error(list);
+      if (!list.length) {
+        step++;
+        show();
+      }
+    });
+    $("quoteBack").addEventListener("click", () => {
+      if (!locked) {
+        error([]);
+        step--;
+        show();
+      }
+    });
+    let submission;
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (step !== 4) {
+        $("quoteNext").click();
+        return;
+      }
+      if ($("quoteSubmit").disabled) return;
+      const d = data();
+      let list = [0, 1, 2, 3, 4].flatMap((i) => validate(d, i));
+      try {
+        validateFiles(Array.from($("quoteFiles").files));
+      } catch (e) {
+        list.push("files");
+      }
+      error(list);
+      if (list.length) return;
+      if (!scope.CanvasFirebase) {
+        error([
+          tr(
+            "The form service could not load. Refresh this page or call us.",
+            "No se pudo cargar el servicio. Actualice la página o llámenos.",
+          ),
+        ]);
+        return;
+      }
+      if (!submission)
+        submission = createSubmission(scope.CanvasFirebase, () =>
+          crypto.randomUUID(),
+        );
+      const tracking = {};
+      for (const k of [
+        "utm_source",
+        "utm_medium",
+        "utm_campaign",
+        "utm_term",
+        "utm_content",
+        "gclid",
+      ])
+        if (params.has(k)) tracking[k] = params.get(k).slice(0, 1000);
+      const payload = buildPayload(d, es ? "es" : "en", {
+        page: location.pathname,
+        referrer: document.referrer.slice(0, 1000),
+        sourcePage: (params.get("source") || "").slice(0, 1000),
+        landingProduct: (params.get("project") || "").slice(0, 1000),
+        tracking,
+      });
+      locked = true;
+      form
+        .querySelectorAll("input,select,textarea,button")
+        .forEach((el) => (el.disabled = true));
+      $("quoteStatus").textContent = tr(
+        "Sending your request securely…",
+        "Enviando su solicitud de forma segura…",
+      );
+      try {
+        const result = await submission.send(
+          payload,
+          Array.from($("quoteFiles").files),
+        );
+        if (!result) return;
+        $("quoteReference").textContent = result.id;
+        form.hidden = true;
+        $("quoteSuccess").hidden = false;
+        $("quoteSuccess").focus();
+        if (typeof scope.gtag === "function")
+          scope.gtag("event", "generate_lead", { method: "production_quote" });
+      } catch (e) {
+        $("quoteSubmit").disabled = false;
+        $("quoteSubmit").textContent = tr(
+          "Retry My Quote",
+          "Reintentar mi cotización",
+        );
+        error([
+          tr(
+            "We could not confirm your request. Your details are kept here. Retry safely with the same reference, or call (512) 434-3793.",
+            "No pudimos confirmar su solicitud. Conservamos sus datos aquí. Reintente con la misma referencia o llame al (512) 945-9783.",
+          ),
+        ]);
+      } finally {
+        $("quoteStatus").textContent = "";
+      }
+    });
+    addPiece();
+    serviceChange();
+    show(false);
+    if (typeof scope.gtag !== "function") {
+      scope.dataLayer = scope.dataLayer || [];
+      scope.gtag = function () {
+        scope.dataLayer.push(arguments);
+      };
+      scope.gtag("js", new Date());
+      scope.gtag("config", "G-98HWWM4BDW");
+    }
+  };
+})(window);

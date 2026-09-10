@@ -1,0 +1,26 @@
+name: Quote request checks
+on:
+  pull_request:
+    paths:
+      - 'quote*.html'
+      - 'js/main.js'
+      - 'js/firebase-config.js'
+      - 'css/styles.css'
+      - 'tests/**'
+      - 'functions/crm-lead-adapter.js'
+      - 'package*.json'
+      - '.github/workflows/quote-ci.yml'
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:quote
+      - run: node --check js/main.js && node --check js/firebase-config.js && node --check functions/crm-lead-adapter.js

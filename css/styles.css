@@ -3230,3 +3230,567 @@ body.loaded .preloader {
 .btn:hover .btn__icon-right {
     transform: translateX(5px);
 }
+/* Scoped quote workspace; other pages retain their existing styles. */
+.quote-page {
+  --q-border: #dedbd5;
+  --q-muted: #62635f;
+  --q-paper: #f4f2ed;
+  --q-ink: #161a18;
+  --q-red: #c92c3c;
+  --q-soft-red: #fff1f1;
+  background: var(--q-paper);
+  color: var(--q-ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+.quote-page [hidden] {
+  display: none !important;
+}
+.quote-page a {
+  color: inherit;
+}
+.quote-page :focus-visible {
+  outline: 3px solid var(--q-red);
+  outline-offset: 4px;
+}
+.q-header {
+  max-width: 1440px;
+  margin: auto;
+  padding: 1.4rem clamp(1rem, 4vw, 4rem);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--q-border);
+  gap: 1rem;
+}
+.q-brand {
+  display: grid;
+  text-decoration: none;
+  line-height: 0.9;
+}
+.q-brand strong {
+  font-size: 1.65rem;
+  letter-spacing: -0.09rem;
+  font-weight: 900;
+}
+.q-brand strong span {
+  font-size: 0.75rem;
+  vertical-align: top;
+  margin-left: 0.2rem;
+}
+.q-brand small {
+  font-size: 0.65rem;
+  letter-spacing: 0.31rem;
+  padding-top: 0.45rem;
+}
+.q-header > div {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  font-size: 0.9rem;
+}
+.q-phone {
+  font-weight: 700;
+}
+.q-shell {
+  max-width: 1440px;
+  margin: auto;
+  padding: clamp(1.5rem, 4vw, 3.5rem) clamp(1rem, 4vw, 4rem) 4rem;
+}
+.q-intro {
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+  align-items: end;
+  gap: 0 4rem;
+  margin-bottom: 2rem;
+}
+.q-eyebrow {
+  color: var(--q-red);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  margin: 0 0 0.8rem;
+}
+.q-intro > .q-eyebrow {
+  grid-column: 1/-1;
+}
+.q-intro h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 5vw, 4.8rem);
+  letter-spacing: -0.025em;
+  line-height: 0.95;
+  font-weight: 400;
+  margin: 0;
+}
+.q-intro h1 em {
+  font-style: normal;
+  color: var(--q-red);
+}
+.q-intro > p:last-child {
+  max-width: 30rem;
+  color: var(--q-muted);
+  padding-bottom: 0.2rem;
+}
+.q-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.42fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+.q-workspace {
+  background: var(--white);
+  border: 1px solid var(--q-border);
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 8px 30px #161a1805;
+  min-width: 0;
+}
+.q-progress {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  list-style: none;
+  border-bottom: 1px solid var(--q-border);
+  margin: 0;
+  padding: 0 1.5rem;
+}
+.q-progress li {
+  display: grid;
+  gap: 0.2rem;
+  padding: 1.1rem 0.4rem 0.8rem;
+  border-bottom: 3px solid transparent;
+  color: var(--q-muted);
+  font-size: 0.8rem;
+}
+.q-progress li span {
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+.q-progress li.is-current {
+  border-color: var(--q-red);
+  color: var(--q-red);
+  font-weight: 700;
+}
+.q-progress li.is-complete {
+  color: var(--q-ink);
+}
+#canvasQuoteForm {
+  padding: clamp(1.2rem, 3vw, 2.5rem);
+}
+.q-step {
+  min-height: 19rem;
+}
+.q-step h2,
+.q-success h2 {
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  line-height: 1.2;
+  margin: 0 0 0.8rem;
+  letter-spacing: -0.03em;
+}
+.q-step > p:not(.q-eyebrow) {
+  color: var(--q-muted);
+  margin-bottom: 1.4rem;
+}
+.q-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 1.2rem 0;
+  min-width: 0;
+}
+.quote-page input:not([type="checkbox"]),
+.quote-page select,
+.quote-page textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 3.1rem;
+  border: 1px solid var(--q-border);
+  border-radius: 0.45rem;
+  padding: 0.7rem 0.8rem;
+  background: var(--white);
+  color: var(--q-ink);
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1.4;
+  box-sizing: border-box;
+}
+.quote-page select {
+  padding-right: 1.8rem;
+}
+.quote-page textarea {
+  resize: vertical;
+}
+.quote-page input:focus,
+.quote-page select:focus,
+.quote-page textarea:focus {
+  border-color: var(--q-red);
+}
+.q-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 1.2rem;
+}
+.q-hint {
+  padding: 1rem 1.1rem;
+  border-left: 3px solid var(--q-red);
+  background: var(--q-paper);
+  border-radius: 0 0.4rem 0.4rem 0;
+  font-size: 0.9rem;
+  color: var(--q-muted);
+  margin: 1.2rem 0;
+}
+.q-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  font-size: 0.9rem;
+  margin: 1.2rem 0;
+  cursor: pointer;
+}
+.q-check input {
+  appearance: auto;
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: none;
+  accent-color: var(--q-red);
+  margin-top: 0.15rem;
+}
+.q-piece {
+  border: 1px solid var(--q-border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  background: var(--q-paper);
+}
+.q-piece-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 0.7rem;
+}
+.q-piece-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) minmax(
+      0,
+      1fr
+    ) minmax(0, 0.8fr);
+  gap: 0.6rem;
+  align-items: end;
+}
+.q-piece-grid label {
+  font-size: 0.85rem;
+  display: grid;
+  gap: 0.35rem;
+}
+.q-piece-grid > span {
+  padding-bottom: 0.75rem;
+}
+.q-piece-grid button {
+  grid-column: 1/-1;
+  justify-self: start;
+}
+.q-text-button {
+  background: transparent;
+  color: var(--q-red);
+  border: 0;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.55rem 0;
+  cursor: pointer;
+  min-height: 2.75rem;
+  text-align: left;
+}
+.q-area {
+  display: block;
+  color: var(--q-muted);
+  font-size: 0.9rem;
+  margin: 1rem 0;
+}
+.q-upload {
+  display: grid;
+  gap: 0.4rem;
+  padding: 1.4rem;
+  border: 1px dashed var(--q-muted);
+  border-radius: 0.5rem;
+  background: var(--q-paper);
+  margin: 1rem 0;
+}
+.q-upload span,
+.q-upload small {
+  font-size: 0.85rem;
+  color: var(--q-muted);
+}
+.q-upload input[type="file"] {
+  padding: 0;
+  background: transparent;
+  border: none;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+.q-file-list {
+  padding-left: 1.2rem;
+  overflow-wrap: anywhere;
+  font-size: 0.9rem;
+}
+.q-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-top: 1px solid var(--q-border);
+  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+}
+#stepCount {
+  font-size: 0.8rem;
+  color: var(--q-muted);
+  margin-right: auto;
+}
+.q-primary,
+.q-secondary {
+  padding: 0.85rem 1.4rem;
+  border-radius: 0.5rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 3rem;
+}
+.q-primary {
+  background: var(--q-red);
+  color: var(--white);
+  border: 1px solid var(--q-red);
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+}
+.q-primary:hover {
+  background: var(--q-ink);
+  border-color: var(--q-ink);
+}
+.q-secondary {
+  border: 1px solid var(--q-border);
+  background: var(--white);
+  color: var(--q-ink);
+}
+.quote-page :disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+.q-aside {
+  color: var(--white);
+  background: var(--q-ink);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+.q-aside > .q-eyebrow {
+  color: var(--gray-light);
+  font-size: 0.68rem;
+}
+.q-aside h2 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1.1;
+  font-weight: 400;
+  margin: 1.5rem 0 0.8rem;
+}
+.q-aside p,
+.q-aside li {
+  font-size: 0.85rem;
+  color: var(--gray-light);
+}
+.q-aside ul {
+  list-style: none;
+  padding: 1.3rem 0;
+  margin: 0;
+  display: grid;
+  gap: 0.9rem;
+}
+.q-aside li {
+  border-bottom: 1px solid var(--q-muted);
+  padding-bottom: 0.8rem;
+}
+.q-aside .q-small {
+  color: var(--gray-light);
+}
+.q-sheet-art {
+  height: 10rem;
+  margin: 1.8rem 0.4rem;
+  background: var(--q-paper);
+  color: var(--q-ink);
+  position: relative;
+  transform: rotate(-5deg);
+  border-radius: 0.1rem;
+  box-shadow: 0.6rem 0.6rem 0 var(--q-red);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.q-sheet-art span {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  transform: rotate(-10deg);
+  letter-spacing: 0.02em;
+  z-index: 1;
+}
+.q-sheet-art i {
+  width: 8rem;
+  height: 8rem;
+  background: var(--q-red);
+  position: absolute;
+  right: -2rem;
+  top: -2rem;
+  border-radius: 50%;
+}
+.q-sheet-art b {
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  position: absolute;
+  left: 0.8rem;
+  bottom: 0.7rem;
+}
+.q-small {
+  font-size: 0.8rem;
+  color: var(--q-muted);
+}
+.q-review {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: var(--q-paper);
+  border-radius: 0.5rem;
+}
+.q-review summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.q-review pre {
+  font: inherit;
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin-top: 1rem;
+}
+.q-error {
+  padding: 1rem;
+  color: var(--q-red);
+  background: var(--q-soft-red);
+  border: 1px solid var(--q-red);
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+#quoteStatus {
+  margin-top: 1rem;
+  color: var(--q-muted);
+}
+.q-success {
+  padding: 3rem;
+}
+.q-success strong {
+  overflow-wrap: anywhere;
+}
+.q-footer {
+  max-width: 1440px;
+  margin: auto;
+  padding: 1.5rem clamp(1rem, 4vw, 4rem);
+  border-top: 1px solid var(--q-border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem 2rem;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--q-muted);
+}
+@media (max-width: 1024px) {
+  .q-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(13rem, 0.4fr);
+  }
+  .q-aside {
+    padding: 1rem;
+  }
+  .q-progress {
+    padding: 0 0.8rem;
+  }
+  .q-intro {
+    gap: 1rem;
+  }
+}
+@media (max-width: 768px) {
+  .q-layout {
+    grid-template-columns: 1fr;
+  }
+  .q-aside {
+    display: none;
+  }
+  .q-intro {
+    grid-template-columns: 1fr;
+  }
+  .q-intro > p:last-child {
+    max-width: 36rem;
+    font-size: 0.95rem;
+  }
+  .q-intro h1 {
+    font-size: clamp(2.6rem, 8vw, 4rem);
+  }
+  .q-header > div {
+    gap: 1rem;
+  }
+  .q-step {
+    min-height: 17rem;
+  }
+}
+@media (max-width: 480px) {
+  .q-header {
+    padding: 1rem;
+  }
+  .q-phone {
+    display: none;
+  }
+  .q-progress {
+    padding: 0 0.5rem;
+  }
+  .q-progress li {
+    font-size: 0.68rem;
+    padding: 0.85rem 0.2rem;
+    overflow-wrap: anywhere;
+  }
+  .q-grid {
+    grid-template-columns: 1fr;
+  }
+  .q-field {
+    margin: 0.8rem 0;
+  }
+  .q-piece-grid {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+  .q-piece-grid label:nth-of-type(3) {
+    grid-column: 1;
+  }
+  .q-piece-grid label:nth-of-type(4) {
+    grid-column: 3;
+  }
+  .q-primary,
+  .q-secondary {
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+  }
+  .q-actions {
+    gap: 0.5rem;
+  }
+  .q-success {
+    padding: 1.5rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .quote-page * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
+
+/* Keep the five-step indicator readable on narrow screens; full labels remain accessible. */
+@media (max-width: 480px) {
+  .q-progress li { font-size: 0; padding: .8rem .5rem; }
+  .q-progress li span { font-size: .875rem; }
+}
