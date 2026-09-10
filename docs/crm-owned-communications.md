@@ -1,0 +1,30 @@
+# CRM-owned communications — review candidate, not a deployment package
+
+Depends on mapping `eeb06de8c8e9e1c9063e56acfaba74ca5ff51cbe`, which depends on integration `61f9a71ab917f6ace51d736c248a5d8f609fc9c5` and reconciled main. Review integration first, then mapping, then this delta. Rebase/retest if a dependency is squashed. No merge or production operation is implied.
+
+## Trusted contract and gates
+
+`CANVAS_NOTIFICATION_OWNER` defaults to `website`. CRM ownership requires a valid server-configured transition ID and UTC cutover plus six strict boolean readiness gates: `CRM_COMMUNICATIONS_INTAKE_READY`, `EMAIL_READY`, `SMS_READY`, `CONSENT_READY`, `IDEMPOTENCY_READY`, `SUPPRESSION_READY` (each full name starts with `CRM_COMMUNICATIONS_`). These attest to reviewed tests, not self-proving configuration. No flag is set by this change. Adapter general enablement, tenant allowlist confirmation, exact-test authorization and credential requirements remain separate.
+
+Only `submitPublicLead` stamps immutable `communications` in the same transaction as the lead/proof. It includes owner, policy version, server capturedAt, testSuppressed and, for CRM, transitionId. Visitor ownership fields are not accepted. Existing Firestore rules restrict updates to status/notes/updatedAt. A misconfigured or premature CRM transition saves the request with owner `held`: neither website notifications nor CRM forwarding are authorized. Site confirmation remains saved-only; five deployed frontend files are untouched.
+
+The CRM intake must explicitly accept/validate notificationOwner, communicationPolicyVersion, capturedAt, testSuppressed and transitionId from the authenticated website integration and match tenant policy; receipt time is also authoritative. Missing historical metadata never grants CRM notification permission. This contract acceptance and atomic intake-to-outbox integration are blockers; sending the added fields to the older strict intake must not be enabled. No existing serialized delivery is rewritten. A transition holds pre-transition outboxes instead of transferring/replaying them.
+
+## Preserved safeguards and target boundaries
+
+This branch restores the deployed PR #5 SMS policy module unchanged and applies its enrollment and final-send checks before adding ownership checks. Missing consent remains denied. `onNewLead`, enrollment, final `sendEmail`, and final `sendSMS` check current policy and stored ownership. Bulk, booking, scheduled workflows and direct messages use those shared gates. Provider configuration is never accessed on a suppressed path. The pre-existing undefined `getPlivo` is deliberately not repaired. Operational/admin sends without a bound Canvas lead now fail closed; audit these consumers before rollout.
+
+The deployed PR #6 legacy guard module is preserved byte-for-byte. `syncLeadToCRM` retains its guarded legacy export. The new adapter uses **`onCanvasLeadForCRM`**, a distinct reviewed deployment identity; keep both legacy enablement flags false. The scheduler and proof issuer remain new targets. Do not deploy this checkout wholesale: branch dependencies/runtime/package differ from live. Each target must use a reviewed live-source overlay preserving package, runtime configuration, IAM and all unrelated exports.
+
+Candidate Functions scope: `submitPublicLead`, `onNewLead`, `processBulkCampaign`, `calcomWebhook`, `processWorkflowQueue`, `sendDirectMessage`; new `createCrmIntegrationTestAuthorization`, `onCanvasLeadForCRM`, `processCrmLeadDeliveryQueue`. Existing `syncLeadToCRM` v6 is excluded from deployment. Necessary private proof/upload authorization rules are a separate reviewed scope. Hosting, its 2,020 assets/config and App Check remain unchanged. No missing notification index is part of this release.
+
+## Transition and rollback
+
+1. Review and test CRM tenant-isolated Twilio/email outbox, strict current consent at enqueue/send, callback authentication, idempotent atomic intake, duplicate retry and uncertain-provider-response handling. All runtime bindings remain disabled. Reuse approved tenant/owner/service evidence.
+2. Review exact-target live-source overlays, verify current baseline/runtime/package/IAM hashes and archive rollback source/config. Run merged runtime tests against those overlays, including simultaneous paused website/CRM suppression. Do not use normal checkout deployment.
+3. A separately approved future rollout may install dormant code first. Establish website global pause (`CANVAS_WEBSITE_COMMUNICATIONS_PAUSED=true`) before any ownership cutover. Freeze legacy workflows/independent callers under explicit approval; never create the absent index or scan/replay historical records. Inventory is not authorization to send.
+4. Use a separately authorized exact submission ID and verified staff one-time proof; general intake/forwarding remain off. Website never sends for this proof; CRM testSuppressed=true also blocks sending. Test unauthorized/expired/reused proof, cross-tenant credential, changed duplicate body, response loss and retry using emulator/mocks first. A real CRM record or provider send requires new explicit approval.
+5. After CRM intake contract, email readiness, Twilio and suppression tests pass, authorize a fresh epoch and future-record cutover. No historical owner backfill. Missing/false SMS consent never enrolls or sends. Marketing consent remains false. Existing held records remain held.
+6. Rollback first pauses both sides. Never automatically flip to website and resume old jobs. Restore only approved target source/config; preserve pause and original per-record owner so CRM-owned records cannot send on website. Keep legacy trigger disabled. New Functions can be disabled/removed only under separate approval. Never delete request evidence or reset idempotency keys/consumed proofs.
+
+Local policy/handler tests are executable without provider dependencies. The five Firestore runtime tests were retargeted to `onCanvasLeadForCRM`; exact new-head emulator CI remains required. Earlier green CI is not evidence for this new head.

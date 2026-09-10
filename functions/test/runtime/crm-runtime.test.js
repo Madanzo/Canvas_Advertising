@@ -47,7 +47,7 @@ db.runTransaction = async (callback, ...options) => {
 let id, proof, leadRef, proofRef, outboxRef;
 const context = () => ({ rawRequest: { ip: '192.0.2.' + sequence, headers: {} } });
 const payload = () => ({ submissionId: id, name: 'Emulator Fixture', email: 'fixture@example.invalid', phone: '+15125550199', service: 'vehicle-wrap', source: 'crm_integration_test', message: 'Emulator only', crmTestAuthorizationToken: proof });
-const trigger = async () => runtime.syncLeadToCRM.run(await leadRef.get(), { params: { leadId: id }, timestamp: new Date().toISOString() });
+const trigger = async () => runtime.onCanvasLeadForCRM.run(await leadRef.get(), { params: { leadId: id }, timestamp: new Date().toISOString() });
 beforeEach(async () => {
     mode = ''; calls = []; sequence++;
     id = 'runtime_fixture_' + Date.now() + '_' + sequence;

@@ -148,7 +148,14 @@ function buildRequestMapping(leadId, leadData, submittedAtIso = new Date().toISO
         sourceSystem: 'canvas-advertising.com',
         externalDocId: leadId,
         turnstileVerified: null,
-        website: ''
+        website: '',
+        ...(leadData.communications?.communicationPolicyVersion === 1 ? {
+            notificationOwner: leadData.communications.notificationOwner,
+            communicationPolicyVersion: 1,
+            capturedAt: leadData.communications.capturedAt,
+            testSuppressed: leadData.communications.testSuppressed === true,
+            ...(leadData.communications.transitionId ? { transitionId: leadData.communications.transitionId } : {})
+        } : {})
     };
 
     return {
@@ -194,6 +201,7 @@ function isSyntheticTestSubmission(config, leadId, source, serverAuthorized = fa
 }
 
 function readiness(config, leadId, serverAuthorized = false) {
+    if (config.legacyForwardingEnabled === true) return { ready: false, reason: 'legacy-forwarding-must-remain-disabled' };
     let mode = 'general';
     if (config.enabled !== true) {
         const testGate = testSubmissionGate(config, leadId);

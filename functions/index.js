@@ -1,3 +1,5 @@
+const communicationsPolicy = require('./communications-policy');
+const smsConsent = require('./sms-consent');
 const functions = require('firebase-functions/v1');
 const admin = require('firebase-admin');
 const telnyx = require('telnyx');
@@ -430,6 +432,7 @@ exports.submitPublicLead = configuredFunctions.https.onCall(async (data, context
                 ...validated.lead,
                 source: crmTestAuthorization.trustedSource(validated.lead.source, testAuthorized),
                 ...(testAuthorized ? { crmIntegrationTestAuthorized: true } : {}),
+                communications: communicationsPolicy.capture(communicationsPolicy.configFromEnv(process.env), new Date(), testAuthorized),
                 contractVersion: 2,
                 createdAt: admin.firestore.FieldValue.serverTimestamp(),
                 updatedAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -472,10 +475,17 @@ async function enrollContactInWorkflow(contactId, workflowId, contactData) {
             return;
         }
 
+        // SMS enrollment requires explicit stored consent; email/task steps remain eligible.
+        const sourceLead = await db.collection('canvas_leads').doc(contactId).get();
+        if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), sourceLead.exists ? sourceLead.data() : null)) return { skipped: true, reason: 'website_communications_suppressed' };
+        const enrollment = smsConsent.enrollment(workflow, sourceLead.exists ? sourceLead.data() : null, contactData.phone);
+        if (!enrollment.allowed) return { skipped: true, reason: 'sms_consent_required' };
+
         // 2. Check if already active (prevent duplicate enrollment if needed)
 
         // 3. Create Workflow Instance (workflowContacts)
         const instanceData = {
+            smsEnrollment: enrollment.smsEnrollment,
             workflowId: workflowId,
             contactId: contactId,
             contactEmail: contactData.email,
@@ -709,11 +719,16 @@ async function executeWorkflowStep(step, instance) {
             options: { workflowId: instance.workflowId, contactId: instance.contactId }
         });
     } else if (step.type === 'sms') {
+        // Fresh consent and recipient binding are required before any provider/config access.
+        const currentLead = await db.collection('canvas_leads').doc(instance.contactId).get();
+        if (!smsConsent.canSend(instance, currentLead.exists ? currentLead.data() : null)) {
+            return { success: true, skipped: true, reason: 'sms_consent_required' };
+        }
         return await sendSMS({
             to: instance.contactPhone,
             templateId: step.templateId,
             variables: variables,
-            options: { workflowId: instance.workflowId, contactId: instance.contactId }
+            options: { workflowId: instance.workflowId, contactId: instance.contactId, smsEnrollment: instance.smsEnrollment }
         });
     } else if (step.type === 'task') {
         console.log(`TASK created: ${step.description}`);
@@ -734,6 +749,10 @@ async function executeWorkflowStep(step, instance) {
  * @param {object} options Extra options (subject, html, workflowId, contactId)
  */
 async function sendEmail({ to, templateId, variables, options = {} }) {
+    // All workflow, bulk, booking and direct-message paths use this final gate.
+    if (!options.contactId) return { success: false, error: 'communications_contact_required' };
+    const communicationLead = await db.collection('canvas_leads').doc(options.contactId).get();
+    if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), communicationLead.exists ? communicationLead.data() : null)) return { success: false, error: 'website_communications_suppressed' };
     if (!to) {
         console.warn('sendEmail: No recipient');
         return null;
@@ -829,10 +848,23 @@ async function sendEmail({ to, templateId, variables, options = {} }) {
  * @param {object} options Extra options (text, workflowId, contactId)
  */
 async function sendSMS({ to, templateId, variables, options = {} }) {
+    // All workflow, bulk, booking and direct-message paths use this final gate.
+    if (!options.contactId) return { success: false, error: 'communications_contact_required' };
+    const communicationLead = await db.collection('canvas_leads').doc(options.contactId).get();
+    if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), communicationLead.exists ? communicationLead.data() : null)) return { success: false, error: 'website_communications_suppressed' };
     if (!to) {
         console.warn('sendSMS: No recipient');
         return null;
     }
+
+    if (!options.contactId) return { success: false, error: 'sms_consent_required' };
+    const currentLead = await db.collection('canvas_leads').doc(options.contactId).get();
+    const lead = currentLead.exists ? currentLead.data() : null;
+    const direct = options.workflowId === 'direct_message';
+    const permitted = direct
+        ? smsConsent.enrollment({ steps: [{ type: 'sms' }] }, lead, to).smsEnrollment.authorized
+        : smsConsent.canSend({ contactPhone: to, smsEnrollment: options.smsEnrollment }, lead);
+    if (!permitted) return { success: false, error: 'sms_consent_required' };
 
     try {
         const client = getPlivo();
@@ -976,6 +1008,7 @@ exports.onNewLead = configuredFunctions.firestore
     .document('canvas_leads/{leadId}')
     .onCreate(async (snapshot, context) => {
         const leadData = snapshot.data();
+        if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), leadData)) return null;
         if (crmLeadAdapter.isSyntheticTestSubmission(
             crmLeadAdapterConfig(),
             context.params.leadId,
@@ -2080,6 +2113,7 @@ function crmLeadAdapterConfig() {
             process.env.CRM_LEAD_ADAPTER_ENABLED
             || 'false'
         ).toLowerCase() === 'true',
+        legacyForwardingEnabled: process.env.CRM_LEGACY_FORWARDING_ENABLED === 'true',
         baseUrl: process.env.MERKAD_LEADS_BASE_URL || '',
         tenantSlug: process.env.MERKAD_LEADS_TENANT_SLUG || '',
         keyId: process.env.MERKAD_LEADS_KEY_ID || '',
@@ -2107,6 +2141,8 @@ async function deliverCrmLead(deliveryRef, delivery) {
         { ...delivery, leadId: delivery.leadId || deliveryRef.id },
         crmLeadAdapter.readiness
     );
+    const ownershipHold = communicationsPolicy.deliveryHold(communicationsPolicy.configFromEnv(process.env), delivery.communications);
+    if (ownershipHold) return { attempted: false, reason: ownershipHold };
     if (!readiness.ready) return { attempted: false, reason: readiness.reason };
     if (!delivery.serializedBody || !delivery.serviceMapping?.crmValue || delivery.serviceMapping.confirmed !== true) {
         await deliveryRef.update({
@@ -2190,7 +2226,12 @@ async function deliverCrmLead(deliveryRef, delivery) {
     return { attempted: true, accepted: false };
 }
 
-exports.syncLeadToCRM = functions
+// Preserve the deployed v6 disabled legacy guard under its existing export.
+exports.syncLeadToCRM = functions.firestore.document('canvas_leads/{leadId}')
+    .onCreate(require('./legacy-crm-trigger').runtimeHandler(process.env, (...args) => fetch(...args)));
+
+// New adapter identity: never replace the preserved legacy trigger implicitly.
+exports.onCanvasLeadForCRM = functions
     .runWith({ secrets: ['MERKAD_LEADS_KEY_ID', 'MERKAD_LEADS_SECRET'] })
     .firestore
     .document('canvas_leads/{leadId}')
@@ -2205,7 +2246,9 @@ async function createCrmLeadDelivery(leadId, leadData, timestamp) {
     const idempotencyKey = crmLeadIdempotencyKey(leadId);
     const config = crmLeadAdapterConfig();
     const testAuthorized = leadData.crmIntegrationTestAuthorized === true;
-    const readiness = crmLeadDeliveryReadiness(config, leadId, testAuthorized);
+    let readiness = crmLeadDeliveryReadiness(config, leadId, testAuthorized);
+    const ownershipHold = communicationsPolicy.deliveryHold(communicationsPolicy.configFromEnv(process.env), leadData.communications);
+    if (ownershipHold) readiness = { ready: false, reason: ownershipHold };
     const deliveryRef = db.collection(CRM_LEAD_DELIVERIES_COLLECTION).doc(leadId);
     const mapping = crmLeadAdapter.buildRequestMapping(
         leadId,
@@ -2221,6 +2264,7 @@ async function createCrmLeadDelivery(leadId, leadData, timestamp) {
         serviceMapping: mapping.serviceMapping,
         unsupportedFields: mapping.unsupportedFields,
         testAuthorized,
+        ...(leadData.communications ? { communications: leadData.communications } : {}),
         status: readiness.ready ? 'pending' : 'held',
         holdReason: readiness.ready ? null : readiness.reason,
         attemptCount: 0,
