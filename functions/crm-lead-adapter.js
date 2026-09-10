@@ -1,5 +1,7 @@
 'use strict';
 
+const smsConsentPolicy = require('./sms-consent');
+
 const CRM_ROUTE_PREFIX = '/api/v1/tenants/';
 const CRM_ROUTE_SUFFIX = '/leads/intake';
 const DEFAULT_TIMEOUT_MS = 8000;
@@ -130,9 +132,7 @@ function buildRequestMapping(leadId, leadData, submittedAtIso = new Date().toISO
             ? preferredContactMethod
             : '',
         marketingConsent: false,
-        smsConsent: leadData.productionRequest?.version === 1
-            ? leadData.productionRequest.smsConsent === true
-            : leadData.boatSurvey?.smsConsent === true,
+        smsConsent: smsConsentPolicy.explicitConsent(leadData),
         attribution: {
             pageUrl: String(leadData.page || '').trim(),
             landingPage: String(leadData.sourcePage || leadData.page || '').trim(),

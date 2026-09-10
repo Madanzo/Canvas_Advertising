@@ -47,3 +47,9 @@ for(const name of ['sendEmail','sendSMS']) test(name+' actual helper blocks CRM,
 test('new adapter refuses overlapping legacy forwarding',()=>{
     assert.equal(mapping.readiness({enabled:true,legacyForwardingEnabled:true},'fixture').reason,'legacy-forwarding-must-remain-disabled');
 });
+
+test('adapter consent matches live SMS safeguard for malformed and unsupported production schema',()=>{
+    for (const productionRequest of [{version:2,smsConsent:true},{smsConsent:true},'invalid',null]) {
+        assert.equal(mapping.buildRequestMapping('fixture',{service:'other',productionRequest,boatSurvey:{smsConsent:true}}).body.smsConsent,false);
+    }
+});

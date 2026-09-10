@@ -18,6 +18,10 @@ The deployed PR #6 legacy guard module is preserved byte-for-byte. `syncLeadToCR
 
 Candidate Functions scope: `submitPublicLead`, `onNewLead`, `processBulkCampaign`, `calcomWebhook`, `processWorkflowQueue`, `sendDirectMessage`; new `createCrmIntegrationTestAuthorization`, `onCanvasLeadForCRM`, `processCrmLeadDeliveryQueue`. Existing `syncLeadToCRM` v6 is excluded from deployment. Necessary private proof/upload authorization rules are a separate reviewed scope. Hosting, its 2,020 assets/config and App Check remain unchanged. No missing notification index is part of this release.
 
+## Unmigrated operations
+
+Cal.com bookings and any other Admin SDK lead writers do not yet stamp trusted ownership. In CRM mode they are held and their website sends are suppressed; they are not automatically promoted to CRM bookings. Authenticated booking ingestion, operational workflows/tasks, bulk audiences, staff direct-message UI and the CRM intake metadata binding are remaining migration work. This candidate does not claim all Canvas operations have moved.
+
 ## Transition and rollback
 
 1. Review and test CRM tenant-isolated Twilio/email outbox, strict current consent at enqueue/send, callback authentication, idempotent atomic intake, duplicate retry and uncertain-provider-response handling. All runtime bindings remain disabled. Reuse approved tenant/owner/service evidence.
