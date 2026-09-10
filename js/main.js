@@ -1043,7 +1043,35 @@ function initWhatsAppWidget() {
     ],
     ["other", "Other", "Otro / ayuda para elegir", "other"],
   ]);
+  const PRODUCTS = [
+    ["printed_vinyl", "Printed vinyl", "Vinil impreso"],
+    ["banners", "Banners", "Lonas impresas"],
+    ["coroplast", "Coroplast signs", "Letreros de coroplast"],
+    ["acm", "ACM signs", "Letreros de ACM"],
+    [
+      "window_graphics",
+      "Window & storefront graphics",
+      "Gráficos para ventanas y escaparates",
+    ],
+    ["wall_murals", "Wall murals", "Murales para paredes"],
+    ["stickers_decals", "Stickers & decals", "Stickers y calcomanías"],
+    [
+      "vehicle_wraps",
+      "Commercial vehicle & fleet wraps",
+      "Rotulación de vehículos y flotillas",
+    ],
+    [
+      "print_collateral",
+      "Flyers, business cards & menus",
+      "Flyers, tarjetas y menús",
+    ],
+    ["other", "Other / Help me choose", "Otro / Ayúdame a elegir"],
+  ];
   const OPTIONS = {
+    commercial: ["Commercial", "Comercial"],
+    premium: ["Premium", "Premium"],
+    coroplast: ["Coroplast", "Coroplast"],
+    acm: ["ACM", "ACM"],
     recommend: ["Recommend a material", "Recomendar un material"],
     wrap: ["Printed wrap film", "Vinil impreso para wrap"],
     vinyl: ["Printed adhesive vinyl", "Vinil adhesivo impreso"],
@@ -1072,49 +1100,141 @@ function initWhatsAppWidget() {
     shipping: ["Shipping · print-only", "Envío · solo impresión"],
     installation: ["Request installation", "Solicitar instalación"],
   };
-  const aliases = {
-    "wrap-panels": "wrap_production_only",
-    "replacement-panels": "wrap_production_only",
-    "wholesale-vinyl": "wholesale_printing",
-    "contour-cut-decals": "contour_cut_decals",
-    "perforated-window-vinyl": "window_graphics",
-    "window-graphics": "window_graphics",
-    "wall-murals": "wall_murals",
-    "vinyl-banners": "vinyl_large_format_printing",
-    "fleet-graphics": "vehicle_wraps",
-    "ricoh-print": "print_collateral",
-  };
-  function config(service, detail) {
-    if (service !== "vinyl_large_format_printing") detail = "general";
+  const PRODUCT_SERVICES = Object.freeze({
+    printed_vinyl: "vinyl_large_format_printing",
+    banners: "vinyl_large_format_printing",
+    coroplast: "vinyl_large_format_printing",
+    acm: "vinyl_large_format_printing",
+    window_graphics: "window_graphics",
+    wall_murals: "wall_murals",
+    stickers_decals: "contour_cut_decals",
+    vehicle_wraps: "vehicle_wraps",
+    print_collateral: "print_collateral",
+    other: "other",
+  });
+  function route(d) {
+    if (d.serviceMode === "cutting_lamination") return "cutting_lamination";
+    if (!PRODUCT_SERVICES[d.product]) throw new Error("service");
+    if (d.product === "printed_vinyl") {
+      if (
+        !["general", "vehicle_panels", "replacement_panels"].includes(
+          d.vinylUse,
+        )
+      )
+        throw new Error("service");
+      if (d.vinylUse !== "general") return "wrap_production_only";
+      if (d.serviceMode === "wholesale_printing") return "wholesale_printing";
+    }
+    return PRODUCT_SERVICES[d.product];
+  }
+  function resolveLink(params) {
+    const key =
+      params.get("service") || params.get("product") || params.get("project");
+    const defaults = {
+      product: "printed_vinyl",
+      vinylUse: "general",
+      serviceMode: "",
+      collateralProduct: "flyers",
+    };
+    if (!key) return defaults;
+    const links = {
+      wrap_production_only: {
+        product: "printed_vinyl",
+        vinylUse: "vehicle_panels",
+      },
+      "wrap-production": {
+        product: "printed_vinyl",
+        vinylUse: "vehicle_panels",
+      },
+      "vehicle-wrap-panels": {
+        product: "printed_vinyl",
+        vinylUse: "vehicle_panels",
+      },
+      "replacement-wrap-panel": {
+        product: "printed_vinyl",
+        vinylUse: "replacement_panels",
+      },
+      "fleet-wraps": { product: "vehicle_wraps" },
+      "vehicle-wrap": { product: "vehicle_wraps" },
+      "wrap-panels": { product: "printed_vinyl", vinylUse: "vehicle_panels" },
+      "replacement-panels": {
+        product: "printed_vinyl",
+        vinylUse: "replacement_panels",
+      },
+      wholesale_printing: {
+        product: "printed_vinyl",
+        serviceMode: "wholesale_printing",
+      },
+      "wholesale-vinyl": {
+        product: "printed_vinyl",
+        serviceMode: "wholesale_printing",
+      },
+      "print-partner": {
+        product: "printed_vinyl",
+        serviceMode: "wholesale_printing",
+      },
+      cutting_lamination: { serviceMode: "cutting_lamination" },
+      "lamination-cutting": { serviceMode: "cutting_lamination" },
+      vinyl_large_format_printing: { product: "printed_vinyl" },
+      "large-format": { product: "printed_vinyl" },
+      "vinyl-banners": { product: "banners" },
+      contour_cut_decals: { product: "stickers_decals" },
+      "contour-cut-decals": { product: "stickers_decals" },
+      decals: { product: "stickers_decals" },
+      "perforated-window-vinyl": { product: "window_graphics" },
+      "window-graphics": { product: "window_graphics" },
+      "wall-murals": { product: "wall_murals" },
+      "interior-branding": { product: "wall_murals" },
+      "fleet-graphics": { product: "vehicle_wraps" },
+      "vehicle-wraps": { product: "vehicle_wraps" },
+      "food-truck": { product: "vehicle_wraps" },
+      "ricoh-print": { product: "print_collateral" },
+      "short-run-digital": { product: "print_collateral" },
+      "restaurant-menus": {
+        product: "print_collateral",
+        collateralProduct: "menus",
+      },
+    };
+    if (links[key]) return { ...defaults, ...links[key] };
+    if (PRODUCT_SERVICES[key]) return { ...defaults, product: key };
+    return { ...defaults, product: "" }; // Require an explicit choice for unsupported links.
+  }
+  function config(d) {
+    const product =
+      d.serviceMode === "cutting_lamination" ? "finishing" : d.product;
+    const paper = product === "print_collateral";
     const material =
-      service === "print_collateral"
-        ? ["recommend", "paper", "card"]
-        : service === "wall_murals"
-          ? ["recommend", "wall"]
-          : service === "window_graphics"
-            ? ["recommend", "perforated", "vinyl"]
-            : service === "cutting_lamination"
-              ? ["recommend", "supplied", "vinyl", "wrap"]
-              : service === "vinyl_large_format_printing" && detail === "banner"
-                ? ["recommend", "banner"]
-                : service === "vinyl_large_format_printing" && detail === "sign"
-                  ? ["recommend", "sign", "vinyl"]
-                  : ["recommend", "wrap", "vinyl"];
+      product === "printed_vinyl"
+        ? ["recommend", "commercial", "premium"]
+        : product === "banners"
+          ? ["recommend", "banner"]
+          : ["coroplast", "acm"].includes(product)
+            ? [product]
+            : paper
+              ? [
+                  "recommend",
+                  d.collateralProduct === "business_cards" ? "card" : "paper",
+                ]
+              : product === "wall_murals"
+                ? ["recommend", "wall"]
+                : product === "window_graphics"
+                  ? ["recommend", "perforated", "vinyl"]
+                  : product === "finishing"
+                    ? ["supplied"]
+                    : ["recommend", "vinyl"];
     const install = [
       "vehicle_wraps",
       "window_graphics",
       "wall_murals",
-      "vinyl_large_format_printing",
+      "coroplast",
+      "acm",
       "other",
-    ].includes(service);
+    ].includes(product);
     return {
-      vehicle: service === "vehicle_wraps",
-      dimensions: service !== "vehicle_wraps",
+      vehicle: product === "vehicle_wraps",
+      dimensions: product !== "vehicle_wraps",
       material,
-      lamination:
-        service === "print_collateral" || detail === "banner"
-          ? ["advise", "none"]
-          : ["advise", "matte", "gloss", "none"],
+      lamination: paper ? ["none"] : ["advise", "matte", "gloss", "none"],
       fulfillment: [
         "pickup",
         "delivery",
@@ -1137,9 +1257,19 @@ function initWhatsAppWidget() {
   }
   function validate(data, step) {
     const errors = [];
-    const rules = config(data.service, data.productDetail);
-    if (step === 0 && !SERVICES.some((s) => s[0] === data.service))
-      errors.push("service");
+    const rules = config(data);
+    if (step === 0) {
+      try {
+        route(data);
+      } catch (_) {
+        errors.push("service");
+      }
+      if (
+        data.product === "print_collateral" &&
+        !["flyers", "business_cards", "menus"].includes(data.collateralProduct)
+      )
+        errors.push("service");
+    }
     if (step === 1) {
       if (rules.vehicle) {
         if (
@@ -1170,6 +1300,27 @@ function initWhatsAppWidget() {
       if (
         !rules.material.includes(data.material) ||
         !rules.lamination.includes(data.lamination)
+      )
+        errors.push("material");
+      if (
+        (data.product === "stickers_decals" &&
+          !["rectangular", "around_design"].includes(data.cutStyle)) ||
+        (data.product === "banners" &&
+          ![
+            "recommend",
+            "trimmed",
+            "hems",
+            "grommets",
+            "hems_grommets",
+          ].includes(data.bannerFinish)) ||
+        (data.product === "print_collateral" &&
+          !(
+            data.collateralProduct === "menus"
+              ? ["recommend", "unlaminated", "hard_laminated"]
+              : ["recommend", "unlaminated"]
+          ).includes(data.paperFinish)) ||
+        (data.serviceMode === "cutting_lamination" &&
+          !["cutting", "lamination", "both"].includes(data.finishingRequest))
       )
         errors.push("material");
       if (data.notes.length > 1200) errors.push("notes");
@@ -1227,14 +1378,45 @@ function initWhatsAppWidget() {
       throw new Error("files");
   }
   function buildPayload(d, locale, context = {}) {
-    const service = SERVICES.find((s) => s[0] === d.service);
+    const serviceId = route(d);
+    const service = SERVICES.find((s) => s[0] === serviceId);
     if (!service) throw new Error("service");
-    const rules = config(d.service, d.productDetail);
+    const rules = config(d);
     const request = {
       version: 1,
-      serviceId: d.service,
+      serviceId,
+      product:
+        serviceId === "cutting_lamination" ? "finishing_services" : d.product,
       productDetail:
-        d.service === "vinyl_large_format_printing" ? d.productDetail : "",
+        serviceId === "cutting_lamination"
+          ? d.finishingRequest
+          : d.product === "printed_vinyl"
+            ? d.vinylUse
+            : d.product === "print_collateral"
+              ? d.collateralProduct
+              : d.product,
+      businessRole: [
+        "business_owner",
+        "installer",
+        "print_reseller",
+        "other",
+      ].includes(d.businessRole)
+        ? d.businessRole
+        : "",
+      cutStyle:
+        d.product === "stickers_decals" && serviceId !== "cutting_lamination"
+          ? d.cutStyle
+          : "",
+      bannerFinish:
+        d.product === "banners" && serviceId !== "cutting_lamination"
+          ? d.bannerFinish
+          : "",
+      paperFinish:
+        d.product === "print_collateral" && serviceId !== "cutting_lamination"
+          ? d.paperFinish
+          : "",
+      legacyRoute:
+        serviceId === "wholesale_printing" ? "wholesale_printing" : "",
       measurementHelp: rules.dimensions && d.measurementHelp,
       pieces:
         rules.dimensions && !d.measurementHelp
@@ -1282,16 +1464,54 @@ function initWhatsAppWidget() {
       partial: tr("Partial wrap", "Wrap parcial"),
       full: tr("Full commercial wrap", "Wrap comercial completo"),
     }[d.coverage];
+    const detailLabels = {
+      general: tr("General graphics", "Gráficos generales"),
+      vehicle_panels: tr(
+        "Vehicle panels · printing only",
+        "Paneles vehiculares · solo impresión",
+      ),
+      replacement_panels: tr(
+        "Replacement vehicle panels · printing only",
+        "Paneles vehiculares de reemplazo · solo impresión",
+      ),
+      flyers: "Flyers",
+      business_cards: tr("Business cards", "Tarjetas de presentación"),
+      menus: tr("Menus", "Menús"),
+      rectangular: tr("Rectangular cut", "Corte rectangular"),
+      around_design: tr("Cut around the design", "Corte alrededor del diseño"),
+      recommend: tr("Recommend an option", "Recomendar una opción"),
+      trimmed: tr("Trimmed edges", "Bordes recortados"),
+      hems: tr("Hems", "Dobladillos"),
+      grommets: tr("Grommets", "Ojillos"),
+      hems_grommets: tr("Hems and grommets", "Dobladillos y ojillos"),
+      unlaminated: tr("No lamination", "Sin laminado"),
+      hard_laminated: tr("Hard-laminated menu", "Menú con laminado rígido"),
+      cutting: tr("Cutting", "Corte"),
+      lamination: tr("Lamination", "Laminado"),
+      both: tr("Cutting and lamination", "Corte y laminado"),
+      business_owner: tr("Business owner", "Dueño de negocio"),
+      installer: tr("Installer", "Instalador"),
+      print_reseller: tr("Print reseller", "Revendedor de impresión"),
+      other: tr("Other", "Otro"),
+    };
     const productLabel =
-      {
-        general: tr("General printing", "Impresión general"),
-        banner: "Banner",
-        sign: tr("Printed sign", "Letrero impreso"),
-        vinyl: tr("Printed vinyl", "Vinil impreso"),
-      }[request.productDetail] || "";
+      serviceId === "cutting_lamination"
+        ? tr(
+            "Finishing existing printed material",
+            "Acabado de material ya impreso",
+          )
+        : PRODUCTS.find((p) => p[0] === d.product)?.[es ? 2 : 1];
     const summary = [
       service[es ? 2 : 1],
       productLabel,
+      detailLabels[request.productDetail] || "",
+      ...[request.cutStyle, request.bannerFinish, request.paperFinish]
+        .filter(Boolean)
+        .map((k) => detailLabels[k]),
+      request.businessRole
+        ? tr("Customer role: ", "Tipo de cliente: ") +
+          detailLabels[request.businessRole]
+        : "",
       request.measurementHelp
         ? tr("Measurement help requested", "Solicito ayuda para medir")
         : request.pieces
@@ -1319,7 +1539,7 @@ function initWhatsAppWidget() {
       businessName: d.company.trim(),
       email: d.email.trim(),
       phone: d.phone.trim(),
-      service: d.service,
+      service: serviceId,
       source: "production_quote",
       formType: "production_quote",
       locale,
@@ -1368,6 +1588,9 @@ function initWhatsAppWidget() {
   }
   scope.CanvasQuote = {
     SERVICES,
+    PRODUCTS,
+    route,
+    resolveLink,
     OPTIONS,
     config,
     area,
@@ -1385,11 +1608,11 @@ function initWhatsAppWidget() {
     let step = 0,
       locked = false;
     const params = new URLSearchParams(location.search);
-    const initial = params.get("service") || aliases[params.get("project")];
-    if (SERVICES.some((s) => s[0] === initial))
-      $("quoteService").value = initial;
-    if (params.get("project") === "vinyl-banners")
-      $("productDetail").value = "banner";
+    const initial = resolveLink(params);
+    let serviceMode = initial.serviceMode;
+    $("quoteService").value = initial.product;
+    $("vinylUse").value = initial.vinylUse;
+    $("collateralProduct").value = initial.collateralProduct;
     const errors = {
       service: tr("Choose a product.", "Elija un producto."),
       vehicle: tr(
@@ -1433,8 +1656,15 @@ function initWhatsAppWidget() {
     };
     function data() {
       return {
-        service: $("quoteService").value,
-        productDetail: $("productDetail").value,
+        product: $("quoteService").value,
+        serviceMode,
+        vinylUse: $("vinylUse").value,
+        collateralProduct: $("collateralProduct").value,
+        businessRole: $("businessRole").value,
+        cutStyle: $("cutStyle").value,
+        bannerFinish: $("bannerFinish").value,
+        paperFinish: $("paperFinish").value,
+        finishingRequest: $("finishingRequest").value,
         measurementHelp: $("measurementHelp").checked,
         pieces: Array.from($("pieceRows").children).map((row) =>
           Object.fromEntries(
@@ -1477,9 +1707,36 @@ function initWhatsAppWidget() {
     }
     function refresh() {
       const d = data(),
-        r = config(d.service, d.productDetail);
-      $("productDetail").parentElement.hidden =
-        d.service !== "vinyl_large_format_printing";
+        r = config(d);
+      const finishing = serviceMode === "cutting_lamination";
+      $("quoteService").parentElement.hidden = finishing;
+      $("vinylUse").parentElement.hidden =
+        finishing || d.product !== "printed_vinyl";
+      $("collateralProduct").parentElement.hidden =
+        finishing || d.product !== "print_collateral";
+      $("cutStyle").parentElement.hidden = $("cutHelp").hidden =
+        finishing || d.product !== "stickers_decals";
+      $("bannerFinish").parentElement.hidden =
+        finishing || d.product !== "banners";
+      $("paperFinish").parentElement.hidden =
+        finishing || d.product !== "print_collateral";
+      $("finishingRequest").parentElement.hidden = !finishing;
+      $("signHelp").hidden =
+        finishing || !["coroplast", "acm"].includes(d.product);
+      $("lamination").parentElement.hidden =
+        !finishing && d.product === "print_collateral";
+      $("finishingService").hidden = finishing;
+      $("returnProducts").hidden = !serviceMode;
+      $("routeNotice").hidden = !serviceMode;
+      $("routeNotice").textContent = finishing
+        ? tr(
+            "Cutting & lamination for your existing printed material.",
+            "Corte y laminado para su material ya impreso.",
+          )
+        : tr(
+            "Existing wholesale inquiry route retained. Eligibility and pricing require Canvas confirmation.",
+            "Se conserva la ruta de consulta de mayoreo. Canvas debe confirmar elegibilidad y precio.",
+          );
       $("vehicleQuestions").hidden = !r.vehicle;
       $("dimensionQuestions").hidden = !r.dimensions;
       $("pieceRows").hidden = d.measurementHelp;
@@ -1493,27 +1750,37 @@ function initWhatsAppWidget() {
         : validate(d, 1).length
           ? ""
           : `${area(d.pieces).toLocaleString(es ? "es-MX" : "en-US", { maximumFractionDigits: 2 })} ${tr("sq ft total finished area · not a price", "pies² de área final total · no es un precio")}`;
-      const s = SERVICES.find((s) => s[0] === d.service);
-      $("serviceHint").textContent = [
-        "wrap_production_only",
-        "wholesale_printing",
-        "cutting_lamination",
-      ].includes(d.service)
-        ? tr(
-            "For print partners and installers. Production only; installation is not included.",
-            "Para socios de impresión e instaladores. Solo producción; no incluye instalación.",
-          )
-        : tr(
-            "Share the specifications you know. We’ll confirm materials, production and any installation needs.",
-            "Comparta los datos que conoce. Confirmaremos materiales, producción y cualquier instalación.",
-          );
+      $("serviceHint").textContent =
+        d.product === "printed_vinyl" || finishing
+          ? tr(
+              "Printing and finishing only. Installation is not included. Canvas will confirm the specifications and price.",
+              "Solo impresión y acabados. No incluye instalación. Canvas confirmará las especificaciones y el precio.",
+            )
+          : tr(
+              "Share the specifications you know. Canvas will confirm production options and pricing.",
+              "Comparta los datos que conoce. Canvas confirmará las opciones de producción y el precio.",
+            );
+      if (validate(d, 0).length) {
+        $("reviewDetails").textContent = "";
+        return;
+      }
       $("reviewDetails").textContent = buildPayload(
         d,
         es ? "es" : "en",
       ).message;
     }
     function serviceChange() {
-      const r = config($("quoteService").value, $("productDetail").value);
+      const d = data(),
+        r = config(d);
+      const paperOptions = $("paperFinish").options;
+      for (const option of paperOptions)
+        option.hidden =
+          option.value === "hard_laminated" && d.collateralProduct !== "menus";
+      if (
+        d.collateralProduct !== "menus" &&
+        $("paperFinish").value === "hard_laminated"
+      )
+        $("paperFinish").value = "recommend";
       fillOptions("material", r.material);
       fillOptions("lamination", r.lamination);
       fillOptions("fulfillment", r.fulfillment);
@@ -1550,8 +1817,25 @@ function initWhatsAppWidget() {
       refresh();
       if (focus) $("q-title-" + step).focus({ preventScroll: true });
     }
-    $("quoteService").addEventListener("change", serviceChange);
-    $("productDetail").addEventListener("change", serviceChange);
+    $("quoteService").addEventListener("change", () => {
+      serviceMode = "";
+      serviceChange();
+    });
+    $("vinylUse").addEventListener("change", () => {
+      serviceMode = "";
+      serviceChange();
+    });
+    $("collateralProduct").addEventListener("change", serviceChange);
+    $("finishingService").addEventListener("click", () => {
+      if (locked) return;
+      serviceMode = "cutting_lamination";
+      serviceChange();
+    });
+    $("returnProducts").addEventListener("click", () => {
+      if (locked) return;
+      serviceMode = "";
+      serviceChange();
+    });
     $("addPiece").addEventListener("click", addPiece);
     form.addEventListener("input", refresh);
     form.addEventListener("change", refresh);
@@ -1629,7 +1913,11 @@ function initWhatsAppWidget() {
         page: location.pathname,
         referrer: document.referrer.slice(0, 1000),
         sourcePage: (params.get("source") || "").slice(0, 1000),
-        landingProduct: (params.get("project") || "").slice(0, 1000),
+        landingProduct: (
+          params.get("product") ||
+          params.get("project") ||
+          ""
+        ).slice(0, 1000),
         tracking,
       });
       locked = true;

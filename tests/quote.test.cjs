@@ -7,14 +7,15 @@ const test = require("node:test"),
 const { JSDOM } = require("jsdom");
 const root = path.resolve(__dirname, "..");
 const source = fs.readFileSync(root + "/js/main.js", "utf8");
-async function fixture(locale = "en") {
+async function fixture(locale = "en", query = "") {
   const dom = new JSDOM(
     fs.readFileSync(
       root + (locale === "es" ? "/quote-es.html" : "/quote.html"),
       "utf8",
     ),
     {
-      url: "http://localhost/" + (locale === "es" ? "quote-es" : "quote"),
+      url:
+        "http://localhost/" + (locale === "es" ? "quote-es" : "quote") + query,
       runScripts: "outside-only",
     },
   );
@@ -30,8 +31,15 @@ async function fixture(locale = "en") {
 }
 const plain = (x) => JSON.parse(JSON.stringify(x));
 const draft = {
-  service: "wrap_production_only",
-  productDetail: "general",
+  product: "printed_vinyl",
+  vinylUse: "general",
+  serviceMode: "",
+  collateralProduct: "flyers",
+  cutStyle: "rectangular",
+  bannerFinish: "recommend",
+  paperFinish: "recommend",
+  finishingRequest: "both",
+  businessRole: "",
   measurementHelp: false,
   pieces: [{ width: 24, height: 36, unit: "in", quantity: 2 }],
   vehicle: "2024 Ford Transit",
@@ -58,7 +66,7 @@ function change(w, el, value) {
   el.dispatchEvent(new w.Event("change", { bubbles: true }));
 }
 
-test("ten documented canonical IDs are identical in English, Spanish, model and adapter", async () => {
+test("ten visible products have bilingual parity; canonical CRM taxonomy is unchanged", async () => {
   const a = await fixture(),
     b = await fixture("es");
   const ids = (x) =>
@@ -77,23 +85,23 @@ for (const locale of ["en", "es"])
       ": every product renders only its relevant dimensions/vehicle/material/fulfillment controls",
     async () => {
       const f = await fixture(locale);
-      for (const s of f.q.SERVICES) {
+      for (const s of f.q.PRODUCTS) {
         change(f.w, f.d.querySelector("#quoteService"), s[0]);
         const vehicle = s[0] === "vehicle_wraps";
         assert.equal(f.d.querySelector("#vehicleQuestions").hidden, !vehicle);
         assert.equal(f.d.querySelector("#dimensionQuestions").hidden, vehicle);
         assert.equal(
-          f.d.querySelector("#productDetail").parentElement.hidden,
-          s[0] !== "vinyl_large_format_printing",
+          f.d.querySelector("#vinylUse").parentElement.hidden,
+          s[0] !== "printed_vinyl",
         );
         const values = [...f.d.querySelector("#fulfillment").options].map(
           (o) => o.value,
         );
         if (
           [
-            "wrap_production_only",
-            "wholesale_printing",
-            "cutting_lamination",
+            "printed_vinyl",
+            "banners",
+            "stickers_decals",
             "print_collateral",
           ].includes(s[0])
         )
@@ -104,19 +112,14 @@ for (const locale of ["en", "es"])
   );
 test("banner and paper products cannot retain unrelated wrap film / laminate selection", async () => {
   const f = await fixture();
-  change(
-    f.w,
-    f.d.querySelector("#quoteService"),
-    "vinyl_large_format_printing",
-  );
-  change(f.w, f.d.querySelector("#productDetail"), "banner");
+  change(f.w, f.d.querySelector("#quoteService"), "banners");
   assert.deepEqual(
     [...f.d.querySelector("#material").options].map((o) => o.value),
     ["recommend", "banner"],
   );
   assert.deepEqual(
     [...f.d.querySelector("#lamination").options].map((o) => o.value),
-    ["advise", "none"],
+    ["advise", "matte", "gloss", "none"],
   );
   change(f.w, f.d.querySelector("#quoteService"), "print_collateral");
   assert.ok(
@@ -169,7 +172,7 @@ test("dimension validation blocks zeros, negatives, unsupported units and fracti
       .validate(
         {
           ...draft,
-          service: "vehicle_wraps",
+          product: "vehicle_wraps",
           vehicle: "",
           measurementHelp: true,
         },
@@ -221,15 +224,16 @@ test("payload survives the deployed public allowlist and nested sanitizer withou
   const ctx = { functions: { https: { HttpsError: Error } } };
   vm.createContext(ctx);
   vm.runInContext(code + ";this.validate=validatePublicLead;", ctx);
-  for (const s of f.q.SERVICES) {
+  for (const s of f.q.PRODUCTS) {
     const payload = plain(
-      f.q.buildPayload({ ...draft, service: s[0] }, "es", {
+      f.q.buildPayload({ ...draft, product: s[0] }, "es", {
         now: "2026-09-10T00:00:00Z",
       }),
     );
     payload.submissionId = "local_0123456789abcdef";
     const saved = ctx.validate(payload).lead;
-    assert.equal(saved.service, s[0]);
+    assert.equal(saved.service, f.q.route({ ...draft, product: s[0] }));
+    assert.equal(saved.productionRequest.product, s[0]);
     assert.deepEqual(plain(saved.productionRequest), payload.productionRequest);
     assert.equal(saved.message, payload.message);
     assert.equal(saved.productionRequest.smsConsent, false);
@@ -239,7 +243,7 @@ test("payload survives the deployed public allowlist and nested sanitizer withou
 test("irrelevant values are excluded and summary explicitly carries project details through CRM", async () => {
   const f = await fixture();
   const payload = f.q.buildPayload(
-    { ...draft, service: "print_collateral", smsConsent: true },
+    { ...draft, product: "print_collateral", smsConsent: true },
     "en",
   );
   assert.equal(payload.productionRequest.vehicle, "");
@@ -381,5 +385,155 @@ test("UI shows success only after persistence and uses same payload on retry", a
   await new Promise((r) => setImmediate(r));
   assert.equal(f.d.querySelector("#quoteSuccess").hidden, false);
   assert.equal(payloads[0], payloads[1]);
+  f.dom.window.close();
+});
+
+const expectedRoutes = {
+  printed_vinyl: "vinyl_large_format_printing",
+  banners: "vinyl_large_format_printing",
+  coroplast: "vinyl_large_format_printing",
+  acm: "vinyl_large_format_printing",
+  window_graphics: "window_graphics",
+  wall_murals: "wall_murals",
+  stickers_decals: "contour_cut_decals",
+  vehicle_wraps: "vehicle_wraps",
+  print_collateral: "print_collateral",
+  other: "other",
+};
+for (const locale of ["en", "es"])
+  test(
+    locale +
+      ": product routing and full product details survive Canvas and CRM summary",
+    async () => {
+      const f = await fixture(locale),
+        adapter = require("../functions/crm-lead-adapter");
+      for (const [product, service] of Object.entries(expectedRoutes)) {
+        const d = {
+          ...draft,
+          product,
+          cutStyle: "around_design",
+          bannerFinish: "hems_grommets",
+          collateralProduct: "menus",
+          paperFinish: "hard_laminated",
+        };
+        const payload = plain(f.q.buildPayload(d, locale));
+        assert.equal(payload.service, service);
+        assert.equal(payload.productionRequest.product, product);
+        assert.equal(
+          adapter.buildRequestMapping("local_0123456789abcdef", payload).body
+            .message,
+          payload.message,
+        );
+        assert.ok(
+          payload.message.includes(
+            f.q.PRODUCTS.find((p) => p[0] === product)[locale === "es" ? 2 : 1],
+          ),
+        );
+      }
+      const general = f.q.buildPayload(draft, locale),
+        panels = f.q.buildPayload(
+          { ...draft, vinylUse: "vehicle_panels" },
+          locale,
+        );
+      assert.equal(general.service, "vinyl_large_format_printing");
+      assert.equal(panels.service, "wrap_production_only");
+      assert.equal(panels.productionRequest.productDetail, "vehicle_panels");
+      for (const role of [
+        "business_owner",
+        "installer",
+        "print_reseller",
+        "other",
+      ])
+        assert.equal(
+          f.q.buildPayload({ ...draft, businessRole: role }, locale).service,
+          general.service,
+        );
+      f.dom.window.close();
+    },
+  );
+for (const locale of ["en", "es"])
+  test(
+    locale +
+      ": legacy service/product/project links retain explicit routes and details",
+    async () => {
+      const links = {
+        "vehicle-wrap-panels": ["wrap_production_only", "vehicle_panels"],
+        "replacement-wrap-panel": [
+          "wrap_production_only",
+          "replacement_panels",
+        ],
+        "fleet-wraps": ["vehicle_wraps", "vehicle_wraps"],
+        "vehicle-wrap": ["vehicle_wraps", "vehicle_wraps"],
+        wholesale_printing: ["wholesale_printing", "general"],
+        "wholesale-vinyl": ["wholesale_printing", "general"],
+        wrap_production_only: ["wrap_production_only", "vehicle_panels"],
+        "wrap-panels": ["wrap_production_only", "vehicle_panels"],
+        "replacement-panels": ["wrap_production_only", "replacement_panels"],
+        "vinyl-banners": ["vinyl_large_format_printing", "banners"],
+        cutting_lamination: ["cutting_lamination", "both"],
+        "ricoh-print": ["print_collateral", "flyers"],
+      };
+      for (const param of ["service", "product", "project"])
+        for (const [link, [service, detail]] of Object.entries(links)) {
+          const f = await fixture(locale, "?" + param + "=" + link);
+          const state = f.q.resolveLink(
+            new f.w.URLSearchParams("?" + param + "=" + link),
+          );
+          const p = f.q.buildPayload({ ...draft, ...state }, locale);
+          assert.equal(p.service, service);
+          assert.equal(p.productionRequest.productDetail, detail);
+          assert.equal(f.d.querySelector("#quoteService").value, state.product);
+          f.dom.window.close();
+        }
+      const f = await fixture(locale, "?service=unknown");
+      f.d.querySelector("#quoteNext").click();
+      assert.equal(f.d.querySelector('[data-step="0"]').hidden, false);
+      assert.throws(() => f.q.buildPayload({ ...draft, product: "" }, locale));
+      f.dom.window.close();
+    },
+  );
+test("finishing secondary route and wholesale exit are explicit; invalid options do not get a fallback", async () => {
+  const f = await fixture();
+  f.d.querySelector("#finishingService").click();
+  assert.equal(f.d.querySelector("#quoteService").parentElement.hidden, true);
+  assert.equal(
+    f.d.querySelector("#finishingRequest").parentElement.hidden,
+    false,
+  );
+  f.d.querySelector("#returnProducts").click();
+  assert.equal(f.d.querySelector("#quoteService").parentElement.hidden, false);
+  change(f.w, f.d.querySelector("#quoteService"), "printed_vinyl");
+  assert.deepEqual(
+    [...f.d.querySelector("#material").options].map((o) => o.value),
+    ["recommend", "commercial", "premium"],
+  );
+  change(f.w, f.d.querySelector("#quoteService"), "stickers_decals");
+  assert.equal(f.d.querySelector("#cutStyle").parentElement.hidden, false);
+  assert.ok(
+    f.q
+      .validate(
+        { ...draft, product: "stickers_decals", cutStyle: "unsupported" },
+        2,
+      )
+      .includes("material"),
+  );
+  change(f.w, f.d.querySelector("#quoteService"), "print_collateral");
+  change(f.w, f.d.querySelector("#collateralProduct"), "menus");
+  change(f.w, f.d.querySelector("#paperFinish"), "hard_laminated");
+  change(f.w, f.d.querySelector("#collateralProduct"), "business_cards");
+  assert.equal(f.d.querySelector("#paperFinish").value, "recommend");
+  assert.ok(
+    f.q
+      .validate(
+        {
+          ...draft,
+          product: "print_collateral",
+          collateralProduct: "flyers",
+          paperFinish: "hard_laminated",
+        },
+        2,
+      )
+      .includes("material"),
+  );
   f.dom.window.close();
 });

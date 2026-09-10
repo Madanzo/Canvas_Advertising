@@ -15,8 +15,13 @@ Source client `2bf92bc8daab66c307be9e5c12b1c5acf1015470`; Hosting version `04087
 
 ## What changed and why
 
-A five-step bilingual flow covers product, specifications, production, fulfillment, and contact/review. Installer-ready wrap panels and wholesale printing come first. Vehicle fields appear only for commercial vehicle wraps. Other products collect up to ten finished sizes with explicit inches/feet/cm/mm and integer quantity; the displayed total is square footage, never price. Measurement help bypasses dimensions without inventing them. Materials, lamination, and installation options depend on the chosen product. Pickup does not ask for a ZIP; delivery, shipping and installation do. Dates/rush work are requests subject to confirmation.
+A five-step bilingual flow covers product, specifications, production, fulfillment, and contact/review. The main menu is product-first: printed vinyl, banners, Coroplast, ACM, window/storefront graphics, wall murals, stickers/decals, commercial vehicle/fleet wraps, paper collateral, and other/help choosing. Finishing existing printed material is a secondary action; wholesale is not a product category.
 
+Printed vinyl has Commercial, Premium or Recommend, relevant lamination including none, and a use-case selector for general graphics versus vehicle/replacement print-only panels. Banners collect finishing requests (trimmed, hems, grommets, both). Coroplast/ACM do not expose unverified thickness, sides or mounting options. Decals offer rectangular or cut around the design, with a plain-language explanation. Paper collateral asks flyers/cards/menus, sizes and quantities; only menus expose hard lamination. Finish and material requests are subject to Canvas confirmation; no brands, warranties, prices or discounts are invented.
+
+Production support evidence: existing `laminated-vinyl-banners.html` documents trimming, hems, grommets and lamination; `restaurant-menus.html` documents hard-laminated menus. No approved Coroplast/ACM thickness/sides/mounting matrix was found. Request those requirements in notes pending production confirmation.
+
+Dimensions support up to ten rows in inches/feet/cm/mm with integer quantity and square footage. Measurement help bypasses dimensions without inventing them. Vehicle questions apply only to commercial vehicle/fleet wraps. Vehicle-specific print-only panels collect finished panel dimensions, not installed-wrap coverage. Fulfillment explicitly distinguishes print-only from installation. Pickup needs no ZIP; shipping/delivery/installation request ZIP. Dates/rush are requests, not promises.
 The result screen appears only after a successful callable response and displays the saved ID. Failure retains the frozen request for an explicit retry, with the same ID and uploaded-file association. Buttons prevent parallel submission. Retrying a lost submit response does not re-upload files or change the payload. No files or contact data are written to browser persistent storage; retention lasts within the current tab. Reloading after an uncertain result is not a durable recovery mechanism and should be resolved using the submission record rather than submitting a new quote.
 
 ## Verified prior behavior
@@ -29,7 +34,7 @@ The former production request posts `service: 'Vinyl Print Production'` for ever
 
 Authoritative source: `CANVAS_VISUAL_PRODUCTION_PRESET` in `lib/leads/services.ts` and `docs/WEBSITE_LEAD_INTEGRATION.md`, CRM repository `merkad-agency-canvas`, reviewed clean commit `d54bd556c42906905b127cfb3710738915a9ca5a`. This is the Canvas preset, not Phantom's WRAP_SERVICE_PRESET. Existing Canvas adapter mapping documentation corroborates the ten labels.
 
-Both HTML locales use the same canonical value in `service` and `productionRequest.serviceId`. Spanish labels are presentation only. The adapter maps canonical keys to the documented CRM labels; the CRM preset resolves those labels to the same keys. All older Canvas aliases remain intact.
+Both HTML locales share product keys that are explicitly mapped to the canonical `service` and `productionRequest.serviceId`. Visible products are not the CRM taxonomy; Spanish labels are presentation only. The adapter maps canonical keys to the documented CRM labels; the CRM preset resolves those labels to the same keys. All older Canvas aliases remain intact.
 
 | Stable key | Documented CRM label |
 | --- | --- |
@@ -44,8 +49,28 @@ Both HTML locales use the same canonical value in `service` and `productionReque
 | `wrap_production_only` | Wrap Production Only |
 | `other` | Other |
 
-Banners and printed signs are product details under vinyl_large_format_printing, not new service IDs. Existing `?project=` links are translated explicitly into these keys. Unknown query parameters do not create services.
+### Product-to-service routing
 
+| Visible product / route | Canonical service | Saved product detail |
+| --- | --- | --- |
+| Printed vinyl, general graphics | `vinyl_large_format_printing` | `general` |
+| Printed vinyl, vehicle panels | `wrap_production_only` | `vehicle_panels` |
+| Printed vinyl, replacement panels | `wrap_production_only` | `replacement_panels` |
+| Banners | `vinyl_large_format_printing` | `banners`, plus bannerFinish |
+| Coroplast signs | `vinyl_large_format_printing` | `coroplast` |
+| ACM signs | `vinyl_large_format_printing` | `acm` |
+| Window/storefront graphics | `window_graphics` | `window_graphics` |
+| Wall murals | `wall_murals` | `wall_murals` |
+| Stickers/decals | `contour_cut_decals` | `stickers_decals`, plus cutStyle |
+| Commercial vehicle/fleet wraps | `vehicle_wraps` | `vehicle_wraps` |
+| Flyers/cards/menus | `print_collateral` | `flyers`, `business_cards`, or `menus`, plus paperFinish |
+| Other/help choosing | `other` | `other` |
+| Secondary finishing service | `cutting_lamination` | `cutting`, `lamination`, or `both` |
+| Existing wholesale link | `wholesale_printing` | printed_vinyl / general, legacyRoute retained |
+
+`productionRequest.product` stores the physical product separately. Explicit details and the optional businessRole are included in the CRM-supported message as well as the saved Canvas object. The role answer never changes routing, pricing or eligibility.
+
+`?service=`, `?product=` and `?project=` support explicit legacy entries including wholesale_printing, wholesale-vinyl, print-partner, wrap_production_only, wrap-production, wrap-panels, replacement-panels, cutting_lamination, lamination-cutting, vinyl-banners, contour-cut-decals, window-graphics, wall-murals, fleet-graphics and ricoh-print. Canonical service links are also supported. Existing wholesale context is shown explicitly; choosing a different product/use case exits it intentionally. No saved records or adapter aliases are rewritten. Unsupported link values leave selection empty and require a user choice, never a fallback service.
 **CRM owner dependency:** verify and persist this exact preset for the Canvas tenant in Settings → Integrations → Website Leads, with default `other`, while intake remains disabled. Review aliases and actual saved key/label records rather than assuming code presets update persisted settings. The redesign does not repair the existing CRM Settings mismatch and does not authorize credentials or forwarding. The adapter's serviceAllowlistConfirmed remains false.
 
 ## Payload and contract preservation
@@ -70,7 +95,7 @@ Run `npm ci`, `npm run test:quote`, then `npm run preview:quote`.
 
 Open `http://127.0.0.1:4173/quote` or `/quote-es`. The local server substitutes a Firebase compat mock, removes production SDK/analytics scripts, and sets CSP connect-src none/form-action none. It only serves an explicit asset allowlist. This mock is never referenced by production HTML or included in proposed Hosting overlays. Local preview submissions simulate success and uploads, and cannot send real messages. Fonts may load from Google's font CDN.
 
-34 automated checks passed: bilingual service parity, all product visibility/validation, units/quantities, measurement help, payload sanitizer/CRM message preservation, upload/no-upload failure and retry, duplicate suppression, App Check readiness/failure, backend source invariants, and exact CRM retry bytes.
+39 automated checks passed: bilingual service parity, all product visibility/validation, units/quantities, measurement help, payload sanitizer/CRM message preservation, upload/no-upload failure and retry, duplicate suppression, App Check readiness/failure, backend source invariants, and exact CRM retry bytes.
 
 Browser QA: English no-file and Spanish PNG paths completed against local mocks; both showed saved-reference confirmations without console errors. Checked widths 320, 375, 414, 768, 1024, 1440 with no horizontal page overflow. No real recipients were contacted. Screenshots are in `docs/screenshots/`.
 
@@ -85,3 +110,7 @@ Because production contains uncommitted/unmerged site work, do not deploy the br
 The adapter file is a **separate future Functions change**, not included in the proposed Hosting-only rollout. It needs its own approval/review in the existing disabled adapter rollout. No Functions, Firestore Rules, Storage Rules, indexes, Hosting settings, CRM tenant settings, credentials, or recovery operations were deployed here.
 
 Local overlay staging was verified against Hosting version `04087d48ca157a49`: exactly the four proposed paths were produced, with live shared-asset prefixes preserved. No release was created.
+
+## Separate draft fixes and release order
+
+See `docs/release-order.md`. PR #4 stays draft; its prior CI result at 1829298 is not evidence for later commits. SMS consent and legacy CRM gating are separate branches/PRs. No recovery runner, missing index, historical replay or production operations are part of any draft.

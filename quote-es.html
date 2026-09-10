@@ -59,7 +59,7 @@
       href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/css/styles.css?v=quote-redesign-1" />
+    <link rel="stylesheet" href="/css/styles.css?v=quote-redesign-2" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -98,7 +98,7 @@
       src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check-compat.js"
     ></script>
     <script defer src="/js/firebase-config.js?v=20260910-2bf92bc"></script>
-    <script defer src="/js/main.js?v=quote-redesign-1"></script>
+    <script defer src="/js/main.js?v=quote-redesign-2"></script>
   </head>
   <body class="quote-page">
     <a class="skip-link" href="#main-content">Saltar a la cotización</a>
@@ -124,11 +124,21 @@
       <div class="q-layout">
         <div class="q-workspace">
           <ol class="q-progress" aria-label="Pasos de cotización">
-            <li data-progress="0" aria-label="01Producto"><span>01</span>Producto</li>
-            <li data-progress="1" aria-label="02Medidas"><span>02</span>Medidas</li>
-            <li data-progress="2" aria-label="03Producción"><span>03</span>Producción</li>
-            <li data-progress="3" aria-label="04Entrega"><span>04</span>Entrega</li>
-            <li data-progress="4" aria-label="05Contacto"><span>05</span>Contacto</li>
+            <li data-progress="0" aria-label="01Producto">
+              <span>01</span>Producto
+            </li>
+            <li data-progress="1" aria-label="02Medidas">
+              <span>02</span>Medidas
+            </li>
+            <li data-progress="2" aria-label="03Producción">
+              <span>03</span>Producción
+            </li>
+            <li data-progress="3" aria-label="04Entrega">
+              <span>04</span>Entrega
+            </li>
+            <li data-progress="4" aria-label="05Contacto">
+              <span>05</span>Contacto
+            </li>
           </ol>
           <form id="canvasQuoteForm" novalidate>
             <div id="quoteError" class="q-error" role="alert" hidden></div>
@@ -137,44 +147,81 @@
               <h2 id="q-title-0" tabindex="-1">¿Qué vamos a producir?</h2>
               <p>Elija la opción más cercana. Le ayudamos con los detalles.</p>
               <label class="q-field" for="quoteService"
-                ><span>Producto / servicio</span
-                ><select id="quoteService" name="service">
-                  <option value="wrap_production_only">
-                    Paneles de wrap listos para instalar
-                  </option>
-                  <option value="wholesale_printing">
-                    Impresión de vinil al mayoreo
-                  </option>
-                  <option value="vinyl_large_format_printing">
-                    Letreros, banners e impresión gran formato
-                  </option>
+                ><span>Producto</span
+                ><select id="quoteService" name="product">
+                  <option value="printed_vinyl">Vinil impreso</option>
+                  <option value="banners">Lonas impresas</option>
+                  <option value="coroplast">Letreros de coroplast</option>
+                  <option value="acm">Letreros de ACM</option>
                   <option value="window_graphics">
                     Gráficos para ventanas y escaparates
                   </option>
-                  <option value="wall_murals">Murales y vinil interior</option>
-                  <option value="contour_cut_decals">
-                    Calcomanías con corte de contorno
+                  <option value="wall_murals">Murales para paredes</option>
+                  <option value="stickers_decals">
+                    Stickers y calcomanías
                   </option>
-                  <option value="cutting_lamination">Corte y laminado</option>
                   <option value="vehicle_wraps">
-                    Wraps comerciales y flotillas
+                    Rotulación de vehículos y flotillas
                   </option>
                   <option value="print_collateral">
                     Flyers, tarjetas y menús
                   </option>
-                  <option value="other">Otro / ayuda para elegir</option>
+                  <option value="other">Otro / Ayúdame a elegir</option>
                 </select></label
               >
               <div id="serviceHint" class="q-hint"></div>
-              <label class="q-field" for="productDetail"
-                ><span>¿Qué tipo de impresión?</span
-                ><select id="productDetail" name="productDetail">
+              <label class="q-field" for="vinylUse"
+                ><span>¿Para qué usará el vinil impreso?</span
+                ><select id="vinylUse">
                   <option value="general">
-                    Impresión general / ayuda para elegir
+                    Gráficos generales / ayuda para elegir
                   </option>
-                  <option value="banner">Banner</option>
-                  <option value="sign">Letrero impreso</option>
-                  <option value="vinyl">Vinil impreso</option>
+                  <option value="vehicle_panels">
+                    Paneles para rotulación vehicular · solo impresión
+                  </option>
+                  <option value="replacement_panels">
+                    Paneles vehiculares de reemplazo · solo impresión
+                  </option>
+                </select></label
+              ><label class="q-field" for="collateralProduct"
+                ><span>¿Qué producto de papel?</span
+                ><select id="collateralProduct">
+                  <option value="flyers">Flyers</option>
+                  <option value="business_cards">
+                    Tarjetas de presentación
+                  </option>
+                  <option value="menus">Menús</option>
+                </select></label
+              >
+              <p>
+                <button
+                  class="q-text-button"
+                  id="finishingService"
+                  type="button"
+                >
+                  ¿Ya tiene material impreso? Servicios de corte y laminado.
+                </button>
+              </p>
+              <p id="routeNotice" class="q-hint" hidden></p>
+              <button
+                id="returnProducts"
+                class="q-text-button"
+                type="button"
+                hidden
+              >
+                Elegir otro producto</button
+              ><label class="q-field" for="businessRole"
+                ><span
+                  >¿Es dueño de negocio, instalador o revendedor de impresión?
+                  (Opcional)</span
+                ><select id="businessRole">
+                  <option value="">Prefiero no responder</option>
+                  <option value="business_owner">Dueño de negocio</option>
+                  <option value="installer">Instalador</option>
+                  <option value="print_reseller">
+                    Revendedor de impresión
+                  </option>
+                  <option value="other">Otro</option>
                 </select></label
               >
             </section>
@@ -266,6 +313,49 @@
                   </select></label
                 >
               </div>
+              <label class="q-field" for="cutStyle"
+                ><span>¿Cómo cortamos las calcomanías?</span
+                ><select id="cutStyle">
+                  <option value="rectangular">Corte rectangular</option>
+                  <option value="around_design">
+                    Corte alrededor del diseño
+                  </option>
+                </select></label
+              >
+              <p id="cutHelp" class="q-hint">
+                El corte alrededor del diseño sigue el borde exterior de su arte
+                en lugar de dejar un rectángulo.
+              </p>
+              <label class="q-field" for="bannerFinish"
+                ><span>Acabado solicitado para la lona</span
+                ><select id="bannerFinish">
+                  <option value="recommend">Recomendar una opción</option>
+                  <option value="trimmed">Bordes recortados</option>
+                  <option value="hems">Dobladillos</option>
+                  <option value="grommets">Ojillos</option>
+                  <option value="hems_grommets">Dobladillos y ojillos</option>
+                </select></label
+              ><label class="q-field" for="paperFinish"
+                ><span>Acabado solicitado</span
+                ><select id="paperFinish">
+                  <option value="recommend">Recomendar una opción</option>
+                  <option value="unlaminated">Sin laminado</option>
+                  <option value="hard_laminated">
+                    Menú con laminado rígido
+                  </option>
+                </select></label
+              ><label class="q-field" for="finishingRequest"
+                ><span>Servicio necesario para su material impreso</span
+                ><select id="finishingRequest">
+                  <option value="cutting">Corte</option>
+                  <option value="lamination">Laminado</option>
+                  <option value="both">Corte y laminado</option>
+                </select></label
+              >
+              <p id="signHelp" class="q-hint">
+                Comparta requisitos de montaje o grosor en las notas. Canvas
+                confirmará las opciones de producción disponibles.
+              </p>
               <label class="q-upload" for="quoteFiles"
                 ><strong>Adjunte arte, fotos o especificaciones</strong
                 ><span>Opcional · hasta 10 archivos · 20 MB cada uno</span

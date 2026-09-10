@@ -59,7 +59,7 @@
       href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/css/styles.css?v=quote-redesign-1" />
+    <link rel="stylesheet" href="/css/styles.css?v=quote-redesign-2" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -98,7 +98,7 @@
       src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check-compat.js"
     ></script>
     <script defer src="/js/firebase-config.js?v=20260910-2bf92bc"></script>
-    <script defer src="/js/main.js?v=quote-redesign-1"></script>
+    <script defer src="/js/main.js?v=quote-redesign-2"></script>
   </head>
   <body class="quote-page">
     <a class="skip-link" href="#main-content">Skip to quote request</a>
@@ -124,11 +124,21 @@
       <div class="q-layout">
         <div class="q-workspace">
           <ol class="q-progress" aria-label="Quote steps">
-            <li data-progress="0" aria-label="01Product"><span>01</span>Product</li>
-            <li data-progress="1" aria-label="02Specifications"><span>02</span>Specifications</li>
-            <li data-progress="2" aria-label="03Production"><span>03</span>Production</li>
-            <li data-progress="3" aria-label="04Delivery"><span>04</span>Delivery</li>
-            <li data-progress="4" aria-label="05Contact"><span>05</span>Contact</li>
+            <li data-progress="0" aria-label="01Product">
+              <span>01</span>Product
+            </li>
+            <li data-progress="1" aria-label="02Specifications">
+              <span>02</span>Specifications
+            </li>
+            <li data-progress="2" aria-label="03Production">
+              <span>03</span>Production
+            </li>
+            <li data-progress="3" aria-label="04Delivery">
+              <span>04</span>Delivery
+            </li>
+            <li data-progress="4" aria-label="05Contact">
+              <span>05</span>Contact
+            </li>
           </ol>
           <form id="canvasQuoteForm" novalidate>
             <div id="quoteError" class="q-error" role="alert" hidden></div>
@@ -137,46 +147,75 @@
               <h2 id="q-title-0" tabindex="-1">What are we making?</h2>
               <p>Choose the closest match. We can help with the details.</p>
               <label class="q-field" for="quoteService"
-                ><span>Product / service</span
-                ><select id="quoteService" name="service">
-                  <option value="wrap_production_only">
-                    Wrap panels, ready to install
-                  </option>
-                  <option value="wholesale_printing">
-                    Wholesale vinyl printing
-                  </option>
-                  <option value="vinyl_large_format_printing">
-                    Signs, banners & large-format printing
-                  </option>
+                ><span>Product</span
+                ><select id="quoteService" name="product">
+                  <option value="printed_vinyl">Printed vinyl</option>
+                  <option value="banners">Banners</option>
+                  <option value="coroplast">Coroplast signs</option>
+                  <option value="acm">ACM signs</option>
                   <option value="window_graphics">
                     Window & storefront graphics
                   </option>
-                  <option value="wall_murals">
-                    Wall murals & interior vinyl
-                  </option>
-                  <option value="contour_cut_decals">Contour-cut decals</option>
-                  <option value="cutting_lamination">
-                    Cutting & lamination
-                  </option>
+                  <option value="wall_murals">Wall murals</option>
+                  <option value="stickers_decals">Stickers & decals</option>
                   <option value="vehicle_wraps">
                     Commercial vehicle & fleet wraps
                   </option>
                   <option value="print_collateral">
-                    Flyers, cards & menus
+                    Flyers, business cards & menus
                   </option>
-                  <option value="other">Other / help choosing</option>
+                  <option value="other">Other / Help me choose</option>
                 </select></label
               >
               <div id="serviceHint" class="q-hint"></div>
-              <label class="q-field" for="productDetail"
-                ><span>What type of print?</span
-                ><select id="productDetail" name="productDetail">
+              <label class="q-field" for="vinylUse"
+                ><span>What will the printed vinyl be used for?</span
+                ><select id="vinylUse">
                   <option value="general">
-                    General printing / help choosing
+                    General graphics / help choosing
                   </option>
-                  <option value="banner">Banner</option>
-                  <option value="sign">Printed sign</option>
-                  <option value="vinyl">Printed vinyl</option>
+                  <option value="vehicle_panels">
+                    Vehicle wrap panels · printing only
+                  </option>
+                  <option value="replacement_panels">
+                    Replacement vehicle panels · printing only
+                  </option>
+                </select></label
+              ><label class="q-field" for="collateralProduct"
+                ><span>Which paper product?</span
+                ><select id="collateralProduct">
+                  <option value="flyers">Flyers</option>
+                  <option value="business_cards">Business cards</option>
+                  <option value="menus">Menus</option>
+                </select></label
+              >
+              <p>
+                <button
+                  class="q-text-button"
+                  id="finishingService"
+                  type="button"
+                >
+                  Already have printed material? Cutting & lamination services.
+                </button>
+              </p>
+              <p id="routeNotice" class="q-hint" hidden></p>
+              <button
+                id="returnProducts"
+                class="q-text-button"
+                type="button"
+                hidden
+              >
+                Choose a different product</button
+              ><label class="q-field" for="businessRole"
+                ><span
+                  >Are you a business owner, installer, or print reseller?
+                  (Optional)</span
+                ><select id="businessRole">
+                  <option value="">Prefer not to say</option>
+                  <option value="business_owner">Business owner</option>
+                  <option value="installer">Installer</option>
+                  <option value="print_reseller">Print reseller</option>
+                  <option value="other">Other</option>
                 </select></label
               >
             </section>
@@ -262,6 +301,45 @@
                   </select></label
                 >
               </div>
+              <label class="q-field" for="cutStyle"
+                ><span>How should we cut the stickers?</span
+                ><select id="cutStyle">
+                  <option value="rectangular">Rectangular cut</option>
+                  <option value="around_design">Cut around the design</option>
+                </select></label
+              >
+              <p id="cutHelp" class="q-hint">
+                Cut around the design follows the outside edge of your artwork
+                instead of leaving a rectangle.
+              </p>
+              <label class="q-field" for="bannerFinish"
+                ><span>Banner finishing request</span
+                ><select id="bannerFinish">
+                  <option value="recommend">Recommend an option</option>
+                  <option value="trimmed">Trimmed edges</option>
+                  <option value="hems">Hems</option>
+                  <option value="grommets">Grommets</option>
+                  <option value="hems_grommets">Hems and grommets</option>
+                </select></label
+              ><label class="q-field" for="paperFinish"
+                ><span>Finish request</span
+                ><select id="paperFinish">
+                  <option value="recommend">Recommend an option</option>
+                  <option value="unlaminated">No lamination</option>
+                  <option value="hard_laminated">Hard-laminated menu</option>
+                </select></label
+              ><label class="q-field" for="finishingRequest"
+                ><span>Service needed for your printed material</span
+                ><select id="finishingRequest">
+                  <option value="cutting">Cutting</option>
+                  <option value="lamination">Lamination</option>
+                  <option value="both">Cutting and lamination</option>
+                </select></label
+              >
+              <p id="signHelp" class="q-hint">
+                Share mounting or thickness requirements in the notes. Canvas
+                will confirm supported production options.
+              </p>
               <label class="q-upload" for="quoteFiles"
                 ><strong>Add artwork, photos or specifications</strong
                 ><span>Optional · up to 10 files · 20 MB each</span
