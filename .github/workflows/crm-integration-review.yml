@@ -1,0 +1,32 @@
+name: CRM integration review
+on:
+  push:
+    branches: ['codex/canvas-crm-integration-review', 'codex/canvas-crm-product-mapping']
+  pull_request:
+    paths: ['functions/**', 'test/**', 'firestore.rules', 'storage.rules', 'package*.json', '.github/workflows/crm-integration-review.yml']
+permissions:
+  contents: read
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: npm ci
+      - run: npm --prefix functions ci
+      - run: npm run test:frontend && npm run check:frontend
+      - run: npm --prefix functions test
+      - run: node --check functions/index.js
+  emulator:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - run: npm ci
+      - run: npm --prefix functions ci
+      - run: npm run test:storage-rules
+      - run: npm run test:crm-runtime

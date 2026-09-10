@@ -1,3 +1,5 @@
+> Superseding safety note (2026-09-10): use docs/crm-integration-review.md for the current controlled website-to-CRM sequence. This direct API harness is a separate, larger write scope (up to two records), not authorization to run it. Intake/forwarding remain disabled.
+
 # Canvas → Merkad API contract integration test procedure
 
 Status: **prepared but not executed**. CRM forwarding remains disabled.
@@ -71,8 +73,8 @@ After this API contract harness passes, a separate controlled test must exercise
 1. Submit the public Canvas form with synthetic data.
 2. Verify the original submission is accepted and saved in `canvas_leads/{submissionId}`.
 3. Verify `crm_lead_deliveries/{submissionId}` contains the exact serialized body, `canvas-lead:{submissionId}` idempotency key, supported mapping, and unsupported-field diagnostics.
-4. Verify the delivery worker claims the outbox record and calls the CRM only after forwarding is deliberately enabled in a separately approved test environment.
-5. Verify the CRM IDs/status are written back to the outbox and the form confirmation reflects an actually accepted active delivery path.
+4. Verify the delivery worker claims the outbox record and calls the CRM only after the separately approved exact-ID authorization and tenant intake configuration are installed; general forwarding remains false.
+5. Verify the CRM IDs/status are written back to the outbox and the form confirmation reflects only Canvas persistence, independently of CRM acceptance.
 6. Verify notification and retry behavior, then return forwarding to disabled unless production enablement is separately approved.
 
 ### Exact-ID test isolation
@@ -84,10 +86,7 @@ mode; the scheduled worker fetches it directly instead of querying the queue.
 Missing, malformed, or different IDs fail closed, and all unrelated/new/backlog
 records remain held.
 
-Mark the same saved test lead with `source: crm_integration_test`. Canvas workflow
-enrollment is skipped only when both that marker and the exact configured ID
-match. This prevents customer email/SMS side effects without disabling any live
-workflow. The CRM-side notification owner must still be approved before the run.
+Do not set a client-controlled marker to authorize the test. Use the verified-staff authorization callable and submit its one-time proof with the fresh exact-ID request. The server writes the trusted marker atomically with lead persistence. Notification suppression requires that persisted authorization, the exact ID and server-owned test source. CRM suppression must be separately confirmed.
 
 ## Secret Manager bindings for Canvas Functions
 
@@ -104,4 +103,4 @@ source export. CI installs from the reconciled lockfile with Node 22.
 
 ## Merge/deployment workflow review
 
-The repository contains one workflow: `.github/workflows/functions-ci.yml`. It runs only tests and syntax checks on pull requests. It has no `push` trigger, Firebase action, credential reference, or deployment command. Therefore, merging PR #1 does **not** trigger an existing GitHub Actions deployment workflow. Manual or external deployment paths remain outside the repository workflow and must still be controlled separately.
+The earlier adapter-only branch contained the workflow: `.github/workflows/functions-ci.yml`. It runs only tests and syntax checks on pull requests. It has no `push` trigger, Firebase action, credential reference, or deployment command. Therefore, merging PR #1 does **not** trigger an existing GitHub Actions deployment workflow. Manual or external deployment paths remain outside the repository workflow and must still be controlled separately.
