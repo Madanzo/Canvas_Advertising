@@ -1,7 +1,7 @@
 name: CRM integration review
 on:
   push:
-    branches: ['codex/canvas-crm-integration-review', 'codex/canvas-crm-product-mapping', 'codex/canvas-crm-communications-owner', 'codex/canvas-crm-split-overlay-tests']
+    branches: ['codex/canvas-crm-integration-review', 'codex/canvas-crm-product-mapping', 'codex/canvas-crm-communications-owner', 'codex/canvas-crm-split-overlay-tests', 'codex/canvas-crm-contract-compatibility']
   pull_request:
     paths: ['functions/**', 'test/**', 'firestore.rules', 'storage.rules', 'package*.json', '.github/workflows/crm-integration-review.yml']
 permissions:

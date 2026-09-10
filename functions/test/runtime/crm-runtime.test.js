@@ -162,12 +162,13 @@ if (process.env.CRM_SPLIT_OVERLAY_RUNTIME === 'true') {
         assert.equal(calls.length,count);assert.deepEqual((await outboxRef.get()).data(),original);
         assert.equal((await db.collection('workflowContacts').get()).size,0);
     });
-    test('split overlay: unready cutover saves held request; visitor ownership cannot override server policy',async()=>{
+    test('split overlay: unready cutover delivers valid lead with enrollment suppressed; visitor ownership cannot override server policy',async()=>{
         process.env.CANVAS_NOTIFICATION_OWNER='crm';
         await assert.rejects(runtime.submitPublicLead.run({...payload(),communications:{notificationOwner:'website'}},context()),/not allowed|unsupported|Unexpected|Unknown/i);
         await runtime.submitPublicLead.run(payload(),context());
         assert.equal((await leadRef.get()).data().communications.notificationOwner,'held');
         await runtime.onNewLead.run(await leadRef.get(),{params:{leadId:id}});await trigger();
-        assert.equal((await outboxRef.get()).data().status,'held');assert.equal(calls.length,0);
+        assert.equal((await outboxRef.get()).data().status,'accepted');assert.equal(calls.length,1);
+        assert.equal(JSON.parse((await outboxRef.get()).data().serializedBody).testSuppressed,true);
     });
 }

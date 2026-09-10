@@ -2142,7 +2142,8 @@ async function deliverCrmLead(deliveryRef, delivery) {
         crmLeadAdapter.readiness
     );
     const ownershipHold = communicationsPolicy.deliveryHold(communicationsPolicy.configFromEnv(process.env), delivery.communications);
-    if (ownershipHold) return { attempted: false, reason: ownershipHold };
+    // Frozen unsuppressed payloads remain held on policy drift; never rewrite a retry.
+    if (ownershipHold && JSON.parse(delivery.serializedBody || '{}').testSuppressed !== true) return { attempted: false, reason: ownershipHold };
     if (!readiness.ready) return { attempted: false, reason: readiness.reason };
     if (!delivery.serializedBody || !delivery.serviceMapping?.crmValue || delivery.serviceMapping.confirmed !== true) {
         await deliveryRef.update({
@@ -2247,13 +2248,12 @@ async function createCrmLeadDelivery(leadId, leadData, timestamp) {
     const config = crmLeadAdapterConfig();
     const testAuthorized = leadData.crmIntegrationTestAuthorized === true;
     let readiness = crmLeadDeliveryReadiness(config, leadId, testAuthorized);
-    const ownershipHold = communicationsPolicy.deliveryHold(communicationsPolicy.configFromEnv(process.env), leadData.communications);
-    if (ownershipHold) readiness = { ready: false, reason: ownershipHold };
     const deliveryRef = db.collection(CRM_LEAD_DELIVERIES_COLLECTION).doc(leadId);
     const mapping = crmLeadAdapter.buildRequestMapping(
         leadId,
         leadData,
-        new Date(timestamp || Date.now()).toISOString()
+        new Date(timestamp || Date.now()).toISOString(),
+        communicationsPolicy.configFromEnv(process.env)
     );
     mapping.serviceMapping.confirmed = config.serviceAllowlistConfirmed;
 

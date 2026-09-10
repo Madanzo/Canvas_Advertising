@@ -1,6 +1,7 @@
 'use strict';
 
 const smsConsentPolicy = require('./sms-consent');
+const communicationsPolicy = require('./communications-policy');
 
 const CRM_ROUTE_PREFIX = '/api/v1/tenants/';
 const CRM_ROUTE_SUFFIX = '/leads/intake';
@@ -78,7 +79,27 @@ function trackingValue(tracking, ...keys) {
     return '';
 }
 
-function buildRequestMapping(leadId, leadData, submittedAtIso = new Date().toISOString()) {
+// Only the server-written capture stamp is eligible. Never use submittedAt,
+// createdAt, visitor fields, or the forwarding clock to manufacture an epoch.
+function communicationsEnvelope(leadData, config = {}) {
+    const stamp = leadData.communications;
+    const capturedAt = typeof stamp?.capturedAt === 'string' && Number.isFinite(Date.parse(stamp.capturedAt))
+        ? stamp.capturedAt : undefined;
+    const eligible = communicationsPolicy.ready(config)
+        && stamp?.communicationPolicyVersion === 1
+        && stamp.notificationOwner === 'crm' && stamp.transitionId === config.transitionId
+        && capturedAt && Date.parse(capturedAt) >= Date.parse(config.cutoverAt)
+        && typeof stamp.testSuppressed === 'boolean';
+    return {
+        notificationOwner: eligible ? 'crm' : 'website',
+        policyVersion: 1,
+        ...(eligible ? { transitionId: stamp.transitionId } : {}),
+        ...(capturedAt ? { capturedAt } : {}),
+        testSuppressed: !eligible || stamp.testSuppressed === true || leadData.crmIntegrationTestAuthorized === true
+    };
+}
+
+function buildRequestMapping(leadId, leadData, submittedAtIso = new Date().toISOString(), communicationsConfig = {}) {
     const requestedService = SERVICE_MAPPING[leadData.service] || '';
     const unsupportedFields = [];
     const flag = (field, value, reason) => {
@@ -149,13 +170,7 @@ function buildRequestMapping(leadId, leadData, submittedAtIso = new Date().toISO
         externalDocId: leadId,
         turnstileVerified: null,
         website: '',
-        ...(leadData.communications?.communicationPolicyVersion === 1 ? {
-            notificationOwner: leadData.communications.notificationOwner,
-            communicationPolicyVersion: 1,
-            capturedAt: leadData.communications.capturedAt,
-            testSuppressed: leadData.communications.testSuppressed === true,
-            ...(leadData.communications.transitionId ? { transitionId: leadData.communications.transitionId } : {})
-        } : {})
+        ...communicationsEnvelope(leadData, communicationsConfig)
     };
 
     return {
@@ -281,6 +296,7 @@ module.exports = {
     SERVICE_MAPPING,
     bearerCredential,
     buildRequestMapping,
+    communicationsEnvelope,
     classifyResponse,
     endpointFor,
     idempotencyKeyFor,

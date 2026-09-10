@@ -27,10 +27,10 @@ test('immutable owner survives rollback; no historical ownership promotion; test
 });
 test('payload exports only server ownership snapshot and retains strict mapped SMS consent',()=>{
     const lead={service:'vinyl_large_format_printing',notificationOwner:'crm', productionRequest:{version:1,smsConsent:'true'}};
-    assert.equal(mapping.buildRequestMapping('fixture',lead).body.notificationOwner,undefined);
-    const body=mapping.buildRequestMapping('fixture',{...lead,communications:policy.capture(ready,now,true)}).body;
+    assert.equal(mapping.buildRequestMapping('fixture',lead).body.notificationOwner,'website');
+    const body=mapping.buildRequestMapping('fixture',{...lead,communications:policy.capture(ready,now,false)},now.toISOString(),ready).body;
     assert.equal(body.notificationOwner,'crm');assert.equal(body.transitionId,ready.transitionId);
-    assert.equal(body.testSuppressed,true);assert.equal(body.smsConsent,false);
+    assert.equal(body.testSuppressed,false);assert.equal(body.smsConsent,false);
 });
 for(const name of ['sendEmail','sendSMS']) test(name+' actual helper blocks CRM, held, test, missing-contact before provider access',async()=>{
     const source=fs.readFileSync(require.resolve('../index'),'utf8');

@@ -1,0 +1,15 @@
+{
+  "canonicalSha": "ebed548e67fe493117f1cf5cc10fac371f7d84c1",
+  "sourceSha256": {
+    "lib/leads/validate.ts": "1630a201c4902f71a5262b2f9095db478060a8caa451db20925026b2d384fd45",
+    "lib/comms/enrollment.ts": "7c789ff122b2e6705f8aaa728d322ab86432866b1a7780b44dc205e9c6754cbe"
+  },
+  "bundleSha256": "0f09ddb7c575317bd337a8f4f727ea28016c7579e4109c225d1b5ea400f63e1a",
+  "exports": [
+    "validateIntake",
+    "decideEnrollment",
+    "emptyConsent",
+    "withConsentChange"
+  ],
+  "build": "esbuild contract-entry.ts --bundle --platform=node --format=cjs --minify; isolated git archive of canonical SHA with existing installed CRM dependencies; no canonical files modified"
+}

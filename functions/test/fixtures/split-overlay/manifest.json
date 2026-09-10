@@ -35,8 +35,6 @@
     },
     {
       "name": "public-adapter-targets",
-      "archiveSha256": "0f8e31e99dcc9d4b710ad964e9fa9b1639ed92d10ba649c40b1692d285001115",
-      "indexSha256": "373ce3af7e3ceb1332b19deb5447529880f9bb3ae2b64886100c5f8a02def1f5",
       "runtime": {
         "node": "22"
       },
@@ -49,9 +47,11 @@
         },
         {
           "file": "public-adapter-targets-new-adapter.txt",
-          "startUtf8Byte": 92153,
-          "endUtf8Byte": 101625,
-          "sha256": "cd735d7f97e69140c57d5e5fe393520c3ef042a279d4d9dbbf25decc44fe74e0"
+          "sha256": "6011ce893b1559849ca5a01b26ac1bb1ba21b3fa54827b95e50e580782920047",
+          "baselineStartUtf8Byte": 92153,
+          "baselineEndUtf8Byte": 101625,
+          "source": "functions/index.js: CRM_LEAD_DELIVERIES_COLLECTION through before syncOrderToCRM, excluding preserved legacy export (candidate, not staged archive)",
+          "lengthUtf8Bytes": 9477
         }
       ],
       "dependencies": [
@@ -63,7 +63,10 @@
           "file": "public-adapter-targets/package-lock.json",
           "sha256": "d80f37188b42a7752bd539e03a01d57e6b16c7968746af8d8da008f253607af0"
         }
-      ]
+      ],
+      "baselineArchiveSha256": "0f8e31e99dcc9d4b710ad964e9fa9b1639ed92d10ba649c40b1692d285001115",
+      "baselineIndexSha256": "373ce3af7e3ceb1332b19deb5447529880f9bb3ae2b64886100c5f8a02def1f5"
     }
-  ]
+  ],
+  "candidateNote": "One adapter slice updated for ebed548 compatibility. Other source slices and dependency locks remain pinned to prior overlay; prior ZIP is not this candidate."
 }
