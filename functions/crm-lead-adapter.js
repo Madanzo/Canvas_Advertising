@@ -9,6 +9,16 @@ const TEST_SUBMISSION_ID_PATTERN = /^[A-Za-z0-9_-]{16,80}$/;
 // This translation is intentionally explicit. It is a proposed Canvas-to-CRM
 // mapping and still requires confirmation against the deployed tenant allowlist.
 const SERVICE_MAPPING = Object.freeze({
+    // Canonical keys from CANVAS_VISUAL_PRODUCTION_PRESET; historical aliases remain valid.
+    'vehicle_wraps': 'Vehicle Wraps',
+    'vinyl_large_format_printing': 'Vinyl & Large-Format Printing',
+    'window_graphics': 'Perforated Window Vinyl / Storefront Glass',
+    'wall_murals': 'Wall Murals & Interior Vinyl',
+    'contour_cut_decals': 'Contour-Cut Decals',
+    'cutting_lamination': 'Cutting & Lamination',
+    'print_collateral': 'Flyers & Business Cards (Secondary)',
+    'wholesale_printing': 'Print Partner / Wholesale Vinyl Printing',
+    'wrap_production_only': 'Wrap Production Only',
     'vehicle-wraps': 'Vehicle Wraps',
     'vehicle-wrap': 'Vehicle Wraps',
     'partial-wrap': 'Vehicle Wraps',
@@ -120,7 +130,9 @@ function buildRequestMapping(leadId, leadData, submittedAtIso = new Date().toISO
             ? preferredContactMethod
             : '',
         marketingConsent: false,
-        smsConsent: leadData.boatSurvey?.smsConsent === true,
+        smsConsent: leadData.productionRequest?.version === 1
+            ? leadData.productionRequest.smsConsent === true
+            : leadData.boatSurvey?.smsConsent === true,
         attribution: {
             pageUrl: String(leadData.page || '').trim(),
             landingPage: String(leadData.sourcePage || leadData.page || '').trim(),
