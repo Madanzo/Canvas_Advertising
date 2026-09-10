@@ -1205,7 +1205,7 @@ function initWhatsAppWidget() {
     const paper = product === "print_collateral";
     const material =
       product === "printed_vinyl"
-        ? ["recommend", "commercial", "premium"]
+        ? ["recommend", "vinyl"]
         : product === "banners"
           ? ["recommend", "banner"]
           : ["coroplast", "acm"].includes(product)
@@ -1234,6 +1234,7 @@ function initWhatsAppWidget() {
       vehicle: product === "vehicle_wraps",
       dimensions: product !== "vehicle_wraps",
       material,
+      vinylGrade: product === "printed_vinyl",
       lamination: paper ? ["none"] : ["advise", "matte", "gloss", "none"],
       fulfillment: [
         "pickup",
@@ -1297,6 +1298,7 @@ function initWhatsAppWidget() {
         errors.push("dimensions");
     }
     if (step === 2) {
+      if (rules.vinylGrade && !["recommend", "commercial", "premium"].includes(data.vinylGrade || "recommend")) errors.push("material");
       if (
         !rules.material.includes(data.material) ||
         !rules.lamination.includes(data.lamination)
@@ -1382,6 +1384,8 @@ function initWhatsAppWidget() {
     const service = SERVICES.find((s) => s[0] === serviceId);
     if (!service) throw new Error("service");
     const rules = config(d);
+    const vinylGrade = rules.vinylGrade ? (d.vinylGrade || "recommend") : "";
+    if (rules.vinylGrade && !["recommend", "commercial", "premium"].includes(vinylGrade)) throw new Error("vinylGrade");
     const request = {
       version: 1,
       serviceId,
@@ -1435,6 +1439,7 @@ function initWhatsAppWidget() {
       vehicleCount: rules.vehicle ? +d.vehicleCount : null,
       coverage: rules.vehicle ? d.coverage : "",
       material: d.material,
+      vinylGrade,
       lamination: d.lamination,
       artwork: d.artwork,
       fulfillment: d.fulfillment,
@@ -1453,6 +1458,7 @@ function initWhatsAppWidget() {
     const es = locale === "es",
       tr = (en, sp) => (es ? sp : en);
     const option = (key) => OPTIONS[key]?.[es ? 1 : 0] || key;
+    const gradeLabel = {recommend: tr("Recommend a grade", "Recomiéndenme una opción"), commercial: tr("Commercial", "Comercial"), premium: tr("Premium", "Premium")}[request.vinylGrade];
     const artworkLabel = {
       ready: tr("Print-ready artwork", "Arte listo para imprimir"),
       review: tr("File review requested", "Revisión de archivos"),
@@ -1526,6 +1532,7 @@ function initWhatsAppWidget() {
       request.vehicle
         ? `${request.vehicle} × ${request.vehicleCount}; ${coverageLabel}`
         : "",
+      ...(rules.vinylGrade ? [`${tr("Vinyl grade", "Grado de vinil")}: ${gradeLabel}`] : []),
       `${tr("Material", "Material")}: ${option(d.material)}; ${tr("lamination", "laminado")}: ${option(d.lamination)}; ${tr("artwork", "arte")}: ${artworkLabel}`,
       `${tr("Fulfillment", "Entrega")}: ${option(d.fulfillment)}${request.zip ? "; ZIP: " + request.zip : ""}`,
       `${tr("Date", "Fecha")}: ${d.completionDate || tr("to confirm", "por confirmar")}; ${tr("rush requested", "urgente solicitado")}: ${d.rush ? tr("yes", "sí") : "no"}`,
@@ -1678,6 +1685,7 @@ function initWhatsAppWidget() {
         vehicleCount: $("vehicleCount").value,
         coverage: $("coverage").value,
         material: $("material").value,
+        vinylGrade: $("vinylGrade").value,
         lamination: $("lamination").value,
         artwork: $("artwork").value,
         fulfillment: $("fulfillment").value,
@@ -1709,6 +1717,23 @@ function initWhatsAppWidget() {
       const d = data(),
         r = config(d);
       const finishing = serviceMode === "cutting_lamination";
+      $("vinylGrade").parentElement.hidden = !r.vinylGrade;
+      if (!r.vinylGrade) $("vinylGrade").value = "recommend";
+      const gradeInformation = {
+        recommend: tr(
+          "Tell us the application and Canvas will recommend a grade and exact film. Printable films, color-change films and paint protection film (PPF) serve different purposes and are not interchangeable.",
+          "Cuéntenos la aplicación y Canvas recomendará el grado y la película exacta. Las películas imprimibles, las de cambio de color y la película de protección de pintura (PPF) tienen usos distintos y no son intercambiables."
+        ),
+        commercial: tr(
+          'Commercial materials we carry include General Formulations and our Canvas Escape film, described by the shop as “Double PR Liner, Gloss / Light Grey Adhesive.” Canvas will confirm the exact printable film for your application. Color-change films and PPF are separate material types.',
+          'Entre los materiales comerciales que manejamos están General Formulations y nuestra película Canvas Escape, descrita por el taller como “Double PR Liner, Gloss / Light Grey Adhesive” (liner Double PR, brillante / adhesivo gris claro). Canvas confirmará la película imprimible exacta para su aplicación. Las películas de cambio de color y el PPF son tipos de material distintos.'
+        ),
+        premium: tr(
+          "We work with 3M, Avery Dennison, Aura, KPMF, Evolv, ORACAL, TeckWrap, Aluko Vinyl and other premium films. These are examples of materials we carry, not a guarantee that every brand or film suits every product. Printable films, color-change films and PPF are different; Canvas will confirm the exact film for your application.",
+          "Trabajamos con 3M, Avery Dennison, Aura, KPMF, Evolv, ORACAL, TeckWrap, Aluko Vinyl y otras películas premium. Son ejemplos de materiales que manejamos, no una garantía de que cada marca o película sea adecuada para cada producto. Las películas imprimibles, las de cambio de color y el PPF son diferentes; Canvas confirmará la película exacta para su aplicación."
+        )
+      };
+      $("vinylGradeHelp").textContent = gradeInformation[$("vinylGrade").value];
       $("quoteService").parentElement.hidden = finishing;
       $("vinylUse").parentElement.hidden =
         finishing || d.product !== "printed_vinyl";
