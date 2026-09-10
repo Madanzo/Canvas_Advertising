@@ -16,7 +16,9 @@ process.env.MERKAD_LEADS_SERVICE_ALLOWLIST_CONFIRMED = 'true';
 process.env.FUNCTIONS_CONFIG_EXPORT = '{}';
 for (const key of ['RESEND_API_KEY','TELNYX_API_KEY','SQUARE_ACCESS_TOKEN']) delete process.env[key];
 const admin = require('firebase-admin');
-const runtime = require('../../index');
+const runtime = process.env.CRM_SPLIT_OVERLAY_RUNTIME === 'true'
+    ? require('./split-overlay-loader.cjs')()
+    : require('../../index');
 const authorization = require('../../crm-test-authorization');
 const db = admin.firestore();
 const realTransaction = db.runTransaction.bind(db);
@@ -50,6 +52,9 @@ const payload = () => ({ submissionId: id, name: 'Emulator Fixture', email: 'fix
 const trigger = async () => runtime.onCanvasLeadForCRM.run(await leadRef.get(), { params: { leadId: id }, timestamp: new Date().toISOString() });
 beforeEach(async () => {
     mode = ''; calls = []; sequence++;
+    for (const key of Object.keys(process.env)) {
+        if (key.startsWith('CANVAS_') || key.startsWith('CRM_COMMUNICATIONS_')) delete process.env[key];
+    }
     id = 'runtime_fixture_' + Date.now() + '_' + sequence;
     process.env.CRM_LEAD_TEST_SUBMISSION_ID = id;
     leadRef = db.collection('canvas_leads').doc(id);
@@ -120,3 +125,49 @@ test('runtime: worker recreates only the exact authorized missing outbox after t
     await runtime.processCrmLeadDeliveryQueue.run({});assert.equal(calls.length,1);
     assert.equal(process.env.CRM_LEAD_ADAPTER_ENABLED,'false');
 });
+
+if (process.env.CRM_SPLIT_OVERLAY_RUNTIME === 'true') {
+    test('split overlay: actual proof issuer rejects anonymous, unverified, wrong staff and wrong exact ID', async()=>{
+        for (const auth of [undefined,{uid:'fixture',token:{email:'sales@canvas-advertising.com',email_verified:false}},{uid:'fixture',token:{email:'other@example.invalid',email_verified:true}}]) {
+            await assert.rejects(runtime.createCrmIntegrationTestAuthorization.run({submissionId:id},{auth}), /Verified Canvas staff/);
+        }
+        const staff={auth:{uid:'fixture-staff',token:{email:'sales@canvas-advertising.com',email_verified:true}}};
+        await assert.rejects(runtime.createCrmIntegrationTestAuthorization.run({submissionId:'wrong_fixture_id_000'},staff), /exact disabled-mode/);
+        const issued=await runtime.createCrmIntegrationTestAuthorization.run({submissionId:id},staff);
+        assert.ok(issued.token);assert.equal((await proofRef.get()).data().createdByUid,'fixture-staff');
+        proof=issued.token;await runtime.submitPublicLead.run(payload(),context());
+        assert.equal((await proofRef.get()).data().consumed,true);
+        assert.equal((await leadRef.get()).data().communications.testSuppressed,true);
+        assert.equal(calls.length,0);
+    });
+    test('split overlay: CRM ownership suppresses actual notification trigger/direct send and preserves immutable outbox',async()=>{
+        process.env.CANVAS_NOTIFICATION_OWNER='crm';
+        process.env.CANVAS_COMMUNICATIONS_TRANSITION_ID='emulator_epoch_2026';
+        process.env.CANVAS_COMMUNICATIONS_CUTOVER_AT='2026-01-01T00:00:00.000Z';
+        for(const gate of ['INTAKE','EMAIL','SMS','CONSENT','IDEMPOTENCY','SUPPRESSION']) process.env['CRM_COMMUNICATIONS_'+gate+'_READY']='true';
+        await runtime.submitPublicLead.run(payload(),context());
+        const saved=(await leadRef.get()).data();assert.equal(saved.communications.notificationOwner,'crm');
+        await db.collection('canvas_workflows').doc('split_fixture_workflow').set({enabled:true,trigger:'form_submit',steps:[{type:'email'},{type:'sms'}]});
+        await runtime.onNewLead.run(await leadRef.get(),{params:{leadId:id}});
+        assert.equal((await db.collection('workflowContacts').get()).size,0);
+        for(const type of ['email','sms']) {
+            await assert.rejects(runtime.sendDirectMessage.run({contactId:id,type,subject:'Fixture',content:'Fixture',recipient:'fixture@example.invalid'},{auth:{uid:'fixture'}}), /website_communications_suppressed/);
+        }
+        await trigger();const original=(await outboxRef.get()).data();
+        assert.equal(JSON.parse(original.serializedBody).notificationOwner,'crm');assert.equal(JSON.parse(original.serializedBody).testSuppressed,true);
+        const count=calls.length;
+        process.env.CANVAS_NOTIFICATION_OWNER='website';
+        await runtime.onNewLead.run(await leadRef.get(),{params:{leadId:id}});
+        await runtime.processCrmLeadDeliveryQueue.run({});
+        assert.equal(calls.length,count);assert.deepEqual((await outboxRef.get()).data(),original);
+        assert.equal((await db.collection('workflowContacts').get()).size,0);
+    });
+    test('split overlay: unready cutover saves held request; visitor ownership cannot override server policy',async()=>{
+        process.env.CANVAS_NOTIFICATION_OWNER='crm';
+        await assert.rejects(runtime.submitPublicLead.run({...payload(),communications:{notificationOwner:'website'}},context()),/not allowed|unsupported|Unexpected|Unknown/i);
+        await runtime.submitPublicLead.run(payload(),context());
+        assert.equal((await leadRef.get()).data().communications.notificationOwner,'held');
+        await runtime.onNewLead.run(await leadRef.get(),{params:{leadId:id}});await trigger();
+        assert.equal((await outboxRef.get()).data().status,'held');assert.equal(calls.length,0);
+    });
+}

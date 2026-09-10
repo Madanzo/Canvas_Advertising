@@ -1,7 +1,7 @@
 name: CRM integration review
 on:
   push:
-    branches: ['codex/canvas-crm-integration-review', 'codex/canvas-crm-product-mapping', 'codex/canvas-crm-communications-owner']
+    branches: ['codex/canvas-crm-integration-review', 'codex/canvas-crm-product-mapping', 'codex/canvas-crm-communications-owner', 'codex/canvas-crm-split-overlay-tests']
   pull_request:
     paths: ['functions/**', 'test/**', 'firestore.rules', 'storage.rules', 'package*.json', '.github/workflows/crm-integration-review.yml']
 permissions:
@@ -30,3 +30,19 @@ jobs:
       - run: npm --prefix functions ci
       - run: npm run test:storage-rules
       - run: npm run test:crm-runtime
+  split-overlay:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ['20', '22']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '21'}
+      - run: npm ci
+      - run: npm --prefix functions ci
+      - run: node tools/verify-split-overlay-fixtures.cjs
+      - run: npm run test:crm-split-runtime

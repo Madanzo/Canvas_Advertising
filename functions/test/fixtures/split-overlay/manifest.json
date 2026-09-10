@@ -1,0 +1,49 @@
+{
+  "sourceSha": "2559dad2ba22257e1e9ea487775fd9d0987a913a",
+  "packages": [
+    {
+      "name": "sms-targets",
+      "archiveSha256": "63d207bf155a31b922be1de19004f12cd307a307d40afabed5b553a93c3fa3ab",
+      "indexSha256": "584d54ce08189f627977ad40eaef9c74cbe45a2bb0671adf998dabd4561f4b12",
+      "runtime": {
+        "node": "20"
+      },
+      "parts": [
+        {
+          "file": "sms-targets-workflow-and-notifications.txt",
+          "startUtf8Byte": 2620,
+          "endUtf8Byte": 26202,
+          "sha256": "9881eeb608002206808d639641125c90187b3afcd17e84eb23145e6f4b9196a2"
+        },
+        {
+          "file": "sms-targets-direct-message.txt",
+          "startUtf8Byte": 45660,
+          "endUtf8Byte": 47622,
+          "sha256": "6213838f98e9b1e41f84605eaea8ce8e6638515ad8af4142b993fd064adf131c"
+        }
+      ]
+    },
+    {
+      "name": "public-adapter-targets",
+      "archiveSha256": "0f8e31e99dcc9d4b710ad964e9fa9b1639ed92d10ba649c40b1692d285001115",
+      "indexSha256": "373ce3af7e3ceb1332b19deb5447529880f9bb3ae2b64886100c5f8a02def1f5",
+      "runtime": {
+        "node": "22"
+      },
+      "parts": [
+        {
+          "file": "public-adapter-targets-public-capture.txt",
+          "startUtf8Byte": 3884,
+          "endUtf8Byte": 20834,
+          "sha256": "479018b7b11b94c4ff2658b980c0a93247f3d4ac9495ed3a62c19a2fb746fa3e"
+        },
+        {
+          "file": "public-adapter-targets-new-adapter.txt",
+          "startUtf8Byte": 92153,
+          "endUtf8Byte": 101625,
+          "sha256": "cd735d7f97e69140c57d5e5fe393520c3ef042a279d4d9dbbf25decc44fe74e0"
+        }
+      ]
+    }
+  ]
+}

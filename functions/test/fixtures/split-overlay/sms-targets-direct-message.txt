@@ -1,0 +1,57 @@
+exports.sendDirectMessage = functions.https.onCall(async (data, context) => {
+    // 1. Auth Check
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+
+    const { contactId, type, content, subject, recipient } = data;
+
+    // 2. Validation
+    if (!contactId || !type || !content) {
+        throw new functions.https.HttpsError('invalid-argument', 'Missing required fields: contactId, type, content.');
+    }
+
+    try {
+        let result;
+
+        // 3. Send Message
+        if (type === 'email') {
+            if (!subject) throw new functions.https.HttpsError('invalid-argument', 'Email requires a subject.');
+
+            // Use internal helper
+            result = await sendEmail({
+                to: recipient, // Email address
+                options: {
+                    subject: subject,
+                    html: content, // Content passed in options
+                    contactId,
+                    workflowId: 'direct_message'
+                }
+            });
+
+        } else if (type === 'sms') {
+            // Use internal helper
+            result = await sendSMS({
+                to: recipient, // Phone number
+                options: {
+                    text: content,
+                    contactId,
+                    workflowId: 'direct_message'
+                }
+            });
+
+        } else {
+            throw new functions.https.HttpsError('invalid-argument', 'Invalid type. Must be "email" or "sms".');
+        }
+
+        if (!result || (result.success === false)) {
+            throw new functions.https.HttpsError('internal', result?.error || 'Failed to send message.');
+        }
+
+        return { success: true, messageId: result.id || result.messageUuid };
+
+    } catch (error) {
+        console.error('sendDirectMessage error:', error);
+        throw new functions.https.HttpsError('internal', error.message);
+    }
+});

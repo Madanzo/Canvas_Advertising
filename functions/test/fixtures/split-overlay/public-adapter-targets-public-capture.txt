@@ -1,0 +1,349 @@
+const PUBLIC_LEAD_FIELDS = new Set([
+    'submissionId', 'name', 'firstName', 'lastName', 'email', 'phone', 'service', 'message', 'source',
+    'formType', 'page', 'referrer', 'landingProduct', 'sourcePage',
+    'campaignSource', 'campaignMedium', 'campaignName', 'projectType',
+    'projectTypeLabel', 'materialType', 'materialTypeLabel', 'finishType',
+    'finishTypeLabel', 'quantity', 'deadline', 'deliveryMethod',
+    'deliveryMethodLabel', 'productionNotes', 'selectedFileNames',
+    'estimatedPrice', 'method', 'coverage', 'vehicleSize', 'wrapFinish',
+    'customWidth', 'customHeight', 'productionSummary', 'fileUploads',
+    'tracking', 'boatSurvey', 'visibilityPackage', 'productionRequest',
+    'businessName', 'businessType', 'locale', 'website', 'crmTestAuthorizationToken'
+]);
+
+const CANVAS_STAFF_EMAILS = new Set([
+    'camiloreyna@canvas-advertising.com',
+    'camilo@canvas-advertising.com',
+    'sales@canvas-advertising.com'
+]);
+const CRM_TEST_AUTHORIZATIONS_COLLECTION = 'crmIntegrationTestAuthorizations';
+
+function isVerifiedCanvasStaff(context) {
+    const email = String(context.auth?.token?.email || '').trim().toLowerCase();
+    return context.auth?.token?.email_verified === true && CANVAS_STAFF_EMAILS.has(email);
+}
+
+const LEAD_UPLOAD_MAX_BYTES = 20 * 1024 * 1024;
+const LEAD_UPLOAD_MAX_FILES = 10;
+const LEAD_UPLOAD_TTL_MS = 15 * 60 * 1000;
+const LEAD_UPLOAD_TYPES = new Set([
+    'image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif',
+    'application/pdf', 'application/postscript', 'application/illustrator',
+    'application/vnd.adobe.illustrator', 'application/octet-stream'
+]);
+const LEAD_UPLOAD_EXTENSIONS = new Set(['jpg', 'jpeg', 'png', 'webp', 'heic', 'heif', 'pdf', 'ai', 'eps']);
+
+function publicLeadError(message) {
+    throw new functions.https.HttpsError('invalid-argument', message);
+}
+
+function sanitizePublicValue(value, path, depth = 0) {
+    if (value === null || value === undefined) return null;
+    if (depth > 4) publicLeadError(`${path} is too deeply nested.`);
+    if (typeof value === 'string') {
+        const limit = path === 'message' || path.endsWith('.notes') || path === 'productionNotes' ? 4000 : 1000;
+        if (value.length > limit) publicLeadError(`${path} is too long.`);
+        return value.trim();
+    }
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'number') {
+        if (!Number.isFinite(value)) publicLeadError(`${path} must be a finite number.`);
+        return value;
+    }
+    if (Array.isArray(value)) {
+        if (value.length > 12) publicLeadError(`${path} has too many items.`);
+        return value.map((item, index) => sanitizePublicValue(item, `${path}.${index}`, depth + 1));
+    }
+    if (typeof value === 'object') {
+        const entries = Object.entries(value);
+        if (entries.length > 40) publicLeadError(`${path} has too many fields.`);
+        return Object.fromEntries(entries.map(([key, item]) => {
+            if (!/^[A-Za-z0-9_-]{1,64}$/.test(key)) publicLeadError(`${path} contains an invalid field name.`);
+            return [key, sanitizePublicValue(item, `${path}.${key}`, depth + 1)];
+        }));
+    }
+    publicLeadError(`${path} contains an unsupported value.`);
+}
+
+function validatePublicLead(rawData) {
+    if (!rawData || typeof rawData !== 'object' || Array.isArray(rawData)) {
+        publicLeadError('Lead data must be an object.');
+    }
+    Object.keys(rawData).forEach((key) => {
+        if (!PUBLIC_LEAD_FIELDS.has(key)) publicLeadError(`Unexpected lead field: ${key}.`);
+    });
+
+    const submissionId = String(rawData.submissionId || '');
+    if (!/^[A-Za-z0-9_-]{16,80}$/.test(submissionId)) publicLeadError('Invalid submission ID.');
+    const name = String(rawData.name || '').trim();
+    const service = String(rawData.service || '').trim();
+    const phone = String(rawData.phone || '').trim();
+    const email = String(rawData.email || '').trim().toLowerCase();
+    if (name.length < 2 || name.length > 120) publicLeadError('Enter a valid name.');
+    if (!service || service.length > 160) publicLeadError('Enter a valid service.');
+    const digits = phone.replace(/\D/g, '');
+    if (service !== 'Private Feedback' && (digits.length < 10 || digits.length > 15)) {
+        publicLeadError('Enter a valid phone number.');
+    }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) publicLeadError('Enter a valid email address.');
+    if (String(rawData.website || '').trim()) return { spam: true, submissionId };
+
+    const lead = {};
+    Object.entries(rawData).forEach(([key, value]) => {
+        if (key !== 'website' && key !== 'submissionId' && key !== 'crmTestAuthorizationToken') {
+            lead[key] = sanitizePublicValue(value, key);
+        }
+    });
+    lead.name = name;
+    lead.service = service;
+    lead.phone = phone;
+    lead.email = email || null;
+    lead.source = crmTestAuthorization.trustedSource(rawData.source, false);
+    return {
+        spam: false,
+        submissionId,
+        lead,
+        crmTestAuthorizationToken: String(rawData.crmTestAuthorizationToken || '').slice(0, 128)
+    };
+}
+
+exports.createCrmIntegrationTestAuthorization = configuredFunctions.https.onCall(async (data, context) => {
+    if (!isVerifiedCanvasStaff(context)) {
+        throw new functions.https.HttpsError('permission-denied', 'Verified Canvas staff access is required.');
+    }
+    const config = crmLeadAdapterConfig();
+    const submissionId = String(data?.submissionId || '');
+    if (config.enabled === true || !crmLeadAdapter.testSubmissionGate(config, submissionId).authorized) {
+        throw new functions.https.HttpsError('failed-precondition', 'The exact disabled-mode CRM test ID is not configured.');
+    }
+    const issued = crmTestAuthorization.issueAuthorization();
+    const expiresAt = admin.firestore.Timestamp.fromMillis(issued.record.expiresAtMs);
+    await db.collection(CRM_TEST_AUTHORIZATIONS_COLLECTION).doc(submissionId).set({
+        tokenHash: issued.record.tokenHash,
+        consumed: false,
+        createdByUid: context.auth.uid,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        expiresAt
+    });
+    return { submissionId, token: issued.token, expiresAt: expiresAt.toDate().toISOString() };
+});
+
+async function enforcePublicLeadRateLimit(context) {
+    const forwarded = context.rawRequest?.headers?.['x-forwarded-for'];
+    const ip = String(Array.isArray(forwarded) ? forwarded[0] : (forwarded || context.rawRequest?.ip || 'unknown'))
+        .split(',')[0].trim();
+    const key = crypto.createHash('sha256').update(`canvas-public-lead:${ip}`).digest('hex');
+    const ref = db.collection('publicLeadRateLimits').doc(key);
+    const now = Date.now();
+    const windowMs = 15 * 60 * 1000;
+    await db.runTransaction(async (transaction) => {
+        const snapshot = await transaction.get(ref);
+        const current = snapshot.exists ? snapshot.data() : null;
+        const windowStartedAt = current?.windowStartedAt?.toMillis?.() || 0;
+        const withinWindow = now - windowStartedAt < windowMs;
+        const count = withinWindow ? Number(current.count || 0) + 1 : 1;
+        if (count > 8) throw new functions.https.HttpsError('resource-exhausted', 'Too many requests. Please try again later.');
+        transaction.set(ref, {
+            count,
+            windowStartedAt: withinWindow ? current.windowStartedAt : admin.firestore.Timestamp.fromMillis(now),
+            expiresAt: admin.firestore.Timestamp.fromMillis(now + windowMs)
+        });
+    });
+}
+
+function normalizeRequestedUpload(rawFile, index) {
+    if (!rawFile || typeof rawFile !== 'object' || Array.isArray(rawFile)) {
+        publicLeadError(`File ${index + 1} is invalid.`);
+    }
+    const name = String(rawFile.name || '').trim();
+    const size = Number(rawFile.size);
+    const extension = name.includes('.') ? name.split('.').pop().toLowerCase() : '';
+    let contentType = String(rawFile.type || '').trim().toLowerCase();
+    if (!contentType && (extension === 'ai' || extension === 'eps')) contentType = 'application/octet-stream';
+    if (!name || name.length > 180 || !/^[^/\\]+$/.test(name)) publicLeadError(`File ${index + 1} has an invalid name.`);
+    if (!Number.isInteger(size) || size < 1 || size > LEAD_UPLOAD_MAX_BYTES) {
+        publicLeadError(`File ${index + 1} must be smaller than 20 MB.`);
+    }
+    if (!LEAD_UPLOAD_EXTENSIONS.has(extension) || !LEAD_UPLOAD_TYPES.has(contentType)) {
+        publicLeadError(`File ${index + 1} has an unsupported type.`);
+    }
+    const safeName = name.replace(/[^a-zA-Z0-9._-]/g, '-');
+    return { name, safeName, size, type: contentType };
+}
+
+exports.createLeadUploadSession = configuredFunctions.https.onCall(async (data, context) => {
+    const rawFiles = data?.files;
+    if (!Array.isArray(rawFiles) || rawFiles.length < 1 || rawFiles.length > LEAD_UPLOAD_MAX_FILES) {
+        publicLeadError(`Choose between 1 and ${LEAD_UPLOAD_MAX_FILES} files.`);
+    }
+    await enforcePublicLeadRateLimit(context);
+    const requestedFiles = rawFiles.map(normalizeRequestedUpload);
+    const submissionId = crypto.randomUUID();
+    const token = crypto.randomBytes(32).toString('base64url');
+    const now = admin.firestore.Timestamp.now();
+    const expiresAt = admin.firestore.Timestamp.fromMillis(now.toMillis() + LEAD_UPLOAD_TTL_MS);
+    const sessionRef = db.collection('leadUploadSessions').doc(submissionId);
+    const batch = db.batch();
+    const authorizedFiles = requestedFiles.map((file) => ({
+        fileId: crypto.randomBytes(12).toString('hex'),
+        ...file
+    }));
+    batch.create(sessionRef, {
+        token,
+        fileCount: requestedFiles.length,
+        allowedPaths: authorizedFiles.map((file) => `${file.fileId}/${file.safeName}`),
+        files: Object.fromEntries(authorizedFiles.map((file) => [file.fileId, {
+            name: file.name,
+            safeName: file.safeName,
+            size: file.size,
+            type: file.type
+        }])),
+        consumed: false,
+        createdAt: now,
+        expiresAt
+    });
+    authorizedFiles.forEach((file) => {
+        const { fileId } = file;
+        batch.create(sessionRef.collection('files').doc(fileId), {
+            name: file.name,
+            safeName: file.safeName,
+            size: file.size,
+            type: file.type,
+            token,
+            createdAt: now,
+            expiresAt
+        });
+    });
+    await batch.commit();
+    return { submissionId, token, expiresAt: expiresAt.toDate().toISOString(), files: authorizedFiles };
+});
+
+async function verifyLeadUploads(submissionId, rawUploads) {
+    if (rawUploads === null || rawUploads === undefined || rawUploads.length === 0) {
+        return { sessionRef: null, uploads: [] };
+    }
+    if (!Array.isArray(rawUploads) || rawUploads.length > LEAD_UPLOAD_MAX_FILES) {
+        publicLeadError('Invalid uploaded files.');
+    }
+    const sessionRef = db.collection('leadUploadSessions').doc(submissionId);
+    const sessionSnapshot = await sessionRef.get();
+    if (!sessionSnapshot.exists) publicLeadError('Upload session was not found. Please upload the files again.');
+    const session = sessionSnapshot.data();
+    if (session.consumed || session.expiresAt.toMillis() <= Date.now() || session.fileCount !== rawUploads.length) {
+        publicLeadError('Upload session is invalid or expired. Please upload the files again.');
+    }
+
+    const bucket = admin.storage().bucket();
+    const uploads = await Promise.all(rawUploads.map(async (upload, index) => {
+        if (!upload || typeof upload !== 'object' || Array.isArray(upload)) publicLeadError(`Upload ${index + 1} is invalid.`);
+        const fileId = String(upload.fileId || '');
+        const pathValue = String(upload.path || '');
+        const expectedPrefix = `lead-uploads/${submissionId}/${fileId}/`;
+        if (!/^[a-f0-9]{24}$/.test(fileId) || !pathValue.startsWith(expectedPrefix)) {
+            publicLeadError(`Upload ${index + 1} has an invalid path.`);
+        }
+        const authSnapshot = await sessionRef.collection('files').doc(fileId).get();
+        if (!authSnapshot.exists) publicLeadError(`Upload ${index + 1} is not authorized.`);
+        const authorization = authSnapshot.data();
+        let metadata;
+        try {
+            [metadata] = await bucket.file(pathValue).getMetadata();
+        } catch (error) {
+            publicLeadError(`Upload ${index + 1} was not found.`);
+        }
+        const custom = metadata.metadata || {};
+        if (custom.submissionId !== submissionId
+            || custom.fileId !== fileId
+            || custom.uploadToken !== session.token
+            || custom.originalName !== authorization.name
+            || Number(metadata.size) !== authorization.size
+            || metadata.contentType !== authorization.type) {
+            publicLeadError(`Upload ${index + 1} failed verification.`);
+        }
+        const downloadToken = crypto.randomUUID();
+        await bucket.file(pathValue).setMetadata({
+            metadata: {
+                ...custom,
+                firebaseStorageDownloadTokens: downloadToken
+            }
+        });
+        const encodedBucket = encodeURIComponent(bucket.name);
+        const encodedPath = encodeURIComponent(pathValue);
+        return {
+            name: authorization.name,
+            size: authorization.size,
+            type: authorization.type,
+            path: pathValue,
+            downloadURL: `https://firebasestorage.googleapis.com/v0/b/${encodedBucket}/o/${encodedPath}?alt=media&token=${downloadToken}`
+        };
+    }));
+    return { sessionRef, uploads };
+}
+
+/** Public website lead intake. Firestore client rules intentionally deny direct creates. */
+exports.submitPublicLead = configuredFunctions.https.onCall(async (data, context) => {
+    const validated = validatePublicLead(data);
+    if (validated.spam) return { ok: true, id: validated.submissionId };
+    await enforcePublicLeadRateLimit(context);
+
+    const ref = db.collection('canvas_leads').doc(validated.submissionId);
+    try {
+        const existing = await ref.get();
+        if (existing.exists) return { ok: true, id: ref.id, duplicate: true };
+        const verifiedUploads = await verifyLeadUploads(validated.submissionId, validated.lead.fileUploads);
+        const uploadSessionRef = verifiedUploads.sessionRef;
+        const testAuthorizationRef = db.collection(CRM_TEST_AUTHORIZATIONS_COLLECTION).doc(validated.submissionId);
+        if (uploadSessionRef) validated.lead.fileUploads = verifiedUploads.uploads;
+        const persisted = await crmTestState.persistLeadWithAuthorization({
+            db,
+            leadRef: ref,
+            authorizationRef: testAuthorizationRef,
+            authorizationToken: validated.crmTestAuthorizationToken,
+            isValidAuthorization: crmTestAuthorization.isValidAuthorization,
+            uploadSessionRef,
+            validateUploadSession: (session) => {
+                if (session.consumed || session.expiresAt.toMillis() <= Date.now()) {
+                    publicLeadError('Upload session is invalid or expired. Please upload the files again.');
+                }
+            },
+            uploadConsumedData: {
+                consumed: true,
+                consumedAt: admin.firestore.FieldValue.serverTimestamp(),
+                leadId: ref.id
+            },
+            authorizationConsumedData: {
+                consumed: true,
+                consumedAt: admin.firestore.FieldValue.serverTimestamp(),
+                leadId: ref.id
+            },
+            buildLead: (testAuthorized) => ({
+                ...validated.lead,
+                source: crmTestAuthorization.trustedSource(validated.lead.source, testAuthorized),
+                ...(testAuthorized ? { crmIntegrationTestAuthorized: true } : {}),
+                communications: communicationsPolicy.capture(communicationsPolicy.configFromEnv(process.env), new Date(), testAuthorized),
+                contractVersion: 2,
+                createdAt: admin.firestore.FieldValue.serverTimestamp(),
+                updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+                status: 'new',
+                notes: ''
+            })
+        });
+        return { ok: true, id: ref.id, duplicate: !persisted.created };
+    } catch (error) {
+        if (error.code === 6 || error.code === 'already-exists') {
+            return { ok: true, id: ref.id, duplicate: true };
+        }
+        console.error('Public lead submission failed:', error);
+        throw new functions.https.HttpsError('internal', 'We could not send your request. Please try again.');
+    }
+});
+
+// ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
+// WORKFLOW ENGINE
+// ----------------------------------------------------------------------
+
+/**
+ * Enroll a contact in a workflow
+ * Creates a workflowContacts document to track progress
+ */

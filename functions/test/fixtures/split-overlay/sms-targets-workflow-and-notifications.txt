@@ -1,0 +1,596 @@
+async function enrollContactInWorkflow(contactId, workflowId, contactData) {
+    try {
+        console.log(`Enrolling contact ${contactId} in workflow ${workflowId}`);
+
+        // 1. Get Workflow Definition
+        const workflowDoc = await db.collection('canvas_workflows').doc(workflowId).get();
+        if (!workflowDoc.exists) {
+            console.error(`Workflow ${workflowId} not found`);
+            return;
+        }
+        const workflow = workflowDoc.data();
+        if (!workflow.enabled) {
+            console.log(`Workflow ${workflow.name} is disabled. Skipping enrollment.`);
+            return;
+        }
+
+        // SMS enrollment requires explicit stored consent; email/task steps remain eligible.
+        const sourceLead = await db.collection('canvas_leads').doc(contactId).get();
+        if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), sourceLead.exists ? sourceLead.data() : null)) return { skipped: true, reason: 'website_communications_suppressed' };
+        const enrollment = smsConsent.enrollment(workflow, sourceLead.exists ? sourceLead.data() : null, contactData.phone);
+        if (!enrollment.allowed) return { skipped: true, reason: 'sms_consent_required' };
+
+        // 2. Check if already active (prevent duplicate enrollment if needed)
+
+        // 3. Create Workflow Instance (workflowContacts)
+        const instanceData = {
+            smsEnrollment: enrollment.smsEnrollment,
+            workflowId: workflowId,
+            contactId: contactId,
+            contactEmail: contactData.email,
+            contactPhone: contactData.phone,
+            contactName: contactData.name || contactData.firstName || 'Friend',
+            eventTime: contactData.eventTime || null, // NEW: Store appointment time
+            status: 'active',
+            currentStepIndex: 0,
+            nextExecutionAt: admin.firestore.FieldValue.serverTimestamp(), // Execute Step 1 immediately
+            history: [],
+            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        };
+
+        await db.collection('workflowContacts').add(instanceData);
+
+        // Update Lead Document validation (for UI visibility)
+        await db.collection('canvas_leads').doc(contactId).update({
+            [`workflows.${workflowId}`]: {
+                status: 'active',
+                startedAt: admin.firestore.FieldValue.serverTimestamp()
+            }
+        });
+
+        console.log(`Enrolled successfully.`);
+
+    } catch (error) {
+        console.error('Error enrolling in workflow:', error);
+    }
+}
+
+/**
+ * HTTP Callable: Process Bulk Campaign
+ * Enrolls a batch of leads into a workflow
+ */
+exports.processBulkCampaign = functions.https.onCall(async (data, context) => {
+    // 1. Auth Check
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'User must be logged in.');
+    }
+
+    const { workflowId, limit, batchSize } = data;
+    const countLimit = limit || batchSize || 50;
+
+    console.log(`Processing bulk campaign: WF=${workflowId}, Limit=${countLimit}, User=${context.auth.uid}`);
+
+    try {
+        // 2. Get Workflow
+        const workflowDoc = await db.collection('canvas_workflows').doc(workflowId).get();
+        if (!workflowDoc.exists) {
+            throw new functions.https.HttpsError('not-found', 'Workflow not found');
+        }
+        const workflow = workflowDoc.data();
+
+        // 3. Query Leads (Backend Filtering)
+        let query = db.collection('canvas_leads');
+        const targetStatus = workflow.targetStatus || 'all';
+
+        if (targetStatus !== 'all') {
+            query = query.where('status', '==', targetStatus);
+        }
+
+        // We can't easily filter "not enrolled" in Firestore query if 'workflows' is a map.
+        // So we fetch and filter in memory (up to reasonable limits).
+        // For production scale, would need a dedicated 'enrollments' collection query, but this works for now.
+        const snapshot = await query.get();
+
+        let eligibleLeads = [];
+        snapshot.forEach(doc => {
+            const lead = doc.data();
+            // Check if already enrolled in THIS workflow
+            const isEnrolled = lead.workflows && lead.workflows[workflowId];
+            if (!isEnrolled) {
+                eligibleLeads.push({ id: doc.id, ...lead });
+            }
+        });
+
+        // 4. Apply Limit
+        const leadsToEnroll = eligibleLeads.slice(0, countLimit);
+        console.log(`Found ${eligibleLeads.length} eligible, enrolling ${leadsToEnroll.length}`);
+
+        // 5. Enroll Loop
+        const promises = leadsToEnroll.map(lead =>
+            enrollContactInWorkflow(lead.id, workflowId, lead)
+        );
+
+        await Promise.all(promises);
+
+        return {
+            success: true,
+            enrolled: leadsToEnroll.length,
+            message: `Enrolled ${leadsToEnroll.length} leads into "${workflow.name}".`
+        };
+
+    } catch (error) {
+        console.error('Bulk Campaign Error:', error);
+        throw new functions.https.HttpsError('internal', error.message);
+    }
+});
+
+/**
+ * Process Workflow Queue (Scheduled Function)
+ * Finds active workflow instances with due steps and executes them
+ */
+// Running every minute to check for due steps
+exports.processWorkflowQueue = functions.pubsub.schedule('every 1 minutes').onRun(async (context) => {
+    const now = admin.firestore.Timestamp.now();
+
+    try {
+        // Query for active instances where nextExecutionAt <= now
+        const snapshot = await db.collection('workflowContacts')
+            .where('status', '==', 'active')
+            .where('nextExecutionAt', '<=', now)
+            .get();
+
+        if (snapshot.empty) return null;
+
+        console.log(`Found ${snapshot.size} due workflow instances.`);
+
+        const batch = db.batch();
+        const promises = [];
+
+        snapshot.forEach(doc => {
+            promises.push(processInstance(doc));
+        });
+
+        await Promise.all(promises);
+        return null;
+
+    } catch (error) {
+        console.error('Error processing workflow queue:', error);
+        return null;
+    }
+});
+
+async function processInstance(doc) {
+    const instance = doc.data();
+    const instanceId = doc.id;
+
+    try {
+        // 1. Get Workflow Definition (Cached or Fresh)
+        const workflowDoc = await db.collection('canvas_workflows').doc(instance.workflowId).get();
+        if (!workflowDoc.exists) {
+            console.error(`Workflow ${instance.workflowId} missing for instance ${instanceId}`);
+            return db.collection('workflowContacts').doc(instanceId).update({ status: 'error', error: 'Workflow deleted' });
+        }
+        const workflow = workflowDoc.data();
+        const steps = workflow.steps || [];
+        const currentStep = steps[instance.currentStepIndex];
+
+        // 2. Execute Step
+        if (!currentStep) {
+            // No more steps, complete workflow
+            console.log(`Workflow ${instance.workflowId} completed for ${instanceId}`);
+            return db.collection('workflowContacts').doc(instanceId).update({ status: 'completed', completedAt: admin.firestore.FieldValue.serverTimestamp() });
+        }
+
+        console.log(`Executing step ${instance.currentStepIndex} (${currentStep.type}) for ${instanceId}`);
+        const result = await executeWorkflowStep(currentStep, instance);
+
+        // 3. Update State
+        const updates = {
+            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+            history: admin.firestore.FieldValue.arrayUnion({
+                stepIndex: instance.currentStepIndex,
+                stepType: currentStep.type,
+                executedAt: new Date().toISOString(),
+                result: result
+            })
+        };
+
+        if (result.success) {
+            // Move to next step
+            const nextIndex = instance.currentStepIndex + 1;
+            const nextStep = steps[nextIndex];
+
+            if (nextStep) {
+                updates.currentStepIndex = nextIndex;
+
+                // Calculate next delay
+                let delayMillis = (nextStep.delay || 0) * 60 * 1000; // default minutes
+                if (nextStep.unit === 'hours') {
+                    delayMillis = (nextStep.delay || 0) * 60 * 60 * 1000;
+                } else if (nextStep.unit === 'days') {
+                    delayMillis = (nextStep.delay || 0) * 24 * 60 * 60 * 1000;
+                }
+
+                if (nextStep.relativeTo === 'event' && instance.eventTime) {
+                    const eventTime = new Date(instance.eventTime).getTime();
+                    const offset = nextStep.timing === 'before' ? -delayMillis : delayMillis;
+                    const nextTime = eventTime + offset;
+                    updates.nextExecutionAt = admin.firestore.Timestamp.fromMillis(nextTime);
+                } else if (nextStep.delay) {
+                    const nextTime = Date.now() + delayMillis;
+                    updates.nextExecutionAt = admin.firestore.Timestamp.fromMillis(nextTime);
+                } else {
+                    updates.nextExecutionAt = admin.firestore.FieldValue.serverTimestamp(); // Immediate
+                }
+            } else {
+                updates.status = 'completed';
+                updates.completedAt = admin.firestore.FieldValue.serverTimestamp();
+            }
+        } else {
+            console.error(`Step failed: ${result.error}`);
+            updates.status = 'error';
+            updates.error = result.error;
+        }
+
+        await db.collection('workflowContacts').doc(instanceId).update(updates);
+
+    } catch (error) {
+        console.error(`Error processing instance ${instanceId}:`, error);
+    }
+}
+
+async function executeWorkflowStep(step, instance) {
+    const variables = {
+        firstName: instance.contactName,
+        name: instance.contactName,
+        email: instance.contactEmail,
+        phone: instance.contactPhone,
+        service: 'Project',
+        ...instance.variables
+    };
+
+    if (step.type === 'email') {
+        return await sendEmail({
+            to: instance.contactEmail,
+            templateId: step.templateId,
+            variables: variables,
+            options: { workflowId: instance.workflowId, contactId: instance.contactId }
+        });
+    } else if (step.type === 'sms') {
+        // Fresh consent and recipient binding are required before any provider/config access.
+        const currentLead = await db.collection('canvas_leads').doc(instance.contactId).get();
+        if (!smsConsent.canSend(instance, currentLead.exists ? currentLead.data() : null)) {
+            return { success: true, skipped: true, reason: 'sms_consent_required' };
+        }
+        return await sendSMS({
+            to: instance.contactPhone,
+            templateId: step.templateId,
+            variables: variables,
+            options: { workflowId: instance.workflowId, contactId: instance.contactId, smsEnrollment: instance.smsEnrollment }
+        });
+    } else if (step.type === 'task') {
+        console.log(`TASK created: ${step.description}`);
+        return { success: true, message: 'Task logged' };
+    }
+
+    return { success: true, skipped: true };
+}
+
+// COMMUNICATION FUNCTIONS
+// ----------------------------------------------------------------------
+
+/**
+ * Send Email via Resend and log to Firestore
+ * @param {string} to Recipient email
+ * @param {string} templateId ID of email template (optional if html provided)
+ * @param {object} variables Data to merge into template
+ * @param {object} options Extra options (subject, html, workflowId, contactId)
+ */
+async function sendEmail({ to, templateId, variables, options = {} }) {
+    // All workflow, bulk, booking and direct-message paths use this final gate.
+    if (!options.contactId) return { success: false, error: 'communications_contact_required' };
+    const communicationLead = await db.collection('canvas_leads').doc(options.contactId).get();
+    if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), communicationLead.exists ? communicationLead.data() : null)) return { success: false, error: 'website_communications_suppressed' };
+    if (!to) {
+        console.warn('sendEmail: No recipient');
+        return null;
+    }
+
+    let html, subject;
+
+    try {
+        const resendClient = getResend();
+        if (!resendClient) {
+            throw new Error('Resend Client unavailable');
+        }
+
+        // 1. Resolve content (Template or Direct)
+        html = options.html;
+        subject = options.subject;
+
+        if (templateId) {
+            const template = await getEmailTemplate(templateId);
+            if (template) {
+                html = replaceTemplateVariables(template.html || template, variables);
+                // If template object has subject, use it, else default
+                if (template.subject) {
+                    subject = replaceTemplateVariables(template.subject, variables);
+                }
+            } else {
+                // Fallback / default handled by getEmailTemplate or specialized logic
+                html = replaceTemplateVariables(DEFAULT_TEMPLATES[templateId] || '', variables);
+            }
+        }
+
+        if (!subject) subject = `Message from ${COMPANY_INFO.name}`;
+
+        // 2. Send via Resend
+        const payload = {
+            from: 'Canvas Advertising <noreply@canvas-advertising.com>',
+            to: to,
+            subject: subject,
+            html: html,
+            tags: [
+                { name: 'workflowId', value: options.workflowId || 'none' },
+                { name: 'contactId', value: options.contactId || 'none' },
+                { name: 'campaign', value: 'true' }
+            ]
+        };
+
+        const result = await resendClient.emails.send(payload);
+
+        if (result.error) {
+            throw new Error(result.error.message);
+        }
+
+        console.log(`Email sent to ${to}: ${result.id}`);
+
+        // 3. Log to Firestore
+        await logCommunication({
+            type: 'email',
+            contactId: options.contactId,
+            workflowId: options.workflowId,
+            provider: 'resend',
+            providerMessageId: result.id,
+            status: 'sent',
+            recipient: to,
+            content: { subject, templateId },
+            timestamp: admin.firestore.FieldValue.serverTimestamp()
+        });
+
+        return { success: true, id: result.id };
+
+    } catch (error) {
+        console.error('sendEmail failed:', error);
+
+        await logCommunication({
+            type: 'email',
+            contactId: options.contactId,
+            workflowId: options.workflowId,
+            provider: 'resend',
+            status: 'failed',
+            recipient: to,
+            error: error.message,
+            timestamp: admin.firestore.FieldValue.serverTimestamp()
+        });
+
+        return { success: false, error: error.message };
+    }
+}
+
+/**
+ * Send SMS via Plivo and log to Firestore
+ * @param {string} to Recipient phone number (E.164 preferably)
+ * @param {string} templateId ID of SMS template (optional if text provided)
+ * @param {object} variables Data to merge
+ * @param {object} options Extra options (text, workflowId, contactId)
+ */
+async function sendSMS({ to, templateId, variables, options = {} }) {
+    // All workflow, bulk, booking and direct-message paths use this final gate.
+    if (!options.contactId) return { success: false, error: 'communications_contact_required' };
+    const communicationLead = await db.collection('canvas_leads').doc(options.contactId).get();
+    if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), communicationLead.exists ? communicationLead.data() : null)) return { success: false, error: 'website_communications_suppressed' };
+    if (!to) {
+        console.warn('sendSMS: No recipient');
+        return null;
+    }
+
+    if (!options.contactId) return { success: false, error: 'sms_consent_required' };
+    const currentLead = await db.collection('canvas_leads').doc(options.contactId).get();
+    const lead = currentLead.exists ? currentLead.data() : null;
+    const direct = options.workflowId === 'direct_message';
+    const permitted = direct
+        ? smsConsent.enrollment({ steps: [{ type: 'sms' }] }, lead, to).smsEnrollment.authorized
+        : smsConsent.canSend({ contactPhone: to, smsEnrollment: options.smsEnrollment }, lead);
+    if (!permitted) return { success: false, error: 'sms_consent_required' };
+
+    try {
+        const client = getPlivo();
+        if (!client) {
+            throw new Error('Plivo Client unavailable');
+        }
+
+        let messageBody = options.text;
+
+        // 1. Resolve content from template if needed
+        if (templateId && !messageBody) {
+            const template = await getSMSTemplate(templateId);
+            if (template) {
+                messageBody = replaceTemplateVariables(template.content, variables);
+            }
+        }
+
+        if (!messageBody) {
+            throw new Error('No message text provided');
+        }
+
+        // 2. Format Phone (Ensure E.164)
+        // Basic cleanup: remove non-digits, ensure +1 if US (simple logic)
+        let formattedPhone = to.replace(/\D/g, '');
+        if (formattedPhone.length === 10) formattedPhone = '1' + formattedPhone;
+        // Plivo expects country code, assume US/Canada '1' if not present? 
+        // Better: user provides full number or we standardize.
+
+        // 3. Send via Plivo
+        const srcNumber = process.env.PLIVO_PHONE_NUMBER || functions.config().plivo?.phone_number;
+
+        const response = await client.messages.create(
+            srcNumber,
+            formattedPhone,
+            messageBody
+        );
+
+        console.log(`SMS sent to ${to}: ${response.messageUuid}`);
+
+        // 4. Log to Firestore
+        await logCommunication({
+            type: 'sms',
+            contactId: options.contactId,
+            workflowId: options.workflowId,
+            provider: 'plivo',
+            providerMessageId: response.messageUuid && response.messageUuid[0], // Plivo returns array
+            status: 'sent',
+            recipient: to,
+            content: { body: messageBody, templateId },
+            timestamp: admin.firestore.FieldValue.serverTimestamp()
+        });
+
+        return { success: true, id: response.messageUuid };
+
+    } catch (error) {
+        console.error('sendSMS failed:', error);
+
+        await logCommunication({
+            type: 'sms',
+            contactId: options.contactId,
+            workflowId: options.workflowId,
+            provider: 'plivo',
+            status: 'failed',
+            recipient: to,
+            error: error.message,
+            timestamp: admin.firestore.FieldValue.serverTimestamp()
+        });
+
+        return { success: false, error: error.message };
+    }
+}
+
+/**
+ * Log communication event to Firestore
+ */
+async function logCommunication(data) {
+    try {
+        await db.collection('communicationLogs').add(data);
+    } catch (e) {
+        console.error('Error logging communication:', e);
+    }
+}
+
+// ----------------------------------------------------------------------
+// HELPER FUNCTIONS (Templates)
+// ----------------------------------------------------------------------
+
+async function getEmailTemplate(id) {
+    try {
+        const doc = await db.collection('emailTemplates').doc(id).get();
+        if (doc.exists) return doc.data();
+
+        // Fallback to legacy location for backward compat temporarily
+        const legacyDoc = await db.collection('canvas_settings').doc('email_templates').get();
+        if (legacyDoc.exists && legacyDoc.data()[id]) {
+            return { html: legacyDoc.data()[id] }; // Adapt structure
+        }
+    } catch (e) { console.error('Template error:', e); }
+    return null;
+}
+
+async function getSMSTemplate(id) {
+    try {
+        const doc = await db.collection('smsTemplates').doc(id).get();
+        if (doc.exists) return doc.data();
+    } catch (e) { console.error('SMS Template error:', e); }
+    return null;
+}
+
+function replaceTemplateVariables(text, data) {
+    if (!text) return '';
+    let content = text;
+    // Replace {{variable}} patterns
+    // Supported: firstName, lastName, phone, service, etc.
+    const keys = Object.keys(data);
+
+    // Safety for null/undefined
+    const getValue = (key) => (data[key] !== undefined && data[key] !== null) ? data[key] : '';
+
+    // Standard fields
+    content = content.replace(/\{\{firstName\}\}/g, getValue('firstName') || getValue('name') || 'Friend');
+    content = content.replace(/\{\{lastName\}\}/g, getValue('lastName') || '');
+    content = content.replace(/\{\{name\}\}/g, getValue('name') || '');
+    content = content.replace(/\{\{service\}\}/g, getValue('service') || 'project');
+    content = content.replace(/\{\{phone\}\}/g, getValue('phone') || '');
+    content = content.replace(/\{\{email\}\}/g, getValue('email') || '');
+
+    // Booking specific
+    if (data.appointmentDate) content = content.replace(/\{\{appointmentDate\}\}/g, data.appointmentDate);
+    if (data.appointmentTime) content = content.replace(/\{\{appointmentTime\}\}/g, data.appointmentTime);
+    if (data.appointmentAddress) content = content.replace(/\{\{appointmentAddress\}\}/g, data.appointmentAddress);
+
+    return content;
+}
+
+// ----------------------------------------------------------------------
+// TRIGGERS (Placeholders for now, replacing old logic)
+// ----------------------------------------------------------------------
+
+exports.onNewLead = functions.firestore
+    .document('canvas_leads/{leadId}')
+    .onCreate(async (snapshot, context) => {
+        const leadData = snapshot.data();
+        if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), leadData)) return null;
+        const triggerType = leadData.source === 'booking' ? 'booking' : 'form_submit';
+
+        console.log(`New lead: ${context.params.leadId}, trigger: ${triggerType}`);
+
+        // If this is a booking, cancel any existing active workflows for this email (e.g. nurture)
+        if (triggerType === 'booking' && leadData.email) {
+            const activeFlows = await db.collection('workflowContacts')
+                .where('contactEmail', '==', leadData.email)
+                .where('status', '==', 'active')
+                .get();
+
+            if (!activeFlows.empty) {
+                console.log(`Cancelling ${activeFlows.size} active workflows for ${leadData.email} due to booking.`);
+                const batch = db.batch();
+                activeFlows.forEach(doc => {
+                    batch.update(doc.ref, {
+                        status: 'cancelled',
+                        cancellationReason: 'New booking',
+                        cancelledAt: admin.firestore.FieldValue.serverTimestamp()
+                    });
+                });
+                await batch.commit();
+            }
+        }
+
+        // Find workflows matching this trigger
+        const workflows = await db.collection('canvas_workflows')
+            .where('trigger', '==', triggerType)
+            .where('enabled', '==', true)
+            .get();
+
+        if (workflows.empty) {
+            console.log('No workflows found for this trigger.');
+            return null;
+        }
+
+        const promises = [];
+        workflows.forEach(doc => {
+            const workflowId = doc.id;
+            promises.push(enrollContactInWorkflow(context.params.leadId, workflowId, leadData));
+        });
+
+        await Promise.all(promises);
+        return null;
+    });
+
