@@ -175,16 +175,18 @@ function testSubmissionGate(config, leadId) {
     return { authorized: true, reason: 'test-submission-authorized' };
 }
 
-function isSyntheticTestSubmission(config, leadId, source) {
+function isSyntheticTestSubmission(config, leadId, source, serverAuthorized = false) {
     return source === 'crm_integration_test'
+        && serverAuthorized === true
         && testSubmissionGate(config, leadId).authorized;
 }
 
-function readiness(config, leadId) {
+function readiness(config, leadId, serverAuthorized = false) {
     let mode = 'general';
     if (config.enabled !== true) {
         const testGate = testSubmissionGate(config, leadId);
         if (!testGate.authorized) return { ready: false, reason: testGate.reason };
+        if (serverAuthorized !== true) return { ready: false, reason: 'test-authorization-missing' };
         mode = 'test-only';
     }
     if (!config.baseUrl) return { ready: false, reason: 'base-url-missing' };

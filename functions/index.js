@@ -4,6 +4,8 @@ const telnyx = require('telnyx');
 const { Resend } = require('resend');
 const firestore = require('@google-cloud/firestore');
 const crypto = require('crypto');
+const crmTestAuthorization = require('./crm-test-authorization');
+const crmTestState = require('./crm-test-state');
 
 // Firebase Functions v7 removed functions.config(). Legacy runtime config is
 // exported into this JSON secret during deployment and exposed only to bound
@@ -116,8 +118,20 @@ const PUBLIC_LEAD_FIELDS = new Set([
     'estimatedPrice', 'method', 'coverage', 'vehicleSize', 'wrapFinish',
     'customWidth', 'customHeight', 'productionSummary', 'fileUploads',
     'tracking', 'boatSurvey', 'visibilityPackage', 'productionRequest',
-    'businessName', 'businessType', 'locale', 'website'
+    'businessName', 'businessType', 'locale', 'website', 'crmTestAuthorizationToken'
 ]);
+
+const CANVAS_STAFF_EMAILS = new Set([
+    'camiloreyna@canvas-advertising.com',
+    'camilo@canvas-advertising.com',
+    'sales@canvas-advertising.com'
+]);
+const CRM_TEST_AUTHORIZATIONS_COLLECTION = 'crmIntegrationTestAuthorizations';
+
+function isVerifiedCanvasStaff(context) {
+    const email = String(context.auth?.token?.email || '').trim().toLowerCase();
+    return context.auth?.token?.email_verified === true && CANVAS_STAFF_EMAILS.has(email);
+}
 
 const LEAD_UPLOAD_MAX_BYTES = 20 * 1024 * 1024;
 const LEAD_UPLOAD_MAX_FILES = 10;
@@ -186,15 +200,43 @@ function validatePublicLead(rawData) {
 
     const lead = {};
     Object.entries(rawData).forEach(([key, value]) => {
-        if (key !== 'website' && key !== 'submissionId') lead[key] = sanitizePublicValue(value, key);
+        if (key !== 'website' && key !== 'submissionId' && key !== 'crmTestAuthorizationToken') {
+            lead[key] = sanitizePublicValue(value, key);
+        }
     });
     lead.name = name;
     lead.service = service;
     lead.phone = phone;
     lead.email = email || null;
-    lead.source = String(rawData.source || 'form_submit').trim().slice(0, 120);
-    return { spam: false, submissionId, lead };
+    lead.source = crmTestAuthorization.trustedSource(rawData.source, false);
+    return {
+        spam: false,
+        submissionId,
+        lead,
+        crmTestAuthorizationToken: String(rawData.crmTestAuthorizationToken || '').slice(0, 128)
+    };
 }
+
+exports.createCrmIntegrationTestAuthorization = configuredFunctions.https.onCall(async (data, context) => {
+    if (!isVerifiedCanvasStaff(context)) {
+        throw new functions.https.HttpsError('permission-denied', 'Verified Canvas staff access is required.');
+    }
+    const config = crmLeadAdapterConfig();
+    const submissionId = String(data?.submissionId || '');
+    if (config.enabled === true || !crmLeadAdapter.testSubmissionGate(config, submissionId).authorized) {
+        throw new functions.https.HttpsError('failed-precondition', 'The exact disabled-mode CRM test ID is not configured.');
+    }
+    const issued = crmTestAuthorization.issueAuthorization();
+    const expiresAt = admin.firestore.Timestamp.fromMillis(issued.record.expiresAtMs);
+    await db.collection(CRM_TEST_AUTHORIZATIONS_COLLECTION).doc(submissionId).set({
+        tokenHash: issued.record.tokenHash,
+        consumed: false,
+        createdByUid: context.auth.uid,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        expiresAt
+    });
+    return { submissionId, token: issued.token, expiresAt: expiresAt.toDate().toISOString() };
+});
 
 async function enforcePublicLeadRateLimit(context) {
     const forwarded = context.rawRequest?.headers?.['x-forwarded-for'];
@@ -360,36 +402,42 @@ exports.submitPublicLead = configuredFunctions.https.onCall(async (data, context
         if (existing.exists) return { ok: true, id: ref.id, duplicate: true };
         const verifiedUploads = await verifyLeadUploads(validated.submissionId, validated.lead.fileUploads);
         const uploadSessionRef = verifiedUploads.sessionRef;
+        const testAuthorizationRef = db.collection(CRM_TEST_AUTHORIZATIONS_COLLECTION).doc(validated.submissionId);
         if (uploadSessionRef) validated.lead.fileUploads = verifiedUploads.uploads;
-        const created = await db.runTransaction(async (transaction) => {
-            const leadSnapshot = await transaction.get(ref);
-            if (leadSnapshot.exists) return false;
-            if (uploadSessionRef) {
-                const sessionSnapshot = await transaction.get(uploadSessionRef);
-                if (!sessionSnapshot.exists) {
-                    publicLeadError('Upload session was not found. Please upload the files again.');
-                }
-                const session = sessionSnapshot.data();
+        const persisted = await crmTestState.persistLeadWithAuthorization({
+            db,
+            leadRef: ref,
+            authorizationRef: testAuthorizationRef,
+            authorizationToken: validated.crmTestAuthorizationToken,
+            isValidAuthorization: crmTestAuthorization.isValidAuthorization,
+            uploadSessionRef,
+            validateUploadSession: (session) => {
                 if (session.consumed || session.expiresAt.toMillis() <= Date.now()) {
                     publicLeadError('Upload session is invalid or expired. Please upload the files again.');
                 }
-                transaction.update(uploadSessionRef, {
-                    consumed: true,
-                    consumedAt: admin.firestore.FieldValue.serverTimestamp(),
-                    leadId: ref.id
-                });
-            }
-            transaction.create(ref, {
+            },
+            uploadConsumedData: {
+                consumed: true,
+                consumedAt: admin.firestore.FieldValue.serverTimestamp(),
+                leadId: ref.id
+            },
+            authorizationConsumedData: {
+                consumed: true,
+                consumedAt: admin.firestore.FieldValue.serverTimestamp(),
+                leadId: ref.id
+            },
+            buildLead: (testAuthorized) => ({
                 ...validated.lead,
+                source: crmTestAuthorization.trustedSource(validated.lead.source, testAuthorized),
+                ...(testAuthorized ? { crmIntegrationTestAuthorized: true } : {}),
                 contractVersion: 2,
                 createdAt: admin.firestore.FieldValue.serverTimestamp(),
                 updatedAt: admin.firestore.FieldValue.serverTimestamp(),
                 status: 'new',
                 notes: ''
-            });
-            return true;
+            })
         });
-        return { ok: true, id: ref.id, duplicate: !created };
+        return { ok: true, id: ref.id, duplicate: !persisted.created };
     } catch (error) {
         if (error.code === 6 || error.code === 'already-exists') {
             return { ok: true, id: ref.id, duplicate: true };
@@ -931,7 +979,8 @@ exports.onNewLead = configuredFunctions.firestore
         if (crmLeadAdapter.isSyntheticTestSubmission(
             crmLeadAdapterConfig(),
             context.params.leadId,
-            leadData.source
+            leadData.source,
+            leadData.crmIntegrationTestAuthorized === true
         )) {
             console.log(`Skipping Canvas notification workflows for approved CRM integration test ${context.params.leadId}.`);
             return null;
@@ -2043,8 +2092,8 @@ function crmLeadAdapterConfig() {
     };
 }
 
-function crmLeadDeliveryReadiness(config, leadId) {
-    return crmLeadAdapter.readiness(config, leadId);
+function crmLeadDeliveryReadiness(config, leadId, serverAuthorized = false) {
+    return crmLeadAdapter.readiness(config, leadId, serverAuthorized);
 }
 
 function crmLeadIdempotencyKey(leadId) {
@@ -2053,7 +2102,11 @@ function crmLeadIdempotencyKey(leadId) {
 
 async function deliverCrmLead(deliveryRef, delivery) {
     const config = crmLeadAdapterConfig();
-    const readiness = crmLeadDeliveryReadiness(config, delivery.leadId || deliveryRef.id);
+    const readiness = crmTestState.readinessForPersistedDelivery(
+        config,
+        { ...delivery, leadId: delivery.leadId || deliveryRef.id },
+        crmLeadAdapter.readiness
+    );
     if (!readiness.ready) return { attempted: false, reason: readiness.reason };
     if (!delivery.serializedBody || !delivery.serviceMapping?.crmValue || delivery.serviceMapping.confirmed !== true) {
         await deliveryRef.update({
@@ -2144,43 +2197,46 @@ exports.syncLeadToCRM = functions
     .onCreate(async (snapshot, context) => {
         const leadId = context.params.leadId;
         const leadData = snapshot.data();
-        const idempotencyKey = crmLeadIdempotencyKey(leadId);
-        const config = crmLeadAdapterConfig();
-        const readiness = crmLeadDeliveryReadiness(config, leadId);
-        const deliveryRef = db.collection(CRM_LEAD_DELIVERIES_COLLECTION).doc(leadId);
-        const mapping = crmLeadAdapter.buildRequestMapping(
-            leadId,
-            leadData,
-            new Date(context.timestamp).toISOString()
-        );
-        mapping.serviceMapping.confirmed = config.serviceAllowlistConfirmed;
-
-        await db.runTransaction(async (transaction) => {
-            const existing = await transaction.get(deliveryRef);
-            if (existing.exists) return;
-            transaction.create(deliveryRef, {
-                leadId,
-                idempotencyKey,
-                serializedBody: mapping.serializedBody,
-                serviceMapping: mapping.serviceMapping,
-                unsupportedFields: mapping.unsupportedFields,
-                status: readiness.ready ? 'pending' : 'held',
-                holdReason: readiness.ready ? null : readiness.reason,
-                attemptCount: 0,
-                createdAt: admin.firestore.FieldValue.serverTimestamp(),
-                updatedAt: admin.firestore.FieldValue.serverTimestamp()
-            });
-        });
-
-        if (!readiness.ready) {
-            console.log(`CRM lead ${leadId} held: ${readiness.reason}. Canvas lead remains accepted.`);
-            return null;
-        }
-
-        const deliverySnapshot = await deliveryRef.get();
-        await deliverCrmLead(deliveryRef, deliverySnapshot.data());
+        await createCrmLeadDelivery(leadId, leadData, context.timestamp);
         return null;
     });
+
+async function createCrmLeadDelivery(leadId, leadData, timestamp) {
+    const idempotencyKey = crmLeadIdempotencyKey(leadId);
+    const config = crmLeadAdapterConfig();
+    const testAuthorized = leadData.crmIntegrationTestAuthorized === true;
+    const readiness = crmLeadDeliveryReadiness(config, leadId, testAuthorized);
+    const deliveryRef = db.collection(CRM_LEAD_DELIVERIES_COLLECTION).doc(leadId);
+    const mapping = crmLeadAdapter.buildRequestMapping(
+        leadId,
+        leadData,
+        new Date(timestamp || Date.now()).toISOString()
+    );
+    mapping.serviceMapping.confirmed = config.serviceAllowlistConfirmed;
+
+    await crmTestState.createOutboxIfAbsent(db, deliveryRef, {
+        leadId,
+        idempotencyKey,
+        serializedBody: mapping.serializedBody,
+        serviceMapping: mapping.serviceMapping,
+        unsupportedFields: mapping.unsupportedFields,
+        testAuthorized,
+        status: readiness.ready ? 'pending' : 'held',
+        holdReason: readiness.ready ? null : readiness.reason,
+        attemptCount: 0,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+
+    if (!readiness.ready) {
+        console.log(`CRM lead ${leadId} held: ${readiness.reason}. Canvas lead remains accepted.`);
+        return { created: true, delivered: false, reason: readiness.reason };
+    }
+
+    const deliverySnapshot = await deliveryRef.get();
+    await deliverCrmLead(deliveryRef, deliverySnapshot.data());
+    return { created: true, delivered: true };
+}
 
 exports.processCrmLeadDeliveryQueue = functions
     .runWith({ secrets: ['MERKAD_LEADS_KEY_ID', 'MERKAD_LEADS_SECRET'] })
@@ -2188,7 +2244,7 @@ exports.processCrmLeadDeliveryQueue = functions
     .schedule('every 5 minutes')
     .onRun(async () => {
         const config = crmLeadAdapterConfig();
-        const readiness = crmLeadDeliveryReadiness(config, config.testSubmissionId);
+        const readiness = crmLeadDeliveryReadiness(config, config.testSubmissionId, true);
         if (!readiness.ready) {
             console.log(`CRM lead queue paused: ${readiness.reason}.`);
             return null;
@@ -2196,10 +2252,18 @@ exports.processCrmLeadDeliveryQueue = functions
 
         const now = Date.now();
         if (readiness.mode === 'test-only') {
-            const testDoc = await db.collection(CRM_LEAD_DELIVERIES_COLLECTION)
-                .doc(config.testSubmissionId)
-                .get();
-            if (testDoc.exists && crmLeadAdapter.isClaimable(testDoc.data(), now)) {
+            const deliveryRef = db.collection(CRM_LEAD_DELIVERIES_COLLECTION).doc(config.testSubmissionId);
+            const leadRef = db.collection('canvas_leads').doc(config.testSubmissionId);
+            const testDoc = await crmTestState.recoverExactTestOutbox({
+                deliveryRef,
+                leadRef,
+                createDelivery: (leadData) => createCrmLeadDelivery(
+                    config.testSubmissionId,
+                    leadData,
+                    leadData.createdAt?.toDate?.() || new Date()
+                )
+            });
+            if (testDoc && testDoc.exists && crmLeadAdapter.isClaimable(testDoc.data(), now)) {
                 await deliverCrmLead(testDoc.ref, testDoc.data());
             }
             return null;

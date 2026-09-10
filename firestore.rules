@@ -39,6 +39,12 @@ service cloud.firestore {
       }
     }
 
+    // One-time CRM test proofs are created and consumed only by trusted
+    // Functions. Browser clients cannot inspect hashes or alter authorization.
+    match /crmIntegrationTestAuthorizations/{submissionId} {
+      allow read, write: if false;
+    }
+
     // Canvas Workflows - authenticated users can read/write
     match /canvas_workflows/{document=**} {
       allow read, write: if isAdmin();
