@@ -39,6 +39,10 @@ if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
 
 // ─── Bootstrap ──────────────────────────────────
 document.addEventListener('DOMContentLoaded', function () {
+    if (document.getElementById('canvasQuoteForm')) {
+        window.initCanvasQuote();
+        return;
+    }
     // Register GSAP plugin (deferred scripts are ready by now)
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
         gsap.registerPlugin(ScrollTrigger);
@@ -978,3 +982,990 @@ function initWhatsAppWidget() {
         }
     });
 }
+
+/* Quote request: stable Canvas service keys, bilingual presentation, callable-only writes. */
+(function (scope) {
+  "use strict";
+  const SERVICES = Object.freeze([
+    [
+      "wrap_production_only",
+      "Wrap Production Only",
+      "Paneles de wrap listos para instalar",
+      "wrap-production",
+    ],
+    [
+      "wholesale_printing",
+      "Print Partner / Wholesale Vinyl Printing",
+      "Impresión de vinil al mayoreo",
+      "print-partner",
+    ],
+    [
+      "vinyl_large_format_printing",
+      "Vinyl & Large-Format Printing",
+      "Impresión de vinil y gran formato",
+      "large-format",
+    ],
+    [
+      "window_graphics",
+      "Perforated Window Vinyl / Storefront Glass",
+      "Gráficos para ventanas y escaparates",
+      "perforated-window-vinyl",
+    ],
+    [
+      "wall_murals",
+      "Wall Murals & Interior Vinyl",
+      "Murales y vinil interior",
+      "interior-branding",
+    ],
+    [
+      "contour_cut_decals",
+      "Contour-Cut Decals",
+      "Calcomanías con corte de contorno",
+      "decals",
+    ],
+    [
+      "cutting_lamination",
+      "Cutting & Lamination",
+      "Corte y laminado",
+      "lamination-cutting",
+    ],
+    [
+      "vehicle_wraps",
+      "Vehicle Wraps",
+      "Wraps comerciales y flotillas",
+      "vehicle-wraps",
+    ],
+    [
+      "print_collateral",
+      "Flyers & Business Cards (Secondary)",
+      "Flyers, tarjetas y menús",
+      "short-run-digital",
+    ],
+    ["other", "Other", "Otro / ayuda para elegir", "other"],
+  ]);
+  const PRODUCTS = [
+    ["printed_vinyl", "Printed vinyl", "Vinil impreso"],
+    ["banners", "Banners", "Lonas impresas"],
+    ["coroplast", "Coroplast signs", "Letreros de coroplast"],
+    ["acm", "ACM signs", "Letreros de ACM"],
+    [
+      "window_graphics",
+      "Window & storefront graphics",
+      "Gráficos para ventanas y escaparates",
+    ],
+    ["wall_murals", "Wall murals", "Murales para paredes"],
+    ["stickers_decals", "Stickers & decals", "Stickers y calcomanías"],
+    [
+      "vehicle_wraps",
+      "Commercial vehicle & fleet wraps",
+      "Rotulación de vehículos y flotillas",
+    ],
+    [
+      "print_collateral",
+      "Flyers, business cards & menus",
+      "Flyers, tarjetas y menús",
+    ],
+    ["other", "Other / Help me choose", "Otro / Ayúdame a elegir"],
+  ];
+  const OPTIONS = {
+    commercial: ["Commercial", "Comercial"],
+    premium: ["Premium", "Premium"],
+    coroplast: ["Coroplast", "Coroplast"],
+    acm: ["ACM", "ACM"],
+    recommend: ["Recommend a material", "Recomendar un material"],
+    wrap: ["Printed wrap film", "Vinil impreso para wrap"],
+    vinyl: ["Printed adhesive vinyl", "Vinil adhesivo impreso"],
+    perforated: ["Perforated window vinyl", "Vinil perforado para ventanas"],
+    wall: ["Wall mural vinyl", "Vinil para mural"],
+    banner: ["Banner vinyl", "Vinil para banner"],
+    sign: [
+      "Sign substrate — please advise",
+      "Sustrato para letrero — recomendar",
+    ],
+    paper: ["Paper", "Papel"],
+    card: ["Card stock", "Cartulina"],
+    supplied: [
+      "Customer-supplied material — review needed",
+      "Material del cliente — requiere revisión",
+    ],
+    advise: ["Recommend a finish", "Recomendar un acabado"],
+    matte: ["Matte laminate", "Laminado mate"],
+    gloss: ["Gloss laminate", "Laminado brillante"],
+    none: ["No lamination", "Sin laminado"],
+    pickup: [
+      "Austin pickup · print-only",
+      "Recoger en Austin · solo impresión",
+    ],
+    delivery: ["Local delivery · print-only", "Entrega local · solo impresión"],
+    shipping: ["Shipping · print-only", "Envío · solo impresión"],
+    installation: ["Request installation", "Solicitar instalación"],
+  };
+  const PRODUCT_SERVICES = Object.freeze({
+    printed_vinyl: "vinyl_large_format_printing",
+    banners: "vinyl_large_format_printing",
+    coroplast: "vinyl_large_format_printing",
+    acm: "vinyl_large_format_printing",
+    window_graphics: "window_graphics",
+    wall_murals: "wall_murals",
+    stickers_decals: "contour_cut_decals",
+    vehicle_wraps: "vehicle_wraps",
+    print_collateral: "print_collateral",
+    other: "other",
+  });
+  function route(d) {
+    if (d.serviceMode === "cutting_lamination") return "cutting_lamination";
+    if (!PRODUCT_SERVICES[d.product]) throw new Error("service");
+    if (d.product === "printed_vinyl") {
+      if (
+        !["general", "vehicle_panels", "replacement_panels"].includes(
+          d.vinylUse,
+        )
+      )
+        throw new Error("service");
+      if (d.vinylUse !== "general") return "wrap_production_only";
+      if (d.serviceMode === "wholesale_printing") return "wholesale_printing";
+    }
+    return PRODUCT_SERVICES[d.product];
+  }
+  function resolveLink(params) {
+    const key =
+      params.get("service") || params.get("product") || params.get("project");
+    const defaults = {
+      product: "printed_vinyl",
+      vinylUse: "general",
+      serviceMode: "",
+      collateralProduct: "flyers",
+    };
+    if (!key) return defaults;
+    const links = {
+      wrap_production_only: {
+        product: "printed_vinyl",
+        vinylUse: "vehicle_panels",
+      },
+      "wrap-production": {
+        product: "printed_vinyl",
+        vinylUse: "vehicle_panels",
+      },
+      "vehicle-wrap-panels": {
+        product: "printed_vinyl",
+        vinylUse: "vehicle_panels",
+      },
+      "replacement-wrap-panel": {
+        product: "printed_vinyl",
+        vinylUse: "replacement_panels",
+      },
+      "fleet-wraps": { product: "vehicle_wraps" },
+      "vehicle-wrap": { product: "vehicle_wraps" },
+      "wrap-panels": { product: "printed_vinyl", vinylUse: "vehicle_panels" },
+      "replacement-panels": {
+        product: "printed_vinyl",
+        vinylUse: "replacement_panels",
+      },
+      wholesale_printing: {
+        product: "printed_vinyl",
+        serviceMode: "wholesale_printing",
+      },
+      "wholesale-vinyl": {
+        product: "printed_vinyl",
+        serviceMode: "wholesale_printing",
+      },
+      "print-partner": {
+        product: "printed_vinyl",
+        serviceMode: "wholesale_printing",
+      },
+      cutting_lamination: { serviceMode: "cutting_lamination" },
+      "lamination-cutting": { serviceMode: "cutting_lamination" },
+      vinyl_large_format_printing: { product: "printed_vinyl" },
+      "large-format": { product: "printed_vinyl" },
+      "vinyl-banners": { product: "banners" },
+      contour_cut_decals: { product: "stickers_decals" },
+      "contour-cut-decals": { product: "stickers_decals" },
+      decals: { product: "stickers_decals" },
+      "perforated-window-vinyl": { product: "window_graphics" },
+      "window-graphics": { product: "window_graphics" },
+      "wall-murals": { product: "wall_murals" },
+      "interior-branding": { product: "wall_murals" },
+      "fleet-graphics": { product: "vehicle_wraps" },
+      "vehicle-wraps": { product: "vehicle_wraps" },
+      "food-truck": { product: "vehicle_wraps" },
+      "ricoh-print": { product: "print_collateral" },
+      "short-run-digital": { product: "print_collateral" },
+      "restaurant-menus": {
+        product: "print_collateral",
+        collateralProduct: "menus",
+      },
+    };
+    if (links[key]) return { ...defaults, ...links[key] };
+    if (PRODUCT_SERVICES[key]) return { ...defaults, product: key };
+    return { ...defaults, product: "" }; // Require an explicit choice for unsupported links.
+  }
+  function config(d) {
+    const product =
+      d.serviceMode === "cutting_lamination" ? "finishing" : d.product;
+    const paper = product === "print_collateral";
+    const material =
+      product === "printed_vinyl"
+        ? ["recommend", "commercial", "premium"]
+        : product === "banners"
+          ? ["recommend", "banner"]
+          : ["coroplast", "acm"].includes(product)
+            ? [product]
+            : paper
+              ? [
+                  "recommend",
+                  d.collateralProduct === "business_cards" ? "card" : "paper",
+                ]
+              : product === "wall_murals"
+                ? ["recommend", "wall"]
+                : product === "window_graphics"
+                  ? ["recommend", "perforated", "vinyl"]
+                  : product === "finishing"
+                    ? ["supplied"]
+                    : ["recommend", "vinyl"];
+    const install = [
+      "vehicle_wraps",
+      "window_graphics",
+      "wall_murals",
+      "coroplast",
+      "acm",
+      "other",
+    ].includes(product);
+    return {
+      vehicle: product === "vehicle_wraps",
+      dimensions: product !== "vehicle_wraps",
+      material,
+      lamination: paper ? ["none"] : ["advise", "matte", "gloss", "none"],
+      fulfillment: [
+        "pickup",
+        "delivery",
+        "shipping",
+        ...(install ? ["installation"] : []),
+      ],
+    };
+  }
+  const toFeet = { in: 1 / 12, ft: 1, cm: 1 / 30.48, mm: 1 / 304.8 };
+  function area(pieces) {
+    return pieces.reduce(
+      (sum, p) =>
+        sum +
+        Number(p.width) *
+          Number(p.height) *
+          toFeet[p.unit] ** 2 *
+          Number(p.quantity),
+      0,
+    );
+  }
+  function validate(data, step) {
+    const errors = [];
+    const rules = config(data);
+    if (step === 0) {
+      try {
+        route(data);
+      } catch (_) {
+        errors.push("service");
+      }
+      if (
+        data.product === "print_collateral" &&
+        !["flyers", "business_cards", "menus"].includes(data.collateralProduct)
+      )
+        errors.push("service");
+    }
+    if (step === 1) {
+      if (rules.vehicle) {
+        if (
+          !data.vehicle.trim() ||
+          !Number.isInteger(+data.vehicleCount) ||
+          +data.vehicleCount < 1 ||
+          +data.vehicleCount > 1000
+        )
+          errors.push("vehicle");
+      } else if (
+        !data.measurementHelp &&
+        (!data.pieces.length ||
+          data.pieces.length > 10 ||
+          data.pieces.some(
+            (p) =>
+              !toFeet[p.unit] ||
+              ![+p.width, +p.height].every(
+                (n) => Number.isFinite(n) && n > 0 && n <= 100000,
+              ) ||
+              !Number.isInteger(+p.quantity) ||
+              +p.quantity < 1 ||
+              +p.quantity > 100000,
+          ))
+      )
+        errors.push("dimensions");
+    }
+    if (step === 2) {
+      if (
+        !rules.material.includes(data.material) ||
+        !rules.lamination.includes(data.lamination)
+      )
+        errors.push("material");
+      if (
+        (data.product === "stickers_decals" &&
+          !["rectangular", "around_design"].includes(data.cutStyle)) ||
+        (data.product === "banners" &&
+          ![
+            "recommend",
+            "trimmed",
+            "hems",
+            "grommets",
+            "hems_grommets",
+          ].includes(data.bannerFinish)) ||
+        (data.product === "print_collateral" &&
+          !(
+            data.collateralProduct === "menus"
+              ? ["recommend", "unlaminated", "hard_laminated"]
+              : ["recommend", "unlaminated"]
+          ).includes(data.paperFinish)) ||
+        (data.serviceMode === "cutting_lamination" &&
+          !["cutting", "lamination", "both"].includes(data.finishingRequest))
+      )
+        errors.push("material");
+      if (data.notes.length > 1200) errors.push("notes");
+    }
+    if (step === 3) {
+      if (!rules.fulfillment.includes(data.fulfillment))
+        errors.push("fulfillment");
+      if (
+        data.fulfillment !== "pickup" &&
+        !/^\d{5}(?:-\d{4})?$/.test(data.zip.trim())
+      )
+        errors.push("zip");
+      if (
+        data.completionDate &&
+        (!/^\d{4}-\d{2}-\d{2}$/.test(data.completionDate) ||
+          data.completionDate < new Date().toLocaleDateString("en-CA"))
+      )
+        errors.push("date");
+    }
+    if (step === 4) {
+      if (data.name.trim().length < 2 || data.name.length > 120)
+        errors.push("name");
+      if (
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email) ||
+        data.email.length > 254
+      )
+        errors.push("email");
+      const n = data.phone.replace(/\D/g, "");
+      if (n.length < 10 || n.length > 15) errors.push("phone");
+    }
+    return errors;
+  }
+  function validateFiles(files) {
+    const types = [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "image/heic",
+      "image/heif",
+      "application/pdf",
+      "application/postscript",
+      "application/illustrator",
+      "application/octet-stream",
+    ];
+    if (
+      files.length > 10 ||
+      files.some(
+        (f) =>
+          !f.size ||
+          f.size > 20 * 1024 * 1024 ||
+          !/\.(jpg|jpeg|png|webp|heic|heif|pdf|ai|eps)$/i.test(f.name) ||
+          (f.type && !types.includes(f.type)),
+      )
+    )
+      throw new Error("files");
+  }
+  function buildPayload(d, locale, context = {}) {
+    const serviceId = route(d);
+    const service = SERVICES.find((s) => s[0] === serviceId);
+    if (!service) throw new Error("service");
+    const rules = config(d);
+    const request = {
+      version: 1,
+      serviceId,
+      product:
+        serviceId === "cutting_lamination" ? "finishing_services" : d.product,
+      productDetail:
+        serviceId === "cutting_lamination"
+          ? d.finishingRequest
+          : d.product === "printed_vinyl"
+            ? d.vinylUse
+            : d.product === "print_collateral"
+              ? d.collateralProduct
+              : d.product,
+      businessRole: [
+        "business_owner",
+        "installer",
+        "print_reseller",
+        "other",
+      ].includes(d.businessRole)
+        ? d.businessRole
+        : "",
+      cutStyle:
+        d.product === "stickers_decals" && serviceId !== "cutting_lamination"
+          ? d.cutStyle
+          : "",
+      bannerFinish:
+        d.product === "banners" && serviceId !== "cutting_lamination"
+          ? d.bannerFinish
+          : "",
+      paperFinish:
+        d.product === "print_collateral" && serviceId !== "cutting_lamination"
+          ? d.paperFinish
+          : "",
+      legacyRoute:
+        serviceId === "wholesale_printing" ? "wholesale_printing" : "",
+      measurementHelp: rules.dimensions && d.measurementHelp,
+      pieces:
+        rules.dimensions && !d.measurementHelp
+          ? d.pieces.map((p) => ({
+              width: +p.width,
+              height: +p.height,
+              unit: p.unit,
+              quantity: +p.quantity,
+            }))
+          : [],
+      areaSqFt:
+        rules.dimensions && !d.measurementHelp
+          ? Number(area(d.pieces).toFixed(4))
+          : null,
+      vehicle: rules.vehicle ? d.vehicle : "",
+      vehicleCount: rules.vehicle ? +d.vehicleCount : null,
+      coverage: rules.vehicle ? d.coverage : "",
+      material: d.material,
+      lamination: d.lamination,
+      artwork: d.artwork,
+      fulfillment: d.fulfillment,
+      installationRequested: d.fulfillment === "installation",
+      zip: d.fulfillment === "pickup" ? "" : d.zip,
+      completionDate: d.completionDate,
+      rush: d.rush,
+      notes: d.notes,
+      smsConsent: d.smsConsent,
+      smsConsentText: d.smsConsentText,
+      smsConsentVersion: "quote-sms-2026-09-10",
+      smsConsentRecordedAt: context.now || new Date().toISOString(),
+      consentLocale: locale,
+    };
+    // The human-readable message is explicitly mapped by the CRM contract.
+    const es = locale === "es",
+      tr = (en, sp) => (es ? sp : en);
+    const option = (key) => OPTIONS[key]?.[es ? 1 : 0] || key;
+    const artworkLabel = {
+      ready: tr("Print-ready artwork", "Arte listo para imprimir"),
+      review: tr("File review requested", "Revisión de archivos"),
+      design: tr("Design assistance", "Ayuda con diseño"),
+    }[d.artwork];
+    const coverageLabel = {
+      recommend: tr("Help choosing coverage", "Ayuda para elegir cobertura"),
+      graphics: tr("Logos / lettering", "Logos / letras"),
+      partial: tr("Partial wrap", "Wrap parcial"),
+      full: tr("Full commercial wrap", "Wrap comercial completo"),
+    }[d.coverage];
+    const detailLabels = {
+      general: tr("General graphics", "Gráficos generales"),
+      vehicle_panels: tr(
+        "Vehicle panels · printing only",
+        "Paneles vehiculares · solo impresión",
+      ),
+      replacement_panels: tr(
+        "Replacement vehicle panels · printing only",
+        "Paneles vehiculares de reemplazo · solo impresión",
+      ),
+      flyers: "Flyers",
+      business_cards: tr("Business cards", "Tarjetas de presentación"),
+      menus: tr("Menus", "Menús"),
+      rectangular: tr("Rectangular cut", "Corte rectangular"),
+      around_design: tr("Cut around the design", "Corte alrededor del diseño"),
+      recommend: tr("Recommend an option", "Recomendar una opción"),
+      trimmed: tr("Trimmed edges", "Bordes recortados"),
+      hems: tr("Hems", "Dobladillos"),
+      grommets: tr("Grommets", "Ojillos"),
+      hems_grommets: tr("Hems and grommets", "Dobladillos y ojillos"),
+      unlaminated: tr("No lamination", "Sin laminado"),
+      hard_laminated: tr("Hard-laminated menu", "Menú con laminado rígido"),
+      cutting: tr("Cutting", "Corte"),
+      lamination: tr("Lamination", "Laminado"),
+      both: tr("Cutting and lamination", "Corte y laminado"),
+      business_owner: tr("Business owner", "Dueño de negocio"),
+      installer: tr("Installer", "Instalador"),
+      print_reseller: tr("Print reseller", "Revendedor de impresión"),
+      other: tr("Other", "Otro"),
+    };
+    const productLabel =
+      serviceId === "cutting_lamination"
+        ? tr(
+            "Finishing existing printed material",
+            "Acabado de material ya impreso",
+          )
+        : PRODUCTS.find((p) => p[0] === d.product)?.[es ? 2 : 1];
+    const summary = [
+      service[es ? 2 : 1],
+      productLabel,
+      detailLabels[request.productDetail] || "",
+      ...[request.cutStyle, request.bannerFinish, request.paperFinish]
+        .filter(Boolean)
+        .map((k) => detailLabels[k]),
+      request.businessRole
+        ? tr("Customer role: ", "Tipo de cliente: ") +
+          detailLabels[request.businessRole]
+        : "",
+      request.measurementHelp
+        ? tr("Measurement help requested", "Solicito ayuda para medir")
+        : request.pieces
+            .map(
+              (p) =>
+                `${p.width} × ${p.height} ${p.unit} × ${p.quantity} ${tr("pieces", "piezas")}`,
+            )
+            .join("; "),
+      request.areaSqFt === null
+        ? ""
+        : `${tr("Finished area", "Área final")}: ${request.areaSqFt} ${tr("sq ft", "pies²")}`,
+      request.vehicle
+        ? `${request.vehicle} × ${request.vehicleCount}; ${coverageLabel}`
+        : "",
+      `${tr("Material", "Material")}: ${option(d.material)}; ${tr("lamination", "laminado")}: ${option(d.lamination)}; ${tr("artwork", "arte")}: ${artworkLabel}`,
+      `${tr("Fulfillment", "Entrega")}: ${option(d.fulfillment)}${request.zip ? "; ZIP: " + request.zip : ""}`,
+      `${tr("Date", "Fecha")}: ${d.completionDate || tr("to confirm", "por confirmar")}; ${tr("rush requested", "urgente solicitado")}: ${d.rush ? tr("yes", "sí") : "no"}`,
+      d.company ? `${tr("Company", "Empresa")}: ${d.company}` : "",
+      d.notes,
+    ]
+      .filter(Boolean)
+      .join("\n");
+    return {
+      name: d.name.trim(),
+      businessName: d.company.trim(),
+      email: d.email.trim(),
+      phone: d.phone.trim(),
+      service: serviceId,
+      source: "production_quote",
+      formType: "production_quote",
+      locale,
+      page: context.page || "",
+      referrer: context.referrer || "",
+      sourcePage: context.sourcePage || "",
+      landingProduct: context.landingProduct || "",
+      tracking: context.tracking || {},
+      productionRequest: request,
+      productionSummary: summary.slice(0, 1000),
+      message: summary,
+      deadline: d.completionDate,
+      productionNotes: d.notes,
+      fileUploads: [],
+    };
+  }
+  function createSubmission(client, uuid) {
+    let busy = false,
+      complete = null,
+      frozen = null,
+      uploaded = null;
+    return {
+      async send(payload, files) {
+        if (complete) return complete;
+        if (busy) return null;
+        busy = true;
+        try {
+          validateFiles(files);
+          if (!frozen) frozen = JSON.parse(JSON.stringify(payload));
+          if (!uploaded) {
+            uploaded = files.length
+              ? await client.uploadLeadFiles(files, "production-quote")
+              : [];
+            frozen.fileUploads = uploaded;
+            frozen.submissionId = uploaded[0]?.submissionId || uuid();
+          }
+          const result = await client.submitLead(frozen);
+          if (!result || result.ok !== true) throw new Error("submission");
+          complete = result;
+          return result;
+        } finally {
+          busy = false;
+        }
+      },
+    };
+  }
+  scope.CanvasQuote = {
+    SERVICES,
+    PRODUCTS,
+    route,
+    resolveLink,
+    OPTIONS,
+    config,
+    area,
+    validate,
+    validateFiles,
+    buildPayload,
+    createSubmission,
+  };
+  scope.initCanvasQuote = function () {
+    const form = document.getElementById("canvasQuoteForm");
+    if (!form) return;
+    const es = document.documentElement.lang === "es";
+    const tr = (en, sp) => (es ? sp : en);
+    const $ = (id) => document.getElementById(id);
+    let step = 0,
+      locked = false;
+    const params = new URLSearchParams(location.search);
+    const initial = resolveLink(params);
+    let serviceMode = initial.serviceMode;
+    $("quoteService").value = initial.product;
+    $("vinylUse").value = initial.vinylUse;
+    $("collateralProduct").value = initial.collateralProduct;
+    const errors = {
+      service: tr("Choose a product.", "Elija un producto."),
+      vehicle: tr(
+        "Add vehicle details and a whole-number vehicle count.",
+        "Agregue los datos del vehículo y una cantidad entera.",
+      ),
+      dimensions: tr(
+        "Enter positive finished dimensions, units and a whole-number quantity, or choose help measuring.",
+        "Ingrese medidas finales positivas, unidades y una cantidad entera, o solicite ayuda para medir.",
+      ),
+      zip: tr(
+        "Enter a valid US ZIP code for delivery or installation.",
+        "Ingrese un código postal válido de EE. UU. para entrega o instalación.",
+      ),
+      name: tr("Enter your full name.", "Ingrese su nombre completo."),
+      email: tr(
+        "Enter a valid email address.",
+        "Ingrese un correo electrónico válido.",
+      ),
+      phone: tr("Enter a valid phone number.", "Ingrese un teléfono válido."),
+      files: tr(
+        "Use up to 10 supported files, each nonempty and no larger than 20 MB.",
+        "Use hasta 10 archivos admitidos, no vacíos y de hasta 20 MB cada uno.",
+      ),
+      date: tr(
+        "Choose today or a future completion date.",
+        "Elija hoy o una fecha futura.",
+      ),
+      material: tr(
+        "Choose a relevant material and finish.",
+        "Elija un material y acabado adecuados.",
+      ),
+      fulfillment: tr(
+        "Choose a fulfillment option.",
+        "Elija una opción de entrega.",
+      ),
+      notes: tr(
+        "Keep notes under 1,200 characters.",
+        "Use menos de 1,200 caracteres en las notas.",
+      ),
+    };
+    function data() {
+      return {
+        product: $("quoteService").value,
+        serviceMode,
+        vinylUse: $("vinylUse").value,
+        collateralProduct: $("collateralProduct").value,
+        businessRole: $("businessRole").value,
+        cutStyle: $("cutStyle").value,
+        bannerFinish: $("bannerFinish").value,
+        paperFinish: $("paperFinish").value,
+        finishingRequest: $("finishingRequest").value,
+        measurementHelp: $("measurementHelp").checked,
+        pieces: Array.from($("pieceRows").children).map((row) =>
+          Object.fromEntries(
+            Array.from(row.querySelectorAll("[data-piece]")).map((el) => [
+              el.dataset.piece,
+              el.value,
+            ]),
+          ),
+        ),
+        vehicle: $("vehicle").value,
+        vehicleCount: $("vehicleCount").value,
+        coverage: $("coverage").value,
+        material: $("material").value,
+        lamination: $("lamination").value,
+        artwork: $("artwork").value,
+        fulfillment: $("fulfillment").value,
+        zip: $("zip").value,
+        completionDate: $("completionDate").value,
+        rush: $("rush").checked,
+        name: $("contactName").value,
+        company: $("company").value,
+        email: $("email").value,
+        phone: $("phone").value,
+        notes: $("notes").value,
+        smsConsent: $("smsConsent").checked,
+        smsConsentText: $("smsConsent").parentElement.textContent.trim(),
+      };
+    }
+    function fillOptions(id, keys) {
+      const el = $(id),
+        old = el.value;
+      el.replaceChildren(
+        ...keys.map((k) => new Option(OPTIONS[k][es ? 1 : 0], k)),
+      );
+      if (keys.includes(old)) el.value = old;
+    }
+    function error(list) {
+      $("quoteError").hidden = !list.length;
+      $("quoteError").textContent = list.map((k) => errors[k] || k).join(" ");
+    }
+    function refresh() {
+      const d = data(),
+        r = config(d);
+      const finishing = serviceMode === "cutting_lamination";
+      $("quoteService").parentElement.hidden = finishing;
+      $("vinylUse").parentElement.hidden =
+        finishing || d.product !== "printed_vinyl";
+      $("collateralProduct").parentElement.hidden =
+        finishing || d.product !== "print_collateral";
+      $("cutStyle").parentElement.hidden = $("cutHelp").hidden =
+        finishing || d.product !== "stickers_decals";
+      $("bannerFinish").parentElement.hidden =
+        finishing || d.product !== "banners";
+      $("paperFinish").parentElement.hidden =
+        finishing || d.product !== "print_collateral";
+      $("finishingRequest").parentElement.hidden = !finishing;
+      $("signHelp").hidden =
+        finishing || !["coroplast", "acm"].includes(d.product);
+      $("lamination").parentElement.hidden =
+        !finishing && d.product === "print_collateral";
+      $("finishingService").hidden = finishing;
+      $("returnProducts").hidden = !serviceMode;
+      $("routeNotice").hidden = !serviceMode;
+      $("routeNotice").textContent = finishing
+        ? tr(
+            "Cutting & lamination for your existing printed material.",
+            "Corte y laminado para su material ya impreso.",
+          )
+        : tr(
+            "Existing wholesale inquiry route retained. Eligibility and pricing require Canvas confirmation.",
+            "Se conserva la ruta de consulta de mayoreo. Canvas debe confirmar elegibilidad y precio.",
+          );
+      $("vehicleQuestions").hidden = !r.vehicle;
+      $("dimensionQuestions").hidden = !r.dimensions;
+      $("pieceRows").hidden = d.measurementHelp;
+      $("addPiece").hidden = d.measurementHelp;
+      $("zip").parentElement.hidden = d.fulfillment === "pickup";
+      $("areaTotal").textContent = d.measurementHelp
+        ? tr(
+            "We’ll help confirm the measurements.",
+            "Le ayudaremos a confirmar las medidas.",
+          )
+        : validate(d, 1).length
+          ? ""
+          : `${area(d.pieces).toLocaleString(es ? "es-MX" : "en-US", { maximumFractionDigits: 2 })} ${tr("sq ft total finished area · not a price", "pies² de área final total · no es un precio")}`;
+      $("serviceHint").textContent =
+        d.product === "printed_vinyl" || finishing
+          ? tr(
+              "Printing and finishing only. Installation is not included. Canvas will confirm the specifications and price.",
+              "Solo impresión y acabados. No incluye instalación. Canvas confirmará las especificaciones y el precio.",
+            )
+          : tr(
+              "Share the specifications you know. Canvas will confirm production options and pricing.",
+              "Comparta los datos que conoce. Canvas confirmará las opciones de producción y el precio.",
+            );
+      if (validate(d, 0).length) {
+        $("reviewDetails").textContent = "";
+        return;
+      }
+      $("reviewDetails").textContent = buildPayload(
+        d,
+        es ? "es" : "en",
+      ).message;
+    }
+    function serviceChange() {
+      const d = data(),
+        r = config(d);
+      const paperOptions = $("paperFinish").options;
+      for (const option of paperOptions)
+        option.hidden =
+          option.value === "hard_laminated" && d.collateralProduct !== "menus";
+      if (
+        d.collateralProduct !== "menus" &&
+        $("paperFinish").value === "hard_laminated"
+      )
+        $("paperFinish").value = "recommend";
+      fillOptions("material", r.material);
+      fillOptions("lamination", r.lamination);
+      fillOptions("fulfillment", r.fulfillment);
+      refresh();
+    }
+    function addPiece() {
+      if ($("pieceRows").children.length >= 10) return;
+      const row = document.createElement("div");
+      row.className = "q-piece";
+      const n = $("pieceRows").children.length + 1;
+      row.innerHTML = `<span class="q-piece-label">${tr("Piece / size", "Pieza / medida")} ${n}</span><div class="q-piece-grid"><label>${tr("Width", "Ancho")}<input data-piece="width" aria-label="${tr("Width", "Ancho")} ${n}" type="number" min="0.001" max="100000" step="any" inputmode="decimal"></label><span aria-hidden="true">×</span><label>${tr("Height", "Alto")}<input data-piece="height" aria-label="${tr("Height", "Alto")} ${n}" type="number" min="0.001" max="100000" step="any" inputmode="decimal"></label><label>${tr("Units", "Unidades")}<select data-piece="unit" aria-label="${tr("Units", "Unidades")} ${n}"><option value="in">${tr("inches", "pulgadas")}</option><option value="ft">${tr("feet", "pies")}</option><option value="cm">cm</option><option value="mm">mm</option></select></label><label>${tr("Quantity", "Cantidad")}<input data-piece="quantity" aria-label="${tr("Quantity", "Cantidad")} ${n}" type="number" min="1" max="100000" step="1" value="1" inputmode="numeric"></label><button class="q-text-button" type="button" aria-label="${tr("Remove size", "Eliminar medida")} ${n}">${tr("Remove", "Eliminar")}</button></div>`;
+      row.querySelector("button").addEventListener("click", () => {
+        if (locked) return;
+        row.remove();
+        refresh();
+      });
+      $("pieceRows").append(row);
+      refresh();
+    }
+    function show(focus = true) {
+      document
+        .querySelectorAll(".q-step")
+        .forEach((el, i) => (el.hidden = i !== step));
+      document.querySelectorAll("[data-progress]").forEach((el, i) => {
+        el.classList.toggle("is-current", i === step);
+        el.classList.toggle("is-complete", i < step);
+        if (i === step) el.setAttribute("aria-current", "step");
+        else el.removeAttribute("aria-current");
+      });
+      $("quoteBack").hidden = step === 0;
+      $("quoteNext").hidden = step === 4;
+      $("quoteSubmit").hidden = step !== 4;
+      $("stepCount").textContent = `${step + 1} / 5`;
+      refresh();
+      if (focus) $("q-title-" + step).focus({ preventScroll: true });
+    }
+    $("quoteService").addEventListener("change", () => {
+      serviceMode = "";
+      serviceChange();
+    });
+    $("vinylUse").addEventListener("change", () => {
+      serviceMode = "";
+      serviceChange();
+    });
+    $("collateralProduct").addEventListener("change", serviceChange);
+    $("finishingService").addEventListener("click", () => {
+      if (locked) return;
+      serviceMode = "cutting_lamination";
+      serviceChange();
+    });
+    $("returnProducts").addEventListener("click", () => {
+      if (locked) return;
+      serviceMode = "";
+      serviceChange();
+    });
+    $("addPiece").addEventListener("click", addPiece);
+    form.addEventListener("input", refresh);
+    form.addEventListener("change", refresh);
+    $("quoteFiles").addEventListener("change", () => {
+      $("fileList").replaceChildren(
+        ...Array.from($("quoteFiles").files).map((f) => {
+          const li = document.createElement("li");
+          li.textContent = `${f.name} · ${(f.size / 1024).toFixed(1)} KB`;
+          return li;
+        }),
+      );
+    });
+    $("quoteNext").addEventListener("click", () => {
+      let list = validate(data(), step);
+      if (step === 2)
+        try {
+          validateFiles(Array.from($("quoteFiles").files));
+        } catch (e) {
+          list.push("files");
+        }
+      error(list);
+      if (!list.length) {
+        step++;
+        show();
+      }
+    });
+    $("quoteBack").addEventListener("click", () => {
+      if (!locked) {
+        error([]);
+        step--;
+        show();
+      }
+    });
+    let submission;
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (step !== 4) {
+        $("quoteNext").click();
+        return;
+      }
+      if ($("quoteSubmit").disabled) return;
+      const d = data();
+      let list = [0, 1, 2, 3, 4].flatMap((i) => validate(d, i));
+      try {
+        validateFiles(Array.from($("quoteFiles").files));
+      } catch (e) {
+        list.push("files");
+      }
+      error(list);
+      if (list.length) return;
+      if (!scope.CanvasFirebase) {
+        error([
+          tr(
+            "The form service could not load. Refresh this page or call us.",
+            "No se pudo cargar el servicio. Actualice la página o llámenos.",
+          ),
+        ]);
+        return;
+      }
+      if (!submission)
+        submission = createSubmission(scope.CanvasFirebase, () =>
+          crypto.randomUUID(),
+        );
+      const tracking = {};
+      for (const k of [
+        "utm_source",
+        "utm_medium",
+        "utm_campaign",
+        "utm_term",
+        "utm_content",
+        "gclid",
+      ])
+        if (params.has(k)) tracking[k] = params.get(k).slice(0, 1000);
+      const payload = buildPayload(d, es ? "es" : "en", {
+        page: location.pathname,
+        referrer: document.referrer.slice(0, 1000),
+        sourcePage: (params.get("source") || "").slice(0, 1000),
+        landingProduct: (
+          params.get("product") ||
+          params.get("project") ||
+          ""
+        ).slice(0, 1000),
+        tracking,
+      });
+      locked = true;
+      form
+        .querySelectorAll("input,select,textarea,button")
+        .forEach((el) => (el.disabled = true));
+      $("quoteStatus").textContent = tr(
+        "Sending your request securely…",
+        "Enviando su solicitud de forma segura…",
+      );
+      try {
+        const result = await submission.send(
+          payload,
+          Array.from($("quoteFiles").files),
+        );
+        if (!result) return;
+        $("quoteReference").textContent = result.id;
+        form.hidden = true;
+        $("quoteSuccess").hidden = false;
+        $("quoteSuccess").focus();
+        if (typeof scope.gtag === "function")
+          scope.gtag("event", "generate_lead", { method: "production_quote" });
+      } catch (e) {
+        $("quoteSubmit").disabled = false;
+        $("quoteSubmit").textContent = tr(
+          "Retry My Quote",
+          "Reintentar mi cotización",
+        );
+        error([
+          tr(
+            "We could not confirm your request. Your details are kept here. Retry safely with the same reference, or call (512) 434-3793.",
+            "No pudimos confirmar su solicitud. Conservamos sus datos aquí. Reintente con la misma referencia o llame al (512) 945-9783.",
+          ),
+        ]);
+      } finally {
+        $("quoteStatus").textContent = "";
+      }
+    });
+    addPiece();
+    serviceChange();
+    show(false);
+    if (typeof scope.gtag !== "function") {
+      scope.dataLayer = scope.dataLayer || [];
+      scope.gtag = function () {
+        scope.dataLayer.push(arguments);
+      };
+      scope.gtag("js", new Date());
+      scope.gtag("config", "G-98HWWM4BDW");
+    }
+  };
+})(window);

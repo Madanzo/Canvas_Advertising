@@ -1,5 +1,12 @@
 {
   "dependencies": {
     "firebase-admin": "^13.6.1"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0"
+  },
+  "scripts": {
+    "preview:quote": "node tools/quote-preview.cjs",
+    "test:quote": "node --test tests/quote.test.cjs functions/test/app-check-client.test.js functions/test/crm-lead-adapter.test.js functions/test/secure-public-lead-source.test.js"
   }
 }
