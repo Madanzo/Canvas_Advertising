@@ -1,8 +1,14 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    function isAuthenticated() {
-      return request.auth != null;
+    function isStaff() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in [
+          'camiloreyna@canvas-advertising.com',
+          'camilo@canvas-advertising.com',
+          'sales@canvas-advertising.com'
+        ];
     }
 
     function isAllowedLeadType() {
@@ -27,15 +33,22 @@ service firebase.storage {
         && firestore.get(/databases/(default)/documents/leadUploadSessions/$(submissionId)).data.consumed == false
         && firestore.get(/databases/(default)/documents/leadUploadSessions/$(submissionId)).data.expiresAt > request.time
         && firestore.get(/databases/(default)/documents/leadUploadSessions/$(submissionId)).data.token == request.resource.metadata.uploadToken;
-      allow read, update, delete: if isAuthenticated();
+      // Public callers may only create a server-authorized upload. Verified
+      // staff can inspect or remove it; mutations require a fresh session.
+      allow read, delete: if isStaff();
+      allow update: if false;
     }
 
-    match /lead-uploads/{allPaths=**} {
-      allow read, write: if isAuthenticated();
+    // The admin dashboard stores portfolio media under this explicit prefix.
+    match /projects/{allPaths=**} {
+      allow read: if true;
+      allow write: if isStaff();
     }
 
+    // Everything without an explicit rule is denied. Cloud Functions use the
+    // Admin SDK and therefore retain verification and cleanup access.
     match /{allPaths=**} {
-      allow read, write: if isAuthenticated();
+      allow read, write: if false;
     }
   }
 }

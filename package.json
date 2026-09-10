@@ -3,10 +3,13 @@
     "firebase-admin": "^13.6.1"
   },
   "devDependencies": {
-    "jsdom": "^26.1.0"
+    "jsdom": "^26.1.0",
+    "@firebase/rules-unit-testing": "^5.0.0",
+    "firebase": "^12.3.0"
   },
   "scripts": {
     "test:frontend": "node --test tests/*.test.cjs",
-    "check:frontend": "node --check js/main.js && node --check js/firebase-config.js"
+    "check:frontend": "node --check js/main.js && node --check js/firebase-config.js",
+    "test:storage-rules": "npx --yes firebase-tools@14.16.0 emulators:exec --only firestore,storage --project demo-canvas-integration \"node --test test/storage.rules.test.js\""
   }
 }
