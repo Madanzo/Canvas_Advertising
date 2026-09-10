@@ -1204,19 +1204,16 @@ function initWhatsAppWidget() {
       d.serviceMode === "cutting_lamination" ? "finishing" : d.product;
     const paper = product === "print_collateral";
     const material =
-      product === "printed_vinyl"
-        ? ["recommend", "vinyl"]
+      ["printed_vinyl", "stickers_decals"].includes(product)
+        ? ["vinyl"]
         : product === "banners"
-          ? ["recommend", "banner"]
+          ? ["banner"]
           : ["coroplast", "acm"].includes(product)
             ? [product]
             : paper
-              ? [
-                  "recommend",
-                  d.collateralProduct === "business_cards" ? "card" : "paper",
-                ]
+              ? [d.collateralProduct === "business_cards" ? "card" : "paper"]
               : product === "wall_murals"
-                ? ["recommend", "wall"]
+                ? ["wall"]
                 : product === "window_graphics"
                   ? ["recommend", "perforated", "vinyl"]
                   : product === "finishing"
@@ -1300,7 +1297,7 @@ function initWhatsAppWidget() {
     if (step === 2) {
       if (rules.vinylGrade && !["recommend", "commercial", "premium"].includes(data.vinylGrade || "recommend")) errors.push("material");
       if (
-        !rules.material.includes(data.material) ||
+        (rules.material.length > 1 && !rules.material.includes(data.material)) ||
         !rules.lamination.includes(data.lamination)
       )
         errors.push("material");
@@ -1438,7 +1435,7 @@ function initWhatsAppWidget() {
       vehicle: rules.vehicle ? d.vehicle : "",
       vehicleCount: rules.vehicle ? +d.vehicleCount : null,
       coverage: rules.vehicle ? d.coverage : "",
-      material: d.material,
+      material: rules.material.length === 1 ? rules.material[0] : d.material,
       vinylGrade,
       lamination: d.lamination,
       artwork: d.artwork,
@@ -1719,19 +1716,13 @@ function initWhatsAppWidget() {
       const finishing = serviceMode === "cutting_lamination";
       $("vinylGrade").parentElement.hidden = !r.vinylGrade;
       if (!r.vinylGrade) $("vinylGrade").value = "recommend";
+      $("vinylMaterialDetails").hidden = !r.vinylGrade;
+      if (!r.vinylGrade) $("vinylMaterialDetails").open = false;
+      $("material").parentElement.hidden = r.material.length === 1;
       const gradeInformation = {
-        recommend: tr(
-          "Tell us the application and Canvas will recommend a grade and exact film. Printable films, color-change films and paint protection film (PPF) serve different purposes and are not interchangeable.",
-          "Cuéntenos la aplicación y Canvas recomendará el grado y la película exacta. Las películas imprimibles, las de cambio de color y la película de protección de pintura (PPF) tienen usos distintos y no son intercambiables."
-        ),
-        commercial: tr(
-          'Commercial materials we carry include General Formulations and our Canvas Escape film, described by the shop as “Double PR Liner, Gloss / Light Grey Adhesive.” Canvas will confirm the exact printable film for your application. Color-change films and PPF are separate material types.',
-          'Entre los materiales comerciales que manejamos están General Formulations y nuestra película Canvas Escape, descrita por el taller como “Double PR Liner, Gloss / Light Grey Adhesive” (liner Double PR, brillante / adhesivo gris claro). Canvas confirmará la película imprimible exacta para su aplicación. Las películas de cambio de color y el PPF son tipos de material distintos.'
-        ),
-        premium: tr(
-          "We work with 3M, Avery Dennison, Aura, KPMF, Evolv, ORACAL, TeckWrap, Aluko Vinyl and other premium films. These are examples of materials we carry, not a guarantee that every brand or film suits every product. Printable films, color-change films and PPF are different; Canvas will confirm the exact film for your application.",
-          "Trabajamos con 3M, Avery Dennison, Aura, KPMF, Evolv, ORACAL, TeckWrap, Aluko Vinyl y otras películas premium. Son ejemplos de materiales que manejamos, no una garantía de que cada marca o película sea adecuada para cada producto. Las películas imprimibles, las de cambio de color y el PPF son diferentes; Canvas confirmará la película exacta para su aplicación."
-        )
+        recommend: tr("We’ll recommend a grade and film for your project.", "Le recomendaremos una opción y película para su proyecto."),
+        commercial: tr("General Formulations and Canvas Escape options. We’ll confirm the right film for your project.", "Opciones de General Formulations y Canvas Escape. Confirmaremos la película adecuada para su proyecto."),
+        premium: tr("Premium film options selected for your project. Exact brand and film confirmed with your quote.", "Opciones de películas premium seleccionadas para su proyecto. La marca y película exactas se confirmarán con su cotización.")
       };
       $("vinylGradeHelp").textContent = gradeInformation[$("vinylGrade").value];
       $("quoteService").parentElement.hidden = finishing;
