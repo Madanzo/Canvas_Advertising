@@ -15,10 +15,10 @@ process.env.MERKAD_LEADS_SECRET = 'not-a-real-credential';
 process.env.MERKAD_LEADS_SERVICE_ALLOWLIST_CONFIRMED = 'true';
 process.env.FUNCTIONS_CONFIG_EXPORT = '{}';
 for (const key of ['RESEND_API_KEY','TELNYX_API_KEY','SQUARE_ACCESS_TOKEN']) delete process.env[key];
-const admin = require('firebase-admin');
 const runtime = process.env.CRM_SPLIT_OVERLAY_RUNTIME === 'true'
     ? require('./split-overlay-loader.cjs')()
     : require('../../index');
+const admin = runtime.__splitAdmin || require('firebase-admin');
 const authorization = require('../../crm-test-authorization');
 const db = admin.firestore();
 const realTransaction = db.runTransaction.bind(db);
@@ -63,7 +63,7 @@ beforeEach(async () => {
     const issued = authorization.issueAuthorization(); proof = issued.token;
     await proofRef.set(issued.record);
 });
-after(async () => { db.runTransaction = realTransaction; global.fetch = oldFetch; await admin.app().delete(); });
+after(async () => { db.runTransaction = realTransaction; global.fetch = oldFetch; if(runtime.__splitDispose) await runtime.__splitDispose(); else await admin.app().delete(); });
 
 test('runtime: concurrent submissions consume the proof once and create exactly one lead', async () => {
     const results = await Promise.all([runtime.submitPublicLead.run(payload(),context()),runtime.submitPublicLead.run(payload(),context())]);

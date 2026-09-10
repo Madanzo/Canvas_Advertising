@@ -9,4 +9,10 @@ for(const pkg of manifest.packages) for(const part of pkg.parts){
  assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),part.sha256);
  assert.ok(!/(AIza[0-9A-Za-z_-]{30,}|sk_live_[0-9A-Za-z]{12,}|mk_live_[0-9A-Za-z]{12,}\.|-----BEGIN .*PRIVATE KEY-----)/.test(bytes.toString()));
 }
-console.log('Verified four exact source ranges and absence of prohibited credential patterns; no runtime config/archive included.');
+for(const pkg of manifest.packages) for(const dep of pkg.dependencies) {
+ const bytes=fs.readFileSync(path.join(root,dep.file));
+ assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),dep.sha256);
+ const data=JSON.parse(bytes);
+ if(dep.file.endsWith('package-lock.json')) assert.equal(data.packages['node_modules/firebase-functions'].version,'7.2.5');
+}
+console.log('Verified separate deployed dependency locks, four exact source ranges and absence of prohibited credential patterns; no runtime config/archive included.');

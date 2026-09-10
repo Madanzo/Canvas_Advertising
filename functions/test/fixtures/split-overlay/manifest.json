@@ -21,6 +21,16 @@
           "endUtf8Byte": 47622,
           "sha256": "6213838f98e9b1e41f84605eaea8ce8e6638515ad8af4142b993fd064adf131c"
         }
+      ],
+      "dependencies": [
+        {
+          "file": "sms-targets/package.json",
+          "sha256": "45143e27a0929aee9ef559db281755334e2324729caea24d99bda048fb38aa1a"
+        },
+        {
+          "file": "sms-targets/package-lock.json",
+          "sha256": "43b031d6ce5f9beb17b6bf80e08b08945834f24eadc151e52e24d590a7b1cf64"
+        }
       ]
     },
     {
@@ -42,6 +52,16 @@
           "startUtf8Byte": 92153,
           "endUtf8Byte": 101625,
           "sha256": "cd735d7f97e69140c57d5e5fe393520c3ef042a279d4d9dbbf25decc44fe74e0"
+        }
+      ],
+      "dependencies": [
+        {
+          "file": "public-adapter-targets/package.json",
+          "sha256": "9be25b82bd2ff54845cb9fa82a24b5a4e3bbe8e34a134038809d10d60908ce92"
+        },
+        {
+          "file": "public-adapter-targets/package-lock.json",
+          "sha256": "d80f37188b42a7752bd539e03a01d57e6b16c7968746af8d8da008f253607af0"
         }
       ]
     }

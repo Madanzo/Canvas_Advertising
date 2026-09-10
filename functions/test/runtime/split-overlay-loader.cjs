@@ -12,9 +12,13 @@ const functionRoot = path.join(__dirname, '../..');
 module.exports = function loadSplitOverlay() {
     assert.match(process.env.FIRESTORE_EMULATOR_HOST || '', /^(127\.0\.0\.1|localhost):\d+$/);
     assert.equal(process.env.GCLOUD_PROJECT, 'demo-canvas-integration');
-    const all = {};
+    const all = {}, admins = [];
     for (const name of ['public-adapter-targets','sms-targets']) {
         const fixture = manifest.packages.find(p=>p.name===name);
+        const dependencyRoot = path.join(fixtureRoot,name);
+        const packageRequire = Module.createRequire(path.join(dependencyRoot,'package.json'));
+        assert.ok(packageRequire.resolve('firebase-functions/v1').startsWith(path.join(dependencyRoot,'node_modules')));
+        assert.ok(packageRequire.resolve('firebase-admin').startsWith(path.join(dependencyRoot,'node_modules')));
         const body = fixture.parts.map(part=>{
             const bytes=fs.readFileSync(path.join(fixtureRoot,part.file));
             assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),part.sha256);
@@ -29,15 +33,18 @@ const communicationsPolicy=require('./communications-policy');
 const smsConsent=require('./sms-consent');
 const crmTestAuthorization=require('./crm-test-authorization');
 const crmTestState=require('./crm-test-state');
-${name==='public-adapter-targets' ? 'admin.initializeApp();' : ''}
+admin.initializeApp();
 const db=admin.firestore();
 const getPlivo=()=>{throw Error('Forbidden provider access in split-overlay test');};
 const getResend=()=>{throw Error('Forbidden provider access in split-overlay test');};
 `;
         const filename=path.join(functionRoot,'.emulator-'+name+'.js');
-        const loaded=new Module(filename,module);loaded.filename=filename;loaded.paths=Module._nodeModulePaths(functionRoot);
+        const loaded=new Module(filename,module);loaded.filename=filename;loaded.paths=Module._nodeModulePaths(dependencyRoot);
         loaded._compile(bootstrap+'\n'+body,filename);
+        admins.push(packageRequire('firebase-admin'));
         Object.assign(all,loaded.exports);
     }
+    all.__splitAdmin=admins[0];
+    all.__splitDispose=async()=>{for(const admin of admins) await admin.app().delete();};
     return all;
 };
