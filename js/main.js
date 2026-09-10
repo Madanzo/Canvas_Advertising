@@ -1204,19 +1204,16 @@ function initWhatsAppWidget() {
       d.serviceMode === "cutting_lamination" ? "finishing" : d.product;
     const paper = product === "print_collateral";
     const material =
-      product === "printed_vinyl"
-        ? ["recommend", "commercial", "premium"]
+      ["printed_vinyl", "stickers_decals"].includes(product)
+        ? ["vinyl"]
         : product === "banners"
-          ? ["recommend", "banner"]
+          ? ["banner"]
           : ["coroplast", "acm"].includes(product)
             ? [product]
             : paper
-              ? [
-                  "recommend",
-                  d.collateralProduct === "business_cards" ? "card" : "paper",
-                ]
+              ? [d.collateralProduct === "business_cards" ? "card" : "paper"]
               : product === "wall_murals"
-                ? ["recommend", "wall"]
+                ? ["wall"]
                 : product === "window_graphics"
                   ? ["recommend", "perforated", "vinyl"]
                   : product === "finishing"
@@ -1234,6 +1231,7 @@ function initWhatsAppWidget() {
       vehicle: product === "vehicle_wraps",
       dimensions: product !== "vehicle_wraps",
       material,
+      vinylGrade: product === "printed_vinyl",
       lamination: paper ? ["none"] : ["advise", "matte", "gloss", "none"],
       fulfillment: [
         "pickup",
@@ -1297,8 +1295,9 @@ function initWhatsAppWidget() {
         errors.push("dimensions");
     }
     if (step === 2) {
+      if (rules.vinylGrade && !["recommend", "commercial", "premium"].includes(data.vinylGrade || "recommend")) errors.push("material");
       if (
-        !rules.material.includes(data.material) ||
+        (rules.material.length > 1 && !rules.material.includes(data.material)) ||
         !rules.lamination.includes(data.lamination)
       )
         errors.push("material");
@@ -1382,6 +1381,8 @@ function initWhatsAppWidget() {
     const service = SERVICES.find((s) => s[0] === serviceId);
     if (!service) throw new Error("service");
     const rules = config(d);
+    const vinylGrade = rules.vinylGrade ? (d.vinylGrade || "recommend") : "";
+    if (rules.vinylGrade && !["recommend", "commercial", "premium"].includes(vinylGrade)) throw new Error("vinylGrade");
     const request = {
       version: 1,
       serviceId,
@@ -1434,7 +1435,8 @@ function initWhatsAppWidget() {
       vehicle: rules.vehicle ? d.vehicle : "",
       vehicleCount: rules.vehicle ? +d.vehicleCount : null,
       coverage: rules.vehicle ? d.coverage : "",
-      material: d.material,
+      material: rules.material.length === 1 ? rules.material[0] : d.material,
+      vinylGrade,
       lamination: d.lamination,
       artwork: d.artwork,
       fulfillment: d.fulfillment,
@@ -1453,6 +1455,7 @@ function initWhatsAppWidget() {
     const es = locale === "es",
       tr = (en, sp) => (es ? sp : en);
     const option = (key) => OPTIONS[key]?.[es ? 1 : 0] || key;
+    const gradeLabel = {recommend: tr("Recommend a grade", "Recomiéndenme una opción"), commercial: tr("Commercial", "Comercial"), premium: tr("Premium", "Premium")}[request.vinylGrade];
     const artworkLabel = {
       ready: tr("Print-ready artwork", "Arte listo para imprimir"),
       review: tr("File review requested", "Revisión de archivos"),
@@ -1526,6 +1529,7 @@ function initWhatsAppWidget() {
       request.vehicle
         ? `${request.vehicle} × ${request.vehicleCount}; ${coverageLabel}`
         : "",
+      ...(rules.vinylGrade ? [`${tr("Vinyl grade", "Grado de vinil")}: ${gradeLabel}`] : []),
       `${tr("Material", "Material")}: ${option(d.material)}; ${tr("lamination", "laminado")}: ${option(d.lamination)}; ${tr("artwork", "arte")}: ${artworkLabel}`,
       `${tr("Fulfillment", "Entrega")}: ${option(d.fulfillment)}${request.zip ? "; ZIP: " + request.zip : ""}`,
       `${tr("Date", "Fecha")}: ${d.completionDate || tr("to confirm", "por confirmar")}; ${tr("rush requested", "urgente solicitado")}: ${d.rush ? tr("yes", "sí") : "no"}`,
@@ -1678,6 +1682,7 @@ function initWhatsAppWidget() {
         vehicleCount: $("vehicleCount").value,
         coverage: $("coverage").value,
         material: $("material").value,
+        vinylGrade: $("vinylGrade").value,
         lamination: $("lamination").value,
         artwork: $("artwork").value,
         fulfillment: $("fulfillment").value,
@@ -1709,6 +1714,17 @@ function initWhatsAppWidget() {
       const d = data(),
         r = config(d);
       const finishing = serviceMode === "cutting_lamination";
+      $("vinylGrade").parentElement.hidden = !r.vinylGrade;
+      if (!r.vinylGrade) $("vinylGrade").value = "recommend";
+      $("vinylMaterialDetails").hidden = !r.vinylGrade;
+      if (!r.vinylGrade) $("vinylMaterialDetails").open = false;
+      $("material").parentElement.hidden = r.material.length === 1;
+      const gradeInformation = {
+        recommend: tr("We’ll recommend a grade and film for your project.", "Le recomendaremos una opción y película para su proyecto."),
+        commercial: tr("General Formulations and Canvas Escape options. We’ll confirm the right film for your project.", "Opciones de General Formulations y Canvas Escape. Confirmaremos la película adecuada para su proyecto."),
+        premium: tr("Premium film options selected for your project. Exact brand and film confirmed with your quote.", "Opciones de películas premium seleccionadas para su proyecto. La marca y película exactas se confirmarán con su cotización.")
+      };
+      $("vinylGradeHelp").textContent = gradeInformation[$("vinylGrade").value];
       $("quoteService").parentElement.hidden = finishing;
       $("vinylUse").parentElement.hidden =
         finishing || d.product !== "printed_vinyl";

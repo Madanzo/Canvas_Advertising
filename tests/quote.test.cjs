@@ -115,7 +115,7 @@ test("banner and paper products cannot retain unrelated wrap film / laminate sel
   change(f.w, f.d.querySelector("#quoteService"), "banners");
   assert.deepEqual(
     [...f.d.querySelector("#material").options].map((o) => o.value),
-    ["recommend", "banner"],
+    ["banner"],
   );
   assert.deepEqual(
     [...f.d.querySelector("#lamination").options].map((o) => o.value),
@@ -505,7 +505,7 @@ test("finishing secondary route and wholesale exit are explicit; invalid options
   change(f.w, f.d.querySelector("#quoteService"), "printed_vinyl");
   assert.deepEqual(
     [...f.d.querySelector("#material").options].map((o) => o.value),
-    ["recommend", "commercial", "premium"],
+    ["vinyl"],
   );
   change(f.w, f.d.querySelector("#quoteService"), "stickers_decals");
   assert.equal(f.d.querySelector("#cutStyle").parentElement.hidden, false);
@@ -535,5 +535,80 @@ test("finishing secondary route and wholesale exit are explicit; invalid options
       )
       .includes("material"),
   );
+  f.dom.window.close();
+});
+
+for (const locale of ["en", "es"]) test(locale + ": vinyl grade visibility, labels, routing and persistence", async () => {
+  const f = await fixture(locale);
+  const grade = f.d.querySelector("#vinylGrade");
+  assert.deepEqual(Array.from(grade.options, o=>o.value), ["recommend","commercial","premium"]);
+  assert.deepEqual(Array.from(grade.options, o=>o.textContent), locale === "en" ? ["Recommend a grade","Commercial","Premium"] : ["Recomiéndenme una opción","Comercial","Premium"]);
+  assert.equal(grade.parentElement.hidden, false);
+  for (const product of f.q.PRODUCTS.map(p=>p[0])) {
+    change(f.w, f.d.querySelector("#quoteService"), product);
+    assert.equal(grade.parentElement.hidden, product !== "printed_vinyl");
+  }
+  change(f.w, f.d.querySelector("#quoteService"), "printed_vinyl");
+  change(f.w, grade, "premium");
+  assert.match(f.d.querySelector("#reviewDetails").textContent, /Premium/);
+  assert.match(f.d.querySelector("#vinylMaterialDetails").textContent, /Avery Dennison.*Aura.*KPMF.*Evolv.*ORACAL.*TeckWrap.*Aluko Vinyl/);
+  change(f.w, grade, "commercial");
+  assert.match(f.d.querySelector("#vinylGradeHelp").textContent, /General Formulations.*Canvas Escape/);
+  assert.match(f.d.querySelector("#vinylMaterialDetails").textContent, /PPF/);
+  assert.doesNotMatch(f.d.body.textContent, /54[″"].*164/);
+  const runtime = fs.readFileSync(root + "/functions/index.js", "utf8");
+  const ctx = {functions:{https:{HttpsError:Error}}}; vm.createContext(ctx);
+  vm.runInContext(runtime.slice(runtime.indexOf("const PUBLIC_LEAD_FIELDS"),runtime.indexOf("async function enforcePublicLeadRateLimit"))+";this.validate=validatePublicLead;",ctx);
+  for (const value of ["recommend","commercial","premium"]) for (const use of ["general","vehicle_panels","replacement_panels"]) {
+    const payload=plain(f.q.buildPayload({...draft,vinylUse:use,vinylGrade:value},locale));
+    payload.submissionId="local_0123456789abcdef";
+    assert.equal(ctx.validate(payload).lead.productionRequest.vinylGrade,value);
+    assert.equal(payload.service,use==="general"?"vinyl_large_format_printing":"wrap_production_only");
+    assert.ok(payload.message.includes(Array.from(grade.options).find(o=>o.value===value).textContent));
+    assert.equal(require("../functions/crm-lead-adapter").buildRequestMapping(payload.submissionId,payload).body.message,payload.message);
+    assert.equal(payload.productionRequest.lamination,draft.lamination);
+  }
+  const wholesale=f.q.buildPayload({...draft,serviceMode:"wholesale_printing",vinylGrade:"premium"},locale);
+  assert.equal(wholesale.service,"wholesale_printing"); assert.equal(wholesale.productionRequest.vinylGrade,"premium");
+  f.d.querySelector("#finishingService").click(); assert.equal(grade.parentElement.hidden,true);
+  assert.equal(f.q.buildPayload({...draft,serviceMode:"cutting_lamination",vinylGrade:"premium"},locale).productionRequest.vinylGrade,"");
+  assert.equal(f.q.buildPayload({...draft,product:"banners",vinylGrade:"premium"},locale).productionRequest.vinylGrade,"");
+  assert.ok(f.q.validate({...draft,vinylGrade:"unknown"},2).length);
+  assert.throws(()=>f.q.buildPayload({...draft,vinylGrade:"unknown"},locale));
+  f.dom.window.close();
+});
+
+for (const locale of ["en", "es"]) test(locale + ": concise disclosure and product changes clear inapplicable hidden selections", async () => {
+  const f = await fixture(locale), get = id => f.d.getElementById(id);
+  assert.equal(get("vinylMaterialDetails").open, false);
+  assert.equal(get("vinylMaterialDetails").querySelector("summary").textContent, locale === "en" ? "View material details" : "Ver detalles de materiales");
+  assert.doesNotMatch(f.d.body.textContent, /Double PR|Liner|described by the shop|descrita por el taller/);
+  for (const grade of ["commercial", "premium"]) {
+    change(f.w, get("vinylGrade"), grade);
+    assert.ok(get("vinylGradeHelp").textContent.length < 155);
+    assert.doesNotMatch(get("vinylGradeHelp").textContent, /3M|Avery|PPF/);
+  }
+  for (const [product, material] of [["printed_vinyl","vinyl"],["stickers_decals","vinyl"],["banners","banner"],["coroplast","coroplast"],["acm","acm"],["wall_murals","wall"],["print_collateral","paper"]]) {
+    change(f.w, get("quoteService"), "window_graphics");
+    change(f.w, get("material"), "perforated");
+    change(f.w, get("quoteService"), product);
+    assert.equal(get("material").parentElement.hidden, true);
+    assert.equal(get("material").value, material);
+    const payload = f.q.buildPayload({...draft, product, material:"perforated", vinylGrade:"premium"}, locale);
+    assert.equal(payload.productionRequest.material, material);
+    if(product !== "printed_vinyl") {
+      assert.equal(get("vinylGrade").value,"recommend");
+      assert.equal(get("vinylMaterialDetails").hidden,true);
+      assert.equal(payload.productionRequest.vinylGrade,"");
+    }
+  }
+  change(f.w,get("quoteService"),"window_graphics");
+  assert.equal(get("material").parentElement.hidden,false);
+  change(f.w,get("quoteService"),"printed_vinyl");
+  assert.equal(get("vinylGrade").value,"recommend");
+  get("finishingService").click();
+  assert.equal(get("material").value,"supplied");
+  assert.equal(get("material").parentElement.hidden,true);
+  assert.equal(get("vinylGrade").parentElement.hidden,true);
   f.dom.window.close();
 });
