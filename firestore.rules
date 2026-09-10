@@ -1,51 +1,83 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Helper function to check if user is authenticated
-    function isAuthenticated() {
-      return request.auth != null;
+    // Private collections are restricted to verified Canvas staff accounts.
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in [
+          'camiloreyna@canvas-advertising.com',
+          'camilo@canvas-advertising.com',
+          'sales@canvas-advertising.com'
+        ];
     }
 
-    // Canvas Leads - public create, authenticated read/write
-    match /canvas_leads/{document=**} {
-      allow create: if true;
-      allow read, update, delete: if isAuthenticated();
+    function isValidLeadUpdate() {
+      return request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['status', 'notes', 'updatedAt'])
+        && request.resource.data.status is string
+        && request.resource.data.status in ['new', 'contacted', 'quoted', 'won', 'lost']
+        && request.resource.data.notes is string
+        && request.resource.data.notes.size() <= 10000
+        && request.resource.data.updatedAt == request.time;
+    }
+
+    // Public creation goes only through submitPublicLead (Admin SDK).
+    match /canvas_leads/{leadId} {
+      allow create: if false;
+      allow read, delete: if isAdmin();
+      allow update: if isAdmin() && isValidLeadUpdate();
+    }
+
+    // Short-lived upload authorizations are server-managed. Storage Rules may
+    // inspect them, but browser clients cannot read or modify their secrets.
+    match /leadUploadSessions/{sessionId} {
+      allow read, write: if false;
+
+      match /files/{fileId} {
+        allow read, write: if false;
+      }
     }
 
     // Canvas Workflows - authenticated users can read/write
     match /canvas_workflows/{document=**} {
-      allow read, write: if isAuthenticated();
+      allow read, write: if isAdmin();
     }
 
     // Canvas Settings (templates, etc.) - authenticated users can read/write
     match /canvas_settings/{document=**} {
-      allow read, write: if isAuthenticated();
+      allow read, write: if isAdmin();
     }
 
     // Canvas Projects - anyone can read, authenticated can write
     match /canvas_projects/{document=**} {
       allow read: if true;
-      allow write: if isAuthenticated();
+      allow write: if isAdmin();
     }
 
     // Communication Logs - authenticated users can read/write
     match /communicationLogs/{document=**} {
-      allow read, write: if isAuthenticated();
+      allow read, write: if isAdmin();
     }
 
     // Email Templates - authenticated users can read/write
     match /emailTemplates/{document=**} {
-      allow read, write: if isAuthenticated();
+      allow read, write: if isAdmin();
     }
 
     // SMS Templates - authenticated users can read/write
     match /smsTemplates/{document=**} {
-      allow read, write: if isAuthenticated();
+      allow read, write: if isAdmin();
     }
 
     // Workflow Contacts (for tracking workflow progress) - authenticated users can read/write
     match /workflowContacts/{document=**} {
-      allow read, write: if isAuthenticated();
+      allow read, write: if isAdmin();
+    }
+
+    // Canvas Orders - authenticated users can read/write
+    match /canvas_orders/{document=**} {
+      allow read, write: if isAdmin();
     }
   }
 }

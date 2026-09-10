@@ -1,0 +1,41 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAllowedLeadType() {
+      return request.resource.contentType in [
+        'image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif',
+        'application/pdf', 'application/postscript', 'application/illustrator',
+        'application/vnd.adobe.illustrator', 'application/octet-stream'
+      ];
+    }
+
+    match /lead-uploads/{submissionId}/{fileId}/{fileName} {
+      allow create: if submissionId.matches('[A-Za-z0-9_-]{16,80}')
+        && fileId.matches('[a-f0-9]{24}')
+        && request.resource.size > 0
+        && request.resource.size <= 20 * 1024 * 1024
+        && isAllowedLeadType()
+        && request.resource.metadata.submissionId == submissionId
+        && request.resource.metadata.fileId == fileId
+        && request.resource.metadata.uploadToken is string
+        && request.resource.metadata.originalName is string
+        && (fileId + '/' + fileName) in firestore.get(/databases/(default)/documents/leadUploadSessions/$(submissionId)).data.allowedPaths
+        && firestore.get(/databases/(default)/documents/leadUploadSessions/$(submissionId)).data.consumed == false
+        && firestore.get(/databases/(default)/documents/leadUploadSessions/$(submissionId)).data.expiresAt > request.time
+        && firestore.get(/databases/(default)/documents/leadUploadSessions/$(submissionId)).data.token == request.resource.metadata.uploadToken;
+      allow read, update, delete: if isAuthenticated();
+    }
+
+    match /lead-uploads/{allPaths=**} {
+      allow read, write: if isAuthenticated();
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if isAuthenticated();
+    }
+  }
+}
