@@ -10,14 +10,14 @@ index 7cb1dd0..7e6e466 100644
 @@ -424,10 +425,16 @@ async function enrollContactInWorkflow(contactId, workflowId, contactData) {
              return;
          }
- 
+
 +        // SMS enrollment requires explicit stored consent; email/task steps remain eligible.
 +        const sourceLead = await db.collection('canvas_leads').doc(contactId).get();
 +        const enrollment = smsConsent.enrollment(workflow, sourceLead.exists ? sourceLead.data() : null, contactData.phone);
 +        if (!enrollment.allowed) return { skipped: true, reason: 'sms_consent_required' };
 +
          // 2. Check if already active (prevent duplicate enrollment if needed)
- 
+
          // 3. Create Workflow Instance (workflowContacts)
          const instanceData = {
 +            smsEnrollment: enrollment.smsEnrollment,
@@ -45,7 +45,7 @@ index 7cb1dd0..7e6e466 100644
 @@ -786,6 +798,15 @@ async function sendSMS({ to, templateId, variables, options = {} }) {
          return null;
      }
- 
+
 +    if (!options.contactId) return { success: false, error: 'sms_consent_required' };
 +    const currentLead = await db.collection('canvas_leads').doc(options.contactId).get();
 +    const lead = currentLead.exists ? currentLead.data() : null;
