@@ -1,0 +1,13 @@
+# Explicit SMS consent draft
+
+Only boolean true from `productionRequest.version === 1` / smsConsent, or the historical boatSurvey.smsConsent schema when productionRequest is absent, authorizes SMS. Quote consent takes precedence; false, missing, strings, unknown versions and missing source leads deny. This does not infer consent from customer role, a phone number, booking, email consent or historical test authorization. It does not alter saved evidence.
+
+Enrollment reads the current source lead and binds `smsEnrollment: {version:1, authorized, phone}` to the normalized recipient. SMS-only workflows are not enrolled without consent. Mixed workflows retain their email/task enrollment with SMS explicitly ineligible. The workflow step reads current consent again and requires the original enrollment grant and matching phone. It returns a skipped consent result without calling the sender when ineligible. Successful skips progress to later non-SMS steps with existing delays; they are not sends/deliveries. Old instances lacking grants remain ineligible even if the lead later opts in. No backfill or re-enrollment is performed.
+
+The shared sendSMS helper checks fresh consent/recipient binding before provider/config access, covering direct messages too. Direct messages require explicit current source consent but have no workflow enrollment; workflow sends also require the grant. Reads fail closed. There is an unavoidable time-of-check race if consent is revoked after the last read while a provider request is already in flight; this draft cannot recall an in-flight message. It does not implement provider STOP-event synchronization, global queue deduplication or historical authorization.
+
+Run `node --test functions/test/sms-consent.test.js`. Eight executable tests exercise actual enrollment, workflow dispatch and shared sender functions in a VM with fake Firestore/providers: opt-in, opt-out, missing/string consent, revocation, deleted leads, phone changes, missing enrollment and no retroactive grants. No network or production operations.
+
+See release-order.md for sibling branches, all affected deployed callers, baseline-preserving artifact preparation, and remaining historical queue gate. Consent safety does not repair the missing index or authorize recovery.
+
+`tools/stage-sms-consent.cjs` applies the reviewed three-helper patch plus module import to a hash-verified live source file in an empty local directory. It preserves provider/runtime/other handler bytes and never deploys. The patch was successfully applied to the archived deployed onNewLead source; the same eight executable consent tests passed against that staged source using SMS_TEST_INDEX. Reverify all current caller versions before release.
