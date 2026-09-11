@@ -14,6 +14,7 @@ function configFromEnv(env) {
         transitionId: env.CANVAS_COMMUNICATIONS_TRANSITION_ID || '',
         cutoverAt: env.CANVAS_COMMUNICATIONS_CUTOVER_AT || '',
         websitePaused: env.CANVAS_WEBSITE_COMMUNICATIONS_PAUSED === 'true',
+        workflowEligibleFrom: env.CANVAS_WORKFLOW_ELIGIBLE_FROM || '',
         ...Object.fromEntries(GATES.map(key => [key, env['CRM_COMMUNICATIONS_' + key.replace(/[A-Z]/g, c => '_' + c).toUpperCase()] === 'true']))
     };
 }
@@ -28,7 +29,9 @@ function ready(config) {
         && validTimestamp(config.cutoverAt) && GATES.every(key => config[key] === true);
 }
 function capture(config, now = new Date(), testSuppressed = false) {
-    const base = { communicationPolicyVersion: 1, purpose: 'lead_received', capturedAt: now.toISOString(), testSuppressed: testSuppressed === true };
+    const base = { communicationPolicyVersion: 1, purpose: 'lead_received', capturedAt: now.toISOString(), testSuppressed: testSuppressed === true,
+        ...(validTimestamp(config.workflowEligibleFrom) && now.getTime() >= Date.parse(config.workflowEligibleFrom)
+            ? { workflowEligibility: { version: 1, cutoverAt: config.workflowEligibleFrom } } : {}) };
     // Incomplete configuration cannot transfer ownership or silence the default owner.
     if (!ready(config) || now.getTime() < Date.parse(config.cutoverAt)) return { ...base, notificationOwner: 'website' };
     return { ...base, notificationOwner: 'crm', transitionId: config.transitionId };
@@ -41,13 +44,36 @@ function websiteAllowed(config, lead, purpose) {
     // website ownership to a CRM/held record, and never rewrites old jobs.
     return !stamp || (stamp.communicationPolicyVersion === 1 && stamp.notificationOwner === 'website');
 }
+// Consolidates ca915c3's explicit table with d77's trusted origin and immutable owner.
+// No step.purpose override, index fallback or unknown-message send fallback.
+const STEP_PURPOSES = Object.freeze({
+    form_submit: { 'email:welcome': 'lead_received', 'sms:sms_welcome': 'lead_received',
+        'email:follow_up_no_response': 'follow_up' },
+    booking: { 'email:booking_confirmed': 'booking', 'sms:sms_booking_confirmed': 'booking',
+        'sms:booking_reminder_2h': 'reminder', 'email:booking_reminder_2h': 'reminder' },
+    status_change: { 'email:thank_you_post_project': 'project_completion', 'sms:sms_thank_you': 'project_completion' }
+});
 function stepPurpose(origin, step) {
-    if (step.type !== 'email' && step.type !== 'sms') return 'workflow';
-    if (origin === 'campaign') return 'campaign';
-    if (origin === 'booking') return step.relativeTo === 'event' || step.templateId === 'booking_reminder_2h' ? 'reminder' : 'booking';
-    if (origin === 'status_change') return 'project_completion';
-    if (origin === 'form_submit') return step.templateId === 'follow_up_no_response' ? 'follow_up' : 'lead_received';
-    return undefined; // Unknown message origin must not bypass a receipt gate.
+    if (['task', 'delay'].includes(step.type)) return 'workflow';
+    if (!['email', 'sms'].includes(step.type)) return undefined;
+    if (origin === 'campaign') return 'campaign'; // authenticated server invocation
+    const purpose = STEP_PURPOSES[origin]?.[step.type + ':' + step.templateId];
+    return purpose && origin === 'booking' && step.relativeTo === 'event' ? 'reminder' : purpose;
+}
+function workflowGrant(config, lead) {
+    const stamp = lead?.communications;
+    const cutover = config.workflowEligibleFrom;
+    if (!validTimestamp(cutover) || stamp?.workflowEligibility?.version !== 1
+        || stamp.workflowEligibility.cutoverAt !== cutover || !validTimestamp(stamp.capturedAt)
+        || Date.parse(stamp.capturedAt) < Date.parse(cutover)) return null;
+    return { version: 1, cutoverAt: cutover, capturedAt: stamp.capturedAt };
+}
+function dispatchDecision(config, lead, instance, purpose) {
+    if (!PURPOSES.includes(purpose)) return { allowed: false, reason: 'unknown_communication_purpose' };
+    const expected = workflowGrant(config, lead), actual = instance?.communicationEligibility;
+    if (!expected || !actual || actual.version !== 1 || actual.cutoverAt !== expected.cutoverAt
+        || actual.capturedAt !== expected.capturedAt) return { allowed: false, reason: 'workflow_not_authorized' };
+    return { allowed: true };
 }
 function deliveryHold(config, stamp) {
     if (stamp?.notificationOwner === 'held') return 'communications-transition-not-ready';
@@ -55,4 +81,4 @@ function deliveryHold(config, stamp) {
         || !Number.isFinite(Date.parse(stamp.capturedAt)) || Date.parse(stamp.capturedAt) < Date.parse(config.cutoverAt))) return 'communications-owner-mismatch';
     return null;
 }
-module.exports = { GATES, PURPOSES, configFromEnv, ready, capture, websiteAllowed, stepPurpose, deliveryHold };
+module.exports = { GATES, PURPOSES, STEP_PURPOSES, workflowGrant, dispatchDecision, configFromEnv, ready, capture, websiteAllowed, stepPurpose, deliveryHold };

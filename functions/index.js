@@ -428,17 +428,24 @@ exports.submitPublicLead = configuredFunctions.https.onCall(async (data, context
                 consumedAt: admin.firestore.FieldValue.serverTimestamp(),
                 leadId: ref.id
             },
-            buildLead: (testAuthorized) => ({
+            buildLead: (testAuthorized) => {
+                const communications = communicationsPolicy.capture(communicationsPolicy.configFromEnv(process.env), new Date(), testAuthorized);
+                return ({
                 ...validated.lead,
                 source: crmTestAuthorization.trustedSource(validated.lead.source, testAuthorized),
                 ...(testAuthorized ? { crmIntegrationTestAuthorized: true } : {}),
-                communications: communicationsPolicy.capture(communicationsPolicy.configFromEnv(process.env), new Date(), testAuthorized),
+                communications,
+                ...(communications.notificationOwner === 'crm' ? { receiptObligation: {
+                    version: 1, purpose: 'lead_received', owner: 'crm', capturedAt: communications.capturedAt,
+                    transitionId: communications.transitionId, status: 'unresolved',
+                    resolution: 'explicit_authenticated_crm_reconciliation_required'
+                } } : {}),
                 contractVersion: 2,
                 createdAt: admin.firestore.FieldValue.serverTimestamp(),
                 updatedAt: admin.firestore.FieldValue.serverTimestamp(),
                 status: 'new',
                 notes: ''
-            })
+            }); }
         });
         return { ok: true, id: ref.id, duplicate: !persisted.created };
     } catch (error) {
@@ -481,6 +488,9 @@ async function enrollContactInWorkflow(contactId, workflowId, contactData, origi
         const policyConfig = communicationsPolicy.configFromEnv(process.env);
         // Origin is supplied by the server caller, never contactData or browser input.
         if (!['form_submit', 'booking', 'campaign', 'status_change'].includes(origin)) return { skipped: true, reason: 'invalid_communication_origin' };
+        const communicationEligibility = communicationsPolicy.workflowGrant(policyConfig, storedLead);
+        if (!communicationEligibility) { console.error('communication_refused', { contactId, workflowId, reason: 'workflow_not_authorized' }); return { skipped: true, reason: 'workflow_not_authorized' }; }
+        if ((workflow.steps || []).some(step => !communicationsPolicy.stepPurpose(origin, step))) { console.error('communication_refused', { contactId, workflowId, reason: 'unknown_communication_purpose' }); return { skipped: true, reason: 'unknown_communication_purpose' }; }
         const eligibleSteps = (workflow.steps || []).filter(step => communicationsPolicy.websiteAllowed(policyConfig, storedLead, communicationsPolicy.stepPurpose(origin, step)));
         if (!eligibleSteps.length && (workflow.steps || []).length) return { skipped: true, reason: 'website_communications_suppressed' };
         if (!communicationsPolicy.websiteAllowed(policyConfig, storedLead, 'workflow')) return { skipped: true, reason: 'website_communications_suppressed' };
@@ -493,6 +503,7 @@ async function enrollContactInWorkflow(contactId, workflowId, contactData, origi
         const instanceData = {
             smsEnrollment: enrollment.smsEnrollment,
             communicationOrigin: origin,
+            communicationEligibility,
             workflowId: workflowId,
             contactId: contactId,
             contactEmail: contactData.email,
@@ -652,7 +663,14 @@ async function processInstance(doc) {
 
         console.log(`Executing step ${instance.currentStepIndex} (${currentStep.type}) for ${instanceId}`);
         const purpose = communicationsPolicy.stepPurpose(instance.communicationOrigin || workflow.trigger, currentStep);
-        const result = await executeWorkflowStep(currentStep, instance, purpose);
+        const sourceLead = await db.collection('canvas_leads').doc(instance.contactId).get();
+        const eligibility = communicationsPolicy.dispatchDecision(communicationsPolicy.configFromEnv(process.env), sourceLead.exists ? sourceLead.data() : null, instance, purpose);
+        if (!eligibility.allowed) {
+            console.error('communication_refused', { instanceId, reason: eligibility.reason });
+            return; // preserve refused record bytes, timestamps and step index
+        }
+        const result = await executeWorkflowStep(currentStep, { ...instance, instanceId }, purpose);
+        if (result.refused) { console.error('communication_refused', { instanceId, reason: result.error }); return; }
 
         // 3. Update State
         const updates = {
@@ -711,10 +729,17 @@ async function processInstance(doc) {
 
 async function executeWorkflowStep(step, instance, purpose) {
     const purposeLead = await db.collection('canvas_leads').doc(instance.contactId).get();
+    const eligibility = communicationsPolicy.dispatchDecision(communicationsPolicy.configFromEnv(process.env), purposeLead.exists ? purposeLead.data() : null, instance, purpose);
+    if (!eligibility.allowed) return { success: false, refused: true, error: eligibility.reason };
     if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), purposeLead.exists ? purposeLead.data() : null, purpose)) {
         // A skipped CRM-owned step is terminal for that step only. The normal
         // scheduler retains the original delays for website-owned follow-ups.
-        return { success: true, skipped: true, reason: 'website_communications_suppressed' };
+        const lead = purposeLead.exists ? purposeLead.data() : null;
+        const config = communicationsPolicy.configFromEnv(process.env);
+        if (purpose === 'lead_received' && lead?.communications?.notificationOwner === 'crm'
+            && !config.websitePaused && !lead.crmIntegrationTestAuthorized && !lead.communications.testSuppressed)
+            return { success: true, skipped: true, reason: 'website_communications_suppressed' };
+        return { success: false, refused: true, error: 'website_communications_suppressed' };
     }
     const variables = {
         firstName: instance.contactName,
@@ -730,7 +755,7 @@ async function executeWorkflowStep(step, instance, purpose) {
             to: instance.contactEmail,
             templateId: step.templateId,
             variables: variables,
-            options: { purpose, workflowId: instance.workflowId, contactId: instance.contactId }
+            options: { purpose, workflowInstanceId: instance.instanceId, workflowId: instance.workflowId, contactId: instance.contactId }
         });
     } else if (step.type === 'sms') {
         // Fresh consent and recipient binding are required before any provider/config access.
@@ -742,7 +767,7 @@ async function executeWorkflowStep(step, instance, purpose) {
             to: instance.contactPhone,
             templateId: step.templateId,
             variables: variables,
-            options: { purpose, workflowId: instance.workflowId, contactId: instance.contactId, smsEnrollment: instance.smsEnrollment }
+            options: { purpose, workflowInstanceId: instance.instanceId, workflowId: instance.workflowId, contactId: instance.contactId, smsEnrollment: instance.smsEnrollment }
         });
     } else if (step.type === 'task') {
         console.log(`TASK created: ${step.description}`);
@@ -766,7 +791,12 @@ async function sendEmail({ to, templateId, variables, options = {} }) {
     // All workflow, bulk, booking and direct-message paths use this final gate.
     if (!options.contactId) return { success: false, error: 'communications_contact_required' };
     const communicationLead = await db.collection('canvas_leads').doc(options.contactId).get();
-    if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), communicationLead.exists ? communicationLead.data() : null, options.purpose)) return { success: false, error: 'website_communications_suppressed' };
+    if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), communicationLead.exists ? communicationLead.data() : null, options.purpose)) return { success: false, refused: true, error: 'website_communications_suppressed' };
+    if (options.purpose !== 'direct_message') {
+        const instanceDoc = options.workflowInstanceId ? await db.collection('workflowContacts').doc(options.workflowInstanceId).get() : null;
+        const eligibility = communicationsPolicy.dispatchDecision(communicationsPolicy.configFromEnv(process.env), communicationLead.exists ? communicationLead.data() : null, instanceDoc?.exists ? instanceDoc.data() : null, options.purpose);
+        if (!eligibility.allowed) { console.error('communication_refused', { contactId: options.contactId, reason: eligibility.reason }); return { success: false, refused: true, error: eligibility.reason }; }
+    }
     if (!to) {
         console.warn('sendEmail: No recipient');
         return null;
@@ -865,7 +895,12 @@ async function sendSMS({ to, templateId, variables, options = {} }) {
     // All workflow, bulk, booking and direct-message paths use this final gate.
     if (!options.contactId) return { success: false, error: 'communications_contact_required' };
     const communicationLead = await db.collection('canvas_leads').doc(options.contactId).get();
-    if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), communicationLead.exists ? communicationLead.data() : null, options.purpose)) return { success: false, error: 'website_communications_suppressed' };
+    if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), communicationLead.exists ? communicationLead.data() : null, options.purpose)) return { success: false, refused: true, error: 'website_communications_suppressed' };
+    if (options.purpose !== 'direct_message') {
+        const instanceDoc = options.workflowInstanceId ? await db.collection('workflowContacts').doc(options.workflowInstanceId).get() : null;
+        const eligibility = communicationsPolicy.dispatchDecision(communicationsPolicy.configFromEnv(process.env), communicationLead.exists ? communicationLead.data() : null, instanceDoc?.exists ? instanceDoc.data() : null, options.purpose);
+        if (!eligibility.allowed) { console.error('communication_refused', { contactId: options.contactId, reason: eligibility.reason }); return { success: false, refused: true, error: eligibility.reason }; }
+    }
     if (!to) {
         console.warn('sendSMS: No recipient');
         return null;
@@ -2287,7 +2322,11 @@ async function createCrmLeadDelivery(leadId, leadData, timestamp) {
         attemptCount: 0,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         updatedAt: admin.firestore.FieldValue.serverTimestamp()
-    });
+    }, leadData.receiptObligation ? { leadRef: db.collection('canvas_leads').doc(leadId), review: {
+        status: 'unresolved', reason: mapping.body.testSuppressed ? 'enrollment_suppressed_requires_review' : 'crm_receipt_evidence_required',
+        idempotencyKey, payloadSha256: require('crypto').createHash('sha256').update(mapping.serializedBody).digest('hex'),
+        capturedAt: leadData.communications.capturedAt, transitionId: leadData.communications.transitionId
+    } } : null);
 
     if (!readiness.ready) {
         console.log(`CRM lead ${leadId} held: ${readiness.reason}. Canvas lead remains accepted.`);

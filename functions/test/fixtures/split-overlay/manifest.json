@@ -2,8 +2,8 @@
   "packages": [
     {
       "name": "sms-targets",
-      "archiveSha256": "b457469512cc7bd181f1cd6f8eb65f80d2ff13354e7738361b77ee26b5b8b1e2",
-      "indexSha256": "e041f90afb669cf684d22cf8ceaa56649758c173e790680aa0e965a1e5b54032",
+      "archiveSha256": "8be1ba89f515d442bca045b869c10b372b57131caf1ff139f1c5ef3f4b3169ae",
+      "indexSha256": "fd6b27acc9a631f480705e3c1dc9dfe409bd93defff09452012052ec523d9df0",
       "runtime": {
         "node": "20"
       },
@@ -11,14 +11,14 @@
         {
           "file": "sms-targets-workflow-and-notifications.txt",
           "startUtf8Byte": 2620,
-          "endUtf8Byte": 27704,
-          "sha256": "9cd7e7ad1c29b6faa8573b0dcda8b15d8a827efee6ecf4b6c803c5a4685f6148"
+          "endUtf8Byte": 31094,
+          "sha256": "4281110a1afae7a9e5b6902ff03fa2a89dcf19011774341883bc00f3741ff87a"
         },
         {
           "file": "sms-targets-direct-message.txt",
-          "startUtf8Byte": 47173,
-          "endUtf8Byte": 49229,
-          "sha256": "08cbe27e8b01adf64dac4c3e4de249202a645f4e1017444770acff8eb5c7c67e"
+          "startUtf8Byte": 50563,
+          "endUtf8Byte": 52620,
+          "sha256": "a454fa805a930fd03da556dec68af56606e8ad9eb91036128ed9e88d73852837"
         }
       ],
       "dependencies": [
@@ -34,7 +34,7 @@
       "baselineArchiveSha256": "4429fa07197c8539efe200df5daac69f9d66d18ae469b9bf22778d87bcc78917",
       "moduleHashes": {
         "sms-consent.js": "8422372d0c66b9867787037fb334cfe4aa120f77bc7ae2015499f09fd5e8afa7",
-        "communications-policy.js": "9d9b8277bb2082a92151fd1e971e703b534571bae446edc43d5bd9e3792c3b7d"
+        "communications-policy.js": "76250530e791dd3897018ea990b955c3d57e71b5999674f447989ef685067aa5"
       }
     },
     {
@@ -46,14 +46,14 @@
         {
           "file": "public-adapter-targets-public-capture.txt",
           "startUtf8Byte": 3884,
-          "endUtf8Byte": 20834,
-          "sha256": "479018b7b11b94c4ff2658b980c0a93247f3d4ac9495ed3a62c19a2fb746fa3e"
+          "endUtf8Byte": 21297,
+          "sha256": "661b74721e150e15acfe7da6fca4394ca5cff3c780b109a68ec4ed55533b8d24"
         },
         {
           "file": "public-adapter-targets-new-adapter.txt",
-          "startUtf8Byte": 92141,
-          "endUtf8Byte": 101618,
-          "sha256": "6011ce893b1559849ca5a01b26ac1bb1ba21b3fa54827b95e50e580782920047"
+          "startUtf8Byte": 92604,
+          "endUtf8Byte": 102564,
+          "sha256": "2877d73da1fa99509fa574fe28b9c01b8266ee4f364e3f0bc2813168ac588ce4"
         }
       ],
       "dependencies": [
@@ -67,14 +67,14 @@
         }
       ],
       "baselineArchiveSha256": "11c3c95913e0c3ddad143336d84f8d691dac01a6933e5fbe76b74fbe80ba549e",
-      "archiveSha256": "dd5f5dd46dbfa4499206f1668fcb936b80a6cb66f41b241a990cfac77c584a73",
-      "indexSha256": "28f2e731eeaba079fb45ca830713a541622fc566aff65443226321a780cc901b",
+      "archiveSha256": "4105c2ec32e27dc6e7c3cd84d768e228940388eadad19c496a614230d7451933",
+      "indexSha256": "9b82bd59a5e42d0afcd43eab544babca9b403a37038aa91baa9de4b2f61fb9c0",
       "moduleHashes": {
         "crm-test-authorization.js": "b8037fa57a785a6152b507338055bd4ca631b62d52c8a760a8f171fe8fe9ff17",
         "crm-lead-adapter.js": "88affc81e4d0653d9c297c26a5a27dbd011e89fd982fa72fc916f6f8f8a21b7a",
         "sms-consent.js": "8422372d0c66b9867787037fb334cfe4aa120f77bc7ae2015499f09fd5e8afa7",
-        "communications-policy.js": "9d9b8277bb2082a92151fd1e971e703b534571bae446edc43d5bd9e3792c3b7d",
-        "crm-test-state.js": "f123916e08a7b073dbdc8e30ce03d10d174964400b11a470596e5e6e984a17d0"
+        "communications-policy.js": "76250530e791dd3897018ea990b955c3d57e71b5999674f447989ef685067aa5",
+        "crm-test-state.js": "5b9290e08cf191c8c4bd97520f95a3c77f557b30c06fc96cd6daf7d89746f74c"
       }
     }
   ],

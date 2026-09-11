@@ -162,7 +162,11 @@ async function createCrmLeadDelivery(leadId, leadData, timestamp) {
         attemptCount: 0,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         updatedAt: admin.firestore.FieldValue.serverTimestamp()
-    });
+    }, leadData.receiptObligation ? { leadRef: db.collection('canvas_leads').doc(leadId), review: {
+        status: 'unresolved', reason: mapping.body.testSuppressed ? 'enrollment_suppressed_requires_review' : 'crm_receipt_evidence_required',
+        idempotencyKey, payloadSha256: require('crypto').createHash('sha256').update(mapping.serializedBody).digest('hex'),
+        capturedAt: leadData.communications.capturedAt, transitionId: leadData.communications.transitionId
+    } } : null);
 
     if (!readiness.ready) {
         console.log(`CRM lead ${leadId} held: ${readiness.reason}. Canvas lead remains accepted.`);

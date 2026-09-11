@@ -316,17 +316,24 @@ exports.submitPublicLead = configuredFunctions.https.onCall(async (data, context
                 consumedAt: admin.firestore.FieldValue.serverTimestamp(),
                 leadId: ref.id
             },
-            buildLead: (testAuthorized) => ({
+            buildLead: (testAuthorized) => {
+                const communications = communicationsPolicy.capture(communicationsPolicy.configFromEnv(process.env), new Date(), testAuthorized);
+                return ({
                 ...validated.lead,
                 source: crmTestAuthorization.trustedSource(validated.lead.source, testAuthorized),
                 ...(testAuthorized ? { crmIntegrationTestAuthorized: true } : {}),
-                communications: communicationsPolicy.capture(communicationsPolicy.configFromEnv(process.env), new Date(), testAuthorized),
+                communications,
+                ...(communications.notificationOwner === 'crm' ? { receiptObligation: {
+                    version: 1, purpose: 'lead_received', owner: 'crm', capturedAt: communications.capturedAt,
+                    transitionId: communications.transitionId, status: 'unresolved',
+                    resolution: 'explicit_authenticated_crm_reconciliation_required'
+                } } : {}),
                 contractVersion: 2,
                 createdAt: admin.firestore.FieldValue.serverTimestamp(),
                 updatedAt: admin.firestore.FieldValue.serverTimestamp(),
                 status: 'new',
                 notes: ''
-            })
+            }); }
         });
         return { ok: true, id: ref.id, duplicate: !persisted.created };
     } catch (error) {

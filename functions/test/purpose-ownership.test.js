@@ -2,8 +2,8 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const policy=require('../communications-policy'),sms=require('../sms-consent'),adapter=require('../crm-lead-adapter');
 const source=fs.readFileSync(require.resolve('../index'),'utf8');
-const cfg={owner:'crm',ownedPurposes:['lead_received'],transitionId:'purpose_fixture_epoch',cutoverAt:'2026-09-01T00:00:00Z',...Object.fromEntries(policy.GATES.map(k=>[k,true]))};
-const env={CANVAS_CRM_OWNED_PURPOSES:'["lead_received"]',CANVAS_COMMUNICATIONS_TRANSITION_ID:cfg.transitionId,CANVAS_COMMUNICATIONS_CUTOVER_AT:cfg.cutoverAt,...Object.fromEntries(policy.GATES.map(k=>['CRM_COMMUNICATIONS_'+k.replace(/[A-Z]/g,c=>'_'+c).toUpperCase(),'true']))};
+const cfg={workflowEligibleFrom:'2026-09-01T00:00:00Z',owner:'crm',ownedPurposes:['lead_received'],transitionId:'purpose_fixture_epoch',cutoverAt:'2026-09-01T00:00:00Z',...Object.fromEntries(policy.GATES.map(k=>[k,true]))};
+const env={CANVAS_WORKFLOW_ELIGIBLE_FROM:cfg.workflowEligibleFrom,CANVAS_CRM_OWNED_PURPOSES:'["lead_received"]',CANVAS_COMMUNICATIONS_TRANSITION_ID:cfg.transitionId,CANVAS_COMMUNICATIONS_CUTOVER_AT:cfg.cutoverAt,...Object.fromEntries(policy.GATES.map(k=>['CRM_COMMUNICATIONS_'+k.replace(/[A-Z]/g,c=>'_'+c).toUpperCase(),'true']))};
 const lead={name:'Synthetic',email:'fixture@example.invalid',phone:'+15125550123',service:'other',productionRequest:{version:1,smsConsent:true},communications:policy.capture(cfg,new Date('2026-09-10T10:00:00Z'))};
 const fn=name=>{const a=source.indexOf('async function '+name+'(');return source.slice(a,source.indexOf('\n}',a)+2);};
 function harness(record=lead,workflow={enabled:true,trigger:'form_submit',steps:[{type:'email',templateId:'welcome'},{type:'sms',templateId:'sms_welcome'},{type:'email',templateId:'follow_up_no_response',delay:2,unit:'days'}]}) {
@@ -49,9 +49,9 @@ test('booking and reminder steps retain their own ownership and stored SMS grant
  assert.deepEqual(h.sends.map(x=>x.options.purpose),['booking','reminder']);
 });
 test('scheduler skips receipt only, retains normal delay, and rollback never rewinds the instance',async()=>{
- const h=harness();const instance={workflowId:'wf_welcome',contactId:'fixture',communicationOrigin:'form_submit',currentStepIndex:0,contactEmail:lead.email};
+ const h=harness();const instance={workflowId:'wf_welcome',contactId:'fixture',communicationOrigin:'form_submit',communicationEligibility:policy.workflowGrant(cfg,lead),currentStepIndex:0,contactEmail:lead.email};
  await h.c.processInstance({id:'synthetic',data:()=>instance});const first=h.writes.at(-1);assert.equal(first.currentStepIndex,1);assert.equal(h.sends.length,0);
- h.c.process.env={};Object.assign(instance,first);await h.c.processInstance({id:'synthetic',data:()=>instance});const second=h.writes.at(-1);assert.equal(second.currentStepIndex,2);assert.ok(second.nextExecutionAt>=Date.now()+47*60*60*1000);assert.equal(h.sends.length,0);
+ h.c.process.env={CANVAS_WORKFLOW_ELIGIBLE_FROM:cfg.workflowEligibleFrom};Object.assign(instance,first);await h.c.processInstance({id:'synthetic',data:()=>instance});const second=h.writes.at(-1);assert.equal(second.currentStepIndex,2);assert.ok(second.nextExecutionAt>=Date.now()+47*60*60*1000);assert.equal(h.sends.length,0);
  assert.equal(h.writes.length,2);
 });
 test('direct handler hardcodes purpose and shared SMS sender retains explicit consent',async()=>{
@@ -62,9 +62,9 @@ test('direct handler hardcodes purpose and shared SMS sender retains explicit co
 test('actual shared email/SMS helpers suppress receipt and allow other explicit purposes with consent',async()=>{
  for(const name of ['sendEmail','sendSMS'])for(const purpose of ['lead_received','follow_up','booking','reminder','campaign','direct_message',undefined]){
   let sent=0;const grant=sms.enrollment({steps:[{type:'sms'}]},lead,lead.phone).smsEnrollment;
-  const c={communicationsPolicy:policy,smsConsent:sms,process:{env:{...env,PLIVO_PHONE_NUMBER:'synthetic'}},db:{collection:()=>({doc:()=>({get:async()=>({exists:true,data:()=>lead})})})},console:{log(){},warn(){},error(){}},getResend:()=>({emails:{send:async()=>{sent++;return{id:'mock'};}}}),getPlivo:()=>({messages:{create:async()=>{sent++;return{messageUuid:['mock']};}}}),logCommunication:async()=>{},admin:{firestore:{FieldValue:{serverTimestamp:()=>0}}}};
+  const c={communicationsPolicy:policy,smsConsent:sms,process:{env:{...env,PLIVO_PHONE_NUMBER:'synthetic'}},db:{collection:name=>({doc:()=>({get:async()=>({exists:true,data:()=>name==='workflowContacts'?{communicationEligibility:policy.workflowGrant(cfg,lead)}:lead})})})},console:{log(){},warn(){},error(){}},getResend:()=>({emails:{send:async()=>{sent++;return{id:'mock'};}}}),getPlivo:()=>({messages:{create:async()=>{sent++;return{messageUuid:['mock']};}}}),logCommunication:async()=>{},admin:{firestore:{FieldValue:{serverTimestamp:()=>0}}}};
   vm.createContext(c);vm.runInContext(fn(name),c);
-  await c[name]({to: name==='sendSMS'?lead.phone:lead.email,options:{purpose,contactId:'fixture',workflowId:purpose==='direct_message'?'direct_message':'fixture',smsEnrollment:grant,subject:'Mock',html:'Mock',text:'Mock'}});
+  await c[name]({to: name==='sendSMS'?lead.phone:lead.email,options:{purpose,workflowInstanceId:'fixture-instance',contactId:'fixture',workflowId:purpose==='direct_message'?'direct_message':'fixture',smsEnrollment:grant,subject:'Mock',html:'Mock',text:'Mock'}});
   assert.equal(sent,purpose && purpose!=='lead_received'?1:0,name+':'+purpose);
  }
 });

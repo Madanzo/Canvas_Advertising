@@ -16,7 +16,7 @@ def sms(text):
   assert fn(text,name)==fn(parent,name),f'Previously reviewed helper drift: {name}'
   text=once(text,fn(parent,name),fn(current,name))
  # Preserve the live SMS provider/config fallback byte-for-byte; only add purpose to its ownership check.
- old=fn(text,'sendSMS');new=once(old,'communicationLead.exists ? communicationLead.data() : null))','communicationLead.exists ? communicationLead.data() : null, options.purpose))');text=once(text,old,new)
+ old=fn(text,'sendSMS');new=fn(current,'sendSMS').replace("runtimeConfig('plivo', 'phone_number')", "functions.config().plivo?.phone_number");text=once(text,old,new)
  text=once(text,"configFromEnv(process.env), leadData))", "configFromEnv(process.env), leadData, 'workflow'))")
  old="const triggerType = leadData.source === 'booking' ? 'booking' : 'form_submit';"
  new="const triggerType = leadData.communications?.purpose === 'lead_received' ? 'form_submit' : (leadData.source === 'booking' ? 'booking' : 'form_submit');"

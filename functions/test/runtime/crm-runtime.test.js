@@ -176,6 +176,7 @@ if (process.env.CRM_SPLIT_OVERLAY_RUNTIME === 'true') {
 if (process.env.CRM_SPLIT_OVERLAY_RUNTIME === 'true') test('purpose scope: real public capture, mixed workflow, and rollback preserve non-receipt scheduling without replay',async()=>{
     process.env.CRM_LEAD_TEST_SUBMISSION_ID='';
     process.env.CANVAS_CRM_OWNED_PURPOSES='["lead_received"]';
+    process.env.CANVAS_WORKFLOW_ELIGIBLE_FROM='2026-01-01T00:00:00.000Z';
     process.env.CANVAS_COMMUNICATIONS_TRANSITION_ID='purpose_emulator_epoch';
     process.env.CANVAS_COMMUNICATIONS_CUTOVER_AT='2026-01-01T00:00:00.000Z';
     for(const gate of ['INTAKE','EMAIL','SMS','CONSENT','IDEMPOTENCY','SUPPRESSION']) process.env['CRM_COMMUNICATIONS_'+gate+'_READY']='true';
@@ -197,3 +198,33 @@ if (process.env.CRM_SPLIT_OVERLAY_RUNTIME === 'true') test('purpose scope: real 
     const heldBefore=(await held.get()).data();await runtime.processWorkflowQueue.run({});
     assert.deepEqual((await held.get()).data(),heldBefore);assert.deepEqual((await instance.ref.get()).data(),after.data());assert.equal(calls.length,0);
 });
+
+if (process.env.CRM_SPLIT_OVERLAY_RUNTIME === 'true') {
+ test('consolidated: actual worker leaves active/due historical and unknown work byte-identical with zero transports',async()=>{
+    process.env.CANVAS_WORKFLOW_ELIGIBLE_FROM='2026-01-01T00:00:00.000Z';
+    const lead=db.collection('canvas_leads').doc('historical_refusal');await lead.set({name:'Synthetic historical'});
+    await db.collection('canvas_workflows').doc('historical_refusal_wf').set({trigger:'form_submit',steps:[{type:'email',templateId:'welcome'}]});
+    const job=db.collection('workflowContacts').doc('historical_refusal_job');await job.set({contactId:lead.id,workflowId:'historical_refusal_wf',status:'active',currentStepIndex:0,nextExecutionAt:admin.firestore.Timestamp.fromMillis(1)});
+    const original=(await job.get()).data();await runtime.processWorkflowQueue.run({});assert.deepEqual((await job.get()).data(),original);assert.equal(calls.length,0);
+    // Valid new server capture/grant cannot authorize an unknown message definition.
+    const policy=require('../../communications-policy');const stamp=policy.capture(policy.configFromEnv(process.env));await lead.set({communications:stamp});
+    await job.update({communicationEligibility:policy.workflowGrant(policy.configFromEnv(process.env),{communications:stamp})});
+    await db.collection('canvas_workflows').doc('historical_refusal_wf').update({steps:[{type:'email',templateId:'unknown',purpose:'follow_up'}]});
+    const unknown=(await job.get()).data();await runtime.processWorkflowQueue.run({});assert.deepEqual((await job.get()).data(),unknown);assert.equal(calls.length,0);
+ });
+ test('consolidated: receipt obligation commits with lead, survives outbox failure/config loss and never auto-resolves on retry',async()=>{
+    process.env.CANVAS_CRM_OWNED_PURPOSES='["lead_received"]';process.env.CANVAS_COMMUNICATIONS_TRANSITION_ID='recovery_emulator_epoch';process.env.CANVAS_COMMUNICATIONS_CUTOVER_AT='2026-01-01T00:00:00.000Z';
+    for(const gate of ['INTAKE','EMAIL','SMS','CONSENT','IDEMPOTENCY','SUPPRESSION'])process.env['CRM_COMMUNICATIONS_'+gate+'_READY']='true';
+    const ordinary=payload();delete ordinary.crmTestAuthorizationToken;ordinary.source='website';
+    await runtime.submitPublicLead.run(ordinary,context());const saved=(await leadRef.get()).data();assert.equal(saved.receiptObligation.status,'unresolved');assert.equal(saved.receiptObligation.capturedAt,saved.communications.capturedAt);
+    mode='outbox-abort';await assert.rejects(trigger(),/pre-outbox/);assert.equal((await outboxRef.get()).exists,false);assert.deepEqual((await leadRef.get()).data().receiptObligation,saved.receiptObligation);
+    mode='';delete process.env.CANVAS_CRM_OWNED_PURPOSES;await trigger();const frozen=(await outboxRef.get()).data();assert.equal(JSON.parse(frozen.serializedBody).testSuppressed,true);
+    const review=(await leadRef.get()).data().receiptReview;assert.equal(review.status,'unresolved');assert.equal(review.reason,'enrollment_suppressed_requires_review');
+    process.env.CANVAS_CRM_OWNED_PURPOSES='["lead_received"]';await trigger();const retried=(await outboxRef.get()).data();assert.equal(retried.serializedBody,frozen.serializedBody);assert.equal(retried.idempotencyKey,frozen.idempotencyKey);assert.deepEqual(retried.createdAt,frozen.createdAt);
+    assert.deepEqual((await leadRef.get()).data().receiptObligation,saved.receiptObligation);assert.deepEqual((await leadRef.get()).data().receiptReview,review);
+    const recovery=require('../../receipt-recovery');const authority={authenticated:true,role:'communications_reviewer',actorId:'emulator-operator',leadId:id,approvalId:'review_emulator_01'};
+    const recorded=await recovery.recordReview(db,id,authority);assert.equal(recorded.decision.maySend,false);assert.deepEqual(await recovery.recordReview(db,id,authority),recorded);assert.equal((await leadRef.collection('receiptRecoveryReviews').get()).size,1);
+    await assert.rejects(recovery.recordReview(db,id,{...authority,authenticated:false}));assert.equal((await leadRef.get()).data().receiptObligation.status,'unresolved');
+    assert.ok(calls.every(c=>JSON.parse(c.body).testSuppressed===true)); // CRM HTTP mocked, no SMS/email boundary available
+ });
+}

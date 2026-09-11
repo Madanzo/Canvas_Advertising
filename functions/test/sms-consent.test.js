@@ -5,21 +5,22 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const policy = require('../sms-consent');
 const source = fs.readFileSync(process.env.SMS_TEST_INDEX || require.resolve('../index.js'), 'utf8');
-function lead(value) { return {phone: '+15125550123', productionRequest:{version:1, ...(value === undefined ? {} : {smsConsent:value})}}; }
+const eligibilityConfig={workflowEligibleFrom:'2026-09-01T00:00:00Z'};
+function lead(value) { return {communications:require('../communications-policy').capture(eligibilityConfig,new Date('2026-09-10T00:00:00Z')),phone: '+15125550123', productionRequest:{version:1, ...(value === undefined ? {} : {smsConsent:value})}}; }
 function harness(current, grant) {
     const calls = { writes:[], sends:0, reads:0 };
-    const workflow = {enabled:true, steps:[{type:'email'}, {type:'sms'}]};
+    const workflow = {enabled:true, steps:[{type:'email',templateId:'welcome'}, {type:'sms',templateId:'sms_welcome'}]};
     const db = {collection(name) { return {
         doc() { return {async get() { calls.reads++; return name === 'canvas_workflows' ? {exists:true,data:()=>workflow} : {exists:!!current,data:()=>current}; }, async update(v) { calls.writes.push(v); }}; },
         async add(v) { calls.writes.push(v); }
     }; }};
-    const context = {communicationsPolicy:require('../communications-policy'),process:{env:{}},smsConsent:policy, db, console:{log(){},error(){}}, admin:{firestore:{FieldValue:{serverTimestamp:()=> 'timestamp'}}}, sendSMS:async()=>{calls.sends++;return {success:true};},sendEmail:async()=>({success:true})};
+    const context = {communicationsPolicy:require('../communications-policy'),process:{env:{CANVAS_WORKFLOW_ELIGIBLE_FROM:eligibilityConfig.workflowEligibleFrom}},smsConsent:policy, db, console:{log(){},error(){}}, admin:{firestore:{FieldValue:{serverTimestamp:()=> 'timestamp'}}}, sendSMS:async()=>{calls.sends++;return {success:true};},sendEmail:async()=>({success:true})};
     vm.createContext(context);
     const enroll = source.slice(source.indexOf('async function enrollContactInWorkflow('),source.indexOf('/**\n * HTTP Callable: Process Bulk Campaign'));
     const start = source.indexOf('async function executeWorkflowStep(');
     const end = source.indexOf('\n}', start)+2;
     vm.runInContext(enroll + '\n' + source.slice(start,end) + ';this.enroll=enrollContactInWorkflow;this.execute=executeWorkflowStep;',context);
-    return {context,calls,workflow,instance:{contactId:'test',contactPhone:'+15125550123',smsEnrollment:grant}};
+    return {context,calls,workflow,instance:{communicationEligibility:require('../communications-policy').workflowGrant(eligibilityConfig,current),contactId:'test',contactPhone:'+15125550123',smsEnrollment:grant}};
 }
 for (const [label,value,expected] of [['opted-in',true,true],['opted-out',false,false],['missing',undefined,false],['string true','true',false]]) {
     test(label + ': enrollment and actual SMS step enforce explicit consent', async()=>{
@@ -30,7 +31,7 @@ for (const [label,value,expected] of [['opted-in',true,true],['opted-out',false,
         const result=await h.context.execute({type:'sms'},instance,'lead_received');
         assert.equal(h.calls.sends,expected ? 1 : 0);
         assert.equal(result.skipped === true,!expected);
-        h.workflow.steps=[{type:'sms'}]; h.calls.writes=[];
+        h.workflow.steps=[{type:'sms',templateId:'sms_welcome'}]; h.calls.writes=[];
         await h.context.enroll('test','sms-only',lead(value),'form_submit');
         assert.equal(h.calls.writes.length,expected ? 2 : 0);
     });

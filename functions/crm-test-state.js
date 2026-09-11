@@ -24,11 +24,12 @@ async function persistLeadWithAuthorization(options) {
     });
 }
 
-async function createOutboxIfAbsent(db, deliveryRef, deliveryData) {
+async function createOutboxIfAbsent(db, deliveryRef, deliveryData, receiptReview = null) {
     return db.runTransaction(async (transaction) => {
         const existing = await transaction.get(deliveryRef);
         if (existing.exists) return { created: false };
         transaction.create(deliveryRef, deliveryData);
+        if (receiptReview) transaction.update(receiptReview.leadRef, { receiptReview: receiptReview.review });
         return { created: true };
     });
 }
