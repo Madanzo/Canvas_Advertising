@@ -477,7 +477,16 @@ async function enrollContactInWorkflow(contactId, workflowId, contactData) {
 
         // SMS enrollment requires explicit stored consent; email/task steps remain eligible.
         const sourceLead = await db.collection('canvas_leads').doc(contactId).get();
-        if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), sourceLead.exists ? sourceLead.data() : null)) return { skipped: true, reason: 'website_communications_suppressed' };
+        const leadForPolicy = sourceLead.exists ? sourceLead.data() : null;
+        const commsConfig = communicationsPolicy.configFromEnv(process.env);
+        // Enrol when ANY step is still website-owned. Refusing the whole
+        // instance because its FIRST step moved to the CRM would also cancel
+        // every later website-owned step — for wf_welcome that is the two-day
+        // follow-up, which nothing else sends. Suppression is per step, below.
+        const workflowPurposes = communicationsPolicy.purposesOfWorkflow(workflowId, workflow.steps || []);
+        const anyWebsiteOwned = workflowPurposes.some(purpose =>
+            communicationsPolicy.websiteAllowed(commsConfig, leadForPolicy, purpose));
+        if (!anyWebsiteOwned) return { skipped: true, reason: 'website_communications_suppressed' };
         const enrollment = smsConsent.enrollment(workflow, sourceLead.exists ? sourceLead.data() : null, contactData.phone);
         if (!enrollment.allowed) return { skipped: true, reason: 'sms_consent_required' };
 
@@ -702,6 +711,22 @@ async function processInstance(doc) {
 }
 
 async function executeWorkflowStep(step, instance) {
+    // Ownership is decided per STEP, at execution time, from the workflow
+    // definition and this step's index. It is never read from the instance
+    // document, so queued instances need no migration: their stored bytes,
+    // currentStepIndex and nextExecutionAt are untouched by the handover.
+    const purpose = communicationsPolicy.purposeOfStep(instance.workflowId, instance.currentStepIndex, step);
+    const ownershipLead = await db.collection('canvas_leads').doc(instance.contactId).get();
+    if (!communicationsPolicy.websiteAllowed(
+            communicationsPolicy.configFromEnv(process.env),
+            ownershipLead.exists ? ownershipLead.data() : null,
+            purpose)) {
+        // success:true so processInstance ADVANCES to the next step. Returning
+        // a failure would park the instance in `error` and every later
+        // website-owned step would never run.
+        return { success: true, skipped: true, reason: 'website_communications_suppressed', purpose };
+    }
+
     const variables = {
         firstName: instance.contactName,
         name: instance.contactName,
@@ -716,7 +741,7 @@ async function executeWorkflowStep(step, instance) {
             to: instance.contactEmail,
             templateId: step.templateId,
             variables: variables,
-            options: { workflowId: instance.workflowId, contactId: instance.contactId }
+            options: { workflowId: instance.workflowId, contactId: instance.contactId, purpose }
         });
     } else if (step.type === 'sms') {
         // Fresh consent and recipient binding are required before any provider/config access.
@@ -728,7 +753,7 @@ async function executeWorkflowStep(step, instance) {
             to: instance.contactPhone,
             templateId: step.templateId,
             variables: variables,
-            options: { workflowId: instance.workflowId, contactId: instance.contactId, smsEnrollment: instance.smsEnrollment }
+            options: { workflowId: instance.workflowId, contactId: instance.contactId, smsEnrollment: instance.smsEnrollment, purpose }
         });
     } else if (step.type === 'task') {
         console.log(`TASK created: ${step.description}`);
@@ -752,7 +777,7 @@ async function sendEmail({ to, templateId, variables, options = {} }) {
     // All workflow, bulk, booking and direct-message paths use this final gate.
     if (!options.contactId) return { success: false, error: 'communications_contact_required' };
     const communicationLead = await db.collection('canvas_leads').doc(options.contactId).get();
-    if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), communicationLead.exists ? communicationLead.data() : null)) return { success: false, error: 'website_communications_suppressed' };
+    if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), communicationLead.exists ? communicationLead.data() : null, options.purpose)) return { success: false, error: 'website_communications_suppressed' };
     if (!to) {
         console.warn('sendEmail: No recipient');
         return null;
@@ -851,7 +876,7 @@ async function sendSMS({ to, templateId, variables, options = {} }) {
     // All workflow, bulk, booking and direct-message paths use this final gate.
     if (!options.contactId) return { success: false, error: 'communications_contact_required' };
     const communicationLead = await db.collection('canvas_leads').doc(options.contactId).get();
-    if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), communicationLead.exists ? communicationLead.data() : null)) return { success: false, error: 'website_communications_suppressed' };
+    if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), communicationLead.exists ? communicationLead.data() : null, options.purpose)) return { success: false, error: 'website_communications_suppressed' };
     if (!to) {
         console.warn('sendSMS: No recipient');
         return null;
@@ -1008,7 +1033,9 @@ exports.onNewLead = configuredFunctions.firestore
     .document('canvas_leads/{leadId}')
     .onCreate(async (snapshot, context) => {
         const leadData = snapshot.data();
-        if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), leadData)) return null;
+        // UNCLASSIFIED: apply the global stops (paused, held, suppressed, test)
+        // without letting one CRM-owned purpose cancel enrolment outright.
+        if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), leadData, communicationsPolicy.PURPOSES.UNCLASSIFIED)) return null;
         if (crmLeadAdapter.isSyntheticTestSubmission(
             crmLeadAdapterConfig(),
             context.params.leadId,
@@ -1516,7 +1543,8 @@ exports.sendDirectMessage = configuredFunctions.https.onCall(async (data, contex
                     subject: subject,
                     html: content, // Content passed in options
                     contactId,
-                    workflowId: 'direct_message'
+                    workflowId: 'direct_message',
+                    purpose: communicationsPolicy.PURPOSES.DIRECT_MESSAGE
                 }
             });
 
@@ -1527,7 +1555,8 @@ exports.sendDirectMessage = configuredFunctions.https.onCall(async (data, contex
                 options: {
                     text: content,
                     contactId,
-                    workflowId: 'direct_message'
+                    workflowId: 'direct_message',
+                    purpose: communicationsPolicy.PURPOSES.DIRECT_MESSAGE
                 }
             });
 
