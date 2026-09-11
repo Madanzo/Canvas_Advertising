@@ -9,3 +9,5 @@ dist/
 brain/
 functions/node_modules/
 serviceAccountKey.json
+
+functions/node_modules

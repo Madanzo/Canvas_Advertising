@@ -1,84 +1,90 @@
 {
-  "packages": [
+ "packages": [
+  {
+   "name": "sms-targets",
+   "archiveSha256": "b457469512cc7bd181f1cd6f8eb65f80d2ff13354e7738361b77ee26b5b8b1e2",
+   "indexSha256": "e041f90afb669cf684d22cf8ceaa56649758c173e790680aa0e965a1e5b54032",
+   "runtime": {
+    "node": "20"
+   },
+   "parts": [
     {
-      "name": "sms-targets",
-      "archiveSha256": "b457469512cc7bd181f1cd6f8eb65f80d2ff13354e7738361b77ee26b5b8b1e2",
-      "indexSha256": "e041f90afb669cf684d22cf8ceaa56649758c173e790680aa0e965a1e5b54032",
-      "runtime": {
-        "node": "20"
-      },
-      "parts": [
-        {
-          "file": "sms-targets-workflow-and-notifications.txt",
-          "startUtf8Byte": 2620,
-          "endUtf8Byte": 27704,
-          "sha256": "9cd7e7ad1c29b6faa8573b0dcda8b15d8a827efee6ecf4b6c803c5a4685f6148"
-        },
-        {
-          "file": "sms-targets-direct-message.txt",
-          "startUtf8Byte": 47173,
-          "endUtf8Byte": 49229,
-          "sha256": "08cbe27e8b01adf64dac4c3e4de249202a645f4e1017444770acff8eb5c7c67e"
-        }
-      ],
-      "dependencies": [
-        {
-          "file": "sms-targets/package.json",
-          "sha256": "45143e27a0929aee9ef559db281755334e2324729caea24d99bda048fb38aa1a"
-        },
-        {
-          "file": "sms-targets/package-lock.json",
-          "sha256": "43b031d6ce5f9beb17b6bf80e08b08945834f24eadc151e52e24d590a7b1cf64"
-        }
-      ],
-      "baselineArchiveSha256": "4429fa07197c8539efe200df5daac69f9d66d18ae469b9bf22778d87bcc78917",
-      "moduleHashes": {
-        "sms-consent.js": "8422372d0c66b9867787037fb334cfe4aa120f77bc7ae2015499f09fd5e8afa7",
-        "communications-policy.js": "9d9b8277bb2082a92151fd1e971e703b534571bae446edc43d5bd9e3792c3b7d"
-      }
+     "file": "sms-targets-workflow-and-notifications.txt",
+     "startUtf8Byte": 2620,
+     "endUtf8Byte": 27704,
+     "sha256": "51a481bac6afc8340d731e7ec9340841b1de91caa0c1b16dd2a5a22f5fca587b",
+     "lengthUtf8Bytes": 25336
     },
     {
-      "name": "public-adapter-targets",
-      "runtime": {
-        "node": "22"
-      },
-      "parts": [
-        {
-          "file": "public-adapter-targets-public-capture.txt",
-          "startUtf8Byte": 3884,
-          "endUtf8Byte": 20834,
-          "sha256": "479018b7b11b94c4ff2658b980c0a93247f3d4ac9495ed3a62c19a2fb746fa3e"
-        },
-        {
-          "file": "public-adapter-targets-new-adapter.txt",
-          "startUtf8Byte": 92141,
-          "endUtf8Byte": 101618,
-          "sha256": "6011ce893b1559849ca5a01b26ac1bb1ba21b3fa54827b95e50e580782920047"
-        }
-      ],
-      "dependencies": [
-        {
-          "file": "public-adapter-targets/package.json",
-          "sha256": "9be25b82bd2ff54845cb9fa82a24b5a4e3bbe8e34a134038809d10d60908ce92"
-        },
-        {
-          "file": "public-adapter-targets/package-lock.json",
-          "sha256": "d80f37188b42a7752bd539e03a01d57e6b16c7968746af8d8da008f253607af0"
-        }
-      ],
-      "baselineArchiveSha256": "11c3c95913e0c3ddad143336d84f8d691dac01a6933e5fbe76b74fbe80ba549e",
-      "archiveSha256": "dd5f5dd46dbfa4499206f1668fcb936b80a6cb66f41b241a990cfac77c584a73",
-      "indexSha256": "28f2e731eeaba079fb45ca830713a541622fc566aff65443226321a780cc901b",
-      "moduleHashes": {
-        "crm-test-authorization.js": "b8037fa57a785a6152b507338055bd4ca631b62d52c8a760a8f171fe8fe9ff17",
-        "crm-lead-adapter.js": "88affc81e4d0653d9c297c26a5a27dbd011e89fd982fa72fc916f6f8f8a21b7a",
-        "sms-consent.js": "8422372d0c66b9867787037fb334cfe4aa120f77bc7ae2015499f09fd5e8afa7",
-        "communications-policy.js": "9d9b8277bb2082a92151fd1e971e703b534571bae446edc43d5bd9e3792c3b7d",
-        "crm-test-state.js": "f123916e08a7b073dbdc8e30ce03d10d174964400b11a470596e5e6e984a17d0"
-      }
+     "file": "sms-targets-direct-message.txt",
+     "startUtf8Byte": 47173,
+     "endUtf8Byte": 49229,
+     "sha256": "08cbe27e8b01adf64dac4c3e4de249202a645f4e1017444770acff8eb5c7c67e",
+     "lengthUtf8Bytes": 2056
     }
-  ],
-  "candidateNote": "All four source ranges are from newly staged purpose-scoped live-source candidates. Configuration and dependencies preserved. No deployment.",
-  "sourceBaseSha": "cc19a5427f8cf0058f2369fb3d506e5f034fdfe6",
-  "canonicalCrmHead": "4a58f5a5caf7c81ad3be895bb98fc81e23327612"
+   ],
+   "dependencies": [
+    {
+     "file": "sms-targets/package.json",
+     "sha256": "45143e27a0929aee9ef559db281755334e2324729caea24d99bda048fb38aa1a"
+    },
+    {
+     "file": "sms-targets/package-lock.json",
+     "sha256": "43b031d6ce5f9beb17b6bf80e08b08945834f24eadc151e52e24d590a7b1cf64"
+    }
+   ],
+   "baselineArchiveSha256": "4429fa07197c8539efe200df5daac69f9d66d18ae469b9bf22778d87bcc78917",
+   "moduleHashes": {
+    "sms-consent.js": "8422372d0c66b9867787037fb334cfe4aa120f77bc7ae2015499f09fd5e8afa7",
+    "communications-policy.js": "8a6560fe66ca7f33a63fb0b8587f64fe11bdb298b5d5630aaf8f01f356199146",
+    "step-purpose.js": "0ff2940c09897d87062ff92555bd6450aed33a4a4b8dc0258a7e0916be96684e"
+   }
+  },
+  {
+   "name": "public-adapter-targets",
+   "runtime": {
+    "node": "22"
+   },
+   "parts": [
+    {
+     "file": "public-adapter-targets-public-capture.txt",
+     "startUtf8Byte": 3884,
+     "endUtf8Byte": 20834,
+     "sha256": "479018b7b11b94c4ff2658b980c0a93247f3d4ac9495ed3a62c19a2fb746fa3e",
+     "lengthUtf8Bytes": 16950
+    },
+    {
+     "file": "public-adapter-targets-new-adapter.txt",
+     "startUtf8Byte": 92141,
+     "endUtf8Byte": 101618,
+     "sha256": "6011ce893b1559849ca5a01b26ac1bb1ba21b3fa54827b95e50e580782920047",
+     "lengthUtf8Bytes": 9477
+    }
+   ],
+   "dependencies": [
+    {
+     "file": "public-adapter-targets/package.json",
+     "sha256": "9be25b82bd2ff54845cb9fa82a24b5a4e3bbe8e34a134038809d10d60908ce92"
+    },
+    {
+     "file": "public-adapter-targets/package-lock.json",
+     "sha256": "d80f37188b42a7752bd539e03a01d57e6b16c7968746af8d8da008f253607af0"
+    }
+   ],
+   "baselineArchiveSha256": "11c3c95913e0c3ddad143336d84f8d691dac01a6933e5fbe76b74fbe80ba549e",
+   "archiveSha256": "dd5f5dd46dbfa4499206f1668fcb936b80a6cb66f41b241a990cfac77c584a73",
+   "indexSha256": "28f2e731eeaba079fb45ca830713a541622fc566aff65443226321a780cc901b",
+   "moduleHashes": {
+    "crm-test-authorization.js": "b8037fa57a785a6152b507338055bd4ca631b62d52c8a760a8f171fe8fe9ff17",
+    "crm-lead-adapter.js": "88affc81e4d0653d9c297c26a5a27dbd011e89fd982fa72fc916f6f8f8a21b7a",
+    "sms-consent.js": "8422372d0c66b9867787037fb334cfe4aa120f77bc7ae2015499f09fd5e8afa7",
+    "communications-policy.js": "8a6560fe66ca7f33a63fb0b8587f64fe11bdb298b5d5630aaf8f01f356199146",
+    "crm-test-state.js": "f123916e08a7b073dbdc8e30ce03d10d174964400b11a470596e5e6e984a17d0",
+    "step-purpose.js": "0ff2940c09897d87062ff92555bd6450aed33a4a4b8dc0258a7e0916be96684e"
+   }
+  }
+ ],
+ "candidateNote": "All four source ranges are from newly staged purpose-scoped live-source candidates. Configuration and dependencies preserved. No deployment.",
+ "sourceBaseSha": "cc19a5427f8cf0058f2369fb3d506e5f034fdfe6",
+ "canonicalCrmHead": "4a58f5a5caf7c81ad3be895bb98fc81e23327612"
 }

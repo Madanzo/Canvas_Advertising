@@ -481,7 +481,8 @@ async function enrollContactInWorkflow(contactId, workflowId, contactData, origi
         const policyConfig = communicationsPolicy.configFromEnv(process.env);
         // Origin is supplied by the server caller, never contactData or browser input.
         if (!['form_submit', 'booking', 'campaign', 'status_change'].includes(origin)) return { skipped: true, reason: 'invalid_communication_origin' };
-        const eligibleSteps = (workflow.steps || []).filter(step => communicationsPolicy.websiteAllowed(policyConfig, storedLead, communicationsPolicy.stepPurpose(origin, step)));
+        const eligibleSteps = (workflow.steps || []).filter((step, index) =>
+            communicationsPolicy.websiteAllowed(policyConfig, storedLead, communicationsPolicy.stepPurpose(origin, step, workflowId, index)));
         if (!eligibleSteps.length && (workflow.steps || []).length) return { skipped: true, reason: 'website_communications_suppressed' };
         if (!communicationsPolicy.websiteAllowed(policyConfig, storedLead, 'workflow')) return { skipped: true, reason: 'website_communications_suppressed' };
         const enrollment = smsConsent.enrollment({ ...workflow, steps: eligibleSteps }, storedLead, contactData.phone);
@@ -651,7 +652,10 @@ async function processInstance(doc) {
         }
 
         console.log(`Executing step ${instance.currentStepIndex} (${currentStep.type}) for ${instanceId}`);
-        const purpose = communicationsPolicy.stepPurpose(instance.communicationOrigin || workflow.trigger, currentStep);
+        // Persisted origin first; the workflow's trigger only as a fallback for
+        // instances enrolled before communicationOrigin was written.
+        const purpose = communicationsPolicy.stepPurpose(
+            instance.communicationOrigin || workflow.trigger, currentStep, instance.workflowId, instance.currentStepIndex);
         const result = await executeWorkflowStep(currentStep, instance, purpose);
 
         // 3. Update State

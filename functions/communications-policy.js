@@ -1,7 +1,11 @@
 'use strict';
 // Trusted Functions environment only. The legacy global owner flag has no authority.
 const GATES = ['intakeReady', 'emailReady', 'smsReady', 'consentReady', 'idempotencyReady', 'suppressionReady'];
-const PURPOSES = ['lead_received', 'follow_up', 'booking', 'reminder', 'campaign', 'direct_message', 'project_completion', 'workflow'];
+// The purpose vocabulary and the explicit step table live in step-purpose.js.
+// Re-exported here so every consumer reaches them through the policy module it
+// already depends on -- including the source-extracting vm test harness.
+const stepPurposeModule = require('./step-purpose');
+const PURPOSES = stepPurposeModule.PURPOSES;
 function ownedPurposes(value) {
     try { const items = JSON.parse(value || '[]'); return Array.isArray(items) && items.length === 1 && items[0] === 'lead_received' ? items : []; }
     catch { return []; }
@@ -41,13 +45,8 @@ function websiteAllowed(config, lead, purpose) {
     // website ownership to a CRM/held record, and never rewrites old jobs.
     return !stamp || (stamp.communicationPolicyVersion === 1 && stamp.notificationOwner === 'website');
 }
-function stepPurpose(origin, step) {
-    if (step.type !== 'email' && step.type !== 'sms') return 'workflow';
-    if (origin === 'campaign') return 'campaign';
-    if (origin === 'booking') return step.relativeTo === 'event' || step.templateId === 'booking_reminder_2h' ? 'reminder' : 'booking';
-    if (origin === 'status_change') return 'project_completion';
-    if (origin === 'form_submit') return step.templateId === 'follow_up_no_response' ? 'follow_up' : 'lead_received';
-    return undefined; // Unknown message origin must not bypass a receipt gate.
+function stepPurpose(origin, step, workflowId, stepIndex) {
+    return stepPurposeModule.stepPurpose(origin, step, workflowId, stepIndex);
 }
 function deliveryHold(config, stamp) {
     if (stamp?.notificationOwner === 'held') return 'communications-transition-not-ready';
@@ -55,4 +54,4 @@ function deliveryHold(config, stamp) {
         || !Number.isFinite(Date.parse(stamp.capturedAt)) || Date.parse(stamp.capturedAt) < Date.parse(config.cutoverAt))) return 'communications-owner-mismatch';
     return null;
 }
-module.exports = { GATES, PURPOSES, configFromEnv, ready, capture, websiteAllowed, stepPurpose, deliveryHold };
+module.exports = { GATES, PURPOSES, STEP_PURPOSES: stepPurposeModule.STEP_PURPOSES, configFromEnv, ready, capture, websiteAllowed, stepPurpose, deliveryHold };
