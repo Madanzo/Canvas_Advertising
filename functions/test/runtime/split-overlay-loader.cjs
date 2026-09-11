@@ -44,7 +44,7 @@ const getResend=()=>{throw Error('Forbidden provider access in split-overlay tes
         // Node caches external resolution by parent directory, so use each package's
         // own require function rather than only replacing Module.paths.
         loaded.require=request=>request.startsWith('.') ? relativeRequire(request) : packageRequire(request);
-        loaded._compile(bootstrap+'\n'+body,filename);
+        loaded._compile(bootstrap+'\n'+body+'\nif (typeof processInstance === "function") exports.__splitProcessInstance = processInstance;',filename);
         admins.push(packageRequire('firebase-admin'));
         Object.assign(all,loaded.exports);
     }

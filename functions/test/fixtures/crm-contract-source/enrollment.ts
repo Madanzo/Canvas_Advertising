@@ -38,6 +38,7 @@ export const ENROLLMENT_REFUSALS = [
   "captured_in_future",
   "test_suppressed",
   "no_consent",
+  "purpose_not_owned",
 ] as const;
 export type EnrollmentRefusal = (typeof ENROLLMENT_REFUSALS)[number];
 
@@ -54,9 +55,32 @@ export interface CommunicationsPolicy {
   transitionId: string;
   /** Only records captured at or after this instant may enrol. No backfill. */
   cutoverAt: string;
+  /**
+   * The EXACT events the CRM owns. Ownership is per purpose, never global.
+   *
+   * `notificationOwner` alone is too coarse to describe the cutover we are
+   * actually proposing. The CRM covers one event — `lead_received`. It has no
+   * booking trigger, no reminder scheduler, no campaign path and no manual
+   * send. A single tenant-wide "crm" flag would let a policy edit imply the CRM
+   * had taken over things it cannot do, and the failure mode is silence: no
+   * booking confirmation from either side, and nothing to notice it.
+   *
+   * So the purpose must be listed here to enrol. An empty or missing list
+   * enrols nothing. Widening the scope is a deliberate edit to this field with
+   * a matching implementation behind it, not a side effect of flipping owner.
+   */
+  ownedPurposes: string[];
 }
 
 export const CURRENT_POLICY_VERSION = 1;
+
+/**
+ * The only purpose the CRM implements today.
+ *
+ * Everything else on Canvas — booking confirmations, appointment reminders,
+ * the follow-up ladder, campaigns, direct messages — stays website-owned.
+ */
+export const LEAD_RECEIVED = "lead_received";
 
 export interface EnrollmentEnvelope {
   /** Advisory only. Validated against policy; never authorises. */
@@ -86,6 +110,8 @@ export function decideEnrollment(args: {
   envelope: EnrollmentEnvelope;
   consent: ContactConsent | undefined | null;
   channel: "sms" | "email";
+  /** Which event this is. Must be listed in the policy's `ownedPurposes`. */
+  purpose: string;
   /**
    * The SERVER's clock at the moment the request was received. Required.
    *
@@ -98,12 +124,18 @@ export function decideEnrollment(args: {
    */
   serverReceivedAt: Date;
 }): EnrollmentDecision {
-  const { policy, envelope, consent, channel } = args;
+  const { policy, envelope, consent, channel, purpose } = args;
 
   if (!policy) return { enroll: false, refusal: "policy_missing" };
   if (policy.enabled !== true) return { enroll: false, refusal: "communications_disabled" };
   if (policy.readinessApproved !== true) return { enroll: false, refusal: "readiness_not_approved" };
   if (policy.notificationOwner !== "crm") return { enroll: false, refusal: "owner_is_not_crm" };
+
+  // Per-purpose ownership, checked as server policy — before anything in the
+  // envelope is read. A tenant flipped to "crm" still owns only what is listed.
+  if (!Array.isArray(policy.ownedPurposes) || !policy.ownedPurposes.includes(purpose)) {
+    return { enroll: false, refusal: "purpose_not_owned" };
+  }
 
   // The envelope must AGREE with the policy. Disagreement is a refusal, never a
   // transfer: an incoming "crm" against a policy that says "website" means the

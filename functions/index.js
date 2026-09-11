@@ -459,7 +459,7 @@ exports.submitPublicLead = configuredFunctions.https.onCall(async (data, context
  * Enroll a contact in a workflow
  * Creates a workflowContacts document to track progress
  */
-async function enrollContactInWorkflow(contactId, workflowId, contactData) {
+async function enrollContactInWorkflow(contactId, workflowId, contactData, origin) {
     try {
         console.log(`Enrolling contact ${contactId} in workflow ${workflowId}`);
 
@@ -477,8 +477,14 @@ async function enrollContactInWorkflow(contactId, workflowId, contactData) {
 
         // SMS enrollment requires explicit stored consent; email/task steps remain eligible.
         const sourceLead = await db.collection('canvas_leads').doc(contactId).get();
-        if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), sourceLead.exists ? sourceLead.data() : null)) return { skipped: true, reason: 'website_communications_suppressed' };
-        const enrollment = smsConsent.enrollment(workflow, sourceLead.exists ? sourceLead.data() : null, contactData.phone);
+        const storedLead = sourceLead.exists ? sourceLead.data() : null;
+        const policyConfig = communicationsPolicy.configFromEnv(process.env);
+        // Origin is supplied by the server caller, never contactData or browser input.
+        if (!['form_submit', 'booking', 'campaign', 'status_change'].includes(origin)) return { skipped: true, reason: 'invalid_communication_origin' };
+        const eligibleSteps = (workflow.steps || []).filter(step => communicationsPolicy.websiteAllowed(policyConfig, storedLead, communicationsPolicy.stepPurpose(origin, step)));
+        if (!eligibleSteps.length && (workflow.steps || []).length) return { skipped: true, reason: 'website_communications_suppressed' };
+        if (!communicationsPolicy.websiteAllowed(policyConfig, storedLead, 'workflow')) return { skipped: true, reason: 'website_communications_suppressed' };
+        const enrollment = smsConsent.enrollment({ ...workflow, steps: eligibleSteps }, storedLead, contactData.phone);
         if (!enrollment.allowed) return { skipped: true, reason: 'sms_consent_required' };
 
         // 2. Check if already active (prevent duplicate enrollment if needed)
@@ -486,6 +492,7 @@ async function enrollContactInWorkflow(contactId, workflowId, contactData) {
         // 3. Create Workflow Instance (workflowContacts)
         const instanceData = {
             smsEnrollment: enrollment.smsEnrollment,
+            communicationOrigin: origin,
             workflowId: workflowId,
             contactId: contactId,
             contactEmail: contactData.email,
@@ -569,7 +576,7 @@ exports.processBulkCampaign = configuredFunctions.https.onCall(async (data, cont
 
         // 5. Enroll Loop
         const promises = leadsToEnroll.map(lead =>
-            enrollContactInWorkflow(lead.id, workflowId, lead)
+            enrollContactInWorkflow(lead.id, workflowId, lead, 'campaign')
         );
 
         await Promise.all(promises);
@@ -644,7 +651,8 @@ async function processInstance(doc) {
         }
 
         console.log(`Executing step ${instance.currentStepIndex} (${currentStep.type}) for ${instanceId}`);
-        const result = await executeWorkflowStep(currentStep, instance);
+        const purpose = communicationsPolicy.stepPurpose(instance.communicationOrigin || workflow.trigger, currentStep);
+        const result = await executeWorkflowStep(currentStep, instance, purpose);
 
         // 3. Update State
         const updates = {
@@ -701,7 +709,13 @@ async function processInstance(doc) {
     }
 }
 
-async function executeWorkflowStep(step, instance) {
+async function executeWorkflowStep(step, instance, purpose) {
+    const purposeLead = await db.collection('canvas_leads').doc(instance.contactId).get();
+    if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), purposeLead.exists ? purposeLead.data() : null, purpose)) {
+        // A skipped CRM-owned step is terminal for that step only. The normal
+        // scheduler retains the original delays for website-owned follow-ups.
+        return { success: true, skipped: true, reason: 'website_communications_suppressed' };
+    }
     const variables = {
         firstName: instance.contactName,
         name: instance.contactName,
@@ -716,7 +730,7 @@ async function executeWorkflowStep(step, instance) {
             to: instance.contactEmail,
             templateId: step.templateId,
             variables: variables,
-            options: { workflowId: instance.workflowId, contactId: instance.contactId }
+            options: { purpose, workflowId: instance.workflowId, contactId: instance.contactId }
         });
     } else if (step.type === 'sms') {
         // Fresh consent and recipient binding are required before any provider/config access.
@@ -728,7 +742,7 @@ async function executeWorkflowStep(step, instance) {
             to: instance.contactPhone,
             templateId: step.templateId,
             variables: variables,
-            options: { workflowId: instance.workflowId, contactId: instance.contactId, smsEnrollment: instance.smsEnrollment }
+            options: { purpose, workflowId: instance.workflowId, contactId: instance.contactId, smsEnrollment: instance.smsEnrollment }
         });
     } else if (step.type === 'task') {
         console.log(`TASK created: ${step.description}`);
@@ -752,7 +766,7 @@ async function sendEmail({ to, templateId, variables, options = {} }) {
     // All workflow, bulk, booking and direct-message paths use this final gate.
     if (!options.contactId) return { success: false, error: 'communications_contact_required' };
     const communicationLead = await db.collection('canvas_leads').doc(options.contactId).get();
-    if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), communicationLead.exists ? communicationLead.data() : null)) return { success: false, error: 'website_communications_suppressed' };
+    if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), communicationLead.exists ? communicationLead.data() : null, options.purpose)) return { success: false, error: 'website_communications_suppressed' };
     if (!to) {
         console.warn('sendEmail: No recipient');
         return null;
@@ -851,7 +865,7 @@ async function sendSMS({ to, templateId, variables, options = {} }) {
     // All workflow, bulk, booking and direct-message paths use this final gate.
     if (!options.contactId) return { success: false, error: 'communications_contact_required' };
     const communicationLead = await db.collection('canvas_leads').doc(options.contactId).get();
-    if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), communicationLead.exists ? communicationLead.data() : null)) return { success: false, error: 'website_communications_suppressed' };
+    if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), communicationLead.exists ? communicationLead.data() : null, options.purpose)) return { success: false, error: 'website_communications_suppressed' };
     if (!to) {
         console.warn('sendSMS: No recipient');
         return null;
@@ -1008,7 +1022,7 @@ exports.onNewLead = configuredFunctions.firestore
     .document('canvas_leads/{leadId}')
     .onCreate(async (snapshot, context) => {
         const leadData = snapshot.data();
-        if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), leadData)) return null;
+        if (!communicationsPolicy.websiteAllowed(communicationsPolicy.configFromEnv(process.env), leadData, 'workflow')) return null;
         if (crmLeadAdapter.isSyntheticTestSubmission(
             crmLeadAdapterConfig(),
             context.params.leadId,
@@ -1018,7 +1032,8 @@ exports.onNewLead = configuredFunctions.firestore
             console.log(`Skipping Canvas notification workflows for approved CRM integration test ${context.params.leadId}.`);
             return null;
         }
-        const triggerType = leadData.source === 'booking' ? 'booking' : 'form_submit';
+        // Public capture stamps its purpose on the server; a visitor's source label cannot select booking ownership.
+        const triggerType = leadData.communications?.purpose === 'lead_received' ? 'form_submit' : (leadData.source === 'booking' ? 'booking' : 'form_submit');
 
         console.log(`New lead: ${context.params.leadId}, trigger: ${triggerType}`);
 
@@ -1057,7 +1072,7 @@ exports.onNewLead = configuredFunctions.firestore
         const promises = [];
         workflows.forEach(doc => {
             const workflowId = doc.id;
-            promises.push(enrollContactInWorkflow(context.params.leadId, workflowId, leadData));
+            promises.push(enrollContactInWorkflow(context.params.leadId, workflowId, leadData, triggerType));
         });
 
         await Promise.all(promises);
@@ -1142,7 +1157,7 @@ exports.calcomWebhook = configuredFunctions.https.onRequest(async (req, res) => 
         await enrollContactInWorkflow(docRef.id, 'wf_booking', {
             ...leadData,
             eventTime: payload.startTime // Pass event time for relative reminders
-        });
+        }, 'booking');
 
         res.status(200).json({
             success: true,
@@ -1516,7 +1531,8 @@ exports.sendDirectMessage = configuredFunctions.https.onCall(async (data, contex
                     subject: subject,
                     html: content, // Content passed in options
                     contactId,
-                    workflowId: 'direct_message'
+                    workflowId: 'direct_message',
+                    purpose: 'direct_message'
                 }
             });
 
@@ -1527,7 +1543,8 @@ exports.sendDirectMessage = configuredFunctions.https.onCall(async (data, contex
                 options: {
                     text: content,
                     contactId,
-                    workflowId: 'direct_message'
+                    workflowId: 'direct_message',
+                    purpose: 'direct_message'
                 }
             });
 

@@ -86,7 +86,7 @@ function communicationsEnvelope(leadData, config = {}) {
     const capturedAt = typeof stamp?.capturedAt === 'string' && Number.isFinite(Date.parse(stamp.capturedAt))
         ? stamp.capturedAt : undefined;
     const eligible = communicationsPolicy.ready(config)
-        && stamp?.communicationPolicyVersion === 1
+        && stamp?.communicationPolicyVersion === 1 && stamp.purpose === 'lead_received'
         && stamp.notificationOwner === 'crm' && stamp.transitionId === config.transitionId
         && capturedAt && Date.parse(capturedAt) >= Date.parse(config.cutoverAt)
         && typeof stamp.testSuppressed === 'boolean';

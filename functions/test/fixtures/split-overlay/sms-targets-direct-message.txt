@@ -25,7 +25,8 @@ exports.sendDirectMessage = functions.https.onCall(async (data, context) => {
                     subject: subject,
                     html: content, // Content passed in options
                     contactId,
-                    workflowId: 'direct_message'
+                    workflowId: 'direct_message',
+                    purpose: 'direct_message'
                 }
             });
 
@@ -36,7 +37,8 @@ exports.sendDirectMessage = functions.https.onCall(async (data, context) => {
                 options: {
                     text: content,
                     contactId,
-                    workflowId: 'direct_message'
+                    workflowId: 'direct_message',
+                    purpose: 'direct_message'
                 }
             });
 

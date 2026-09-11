@@ -5,16 +5,16 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const adapter = require('../crm-lead-adapter');
 const policy = require('../communications-policy');
-const contract = require('./fixtures/crm-contract-ebed548.cjs');
+const contract = require('./fixtures/crm-contract-4a58f5a.cjs');
 const now = new Date('2026-09-11T12:00:00.000Z');
-const config = {owner:'crm',transitionId:'canvas-transition-fixture',cutoverAt:'2026-09-11T00:00:00.000Z',...Object.fromEntries(policy.GATES.map(k=>[k,true]))};
+const config = {owner:'crm',ownedPurposes:['lead_received'],transitionId:'canvas-transition-fixture',cutoverAt:'2026-09-11T00:00:00.000Z',...Object.fromEntries(policy.GATES.map(k=>[k,true]))};
 const lead = {name:'Synthetic Contract',email:'contract@example.invalid',phone:'+15125550142',service:'vehicle_wraps',createdAt:'2026-09-11T10:00:00.000Z',boatSurvey:{smsConsent:true},communications:policy.capture(config,new Date('2026-09-11T10:00:00.000Z'))};
-const crmPolicy = {enabled:true,readinessApproved:true,notificationOwner:'crm',policyVersion:1,transitionId:config.transitionId,cutoverAt:config.cutoverAt};
+const crmPolicy = {ownedPurposes:['lead_received'],enabled:true,readinessApproved:true,notificationOwner:'crm',policyVersion:1,transitionId:config.transitionId,cutoverAt:config.cutoverAt};
 function check(record,configuration=config) {
     const output=adapter.buildRequestMapping('contract-fixture',record,now.toISOString(),configuration);
     const body=JSON.parse(output.serializedBody);
     assert.equal(contract.validateIntake(body).ok,true);
-    const decision=contract.decideEnrollment({policy:crmPolicy,envelope:body,consent:contract.withConsentChange(contract.emptyConsent(),'sms','granted','website_form',now),channel:'sms',serverReceivedAt:now});
+    const decision=contract.decideEnrollment({policy:crmPolicy,envelope:body,consent:contract.withConsentChange(contract.emptyConsent(),'sms','granted','website_form',now),channel:'sms',purpose:'lead_received',serverReceivedAt:now});
     return {body,decision};
 }
 test('actual adapter serialized output satisfies exact canonical CRM validator and enrollment contract',()=>{
@@ -65,7 +65,14 @@ test('HTTP retries reuse exact bytes and idempotency header',async()=>{
 
 test('contract bundle is pinned to canonical source and immutable fingerprint',()=>{
  const crypto=require('node:crypto');const manifest=require('./fixtures/crm-contract-source/manifest.json');
- assert.equal(manifest.canonicalSha,'ebed548e67fe493117f1cf5cc10fac371f7d84c1');
- assert.equal(crypto.createHash('sha256').update(fs.readFileSync(require.resolve('./fixtures/crm-contract-ebed548.cjs'))).digest('hex'),manifest.bundleSha256);
+ assert.equal(manifest.canonicalSha,'4a58f5a5caf7c81ad3be895bb98fc81e23327612');
+ assert.equal(crypto.createHash('sha256').update(fs.readFileSync(require.resolve('./fixtures/crm-contract-4a58f5a.cjs'))).digest('hex'),manifest.bundleSha256);
  for(const [file,hash] of Object.entries(manifest.sourceSha256)) assert.equal(crypto.createHash('sha256').update(fs.readFileSync(require('node:path').join(__dirname,'fixtures/crm-contract-source',require('node:path').basename(file)))).digest('hex'),hash);
+});
+
+test('canonical CRM owns lead_received only; adapter cannot transfer a different or missing capture purpose',()=>{
+ const {body}=check(lead);
+ const decision=contract.decideEnrollment({policy:crmPolicy,envelope:body,consent:contract.withConsentChange(contract.emptyConsent(),'sms','granted','website_form',now),channel:'sms',purpose:'booking',serverReceivedAt:now});
+ assert.equal(decision.refusal,'purpose_not_owned');
+ for(const purpose of [undefined,'booking','campaign'])assert.equal(check({...lead,communications:{...lead.communications,purpose}}).body.testSuppressed,true);
 });

@@ -1,10 +1,9 @@
 {
-  "sourceSha": "2559dad2ba22257e1e9ea487775fd9d0987a913a",
   "packages": [
     {
       "name": "sms-targets",
-      "archiveSha256": "63d207bf155a31b922be1de19004f12cd307a307d40afabed5b553a93c3fa3ab",
-      "indexSha256": "584d54ce08189f627977ad40eaef9c74cbe45a2bb0671adf998dabd4561f4b12",
+      "archiveSha256": "b457469512cc7bd181f1cd6f8eb65f80d2ff13354e7738361b77ee26b5b8b1e2",
+      "indexSha256": "e041f90afb669cf684d22cf8ceaa56649758c173e790680aa0e965a1e5b54032",
       "runtime": {
         "node": "20"
       },
@@ -12,14 +11,14 @@
         {
           "file": "sms-targets-workflow-and-notifications.txt",
           "startUtf8Byte": 2620,
-          "endUtf8Byte": 26202,
-          "sha256": "9881eeb608002206808d639641125c90187b3afcd17e84eb23145e6f4b9196a2"
+          "endUtf8Byte": 27704,
+          "sha256": "9cd7e7ad1c29b6faa8573b0dcda8b15d8a827efee6ecf4b6c803c5a4685f6148"
         },
         {
           "file": "sms-targets-direct-message.txt",
-          "startUtf8Byte": 45660,
-          "endUtf8Byte": 47622,
-          "sha256": "6213838f98e9b1e41f84605eaea8ce8e6638515ad8af4142b993fd064adf131c"
+          "startUtf8Byte": 47173,
+          "endUtf8Byte": 49229,
+          "sha256": "08cbe27e8b01adf64dac4c3e4de249202a645f4e1017444770acff8eb5c7c67e"
         }
       ],
       "dependencies": [
@@ -31,7 +30,12 @@
           "file": "sms-targets/package-lock.json",
           "sha256": "43b031d6ce5f9beb17b6bf80e08b08945834f24eadc151e52e24d590a7b1cf64"
         }
-      ]
+      ],
+      "baselineArchiveSha256": "4429fa07197c8539efe200df5daac69f9d66d18ae469b9bf22778d87bcc78917",
+      "moduleHashes": {
+        "sms-consent.js": "8422372d0c66b9867787037fb334cfe4aa120f77bc7ae2015499f09fd5e8afa7",
+        "communications-policy.js": "9d9b8277bb2082a92151fd1e971e703b534571bae446edc43d5bd9e3792c3b7d"
+      }
     },
     {
       "name": "public-adapter-targets",
@@ -47,11 +51,9 @@
         },
         {
           "file": "public-adapter-targets-new-adapter.txt",
-          "sha256": "6011ce893b1559849ca5a01b26ac1bb1ba21b3fa54827b95e50e580782920047",
-          "baselineStartUtf8Byte": 92153,
-          "baselineEndUtf8Byte": 101625,
-          "source": "functions/index.js: CRM_LEAD_DELIVERIES_COLLECTION through before syncOrderToCRM, excluding preserved legacy export (candidate, not staged archive)",
-          "lengthUtf8Bytes": 9477
+          "startUtf8Byte": 92141,
+          "endUtf8Byte": 101618,
+          "sha256": "6011ce893b1559849ca5a01b26ac1bb1ba21b3fa54827b95e50e580782920047"
         }
       ],
       "dependencies": [
@@ -64,9 +66,19 @@
           "sha256": "d80f37188b42a7752bd539e03a01d57e6b16c7968746af8d8da008f253607af0"
         }
       ],
-      "baselineArchiveSha256": "0f8e31e99dcc9d4b710ad964e9fa9b1639ed92d10ba649c40b1692d285001115",
-      "baselineIndexSha256": "373ce3af7e3ceb1332b19deb5447529880f9bb3ae2b64886100c5f8a02def1f5"
+      "baselineArchiveSha256": "11c3c95913e0c3ddad143336d84f8d691dac01a6933e5fbe76b74fbe80ba549e",
+      "archiveSha256": "dd5f5dd46dbfa4499206f1668fcb936b80a6cb66f41b241a990cfac77c584a73",
+      "indexSha256": "28f2e731eeaba079fb45ca830713a541622fc566aff65443226321a780cc901b",
+      "moduleHashes": {
+        "crm-test-authorization.js": "b8037fa57a785a6152b507338055bd4ca631b62d52c8a760a8f171fe8fe9ff17",
+        "crm-lead-adapter.js": "88affc81e4d0653d9c297c26a5a27dbd011e89fd982fa72fc916f6f8f8a21b7a",
+        "sms-consent.js": "8422372d0c66b9867787037fb334cfe4aa120f77bc7ae2015499f09fd5e8afa7",
+        "communications-policy.js": "9d9b8277bb2082a92151fd1e971e703b534571bae446edc43d5bd9e3792c3b7d",
+        "crm-test-state.js": "f123916e08a7b073dbdc8e30ce03d10d174964400b11a470596e5e6e984a17d0"
+      }
     }
   ],
-  "candidateNote": "One adapter slice updated for ebed548 compatibility. Other source slices and dependency locks remain pinned to prior overlay; prior ZIP is not this candidate."
+  "candidateNote": "All four source ranges are from newly staged purpose-scoped live-source candidates. Configuration and dependencies preserved. No deployment.",
+  "sourceBaseSha": "cc19a5427f8cf0058f2369fb3d506e5f034fdfe6",
+  "canonicalCrmHead": "4a58f5a5caf7c81ad3be895bb98fc81e23327612"
 }

@@ -24,23 +24,23 @@ function harness(current, grant) {
 for (const [label,value,expected] of [['opted-in',true,true],['opted-out',false,false],['missing',undefined,false],['string true','true',false]]) {
     test(label + ': enrollment and actual SMS step enforce explicit consent', async()=>{
         const h=harness(lead(value));
-        await h.context.enroll('test','welcome',lead(value));
+        await h.context.enroll('test','welcome',lead(value),'form_submit');
         const instance=h.calls.writes[0];
         assert.equal(instance.smsEnrollment.authorized,expected);
-        const result=await h.context.execute({type:'sms'},instance);
+        const result=await h.context.execute({type:'sms'},instance,'lead_received');
         assert.equal(h.calls.sends,expected ? 1 : 0);
         assert.equal(result.skipped === true,!expected);
         h.workflow.steps=[{type:'sms'}]; h.calls.writes=[];
-        await h.context.enroll('test','sms-only',lead(value));
+        await h.context.enroll('test','sms-only',lead(value),'form_submit');
         assert.equal(h.calls.writes.length,expected ? 2 : 0);
     });
 }
 test('send-time revocation, missing lead, missing enrollment, or changed phone deny provider access',async()=>{
     const grant=policy.enrollment({steps:[{type:'sms'}]},lead(true),'+15125550123').smsEnrollment;
     for(const current of [lead(false),lead(undefined),null,{...lead(true),phone:'+15125550999'}]) {
-        const h=harness(current,grant);await h.context.execute({type:'sms'},h.instance);assert.equal(h.calls.sends,0);
+        const h=harness(current,grant);await h.context.execute({type:'sms'},h.instance,'lead_received');assert.equal(h.calls.sends,0);
     }
-    const h=harness(lead(true));await h.context.execute({type:'sms'},h.instance);assert.equal(h.calls.sends,0);
+    const h=harness(lead(true));await h.context.execute({type:'sms'},h.instance,'lead_received');assert.equal(h.calls.sends,0);
 });
 test('old false enrollment is never retroactively authorized by later opt-in',()=>{
     const grant=policy.enrollment({steps:[{type:'email'},{type:'sms'}]},lead(false),'+15125550123').smsEnrollment;
@@ -61,7 +61,7 @@ test('shared sender also blocks direct SMS before provider/config access without
    getPlivo:()=>{providers++;return {messages:{create:async()=>{sends++;return {messageUuid:['mock']};}}};},
    process:{env:{PLIVO_PHONE_NUMBER:'mock'}},runtimeConfig:()=>{throw Error('unexpected config');},logCommunication:async()=>{},admin:{firestore:{FieldValue:{serverTimestamp:()=>0}}}};
   vm.createContext(context);vm.runInContext(source.slice(start,end)+';this.send=sendSMS;',context);
-  const result=await context.send({to:'+15125550123',options:{contactId:'test',workflowId:'direct_message',text:'Mock only'}});
+  const result=await context.send({to:'+15125550123',options:{contactId:'test',workflowId:'direct_message',purpose:'direct_message',text:'Mock only'}});
   assert.equal(result.success,value===true);assert.equal(providers,value===true?1:0);assert.equal(sends,value===true?1:0);
  }
 });

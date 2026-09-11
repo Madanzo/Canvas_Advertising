@@ -141,7 +141,7 @@ if (process.env.CRM_SPLIT_OVERLAY_RUNTIME === 'true') {
         assert.equal(calls.length,0);
     });
     test('split overlay: CRM ownership suppresses actual notification trigger/direct send and preserves immutable outbox',async()=>{
-        process.env.CANVAS_NOTIFICATION_OWNER='crm';
+        process.env.CANVAS_CRM_OWNED_PURPOSES='["lead_received"]';
         process.env.CANVAS_COMMUNICATIONS_TRANSITION_ID='emulator_epoch_2026';
         process.env.CANVAS_COMMUNICATIONS_CUTOVER_AT='2026-01-01T00:00:00.000Z';
         for(const gate of ['INTAKE','EMAIL','SMS','CONSENT','IDEMPOTENCY','SUPPRESSION']) process.env['CRM_COMMUNICATIONS_'+gate+'_READY']='true';
@@ -156,19 +156,44 @@ if (process.env.CRM_SPLIT_OVERLAY_RUNTIME === 'true') {
         await trigger();const original=(await outboxRef.get()).data();
         assert.equal(JSON.parse(original.serializedBody).notificationOwner,'crm');assert.equal(JSON.parse(original.serializedBody).testSuppressed,true);
         const count=calls.length;
-        process.env.CANVAS_NOTIFICATION_OWNER='website';
+        process.env.CANVAS_CRM_OWNED_PURPOSES='[]';
         await runtime.onNewLead.run(await leadRef.get(),{params:{leadId:id}});
         await runtime.processCrmLeadDeliveryQueue.run({});
         assert.equal(calls.length,count);assert.deepEqual((await outboxRef.get()).data(),original);
         assert.equal((await db.collection('workflowContacts').get()).size,0);
     });
     test('split overlay: unready cutover delivers valid lead with enrollment suppressed; visitor ownership cannot override server policy',async()=>{
-        process.env.CANVAS_NOTIFICATION_OWNER='crm';
+        process.env.CANVAS_CRM_OWNED_PURPOSES='["lead_received"]';
         await assert.rejects(runtime.submitPublicLead.run({...payload(),communications:{notificationOwner:'website'}},context()),/not allowed|unsupported|Unexpected|Unknown/i);
         await runtime.submitPublicLead.run(payload(),context());
-        assert.equal((await leadRef.get()).data().communications.notificationOwner,'held');
+        assert.equal((await leadRef.get()).data().communications.notificationOwner,'website');
         await runtime.onNewLead.run(await leadRef.get(),{params:{leadId:id}});await trigger();
         assert.equal((await outboxRef.get()).data().status,'accepted');assert.equal(calls.length,1);
         assert.equal(JSON.parse((await outboxRef.get()).data().serializedBody).testSuppressed,true);
     });
 }
+
+if (process.env.CRM_SPLIT_OVERLAY_RUNTIME === 'true') test('purpose scope: real public capture, mixed workflow, and rollback preserve non-receipt scheduling without replay',async()=>{
+    process.env.CRM_LEAD_TEST_SUBMISSION_ID='';
+    process.env.CANVAS_CRM_OWNED_PURPOSES='["lead_received"]';
+    process.env.CANVAS_COMMUNICATIONS_TRANSITION_ID='purpose_emulator_epoch';
+    process.env.CANVAS_COMMUNICATIONS_CUTOVER_AT='2026-01-01T00:00:00.000Z';
+    for(const gate of ['INTAKE','EMAIL','SMS','CONSENT','IDEMPOTENCY','SUPPRESSION']) process.env['CRM_COMMUNICATIONS_'+gate+'_READY']='true';
+    const publicId='purpose_public_'+Date.now();
+    const input={submissionId:publicId,name:'Synthetic Purpose',email:'purpose@example.invalid',phone:'+15125550198',service:'vehicle-wrap',source:'booking'};
+    await assert.rejects(runtime.submitPublicLead.run({...input,purpose:'booking'},context()),/not allowed|unsupported|Unexpected|Unknown/i);
+    await runtime.submitPublicLead.run(input,context());
+    const ref=db.collection('canvas_leads').doc(publicId);const saved=await ref.get();
+    assert.equal(saved.data().communications.purpose,'lead_received');assert.equal(saved.data().communications.notificationOwner,'crm');
+    await db.collection('canvas_workflows').doc('purpose_mixed_fixture').set({enabled:true,trigger:'form_submit',steps:[{type:'email',templateId:'welcome'},{type:'sms',templateId:'sms_welcome',delay:2,unit:'minutes'},{type:'email',templateId:'follow_up_no_response',delay:2,unit:'days'}]});
+    await runtime.onNewLead.run(saved,{params:{leadId:publicId}});
+    const instances=await db.collection('workflowContacts').where('contactId','==',publicId).get();assert.equal(instances.size,1);
+    const instance=instances.docs[0];assert.equal(instance.data().communicationOrigin,'form_submit');
+    await runtime.__splitProcessInstance(instance);assert.equal((await instance.ref.get()).data().currentStepIndex,1);
+    process.env.CANVAS_CRM_OWNED_PURPOSES='[]';
+    await runtime.__splitProcessInstance(await instance.ref.get());
+    const after=await instance.ref.get();assert.equal(after.data().currentStepIndex,2);assert.ok(after.data().nextExecutionAt.toMillis()>Date.now()+47*60*60*1000);
+    const held=db.collection('workflowContacts').doc('purpose_historical_held');await held.set({status:'held',currentStepIndex:0,nextExecutionAt:admin.firestore.Timestamp.fromMillis(1),history:[]});
+    const heldBefore=(await held.get()).data();await runtime.processWorkflowQueue.run({});
+    assert.deepEqual((await held.get()).data(),heldBefore);assert.deepEqual((await instance.ref.get()).data(),after.data());assert.equal(calls.length,0);
+});
