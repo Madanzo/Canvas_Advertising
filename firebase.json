@@ -21,7 +21,10 @@
     ]
   },
   "functions": {
-    "source": "functions"
+    "source": "functions",
+    "predeploy": [
+      "node \"$PROJECT_DIR/tools/check-workflow-deployment.cjs\" \"$RESOURCE_DIR\""
+    ]
   },
   "firestore": {
     "rules": "firestore.rules"

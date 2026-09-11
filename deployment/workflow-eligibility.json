@@ -1,0 +1,7 @@
+{
+  "project": "canvas-adnvertising",
+  "region": "us-central1",
+  "eligibleFrom": "2026-09-11T00:00:00.000Z",
+  "existingTargets": ["submitPublicLead", "onNewLead", "processBulkCampaign", "calcomWebhook", "processWorkflowQueue", "sendDirectMessage"],
+  "newTargets": ["createCrmIntegrationTestAuthorization", "onCanvasLeadForCRM", "processCrmLeadDeliveryQueue"]
+}

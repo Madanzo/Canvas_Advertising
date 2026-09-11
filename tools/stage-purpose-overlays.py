@@ -2,7 +2,7 @@
 No Firebase/auth/network operations. Archives may contain configuration: keep outputs private.
 Usage: python tools/stage-purpose-overlays.py ROOT OUTPUT
 """
-import sys,pathlib,subprocess,json,zipfile,hashlib,os,difflib
+import sys,pathlib,subprocess,json,zipfile,hashlib,os,difflib,shutil
 root=pathlib.Path(sys.argv[1]);out=pathlib.Path(sys.argv[2]);out.mkdir(mode=0o700,parents=True,exist_ok=False)
 review=pathlib.Path(__file__).resolve().parents[1];current=(review/'functions/index.js').read_text()
 parent=subprocess.check_output(['git','show','cc19a5427f8cf0058f2369fb3d506e5f034fdfe6:functions/index.js'],cwd=review,text=True)
@@ -59,6 +59,15 @@ def package(name,basePath,baseHash,source,transform,modules,targets):
  os.chmod(archive,0o600)
  for p,b in entries.items():
   path=folder/'source'/p;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(b);os.chmod(path,0o600)
+ # Deployable wrapper is separate from runtime bytes; Hosting is deliberately absent.
+ lock=json.loads((review/'deployment/workflow-eligibility.json').read_text())
+ envPath=folder/'source'/('.env.'+lock['project'])
+ assert not envPath.exists(), 'Existing project dotenv requires explicit reconciliation'
+ envPath.write_text('CANVAS_WORKFLOW_ELIGIBLE_FROM='+lock['eligibleFrom']+'\n');os.chmod(envPath,0o600)
+ (folder/'tools').mkdir();(folder/'deployment').mkdir()
+ shutil.copyfile(review/'tools/check-workflow-deployment.cjs',folder/'tools/check-workflow-deployment.cjs')
+ shutil.copyfile(review/'deployment/workflow-eligibility.json',folder/'deployment/workflow-eligibility.json')
+ (folder/'firebase.json').write_text(json.dumps({'functions':{'source':'source','predeploy':['node "$PROJECT_DIR/tools/check-workflow-deployment.cjs" "$RESOURCE_DIR"']}},indent=2)+'\n')
  for p,(_,b) in base.items():
   if p!='index.js':assert entries[p]==b
  subprocess.run(['node','--check',str(folder/'source/index.js')],check=True)
@@ -68,5 +77,5 @@ previous=root/'scratch/crm-communications-overlays-v2/sms-targets/candidate.zip'
 prepared=readzip(previous,'63d207bf155a31b922be1de19004f12cd307a307d40afabed5b553a93c3fa3ab')
 publicPath='scratch/app-check-client-2bf92bc/submitPublicLead.zip';publicHash='11c3c95913e0c3ddad143336d84f8d691dac01a6933e5fbe76b74fbe80ba549e';publicBase=readzip(root/publicPath,publicHash)
 packages=[package('sms-targets','scratch/deploy-sms-pr5-2026-09-10/onNewLead-after.zip','4429fa07197c8539efe200df5daac69f9d66d18ae469b9bf22778d87bcc78917',prepared['index.js'][1].decode(),sms,['communications-policy.js'],['onNewLead','processBulkCampaign','calcomWebhook','processWorkflowQueue','sendDirectMessage']),package('public-adapter-targets',publicPath,publicHash,publicBase['index.js'][1].decode(),public,['communications-policy.js','crm-test-authorization.js','crm-test-state.js','crm-lead-adapter.js','sms-consent.js'],['submitPublicLead','createCrmIntegrationTestAuthorization','onCanvasLeadForCRM','processCrmLeadDeliveryQueue'])]
-manifest={'sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],cwd=review,text=True).strip(),'sourceTreeDirty':bool(subprocess.check_output(['git','status','--porcelain'],cwd=review,text=True).strip()),'canonicalCrmHead':'4a58f5a5caf7c81ad3be895bb98fc81e23327612','packages':packages,'deploymentAuthorized':False,'freshLiveBaselineRecheckRequired':True,'excluded':['syncLeadToCRM v6','createLeadUploadSession v3','Hosting','rules','indexes','all other Functions']}
+manifest={'sourceHead':subprocess.check_output(['git','rev-parse','HEAD'],cwd=review,text=True).strip(),'sourceTreeDirty':bool(subprocess.check_output(['git','status','--porcelain'],cwd=review,text=True).strip()),'canonicalCrmHead':'afeae048c04d2b063fb7b5d2310bbb3cc69d3675','packages':packages,'deploymentEnvironment':json.loads((review/'deployment/workflow-eligibility.json').read_text()),'deploymentAuthorized':False,'freshLiveBaselineRecheckRequired':True,'excluded':['syncLeadToCRM v6','createLeadUploadSession v3','Hosting','rules','indexes','all other Functions']}
 (out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');os.chmod(out/'manifest.json',0o600);print(json.dumps(manifest,indent=2))
