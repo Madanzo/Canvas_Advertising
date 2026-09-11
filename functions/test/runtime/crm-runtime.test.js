@@ -206,6 +206,9 @@ if (process.env.CRM_SPLIT_OVERLAY_RUNTIME === 'true') {
     await db.collection('canvas_workflows').doc('historical_refusal_wf').set({trigger:'form_submit',steps:[{type:'email',templateId:'welcome'}]});
     const job=db.collection('workflowContacts').doc('historical_refusal_job');await job.set({contactId:lead.id,workflowId:'historical_refusal_wf',status:'active',currentStepIndex:0,nextExecutionAt:admin.firestore.Timestamp.fromMillis(1)});
     const original=(await job.get()).data();await runtime.processWorkflowQueue.run({});assert.deepEqual((await job.get()).data(),original);assert.equal(calls.length,0);
+    // An empty workflow must not complete or mutate an ineligible persisted instance.
+    await db.collection('canvas_workflows').doc('historical_refusal_wf').update({steps:[]});
+    await runtime.processWorkflowQueue.run({});assert.deepEqual((await job.get()).data(),original);assert.equal(calls.length,0);
     // Valid new server capture/grant cannot authorize an unknown message definition.
     const policy=require('../../communications-policy');const stamp=policy.capture(policy.configFromEnv(process.env));await lead.set({communications:stamp});
     await job.update({communicationEligibility:policy.workflowGrant(policy.configFromEnv(process.env),{communications:stamp})});

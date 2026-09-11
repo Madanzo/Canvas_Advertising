@@ -52,3 +52,14 @@ test('consolidated mapping survives reordered known steps and covers saved booki
  assert.equal(p.stepPurpose('status_change',{type:'sms',templateId:'sms_thank_you'}),'project_completion');
  assert.equal(p.stepPurpose('form_submit',{type:'email',purpose:'follow_up'}),undefined);
 });
+
+test('no-step completion refuses an ineligible instance without writes or provider calls',async()=>{
+ for(const record of [{},lead]) {
+  const instance={contactId:'fixture',workflowId:'empty',status:'active',currentStepIndex:0,nextExecutionAt:1,history:[]};
+  const before=JSON.stringify(instance);const h=worker(record,instance,undefined);
+  await h.run();assert.equal(h.count(),0);assert.deepEqual(h.writes,[]);
+  assert.equal(JSON.stringify(instance),before);assert.match(JSON.stringify(h.logs),/communication_refused.*workflow_not_authorized/);
+ }
+ const instance={contactId:'fixture',workflowId:'empty',currentStepIndex:0,communicationEligibility:p.workflowGrant(cfg,lead)};
+ const allowed=worker(lead,instance,undefined);await allowed.run();assert.equal(allowed.count(),0);assert.equal(allowed.writes[0].status,'completed');
+});

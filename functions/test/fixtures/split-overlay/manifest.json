@@ -2,8 +2,8 @@
   "packages": [
     {
       "name": "sms-targets",
-      "archiveSha256": "8be1ba89f515d442bca045b869c10b372b57131caf1ff139f1c5ef3f4b3169ae",
-      "indexSha256": "fd6b27acc9a631f480705e3c1dc9dfe409bd93defff09452012052ec523d9df0",
+      "archiveSha256": "e4b6e17cfc95ddbd5541e4d59382d950207ca234cff38633922bc7a0667749cd",
+      "indexSha256": "18fa841acd874a74a3363027f1ec4e7ff42d67084f835d6bc376ef8fcd5c8f81",
       "runtime": {
         "node": "20"
       },
@@ -11,13 +11,13 @@
         {
           "file": "sms-targets-workflow-and-notifications.txt",
           "startUtf8Byte": 2620,
-          "endUtf8Byte": 31094,
-          "sha256": "4281110a1afae7a9e5b6902ff03fa2a89dcf19011774341883bc00f3741ff87a"
+          "endUtf8Byte": 31603,
+          "sha256": "c41e65008363c67ccc95b3ce39a3b7c26679b5344e97855e9618d0c8bc0eb3af"
         },
         {
           "file": "sms-targets-direct-message.txt",
-          "startUtf8Byte": 50563,
-          "endUtf8Byte": 52620,
+          "startUtf8Byte": 51072,
+          "endUtf8Byte": 53129,
           "sha256": "a454fa805a930fd03da556dec68af56606e8ad9eb91036128ed9e88d73852837"
         }
       ],

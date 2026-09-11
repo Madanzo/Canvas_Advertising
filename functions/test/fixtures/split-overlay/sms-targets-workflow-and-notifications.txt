@@ -176,6 +176,13 @@ async function processInstance(doc) {
     const instanceId = doc.id;
 
     try {
+        // Eligibility gates every mutation, including empty/deleted workflow completion.
+        const sourceLead = await db.collection('canvas_leads').doc(instance.contactId).get();
+        const instanceEligibility = communicationsPolicy.dispatchDecision(communicationsPolicy.configFromEnv(process.env), sourceLead.exists ? sourceLead.data() : null, instance, 'workflow');
+        if (!instanceEligibility.allowed) {
+            console.error('communication_refused', { instanceId, reason: instanceEligibility.reason });
+            return; // leave ineligible work byte-for-byte unchanged
+        }
         // 1. Get Workflow Definition (Cached or Fresh)
         const workflowDoc = await db.collection('canvas_workflows').doc(instance.workflowId).get();
         if (!workflowDoc.exists) {
@@ -195,7 +202,6 @@ async function processInstance(doc) {
 
         console.log(`Executing step ${instance.currentStepIndex} (${currentStep.type}) for ${instanceId}`);
         const purpose = communicationsPolicy.stepPurpose(instance.communicationOrigin || workflow.trigger, currentStep);
-        const sourceLead = await db.collection('canvas_leads').doc(instance.contactId).get();
         const eligibility = communicationsPolicy.dispatchDecision(communicationsPolicy.configFromEnv(process.env), sourceLead.exists ? sourceLead.data() : null, instance, purpose);
         if (!eligibility.allowed) {
             console.error('communication_refused', { instanceId, reason: eligibility.reason });
