@@ -44,3 +44,11 @@ test('real direct callback rejects unauthenticated input before any helper call'
  const a=source.indexOf('exports.sendDirectMessage ='),b=source.indexOf('\n});',a)+4;vm.createContext(c);vm.runInContext(source.slice(a,b),c);
  await assert.rejects(callback({type:'email',purpose:'direct_message'},{auth:null}));assert.equal(providers,0);
 });
+test('consolidated mapping survives reordered known steps and covers saved booking/project additions',()=>{
+ assert.equal(p.stepPurpose('form_submit',{type:'email',templateId:'follow_up_no_response',purpose:'lead_received'},'wf_welcome',0),'follow_up');
+ assert.equal(p.stepPurpose('form_submit',{type:'email',templateId:'welcome',purpose:'follow_up'},'wf_welcome',2),'lead_received');
+ assert.equal(p.stepPurpose('booking',{type:'email',templateId:'booking_reminder_2h'}),'reminder');
+ assert.equal(p.stepPurpose('status_change',{type:'email',templateId:'thank_you_post_project'}),'project_completion');
+ assert.equal(p.stepPurpose('status_change',{type:'sms',templateId:'sms_thank_you'}),'project_completion');
+ assert.equal(p.stepPurpose('form_submit',{type:'email',purpose:'follow_up'}),undefined);
+});
