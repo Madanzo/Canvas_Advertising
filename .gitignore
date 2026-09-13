@@ -5,6 +5,10 @@ dist/
 *.log
 .env
 .env.*
+# Non-secret deploy-time parameters for the CRM forwarding functions.
+# Firebase reads .env.<project> automatically. The credential is NOT here:
+# it lives in Secret Manager and is bound by reference.
+!functions/.env.canvas-adnvertising
 .agent/
 brain/
 functions/node_modules/
