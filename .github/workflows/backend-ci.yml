@@ -1,0 +1,65 @@
+name: Backend checks
+
+# The frontend workflow's pull_request trigger is path-filtered to quote pages,
+# js/, css/styles.css, tests/ and docs — none of which this diff touches. A
+# functions-only change therefore reaches review with nothing run against it.
+# This covers that gap. It installs, type-free-checks, unit-tests and performs
+# offline trigger discovery; it deploys nothing and holds no credentials.
+
+on:
+  push:
+    branches:
+      - 'chore/canvas-backend-reconciliation'
+      - 'codex/canvas-crm-**'
+  pull_request:
+    paths:
+      - 'functions/**'
+      - '.github/scripts/discover-endpoints.cjs'
+      - '.github/workflows/backend-ci.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  functions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # functions/package.json pins engines.node 22; run the checks on the
+      # runtime the code is actually deployed to, not the repo default.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: functions/package-lock.json
+
+      - name: Install (clean, lockfile-exact)
+        working-directory: functions
+        run: npm ci
+
+      - name: Confirm the installed runtime matches engines.node
+        working-directory: functions
+        run: |
+          node -p "'node ' + process.version"
+          node -e "const e=require('node:assert');const m=process.version.match(/^v(\\d+)/)[1];e.strictEqual(m,'22','expected Node 22, got '+process.version)"
+          npm ls --depth=0 firebase-functions firebase-admin
+
+      - name: Syntax check
+        working-directory: functions
+        run: |
+          node --check index.js
+          node --check crm-lead-adapter.js
+
+      - name: Adapter unit tests
+        working-directory: functions
+        run: npm test
+
+      # Loads index.js and reads the __endpoint metadata firebase-functions
+      # attaches in-process. No Google API is contacted and no credential is
+      # present; the project id is a throwaway. This is the check that catches
+      # a module that cannot load — the failure the CLI surfaces as "User code
+      # failed to load. Cannot determine backend specification" — before a
+      # deploy does.
+      - name: Entrypoint and trigger discovery (offline, no production calls)
+        run: node .github/scripts/discover-endpoints.cjs
