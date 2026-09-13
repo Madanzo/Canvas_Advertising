@@ -9,7 +9,12 @@ name: Backend checks
 on:
   push:
     branches:
-      - 'chore/canvas-backend-reconciliation'
+      # main is the branch a release is cut from, so it is the one that most
+      # needs coverage. It was missing: PR #9 merged to main and no backend
+      # check ran on the merge commit. The PR's head was green and the merge
+      # left the tree identical, so nothing slipped through that time — but a
+      # merge that silently changed the tree would not have been caught.
+      - 'main'
       - 'codex/canvas-crm-**'
   pull_request:
     paths:
