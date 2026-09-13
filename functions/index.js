@@ -2010,6 +2010,196 @@ exports.squareWebhook = configuredFunctions.https.onRequest(async (req, res) => 
     }
 });
 
+// ─── CRM Webhook Triggers ───────────────────
+
+const CRM_LEAD_DELIVERIES_COLLECTION = 'crm_lead_deliveries';
+const CRM_LEAD_BATCH_SIZE = 25;
+const CRM_LEAD_MAX_ATTEMPTS = 8;
+const crmLeadAdapter = require('./crm-lead-adapter');
+
+// The CRM credential is held in Secret Manager and injected at runtime. A
+// plaintext deploy parameter would be readable in the deployed function config
+// by anyone with project viewer access; this is bound by reference instead.
+// Scoped to these two functions only — nothing else in this codebase changes.
+const MERKAD_LEADS_SECRET_ID = 'MERKAD_LEADS_CREDENTIAL';
+const crmFunctions = functions.runWith({ secrets: [MERKAD_LEADS_SECRET_ID] });
+
+function crmLeadAdapterConfig() {
+    return {
+        enabled: String(
+            process.env.CRM_LEAD_ADAPTER_ENABLED
+            || 'false'
+        ).toLowerCase() === 'true',
+        baseUrl: process.env.MERKAD_LEADS_BASE_URL || '',
+        tenantSlug: process.env.MERKAD_LEADS_TENANT_SLUG || '',
+        // Whole bearer string `mk_live_<keyId>.<secret>`, injected by the
+        // Secret Manager binding below — never a plaintext deploy parameter.
+        credential: process.env.MERKAD_LEADS_CREDENTIAL || '',
+        serviceAllowlistConfirmed: String(
+            process.env.MERKAD_LEADS_SERVICE_ALLOWLIST_CONFIRMED
+            || 'false'
+        ).toLowerCase() === 'true'
+    };
+}
+
+function crmLeadDeliveryReadiness(config) {
+    return crmLeadAdapter.readiness(config);
+}
+
+function crmLeadIdempotencyKey(leadId) {
+    return crmLeadAdapter.idempotencyKeyFor(leadId);
+}
+
+async function deliverCrmLead(deliveryRef, delivery) {
+    const config = crmLeadAdapterConfig();
+    const readiness = crmLeadDeliveryReadiness(config);
+    if (!readiness.ready) return { attempted: false, reason: readiness.reason };
+    if (!delivery.serializedBody || !delivery.serviceMapping?.crmValue || delivery.serviceMapping.confirmed !== true) {
+        await deliveryRef.update({
+            status: 'failed',
+            lastError: 'UNSUPPORTED_SERVICE_MAPPING',
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+        return { attempted: false, reason: 'unsupported-service-mapping' };
+    }
+
+    const nowMs = Date.now();
+    const attemptNumber = await db.runTransaction(async (transaction) => {
+        const currentSnapshot = await transaction.get(deliveryRef);
+        if (!currentSnapshot.exists) return 0;
+        const current = currentSnapshot.data();
+        if (!crmLeadAdapter.isClaimable(current, nowMs)) return 0;
+        const nextAttempt = Number(current.attemptCount || 0) + 1;
+        transaction.update(deliveryRef, {
+            status: 'processing',
+            attemptCount: nextAttempt,
+            processingLeaseExpiresAt: admin.firestore.Timestamp.fromMillis(
+                nowMs + crmLeadAdapter.PROCESSING_LEASE_MS
+            ),
+            lastAttemptAt: admin.firestore.FieldValue.serverTimestamp(),
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+        return nextAttempt;
+    });
+    if (!attemptNumber) return { attempted: false, reason: 'not-claimable' };
+
+    const result = await crmLeadAdapter.postSerializedDelivery({
+        fetchImpl: fetch,
+        baseUrl: config.baseUrl,
+        tenantSlug: config.tenantSlug,
+        credential: config.credential,
+        idempotencyKey: delivery.idempotencyKey,
+        serializedBody: delivery.serializedBody
+    });
+    const common = {
+        responseStatus: result.status || null,
+        responseCode: result.code || '',
+        processingLeaseExpiresAt: admin.firestore.FieldValue.delete(),
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    };
+
+    if (result.outcome === 'accepted') {
+        await deliveryRef.update({
+            ...common,
+            status: 'accepted',
+            acceptedAt: admin.firestore.FieldValue.serverTimestamp(),
+            crmLeadId: result.data.leadId,
+            crmContactId: result.data.contactId || null,
+            crmOpportunityId: result.data.opportunityId || null,
+            duplicate: result.duplicate === true,
+            lastError: admin.firestore.FieldValue.delete(),
+            nextAttemptAt: admin.firestore.FieldValue.delete()
+        });
+        return { attempted: true, accepted: true };
+    }
+
+    if (result.outcome === 'retry' && attemptNumber < CRM_LEAD_MAX_ATTEMPTS) {
+        const delayMinutes = Math.min(5 * (2 ** (attemptNumber - 1)), 360);
+        await deliveryRef.update({
+            ...common,
+            status: 'retry',
+            lastError: result.code || 'transient_delivery_failure',
+            nextAttemptAt: admin.firestore.Timestamp.fromMillis(
+                Date.now() + (delayMinutes * (0.8 + Math.random() * 0.4)) * 60 * 1000
+            )
+        });
+        return { attempted: true, accepted: false };
+    }
+
+    await deliveryRef.update({
+        ...common,
+        status: result.outcome === 'conflict' ? 'conflict' : 'failed',
+        lastError: result.code || 'non_retryable_delivery_failure',
+        validationErrors: result.errors || [],
+        nextAttemptAt: admin.firestore.FieldValue.delete()
+    });
+    return { attempted: true, accepted: false };
+}
+
+exports.syncLeadToCRM = crmFunctions.firestore
+    .document('canvas_leads/{leadId}')
+    .onCreate(async (snapshot, context) => {
+        const leadId = context.params.leadId;
+        const leadData = snapshot.data();
+        const idempotencyKey = crmLeadIdempotencyKey(leadId);
+        const config = crmLeadAdapterConfig();
+        const readiness = crmLeadDeliveryReadiness(config);
+        const deliveryRef = db.collection(CRM_LEAD_DELIVERIES_COLLECTION).doc(leadId);
+        const mapping = crmLeadAdapter.buildRequestMapping(
+            leadId,
+            leadData,
+            new Date(context.timestamp).toISOString()
+        );
+        mapping.serviceMapping.confirmed = config.serviceAllowlistConfirmed;
+
+        await db.runTransaction(async (transaction) => {
+            const existing = await transaction.get(deliveryRef);
+            if (existing.exists) return;
+            transaction.create(deliveryRef, {
+                leadId,
+                idempotencyKey,
+                serializedBody: mapping.serializedBody,
+                serviceMapping: mapping.serviceMapping,
+                unsupportedFields: mapping.unsupportedFields,
+                status: readiness.ready ? 'pending' : 'held',
+                holdReason: readiness.ready ? null : readiness.reason,
+                attemptCount: 0,
+                createdAt: admin.firestore.FieldValue.serverTimestamp(),
+                updatedAt: admin.firestore.FieldValue.serverTimestamp()
+            });
+        });
+
+        if (!readiness.ready) {
+            console.log(`CRM lead ${leadId} held: ${readiness.reason}. Canvas lead remains accepted.`);
+            return null;
+        }
+
+        const deliverySnapshot = await deliveryRef.get();
+        await deliverCrmLead(deliveryRef, deliverySnapshot.data());
+        return null;
+    });
+
+exports.processCrmLeadDeliveryQueue = crmFunctions.pubsub
+    .schedule('every 5 minutes')
+    .onRun(async () => {
+        const readiness = crmLeadDeliveryReadiness(crmLeadAdapterConfig());
+        if (!readiness.ready) {
+            console.log(`CRM lead queue paused: ${readiness.reason}.`);
+            return null;
+        }
+
+        const now = Date.now();
+        const snapshot = await db.collection(CRM_LEAD_DELIVERIES_COLLECTION)
+            // Held records were captured while forwarding was disabled. They
+            // require a separately reviewed replay operation and are excluded.
+            .where('status', 'in', ['pending', 'retry', 'processing'])
+            .limit(CRM_LEAD_BATCH_SIZE)
+            .get();
+        const eligible = snapshot.docs.filter((doc) => crmLeadAdapter.isClaimable(doc.data(), now));
+        await Promise.all(eligible.map((doc) => deliverCrmLead(doc.ref, doc.data())));
+        return null;
+    });
+
 exports.syncOrderToCRM = configuredFunctions.firestore
     .document('canvas_orders/{orderId}')
     .onCreate(async (snapshot, context) => {
