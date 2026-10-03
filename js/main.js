@@ -98,6 +98,14 @@ if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
 
 // ─── Bootstrap ──────────────────────────────────
 document.addEventListener('DOMContentLoaded', function () {
+    if (document.getElementById('commerce-app')) {
+        initNavigation();
+        window.initCanvasCommerce();
+        window.addEventListener('hashchange', () => {
+            if (new URLSearchParams(location.hash.slice(1)).has('recover')) location.reload();
+        });
+        return;
+    }
     if (document.getElementById('canvasQuoteForm')) {
         window.initCanvasQuote();
         return;
@@ -4375,3 +4383,541 @@ function initReviewFunnel() {
     }
   };
 })(window);
+
+
+// Commerce uses the website proxy, never a CRM credential/capability or client price.
+window.initCanvasCommerce = async function () {
+    const es = document.documentElement.lang === 'es';
+    const txt = (en, spanish) => es ? spanish : en;
+    const valueLabel = (value) => ({
+        area: txt('Area', 'Superficie'), piece: txt('Per piece', 'Por pieza'), pack: txt('Packs', 'Paquetes'),
+        garment_matrix: txt('Garment variants', 'Variantes de prendas'), material: txt('Material', 'Material'), finish: txt('Finish', 'Acabado'),
+        vinyl: txt('Vinyl', 'Vinilo'), hem: txt('Hem', 'Dobladillo'), pocket: txt('Pole pocket', 'Bolsillo para poste'),
+        unpaid: txt('Unpaid', 'Sin pagar'), paid: txt('Paid', 'Pagado'), pending: txt('Pending', 'Pendiente'),
+        authorized: txt('Authorized, not captured', 'Autorizado, no cobrado'), failed: txt('Verified failure', 'Fallo verificado'),
+        unknown: txt('Being reconciled', 'En conciliación'), awaiting_review: txt('Awaiting review', 'Pendiente de revisión'),
+        changes_requested: txt('Changes requested', 'Cambios solicitados'), approved: txt('Approved', 'Aprobado'),
+        source: txt('Source', 'Original'), final: txt('Final', 'Final'), needs_review: txt('Needs staff review', 'Requiere revisión técnica'),
+        ready: txt('Ready', 'Listo'), quarantined: txt('Quarantined', 'En cuarentena'), needs_correction: txt('Needs correction', 'Requiere corrección')
+    })[value] || value;
+    const app = document.getElementById('commerce-app');
+    const message = document.getElementById('commerce-message');
+    const api = window.CanvasFirebase.commerce;
+    const preview = app.hasAttribute('data-commerce-preview') && ['localhost', '127.0.0.1'].includes(location.hostname);
+    if (preview) {
+        window.CanvasFinix = { tokenize: async () => (await (await fetch('/preview/tokenize', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })).json()).token };
+        const contact = document.getElementById('commerce-contact');
+        contact.elements.name.value = 'Synthetic Canvas Customer';
+        contact.elements.email.value = 'canvas-preview@example.com';
+        contact.elements.phone.value = '5125550106';
+    }
+    const uid = () => crypto.randomUUID().replaceAll('-', '_');
+    const money = (n) => new Intl.NumberFormat(es ? 'es-US' : 'en-US', { style: 'currency', currency: 'USD' }).format(n / 100);
+    const node = (tag, text, attrs = {}) => {
+        const el = document.createElement(tag);
+        if (text != null) el.textContent = text;
+        for (const [key, value] of Object.entries(attrs)) el.setAttribute(key, value);
+        return el;
+    };
+    const button = (label, handler, secondary = false) => {
+        const el = node('button', label, { type: 'button', class: 'c-button' + (secondary ? ' c-button--secondary' : '') });
+        el.addEventListener('click', () => run(el, handler));
+        return el;
+    };
+    const field = (form, label, name, type = 'text', attrs = {}) => {
+        const wrap = node('label', label);
+        const control = node(type === 'select' ? 'select' : type === 'textarea' ? 'textarea' : 'input', null, { name, ...attrs });
+        if (control.tagName === 'INPUT') control.type = type;
+        wrap.append(control); form.append(wrap); return control;
+    };
+    const select = (form, label, name, values) => {
+        const el = field(form, label, name, 'select');
+        values.forEach(([value, text]) => el.append(node('option', text, { value })));
+        return el;
+    };
+    const statusText = {
+        financial_hold: txt('Payment holds production', 'El pago detiene la producción'),
+        needs_artwork: txt('Artwork required', 'Faltan archivos'),
+        staff_review: txt('Staff preflight / final preparation', 'Revisión técnica y preparación final'),
+        needs_correction: txt('Artwork corrections required', 'Se requieren correcciones'),
+        awaiting_proof: txt('Final proof approval required', 'Falta aprobar la prueba final'),
+        missing_specs: txt('Specifications incomplete', 'Especificaciones incompletas'),
+        revision_hold: txt('Revision holds production', 'La revisión detiene la producción'),
+        ready: txt('Ready for staff production release', 'Listo para liberación de producción'),
+        cancelled: txt('Cancelled', 'Cancelado')
+    };
+    const errorText = {
+        commerce_disabled: txt('Online checkout is not released yet. Your existing quote form still works.', 'La compra en línea aún no está habilitada. El formulario de cotización sigue disponible.'),
+        checkout_cutover_pending: txt('Checkout awaits the reviewed payment-provider cutover.', 'La compra espera el cambio aprobado de proveedor de pago.'),
+        quote_expired: txt('This quote expired. Request a fresh price and accept it again.', 'Esta cotización venció. Solicita un nuevo precio y acéptalo.'),
+        idempotency_conflict: txt('This retry differs from the saved request. Do not create a second payment; recover the original order.', 'Este reintento difiere del original. No crees otro pago; recupera tu pedido.'),
+        checkout_attempt_active: txt('A payment is already being reconciled. Retry the saved attempt or refresh status.', 'Ya se está conciliando un pago. Reintenta el original o actualiza el estado.'),
+        upload_expired: txt('The temporary upload expired. Reselect the file to create a new upload identity.', 'La carga temporal venció. Selecciona el archivo de nuevo para iniciar otra carga.'),
+        proof_stale: txt('Artwork changed. Refresh and review the new proof.', 'Los archivos cambiaron. Actualiza y revisa la nueva prueba.'),
+        delivery_uncertain: txt('The response is uncertain. Retry the SAME saved request; do not start another order/payment.', 'La respuesta es incierta. Reintenta la MISMA solicitud; no crees otro pedido o pago.')
+    };
+    const announce = (text, error = false) => {
+        message.textContent = text; message.dataset.error = String(error);
+    };
+    async function run(control, task) {
+        if (control?.disabled) return;
+        if (control) control.disabled = true;
+        try { await task(); }
+        catch (error) { announce(errorText[error.code] || txt('Could not complete this step: ', 'No se completó este paso: ') + (error.code || error.message), true); }
+        finally { if (control?.isConnected) control.disabled = false; }
+    }
+    const restore = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch { return fallback; } };
+    let cart = restore('canvas_commerce_cart_v1', []);
+    let catalog, quote, order, publicConfiguration;
+    let checkout = restore('canvas_commerce_checkout_v1', null);
+    let payment = restore('canvas_commerce_payment_v1', null);
+    let uploads = restore('canvas_commerce_uploads_v1', {});
+    const saveCart = () => localStorage.setItem('canvas_commerce_cart_v1', JSON.stringify(cart));
+    const invalidate = () => {
+        quote = null; document.getElementById('commerce-quote').replaceChildren();
+        document.getElementById('commerce-checkout').hidden = true;
+    };
+    const pricedRow = (parent, label, amount, total = false) => {
+        const row = node('div', null, { class: 'c-price-row' + (total ? ' c-total' : '') });
+        row.append(node('span', label), node('span', money(amount))); parent.append(row);
+    };
+    function renderConfig() {
+        const form = document.getElementById('commerce-config'); form.replaceChildren();
+        const product = select(form, txt('Product', 'Producto'), 'product', catalog.products.map((p) => [p.productId, p.name[es ? 'es' : 'en']]));
+        const fields = node('div', null, { class: 'c-fields' }); form.append(fields);
+        const update = () => {
+            fields.replaceChildren();
+            const p = catalog.products.find((p) => p.productId === product.value);
+            fields.append(node('p', txt('Pricing mode: ', 'Tipo de precio: ') + valueLabel(p.mode) + (p.mode === 'pack' ? txt(' · pieces per pack: ', ' · piezas por paquete: ') + p.unitsPerPack : ''), { class: 'c-small' }));
+            if (p.availability !== 'available' || !p.capacityApproved) {
+                fields.append(node('p', txt('This product needs a staff quote or is unavailable.', 'Este producto requiere cotización o no está disponible.')));
+                return;
+            }
+            if (p.mode === 'area' || p.maxWidthIn || p.maxHeightIn) {
+                const dimensions = node('div', null, { class: 'c-row' });
+                field(dimensions, txt('Width', 'Ancho'), 'width', 'number', { min: '.001', step: 'any', required: '', value: '3' });
+                field(dimensions, txt('Height', 'Alto'), 'height', 'number', { min: '.001', step: 'any', required: '', value: '4' });
+                fields.append(dimensions);
+                select(fields, txt('Dimension unit', 'Unidad'), 'unit', ['ft', 'in', 'mm', 'cm', 'm'].map((s) => [s, s]));
+            }
+            field(fields, p.mode === 'pack' ? txt('Packs', 'Paquetes') : txt('Quantity', 'Cantidad'), 'quantity', 'number', {
+                min: p.minimumQuantity, max: p.maximumQuantity, required: '', value: p.minimumQuantity, step: '1'
+            });
+            for (const [name, values] of Object.entries(p.options)) select(fields, valueLabel(name), 'option_' + name, values.map((v) => [v, valueLabel(v)]));
+            if (p.mode === 'garment_matrix') {
+                fields.append(node('p', txt('Allocate quantities by garment variant; total must match quantity.', 'Asigna cantidades por variante; la suma debe igualar la cantidad.')));
+                p.garmentStock.forEach((v, i) => {
+                    field(fields, v.color + ' / ' + v.size + ' · ' + txt('Available ', 'Disponible ') + v.available,
+                        'variant_' + i, 'number', { min: 0, max: v.available, value: 0, step: 1 });
+                    field(fields, txt('Personalization (optional)', 'Personalización (opcional)') + ' · ' + v.color + ' / ' + v.size,
+                        'personalization_' + i, 'text', { maxlength: 200 });
+                });
+            }
+            select(fields, txt('Artwork plan', 'Plan de archivos'), 'artworkMode', [
+                ['later', txt('Upload after purchase', 'Subir después de comprar')],
+                ['now', txt('Ready to upload after checkout', 'Listo para subir al finalizar la compra')],
+                ['design_help', txt('I need design help (quoted by CRM)', 'Necesito diseño (precio del CRM)')]
+            ]);
+            field(fields, txt('Design brief / notes', 'Descripción del diseño'), 'designBrief', 'textarea', { maxlength: 2000 });
+            fields.append(node('p', txt('Each cart item is a separate purchased item. Multiple designs can be allocated after purchase.', 'Cada artículo es una compra independiente. Puedes asignar varios diseños después de comprar.'), { class: 'c-small' }));
+            const add = node('button', txt('Add to order', 'Agregar al pedido'), { type: 'submit', class: 'c-button' }); fields.append(add);
+        };
+        product.addEventListener('change', update); update();
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const p = catalog.products.find((p) => p.productId === product.value);
+            const data = new FormData(form); const variants = p.garmentStock.flatMap((v, i) => Number(data.get('variant_' + i)) > 0
+                ? [{ sku: v.sku, color: v.color, size: v.size, quantity: Number(data.get('variant_' + i)),
+                    ...(data.get('personalization_' + i) ? { personalization: data.get('personalization_' + i) } : {}) }] : []);
+            const configuration = { quantity: Number(data.get('quantity')), options: Object.fromEntries(Object.keys(p.options).map((key) => [key, data.get('option_' + key)])),
+                variants, artworkMode: data.get('artworkMode'), designBrief: data.get('designBrief'), notes: '' };
+            if (data.has('width')) configuration.dimensions = { width: Number(data.get('width')), height: Number(data.get('height')), unit: data.get('unit') };
+            const editing = app.dataset.editLineItem;
+            const index = cart.findIndex((item) => item.lineItemId === editing);
+            const next = { lineItemId: index >= 0 ? editing : uid(), productId: p.productId, configuration };
+            if (index >= 0) cart[index] = next; else cart.push(next);
+            delete app.dataset.editLineItem;
+            form.querySelector('[type=submit]').textContent = txt('Add to order', 'Agregar al pedido');
+            saveCart(); invalidate(); renderCart(); announce(txt('Item added. Request the authoritative price below.', 'Artículo agregado. Solicita el precio autorizado abajo.'));
+        }, { once: false });
+    }
+    function renderCart() {
+        const holder = document.getElementById('commerce-cart'); holder.replaceChildren();
+        if (!cart.length) { holder.append(node('p', txt('Your order starts here.', 'Tu pedido comienza aquí.'))); return; }
+        cart.forEach((item, i) => {
+            const p = catalog.products.find((p) => p.productId === item.productId);
+            const block = node('article', null, { class: 'c-line' });
+            block.append(node('h3', (i + 1) + '. ' + (p?.name[es ? 'es' : 'en'] || item.productId)),
+                node('p', txt('Quantity: ', 'Cantidad: ') + item.configuration.quantity),
+                node('p', Object.entries(item.configuration.options).map(([k, v]) => valueLabel(k) + ': ' + valueLabel(v)).join(' · '), { class: 'c-small' }));
+            if (item.configuration.dimensions) block.append(node('p', item.configuration.dimensions.width + ' × ' + item.configuration.dimensions.height + ' ' + item.configuration.dimensions.unit));
+            block.append(button(txt('Edit configuration', 'Editar configuración'), async () => {
+                const form = document.getElementById('commerce-config');
+                form.elements.product.value = item.productId; form.elements.product.dispatchEvent(new Event('change'));
+                const c = item.configuration; const fill = (name, value) => { if (form.elements[name] && value != null) form.elements[name].value = value; };
+                fill('quantity', c.quantity); fill('width', c.dimensions?.width); fill('height', c.dimensions?.height); fill('unit', c.dimensions?.unit);
+                fill('artworkMode', c.artworkMode); fill('designBrief', c.designBrief);
+                for (const [name, value] of Object.entries(c.options)) fill('option_' + name, value);
+                p?.garmentStock.forEach((v, index) => { const variant = c.variants.find((row) => row.sku === v.sku && row.color === v.color && row.size === v.size);
+                    fill('variant_' + index, variant?.quantity || 0); fill('personalization_' + index, variant?.personalization || ''); });
+                app.dataset.editLineItem = item.lineItemId;
+                form.querySelector('[type=submit]').textContent = txt('Save configuration', 'Guardar configuración');
+                form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, true), button(txt('Duplicate as a separate item', 'Duplicar como artículo independiente'), async () => {
+                cart.push({ ...structuredClone(item), lineItemId: uid() }); saveCart(); invalidate(); renderCart();
+            }, true), button(txt('Remove', 'Quitar'), async () => { cart.splice(i, 1); saveCart(); invalidate(); renderCart(); }, true)); holder.append(block);
+        });
+        const delivery = select(holder, txt('Delivery / destination zone', 'Entrega / zona'), 'delivery',
+            catalog.deliveryRules.map((r, i) => [i, r.methodId + ' · ' + r.zone]));
+        const address = node('div', null, { class: 'c-fields' }); holder.append(address);
+        const updateAddress = () => {
+            address.replaceChildren();
+            if (catalog.deliveryRules[Number(delivery.value)].kind === 'shipping') {
+                for (const [key, en, spanish] of [['line1', 'Address', 'Dirección'], ['line2', 'Unit (optional)', 'Unidad (opcional)'],
+                    ['city', 'City', 'Ciudad'], ['region', 'State / region', 'Estado'], ['postalCode', 'Postal code', 'Código postal'], ['country', 'Country (2-letter code)', 'País (2 letras)']])
+                    field(address, txt(en, spanish), key, 'text', { maxlength: key === 'country' ? 2 : 200 });
+            }
+        };
+        delivery.addEventListener('change', () => { invalidate(); updateAddress(); }); updateAddress();
+        holder.append(button(txt('Get authoritative price', 'Obtener precio autorizado'), async () => {
+            const rule = catalog.deliveryRules[Number(delivery.value)];
+            const destination = { methodId: rule.methodId, destinationZone: rule.zone };
+            if (rule.kind === 'shipping') destination.address = Object.fromEntries([...address.querySelectorAll('input')].map((input) => [input.name, input.value]));
+            const requestId = uid();
+            quote = await api('quote', { version: 'canvas-commerce.v1', requestId, catalogVersion: catalog.version, items: cart,
+                delivery: destination, locale: es ? 'es' : 'en' }, requestId);
+            renderQuote();
+        }));
+    }
+    function renderQuote() {
+        const holder = document.getElementById('commerce-quote'); holder.replaceChildren();
+        quote.items.forEach((item) => {
+            const block = node('article', null, { class: 'c-line' });
+            block.append(node('h3', item.name), node('p', txt('Purchased pieces: ', 'Piezas compradas: ') + item.pieces));
+            for (const [key, en, spanish] of [['baseMinor', 'Base print', 'Impresión base'], ['optionsMinor', 'Options', 'Opciones'],
+                ['setupMinor', 'Setup', 'Preparación'], ['designMinor', 'Design help', 'Diseño']]) pricedRow(block, txt(en, spanish), item.price[key]);
+            pricedRow(block, txt('Item tax', 'Impuesto del artículo'), item.taxMinor); holder.append(block);
+        });
+        pricedRow(holder, txt('Shipping', 'Envío'), quote.shippingMinor);
+        pricedRow(holder, txt('Tax (includes item taxes)', 'Impuesto (incluye impuestos por artículo)'), quote.taxMinor);
+        pricedRow(holder, txt('Order total', 'Total del pedido'), quote.totalMinor, true);
+        holder.append(node('p', txt('Price valid until ', 'Precio válido hasta ') + new Date(quote.expiresAt).toLocaleString(), { class: 'c-small' }));
+        document.getElementById('commerce-terms').textContent = txt('I accept this exact quote and terms version ', 'Acepto esta cotización exacta y los términos versión ') + quote.termsVersion;
+        if (publicConfiguration?.termsUrl) document.getElementById('commerce-terms').append(node('a', txt(' Read terms', ' Leer términos'), { href: publicConfiguration.termsUrl, class: 'c-text-link', target: '_blank', rel: 'noopener noreferrer' }));
+        if (!preview && !publicConfiguration?.termsUrl) {
+            announce(txt('Purchase terms are not configured. Checkout is not ready for release.', 'No están configurados los términos de compra. La compra aún no está lista.'), true);
+            return;
+        }
+        document.getElementById('commerce-contact').elements.terms.checked = false;
+        document.getElementById('commerce-checkout').hidden = false;
+        announce(txt('CRM price received. No payment has been taken.', 'Precio recibido del CRM. No se ha cobrado.'));
+    }
+    async function checkoutSaved() {
+        const result = await api('checkout', checkout.body || sessionStorage.getItem('canvas_commerce_checkout_payload_v1'), checkout.attemptId);
+        checkout.state = 'accepted'; delete checkout.body;
+        localStorage.setItem('canvas_commerce_checkout_v1', JSON.stringify(checkout));
+        sessionStorage.removeItem('canvas_commerce_checkout_payload_v1');
+        localStorage.setItem('canvas_commerce_last_order_v1', result.id);
+        order = await api('order', { orderId: result.id }); await renderOrder();
+    }
+    document.getElementById('commerce-contact').addEventListener('submit', (event) => {
+        event.preventDefault();
+        run(event.submitter, async () => {
+            if (!quote || quote.expiresAt <= Date.now()) throw Object.assign(new Error(), { code: 'quote_expired' });
+            if (checkout && checkout.state !== 'accepted') return checkoutSaved();
+            if (checkout && checkout.quoteHash === quote.quoteHash) return checkoutSaved();
+            const data = new FormData(event.currentTarget);
+            const attemptId = uid();
+            const contact = { name: data.get('name'), email: data.get('email') };
+            if (data.get('phone')) contact.phone = data.get('phone');
+            checkout = { attemptId, quoteHash: quote.quoteHash, body: JSON.stringify({
+                version: 'canvas-commerce.v1', quoteId: quote.quoteId, acceptedHash: quote.quoteHash, termsVersion: quote.termsVersion, sourceOrderId: attemptId, contact
+            }) };
+            // Preserve the exact serialized checkout before delivery, including lost response recovery.
+            sessionStorage.setItem('canvas_commerce_checkout_payload_v1', checkout.body);
+            localStorage.setItem('canvas_commerce_checkout_v1', JSON.stringify({ attemptId, quoteHash: checkout.quoteHash, state: 'pending' }));
+            await checkoutSaved();
+        });
+    });
+    async function refresh() { order = await api('order', { orderId: order.id }); await renderOrder(); }
+    async function pay(collection = 'required') {
+        if (order.financial === 'failed') {
+            payment = null;
+            sessionStorage.removeItem('canvas_commerce_payment_payload_v1');
+        }
+        if (payment && payment.orderId === order.id && (payment.collection || 'required') === collection) {
+            // Retry existing server intent; if the initial HTTP request never
+            // reached it, the tab retains the same token bytes, not a new charge.
+            try { await api('payment', null, payment.attemptId); }
+            catch (error) {
+                const saved = sessionStorage.getItem('canvas_commerce_payment_payload_v1');
+                if (error.code !== 'retry_not_found' || !saved) throw error;
+                await api('payment', saved, payment.attemptId);
+            }
+        } else {
+            if (!window.CanvasFinix || typeof window.CanvasFinix.tokenize !== 'function') {
+                announce(txt('Finix sandbox tokenization is not configured. No payment has been submitted.', 'La tokenización de prueba Finix no está configurada. No se envió ningún pago.'), true); return;
+            }
+            const token = await window.CanvasFinix.tokenize();
+            payment = { orderId: order.id, attemptId: uid(), collection, state: 'pending' };
+            localStorage.setItem('canvas_commerce_payment_v1', JSON.stringify(payment));
+            const raw = JSON.stringify({ orderId: order.id, requestId: payment.attemptId, token, collection });
+            sessionStorage.setItem('canvas_commerce_payment_payload_v1', raw);
+            const result = await api('payment', raw, payment.attemptId);
+            payment.state = result.state; localStorage.setItem('canvas_commerce_payment_v1', JSON.stringify(payment));
+        }
+        await refresh();
+        if (order.financial === 'paid') sessionStorage.removeItem('canvas_commerce_payment_payload_v1');
+    }
+    async function mountPayment(holder) {
+        if (preview || !publicConfiguration?.finixApplicationId) return;
+        if (!window.Finix) {
+            await new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'https://js.finix.com/v/2/finix.js'; script.defer = true;
+                script.addEventListener('load', resolve, { once: true });
+                script.addEventListener('error', () => reject(new Error('finix_form_unavailable')), { once: true });
+                document.head.append(script);
+            });
+        }
+        const mount = node('div', null, { id: 'commerce-finix-form' }); holder.append(mount);
+        let valid = false;
+        const form = window.Finix.PaymentForm(mount, 'sandbox', publicConfiguration.finixApplicationId, {
+            paymentMethods: ['card'], showAddress: true,
+            onUpdate: (_state, _bin, hasErrors) => { valid = !hasErrors; }
+        });
+        window.CanvasFinix = { tokenize: () => new Promise((resolve, reject) => {
+            if (!valid) return reject(new Error(txt('Complete the secure payment form.', 'Completa el formulario de pago seguro.')));
+            form.submit((error, response) => {
+                const token = response?.data?.id;
+                if (error || !/^TK[A-Za-z0-9]{10,100}$/.test(token || '')) reject(new Error('tokenization_failed'));
+                else resolve(token);
+            });
+        }) };
+    }
+    async function upload(file, item, placement, assignmentId, allocatedQuantity) {
+        if (!file || !['image/png', 'image/jpeg', 'application/pdf'].includes(file.type)
+            || file.size <= 0 || file.size > item.purchased.productionPolicy.maxFileBytes) {
+            throw new Error(txt('Choose a supported file within the purchased size limit.', 'Elige un archivo permitido dentro del límite comprado.'));
+        }
+        const sha256 = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', await file.arrayBuffer()))).map((v) => v.toString(16).padStart(2, '0')).join('');
+        const key = [order.id, item.lineItemId, placement, assignmentId, allocatedQuantity, sha256].join(':');
+        let intent = uploads[key];
+        if (!intent || intent.expired) {
+            const requestId = uid();
+            intent = { attemptId: requestId, body: JSON.stringify({ orderId: order.id, lineItemId: item.lineItemId, placement,
+                assignmentId, allocatedQuantity, role: 'source', filename: file.name, mime: file.type, size: file.size, sha256, requestId }) };
+            uploads[key] = intent; localStorage.setItem('canvas_commerce_uploads_v1', JSON.stringify(uploads));
+        }
+        try {
+            if (intent.sessionId) {
+                try {
+                    await api('complete-upload', { orderId: order.id, sessionId: intent.sessionId }, intent.attemptId + '_complete');
+                    await refresh(); return;
+                } catch (error) {
+                    // A completed object with a lost response is recovered without
+                    // uploading/replacing it. Incomplete storage is safe to resume.
+                    if (!['temporarily_unavailable', 'delivery_uncertain'].includes(error.code)) throw error;
+                }
+            }
+            const session = await api('create-upload', intent.body, intent.attemptId);
+            intent.sessionId = session.sessionId;
+            localStorage.setItem('canvas_commerce_uploads_v1', JSON.stringify(uploads));
+            if (!session.completed) {
+                if (session.expiresAt <= Date.now()) throw Object.assign(new Error(), { code: 'upload_expired' });
+                // Temporary upload capability exists only for this browser operation.
+                // Probe accepted bytes before resuming each chunk; never analytics/log it.
+                let offset = 0;
+                while (offset < file.size) {
+                    const end = Math.min(offset + 256 * 1024, file.size);
+                    let response;
+                    try {
+                        response = await fetch(session.uploadUrl, { method: 'PUT', credentials: 'omit',
+                            headers: { 'Content-Type': file.type, 'Content-Range': 'bytes ' + offset + '-' + (end - 1) + '/' + file.size },
+                            body: file.slice(offset, end) });
+                    } catch {
+                        response = await fetch(session.uploadUrl, { method: 'PUT', credentials: 'omit',
+                            headers: { 'Content-Range': 'bytes */' + file.size, 'Content-Length': '0' } });
+                    }
+                    if (response.status === 308) {
+                        const range = response.headers.get('Range');
+                        const next = range ? Number(range.split('-')[1]) + 1 : 0;
+                        if (next <= offset) throw Object.assign(new Error(), { code: 'delivery_uncertain' });
+                        offset = next;
+                    } else if (response.ok) { offset = file.size; }
+                    else throw Object.assign(new Error(), { code: 'upload_failed' });
+                }
+            }
+            await api('complete-upload', { orderId: order.id, sessionId: session.sessionId }, intent.attemptId + '_complete');
+            announce(txt('File received for the selected item/design. Staff review is still required.', 'Archivo recibido para el artículo y diseño seleccionado. Aún requiere revisión técnica.'));
+            await refresh();
+        } catch (error) {
+            if (error.code === 'upload_expired') { intent.expired = true; localStorage.setItem('canvas_commerce_uploads_v1', JSON.stringify(uploads)); }
+            throw error;
+        }
+    }
+    async function renderOrder() {
+        const holder = document.getElementById('commerce-order'); holder.replaceChildren(); holder.hidden = false;
+        holder.append(node('h2', txt('Your order', 'Tu pedido')), node('p', order.id, { class: 'c-order-id' }));
+        const badges = node('div', null, { class: 'c-badges' });
+        badges.append(node('span', txt('Payment: ', 'Pago: ') + (es ? valueLabel(order.financial) : order.financial), { class: 'c-badge' + (order.financial !== 'paid' ? ' c-badge--hold' : '') }));
+        holder.append(badges);
+        pricedRow(holder, txt('Order total', 'Total del pedido'), order.totalMinor);
+        pricedRow(holder, txt('Captured', 'Cobrado'), order.capturedMinor);
+        pricedRow(holder, txt('Balance remaining', 'Saldo restante'), order.balanceMinor);
+        pricedRow(holder, txt('Required before production', 'Requerido antes de producción'), Math.max(0, order.requiredMinor - order.capturedMinor));
+        holder.append(node('p', txt('CRM receipt: ', 'Confirmación CRM: ') + order.sync, { class: 'c-small' }));
+        holder.append(node('p', txt('Customer order notifications are not connected yet. This internal receipt is not evidence of an email or text being sent.', 'Las notificaciones del pedido aún no están conectadas. Esta confirmación interna no demuestra que se envió un correo o mensaje.'), { class: 'c-small' }));
+        holder.append(node('p', txt('Payment, artwork and approval are separate requirements. Payment alone does not start production.', 'Pago, archivos y aprobación son requisitos independientes. Pagar no inicia la producción.')));
+        holder.append(button(txt('Refresh authoritative status', 'Actualizar estado autorizado'), refresh, true));
+        if (preview) {
+            const simulate = async (path) => {
+                const response = await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ orderId: order.id }) });
+                if (!response.ok) throw new Error('preview_step_failed');
+                await refresh();
+            };
+            const controls = node('div', null, { class: 'c-preview' });
+            controls.append(node('p', txt('TEST CONTROLS · Simulated staff actions, not customer permissions.', 'CONTROLES DE PRUEBA · Acciones técnicas simuladas, no permisos del cliente.')),
+                button(txt('Simulate staff preparation / revised proofs', 'Simular preparación técnica / pruebas nuevas'), () => simulate('/preview/proof'), true),
+                button(txt('Lose next payment response (test retry)', 'Perder siguiente respuesta de pago (probar reintento)'), () => simulate('/preview/lost-payment'), true));
+            holder.append(controls);
+        }
+        if (order.financial !== 'paid' && !order.cancelled) {
+            if (!(payment?.orderId === order.id) || order.financial === 'failed') await mountPayment(holder);
+            holder.append(button(order.financial === 'failed' ? txt('Start a new payment after verified failure', 'Iniciar otro pago tras fallo verificado') : payment?.orderId === order.id
+                ? txt('Reconcile saved payment attempt', 'Conciliar intento de pago original')
+                : txt('Pay securely', 'Pagar de forma segura'), () => pay(order.capturedMinor >= order.requiredMinor ? 'balance' : 'required')));
+        } else if (order.financial === 'paid' && order.balanceMinor > 0 && !order.cancelled) {
+            await mountPayment(holder);
+            holder.append(button(txt('Pay remaining balance', 'Pagar saldo restante'), () => pay('balance')));
+        }
+        if (order.fulfillments?.length) {
+            for (const f of order.fulfillments.filter(Boolean)) holder.append(node('p', txt('Fulfillment: ', 'Entrega: ') + f.method + ' · ' + f.quantity + ' · ' + (f.tracking || '')));
+        }
+        for (const item of order.items) {
+            const article = node('article', null, { class: 'c-line', 'data-line-item': item.lineItemId });
+            article.append(node('h3', item.purchased.name), node('p', statusText[item.readiness] || item.readiness, { class: 'c-badge c-badge--hold' }));
+            article.append(node('p', txt('Production stage: ', 'Etapa de producción: ') + (item.stage || '—') + ' · ' + txt('Pieces: ', 'Piezas: ') + item.purchased.pieces));
+            article.append(node('p', txt('Fulfilled pieces: ', 'Piezas entregadas: ') + item.fulfilledQuantity + '/' + item.purchased.pieces));
+            const artworkMissing = item.purchased.productionPolicy.requiredPlacements.some((placement) =>
+                item.assets.filter((a) => a.role === 'source' && a.placement === placement)
+                    .reduce((n, a) => n + (a.allocatedQuantity || 0), 0) !== item.purchased.pieces);
+            article.append(node('p', artworkMissing ? txt('Artwork holds production: purchased placements are not fully allocated.', 'Los archivos detienen la producción: faltan asignaciones en ubicaciones compradas.')
+                : txt('Source artwork allocated; technical checks and final files are still evaluated separately.', 'Originales asignados; las verificaciones técnicas y archivos finales se evalúan por separado.'), { class: 'c-small' }));
+            if (item.purchased.productionPolicy.proofRequired && item.proof?.decision !== 'approved') article.append(node('p',
+                txt('Approval holds production: ', 'La aprobación detiene la producción: ')
+                    + (item.proof ? valueLabel(item.proof.decision) : txt('final proof has not been issued yet.', 'aún no se emitió la prueba final.')), { class: 'c-small' }));
+            for (const placement of item.purchased.productionPolicy.requiredPlacements) {
+                const sources = item.assets.filter((a) => a.placement === placement && a.role === 'source');
+                const covered = sources.reduce((n, a) => n + (a.allocatedQuantity || 0), 0);
+                article.append(node('p', placement + ' · ' + txt('Source allocation ', 'Asignación de originales ') + covered + '/' + item.purchased.pieces));
+            }
+            if (!order.cancelled && !item.stageDone) {
+                const form = node('form', null, { class: 'c-fields' });
+                const placement = select(form, txt('Purchased placement', 'Ubicación comprada'), 'placement', item.purchased.productionPolicy.requiredPlacements.map((p) => [p, p]));
+                const assignment = field(form, txt('Design assignment ID', 'ID del diseño'), 'assignment', 'text', { value: 'main', pattern: '[A-Za-z0-9_-]{1,100}', required: '', maxlength: 100 });
+                const quantity = field(form, txt('Pieces using this design at this placement', 'Piezas con este diseño en esta ubicación'), 'allocation', 'number',
+                    { value: item.purchased.pieces, min: 1, max: item.purchased.pieces, step: 1, required: '' });
+                const file = field(form, txt('Source artwork (PNG, JPEG or PDF)', 'Archivo original (PNG, JPEG o PDF)'), 'artwork', 'file', { accept: 'image/png,image/jpeg,application/pdf', required: '' });
+                const submit = node('button', txt('Upload to this purchased item', 'Subir a este artículo comprado'), { class: 'c-button', type: 'submit' });
+                form.append(submit, node('p', txt('Reuse an assignment ID to replace that design. Use another ID to split quantities between designs; all allocations must total the purchased pieces for every placement.', 'Reutiliza el ID para reemplazar ese diseño. Usa otro ID para dividir cantidades entre diseños; cada ubicación debe cubrir todas las piezas compradas.'), { class: 'c-small' }));
+                form.addEventListener('submit', (event) => { event.preventDefault(); run(submit, () => upload(file.files[0], item, placement.value, assignment.value, Number(quantity.value))); });
+                article.append(form);
+            }
+            for (const asset of item.assets) article.append(node('p', [valueLabel(asset.role), asset.placement, asset.assignmentId || 'main', asset.allocatedQuantity, valueLabel(asset.state)].join(' · '), { class: 'c-small' }));
+            if (item.proof) {
+                article.append(node('h3', txt('Whole-item proof packet', 'Prueba completa del artículo')),
+                    node('p', txt('Review EVERY final design and placement below. One decision approves this entire immutable artwork set.', 'Revisa TODOS los diseños finales y ubicaciones. Una decisión aprueba este conjunto inmutable completo.')));
+                const grid = node('div', null, { class: 'c-proof-grid' }); article.append(grid);
+                const finals = item.assets.filter((a) => a.role === 'final');
+                let previewsReady = true;
+                for (const asset of finals) {
+                    const figure = node('figure'); grid.append(figure);
+                    try {
+                        const download = await api('download', { orderId: order.id, lineItemId: item.lineItemId, assetId: asset.assetId, preview: true });
+                        const url = new URL(download.url);
+                        if (url.protocol !== 'https:' && !(app.hasAttribute('data-commerce-preview') && url.origin === location.origin)) throw new Error('invalid_preview');
+                        figure.append(node('img', null, { src: url.href, alt: item.purchased.name + ' Austin · ' + asset.placement + ' · ' + asset.assignmentId,
+                            width: 600, height: 400, loading: 'lazy' }));
+                    } catch { previewsReady = false; figure.append(node('p', txt('Preview unavailable. Refresh before approving.', 'Vista previa no disponible. Actualiza antes de aprobar.'))); }
+                    figure.append(node('figcaption', asset.placement + ' · ' + (asset.assignmentId || 'main') + ' · ' + asset.allocatedQuantity
+                        + (asset.assetId === item.proof.previewAssetId ? txt(' · primary preview', ' · vista principal') : '')));
+                }
+                article.append(node('p', txt('Proof decision: ', 'Decisión de prueba: ') + (es ? valueLabel(item.proof.decision) : item.proof.decision)));
+                if (item.proof.decision === 'awaiting_review') {
+                    const confirm = field(article, txt('I reviewed every final placement and allocated design in this proof packet.', 'Revisé todas las ubicaciones y diseños finales de esta prueba.'), 'proof_reviewed', 'checkbox');
+                    const decide = async (decision) => {
+                        const decoded = [...grid.querySelectorAll('img')];
+                        if (decision === 'approved' && (!confirm.checked || !previewsReady || !finals.length
+                            || decoded.length !== finals.length || decoded.some((image) => !image.complete || image.naturalWidth === 0))) {
+                            announce(txt('Review all final previews and check the confirmation before approving.', 'Revisa todas las vistas finales y marca la confirmación.'), true); return;
+                        }
+                        const attemptId = item.proof.proofId + '_' + decision;
+                        await api('decide-proof', { orderId: order.id, lineItemId: item.lineItemId, proofId: item.proof.proofId, decision }, attemptId);
+                        await refresh();
+                    };
+                    article.append(button(txt('Approve complete proof', 'Aprobar prueba completa'), () => decide('approved')),
+                        button(txt('Request changes', 'Solicitar cambios'), () => decide('changes_requested'), true));
+                }
+            }
+            holder.append(article);
+        }
+        if (!publicConfiguration?.orderId) holder.append(button(txt('Reorder with current prices', 'Reordenar con precios actuales'), async () => {
+            let intent = restore('canvas_commerce_reorder_v1', null);
+            if (!intent || intent.orderId !== order.id || intent.expiresAt <= Date.now()) {
+                intent = { orderId: order.id, requestId: uid(), expiresAt: Date.now() + 60000 };
+                localStorage.setItem('canvas_commerce_reorder_v1', JSON.stringify(intent));
+            }
+            quote = await api('reorder', { orderId: order.id, requestId: intent.requestId }, intent.requestId);
+            intent.expiresAt = quote.expiresAt; localStorage.setItem('canvas_commerce_reorder_v1', JSON.stringify(intent));
+            cart = quote.items.map((item) => ({ lineItemId: item.lineItemId, productId: item.productId, configuration: item.configuration }));
+            saveCart(); renderCart(); renderQuote();
+            document.getElementById('commerce-checkout').scrollIntoView({ behavior: 'smooth' });
+            announce(txt('Fresh prices received. This is a separate order; review and accept before any checkout/payment.', 'Precios actuales recibidos. Es otro pedido; revisa y acepta antes de comprar o pagar.'));
+        }, true));
+        if (!publicConfiguration?.orderId) holder.append(button(txt('Start a separate order', 'Iniciar un pedido independiente'), async () => {
+            localStorage.removeItem('canvas_commerce_checkout_v1'); localStorage.removeItem('canvas_commerce_payment_v1');
+            localStorage.removeItem('canvas_commerce_last_order_v1'); checkout = payment = order = null;
+            sessionStorage.removeItem('canvas_commerce_checkout_payload_v1'); sessionStorage.removeItem('canvas_commerce_payment_payload_v1');
+            holder.hidden = true; cart = []; saveCart(); invalidate(); renderCart();
+        }, true));
+    }
+    document.getElementById('commerce-recovery').addEventListener('submit', (event) => {
+        event.preventDefault(); run(event.submitter, async () => {
+            const data = new FormData(event.currentTarget);
+            await api('request-recovery', { orderId: data.get('orderId'), email: data.get('email') });
+            announce(txt('If those details match, a private recovery link has been sent.', 'Si los datos coinciden, se envió un enlace privado.'));
+            if (preview) {
+                const mailbox = await (await fetch('/preview/mailbox', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })).json();
+                if (mailbox.url) message.append(node('a', txt(' Open simulated private email', ' Abrir correo privado simulado'), { href: mailbox.url, class: 'c-text-link' }));
+            }
+        });
+    });
+    try {
+        const recovery = new URLSearchParams(location.hash.slice(1)).get('recover');
+        // Remove sensitive fragments BEFORE analytics can see page URLs.
+        if (recovery) {
+            history.replaceState(null, '', location.pathname);
+            const result = await api('recover', { token: recovery });
+            localStorage.setItem('canvas_commerce_last_order_v1', result.orderId);
+            localStorage.setItem('canvas_commerce_recovered_order_v1', result.orderId);
+        }
+        publicConfiguration = await api('website-session', {});
+        const recoveredOrder = publicConfiguration.orderId;
+        if (recoveredOrder) {
+            app.querySelector('.c-grid').hidden = true;
+            order = await api('order', { orderId: recoveredOrder }); await renderOrder();
+            announce(txt('Recovered access is limited to this order.', 'El acceso recuperado se limita a este pedido.'));
+            return;
+        }
+        catalog = await api('catalog', {}); renderConfig(); renderCart();
+        const lastOrder = localStorage.getItem('canvas_commerce_last_order_v1');
+        if (lastOrder) { order = await api('order', { orderId: lastOrder }); await renderOrder(); }
+        else if (checkout) {
+            document.getElementById('commerce-cart').append(button(txt('Recover saved checkout request', 'Recuperar solicitud de compra guardada'), checkoutSaved, true));
+        }
+        announce(app.hasAttribute('data-commerce-preview')
+            ? txt('ISOLATED PREVIEW · Synthetic prices, simulated payment and private test storage. No customer data or live charges.', 'VISTA AISLADA · Precios sintéticos, pago simulado y almacenamiento privado de prueba. Sin datos reales ni cobros.')
+            : txt('Connected. Prices and order status come from CRM.', 'Conectado. Los precios y estados provienen del CRM.'));
+    } catch (error) { announce(errorText[error.code] || error.code || error.message, true); }
+};

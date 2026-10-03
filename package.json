@@ -6,6 +6,8 @@
     "jsdom": "^26.1.0"
   },
   "scripts": {
+    "preview:commerce": "node scripts/commerce/preview-server.cjs",
+    "test:commerce": "node --test scripts/commerce/integration.test.cjs scripts/commerce/browser.test.cjs scripts/commerce/modes.test.cjs",
     "test:frontend": "node --test tests/*.test.cjs",
     "check:frontend": "node --check js/main.js && node --check js/firebase-config.js"
   }

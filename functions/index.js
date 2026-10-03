@@ -29,6 +29,40 @@ const configuredFunctions = functions.runWith({ secrets: [RUNTIME_CONFIG_SECRET]
 admin.initializeApp();
 const db = admin.firestore();
 
+// Commerce is independently gated OFF by default. Secret never enters client code.
+exports.canvasCommerce = functions.runWith({
+    secrets: [RUNTIME_CONFIG_SECRET, 'MERKAD_COMMERCE_API_KEY'], timeoutSeconds: 60
+}).https.onRequest(async (req, res) => {
+    const { WebsiteCommerce, FirestoreWebsiteStore, crmTransport } = require('./commerce-adapter');
+    const { commerceHttp } = require('./commerce-http');
+    const service = new WebsiteCommerce({
+        store: new FirestoreWebsiteStore(db),
+        config: async () => (await db.doc('canvas_commerce_private/config').get()).data() || {},
+        transport: (...args) => crmTransport({
+            baseUrl: process.env.CANVAS_COMMERCE_API_BASE_URL,
+            credential: process.env.MERKAD_COMMERCE_API_KEY
+        })(...args),
+        sendRecovery: async ({ email, token, orderId }) => {
+            const client = getResend();
+            if (!client) throw new Error('Recovery delivery unavailable');
+            const result = await client.emails.send({
+                from: 'orders@canvas-advertising.com', to: email,
+                subject: 'Recover your Canvas Advertising order',
+                text: `Open this private link within 15 minutes to recover order ${orderId}: https://canvas-advertising.com/store#recover=${token}\nDo not share this link.`
+            });
+            if (result.error) throw new Error('Recovery delivery failed');
+        }
+    });
+    return commerceHttp({ service, origin: 'https://canvas-advertising.com',
+        verifyAppCheck: async (token) => {
+            const { CommerceFailure } = require('./commerce-adapter');
+            if (!token) throw new CommerceFailure('app_check_required', 401);
+            try { await admin.appCheck().verifyToken(token); }
+            catch { throw new CommerceFailure('app_check_invalid', 401); }
+        }
+    })(req, res);
+});
+
 // ----------------------------------------------------------------------
 // INTEGRATIONS: Resend & Telnyx
 // ----------------------------------------------------------------------
@@ -1713,6 +1747,9 @@ exports.getGoogleReviews = configuredFunctions.https.onCall(async (data, context
  * HTTPS Callable: Create Hosted Square Checkout Link
  */
 exports.createSquareCheckoutSession = configuredFunctions.https.onCall(async (data, context) => {
+    await require('./commerce-adapter').assertSquareCheckoutAllowed(db).catch(() => {
+        throw new functions.https.HttpsError('failed-precondition', 'Legacy checkout is disabled.');
+    });
     const { productName, priceInCents, quantity, artworkUrl, customerName, customerEmail, customerPhone, redirectUrl } = data;
     
     if (!productName || !priceInCents || !quantity || !artworkUrl) {
@@ -1726,6 +1763,10 @@ exports.createSquareCheckoutSession = configuredFunctions.https.onCall(async (da
     if (!client || !locationId) {
         throw new functions.https.HttpsError('failed-precondition', 'Online payment is temporarily unavailable.');
     }
+    const finishSquare = await require('./commerce-adapter').beginSquareCheckout(db).catch(() => {
+        throw new functions.https.HttpsError('failed-precondition', 'Legacy checkout is disabled.');
+    });
+    let squareReference = null;
     
     try {
         const { randomUUID } = require('crypto');
@@ -1760,6 +1801,7 @@ exports.createSquareCheckoutSession = configuredFunctions.https.onCall(async (da
         });
         
         if (response?.paymentLink?.url) {
+            squareReference = response.paymentLink.id;
             return {
                 url: response.paymentLink.url,
                 paymentLinkId: response.paymentLink.id,
@@ -1771,6 +1813,8 @@ exports.createSquareCheckoutSession = configuredFunctions.https.onCall(async (da
     } catch (error) {
         console.error('Square Payment Link creation failed:', error);
         throw new functions.https.HttpsError('internal', `Square error: ${error.message}`);
+    } finally {
+        await finishSquare(squareReference);
     }
 });
 
@@ -1825,6 +1869,9 @@ exports.getSquareConfig = configuredFunctions.https.onCall(async (data, context)
  * HTTPS Callable: Process Square Web Payments SDK Payment
  */
 exports.processSquarePayment = configuredFunctions.https.onCall(async (data, context) => {
+    await require('./commerce-adapter').assertSquareCheckoutAllowed(db).catch(() => {
+        throw new functions.https.HttpsError('failed-precondition', 'Legacy checkout is disabled.');
+    });
     const { token, productName, priceInCents, quantity, artworkUrl, customerName, customerEmail, customerPhone } = data;
 
     if (!productName || !priceInCents || !quantity || !artworkUrl) {
@@ -1845,6 +1892,10 @@ exports.processSquarePayment = configuredFunctions.https.onCall(async (data, con
     if (!client) {
         throw new functions.https.HttpsError('failed-precondition', 'Square client initialization failed.');
     }
+    const finishSquare = await require('./commerce-adapter').beginSquareCheckout(db).catch(() => {
+        throw new functions.https.HttpsError('failed-precondition', 'Legacy checkout is disabled.');
+    });
+    let squareReference = null;
 
     try {
         const { randomUUID } = require('crypto');
@@ -1863,6 +1914,7 @@ exports.processSquarePayment = configuredFunctions.https.onCall(async (data, con
         });
 
         const payment = response.payment;
+        if (payment?.id) squareReference = payment.id;
         if (payment && (payment.status === 'COMPLETED' || payment.status === 'APPROVED')) {
             const orderData = {
                 orderId: payment.id,
@@ -1902,6 +1954,8 @@ exports.processSquarePayment = configuredFunctions.https.onCall(async (data, con
     } catch (error) {
         console.error('Square Payment Processing failed:', error);
         throw new functions.https.HttpsError('internal', `Square payment failed: ${error.message}`);
+    } finally {
+        await finishSquare(squareReference);
     }
 });
 

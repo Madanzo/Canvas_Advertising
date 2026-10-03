@@ -292,6 +292,31 @@ async function deleteTemplate(templateId) {
 
 // Export functions for use in main.js and admin.js
 window.CanvasFirebase = {
+    commerce: async (operation, body, attemptId) => {
+        let token;
+        // Isolated preview declares itself in a server-only response; the normal
+        // site still acquires a real App Check token before the commerce proxy.
+        const preview = ['localhost', '127.0.0.1'].includes(location.hostname)
+            && document.querySelector('[data-commerce-preview]');
+        if (!preview) {
+            await ensureFirebaseClient();
+            token = (await appCheck.getToken(false)).token;
+        }
+        const response = await fetch('/api/commerce', {
+            method: 'POST', credentials: 'same-origin', redirect: 'error',
+            headers: { 'Content-Type': 'application/json', ...(token ? { 'X-Firebase-AppCheck': token } : {}) },
+            body: JSON.stringify(['website-session', 'request-recovery', 'recover'].includes(operation)
+                ? { operation, ...body }
+                : { operation, serializedBody: typeof body === 'string' ? body : body == null ? null : JSON.stringify(body), attemptId })
+        });
+        const result = await response.json();
+        if (!result.ok) {
+            const error = new Error(result.code || 'delivery_uncertain');
+            error.code = result.code; error.status = response.status;
+            throw error;
+        }
+        return result.result;
+    },
     init: initializeFirebase,
     ready: ensureFirebaseClient,
     submitLead: submitLead,

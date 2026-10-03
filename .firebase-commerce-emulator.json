@@ -1,0 +1,10 @@
+{
+  "firestore": { "rules": "firestore.rules" },
+  "emulators": {
+    "firestore": { "port": 8186 },
+    "hub": { "port": 4456 },
+    "logging": { "port": 4556 },
+    "ui": { "enabled": false },
+    "singleProjectMode": true
+  }
+}

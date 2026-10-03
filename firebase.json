@@ -7,9 +7,13 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**",
-      "functions/**"
+      "functions/**",
+      "serviceAccountKey.json", "*.py", "*.md", "*.log", ".env*",
+      "check_logs.js", "scratch/**", "checkpoints/**", "firestore.rules",
+      "package.json", "package-lock.json", "docs/**", "tests/**", "scripts/**"
     ],
     "rewrites": [
+      { "source": "/api/commerce", "function": "canvasCommerce" },
       {
         "source": "/projects/**",
         "function": "serveProjectPage"

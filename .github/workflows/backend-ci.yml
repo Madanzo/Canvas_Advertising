@@ -16,6 +16,7 @@ on:
       # merge that silently changed the tree would not have been caught.
       - 'main'
       - 'codex/canvas-crm-**'
+      - 'codex/canvas-commerce-**'
   pull_request:
     paths:
       - 'functions/**'
@@ -55,6 +56,8 @@ jobs:
         run: |
           node --check index.js
           node --check crm-lead-adapter.js
+          node --check commerce-adapter.js
+          node --check commerce-http.js
 
       - name: Adapter unit tests
         working-directory: functions

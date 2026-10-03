@@ -1,10 +1,11 @@
 name: Frontend reconciliation checks
 on:
   push:
-    branches: ['codex/canvas-frontend-reconciliation']
+    branches: ['codex/canvas-frontend-reconciliation', 'codex/canvas-commerce-**']
   pull_request:
     paths:
       - 'quote*.html'
+      - 'store*.html'
       - 'js/main.js'
       - 'js/firebase-config.js'
       - 'css/styles.css'
