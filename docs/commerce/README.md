@@ -1,7 +1,10 @@
 # Canvas website commerce integration
 
 Integration against CRM PR #32, backend head `84f66cb` (adopted coordinated staff-review schema fix).
-Live payments, CRM lead forwarding, deployment and historical replay remain disabled.
+New commerce forwarding and live commerce payments remain disabled; no deployment
+or historical replay is authorized. Existing production CRM lead intake/forwarding
+is left unchanged by this commerce branch. This statement does not assert its live
+configuration or disable an already active lead-delivery path.
 
 ## Review preview and contract
 
