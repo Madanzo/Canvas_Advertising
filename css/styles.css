@@ -47,8 +47,15 @@
 .c-order-id { overflow-wrap: anywhere; font-family: monospace; }
 .c-footer { padding: 2rem 3%; text-align: center; background: var(--primary); color: var(--white); }
 .c-preview { background: var(--clr-warning); color: var(--primary); padding: 1rem; margin: 1rem 0; border-radius: var(--radius-sm); }
+.c-config-layout { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1fr); gap: 1.25rem; align-items: start; }
+.c-reference { min-width: 0; position: sticky; top: 7rem; }
+.c-artboard { display: grid; place-items: center; aspect-ratio: 1; max-height: 30rem; padding: .5rem; border: 2px dashed var(--gray); background: var(--light); overflow: hidden; text-align: center; margin: 1rem 0; }
+.c-artboard img { width: 100%; height: 100%; object-fit: contain; min-height: 0; }
+.c-summary { position: sticky; top: 7rem; align-self: start; max-height: calc(100dvh - 8rem); overflow: auto; }
+.c-action-dock { position: sticky; bottom: .5rem; z-index: 10; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .75rem 1rem; background: var(--white); color: var(--primary); border: 2px solid var(--primary); border-radius: var(--radius-sm); }
+@media (max-width: 1024px) { .c-config-layout { grid-template-columns: minmax(0, 1fr); } .c-reference { position: static; } .c-artboard { max-height: 16rem; } }
 .commerce-page [hidden] { display: none !important; }
-@media (max-width: 768px) { .c-grid { grid-template-columns: minmax(0, 1fr); } .c-shell { margin-top: 6rem; } .c-card, .c-hero, .c-footer, .c-preview { padding: 1rem; } .c-proof-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 768px) { .c-grid { grid-template-columns: minmax(0, 1fr); } .c-shell { margin-top: 6rem; padding-bottom: 7rem; } .c-summary { position: static; max-height: none; overflow: visible; } .c-action-dock { position: fixed; bottom: 0; left: 0; right: 0; border-radius: 0; font-size: .85rem; } .c-action-dock .c-button { width: auto; flex: 0 1 55%; font-size: .85rem; } .c-card, .c-hero, .c-footer, .c-preview { padding: 1rem; } .c-proof-grid { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 480px) { .c-row { grid-template-columns: minmax(0, 1fr); } .c-button { width: 100%; } .c-card input, .c-card select { font-size: 1rem; } .c-price-row { flex-wrap: wrap; } }
 @font-face {
     font-display: swap;

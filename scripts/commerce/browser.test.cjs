@@ -23,15 +23,22 @@ test('browser storefront → website HTTP → actual CRM handler: configuration,
     });
     await page.goto(preview.origin + '/store');
     await page.getByRole('button', { name: 'Add to order', exact: true }).waitFor();
+    const png = await requireCrm('sharp')({ create: { width: 120, height: 80, channels: 3, background: '#e63946' } }).png().toBuffer();
+    await page.locator('[name=referenceFile]').setInputFiles({ name: 'reference.png', mimeType: 'image/png', buffer: png });
+    await page.locator('.c-artboard img').waitFor();
+    assert.equal(preview.backend.objects.size, 0, 'local reference must not create durable/assigned artwork');
+    assert.equal(await page.locator('.c-action-dock button').isDisabled(), true);
     for (const width of [320, 375, 414, 768, 1024, 1440]) {
         await page.setViewportSize({ width, height: 1000 });
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, 'overflow at ' + width);
+        assert.equal(await page.locator('.c-action-dock').evaluate((el) => getComputedStyle(el).position), width <= 768 ? 'fixed' : 'sticky');
         await page.screenshot({ path: '/private/tmp/canvas-commerce-' + width + '.png', fullPage: true });
     }
     await page.setViewportSize({ width: 1024, height: 1000 });
     // Edit/duplicate preserve distinct item identities without cross-linked art.
     await page.locator('#commerce-config [name=quantity]').fill('2');
     await page.getByRole('button', { name: 'Add to order', exact: true }).click();
+    assert.ok((await page.locator('.c-action-dock').innerText()).includes('price not confirmed'));
     await page.getByRole('button', { name: 'Duplicate as a separate item', exact: true }).click();
     await page.getByRole('button', { name: 'Remove', exact: true }).last().click();
     await page.getByRole('button', { name: 'Edit configuration', exact: true }).click();
@@ -40,6 +47,7 @@ test('browser storefront → website HTTP → actual CRM handler: configuration,
     await page.getByRole('button', { name: 'Add to order', exact: true }).click();
     await page.getByRole('button', { name: 'Get authoritative price', exact: true }).click();
     await page.locator('#commerce-checkout').waitFor({ state: 'visible' });
+    assert.ok((await page.locator('.c-action-dock').innerText()).includes('$81.19'));
     assert.ok((await page.locator('#commerce-quote').innerText()).includes('$81.19'));
     await page.locator('#commerce-contact [name=terms]').check();
     await page.getByRole('button', { name: 'Create order & continue to payment', exact: true }).click();
@@ -52,7 +60,6 @@ test('browser storefront → website HTTP → actual CRM handler: configuration,
     assert.equal(preview.backend.controls.submits, 1);
     assert.ok((await page.locator('#commerce-order').innerText()).includes('Artwork required'));
     await page.reload(); await page.getByText('Payment: paid', { exact: true }).waitFor();
-    const png = await requireCrm('sharp')({ create: { width: 120, height: 80, channels: 3, background: '#e63946' } }).png().toBuffer();
     const items = await page.locator('[data-line-item]').evaluateAll((elements) => elements.map((el) => el.dataset.lineItem));
     for (let i = 0; i < items.length; i++) {
         for (const assignment of i === 0 ? ['designA', 'designB'] : ['main']) {

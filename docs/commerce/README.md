@@ -44,6 +44,15 @@ draft, confirmed capture, artwork approval and production eligibility stay separ
 No invoice833 exception, historical promotion, workflow-queue activation, replay,
 customer message, live Finix activation or deployment is authorized here.
 
+The configurator now places a local PNG/JPEG reference beside desktop settings,
+keeps the desktop order summary sticky, and provides a persistent mobile next-step
+bar. The bar displays only an unexpired CRM quote total, never a client-calculated
+price; editing invalidates that total. Reference images use ephemeral local blob URLs,
+are revoked on product change/page exit, and explicitly are not uploaded, persisted,
+approved or assigned production assets. Durable **pre-purchase** artwork still needs
+the CRM draft/asset contract; this local reference is not substitute acceptance for it.
+Purchased artwork identity/recovery/proof services remain unchanged.
+
 Run `CRM_TEST_ROOT=/private/tmp/canvas-commerce npm run preview:commerce`, then open
 `http://127.0.0.1:3210/store` or `/store-es`. The CRM checkout must contain the
 reviewed PR #32 code and installed dependencies. The preview uses its actual HTTP

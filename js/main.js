@@ -4472,10 +4472,73 @@ window.initCanvasCommerce = async function () {
     let checkout = restore('canvas_commerce_checkout_v1', null);
     let payment = restore('canvas_commerce_payment_v1', null);
     let uploads = restore('canvas_commerce_uploads_v1', {});
+    // Local reference preview is never an upload, approved proof or assignment.
+    // Purchased-item uploads below remain the only durable artwork handoff.
+    const configForm = document.getElementById('commerce-config');
+    const configLayout = node('div', null, { class: 'c-config-layout' });
+    const referencePanel = node('section', null, { class: 'c-reference', 'aria-label': txt('Artwork reference preview', 'Vista de referencia del archivo') });
+    referencePanel.append(node('h3', txt('Plan your print', 'Planea tu impresión')));
+    const referenceBox = node('div', txt('Size reference · not a production proof', 'Referencia de tamaño · no es prueba de producción'), { class: 'c-artboard' });
+    const referenceCaption = node('p', txt('Choose a local image to check the layout. It is not uploaded, saved or assigned to an item.', 'Elige una imagen local para revisar la composición. No se sube, guarda ni asigna a un artículo.'), { class: 'c-small' });
+    const localFile = field(referencePanel, txt('Local image preview (optional)', 'Vista previa local (opcional)'), 'referenceFile', 'file', { accept: 'image/png,image/jpeg' });
+    referencePanel.append(referenceBox, referenceCaption);
+    configForm.before(configLayout); configLayout.append(referencePanel, configForm);
+    let referenceUrl;
+    const clearReference = () => {
+        if (referenceUrl) URL.revokeObjectURL(referenceUrl);
+        referenceUrl = null; localFile.value = '';
+        referenceBox.replaceChildren(node('span', txt('Size reference · not a production proof', 'Referencia de tamaño · no es prueba de producción')));
+    };
+    localFile.addEventListener('change', () => {
+        clearReferenceImage();
+        const file = localFile.files[0];
+        if (!file) return;
+        if (!['image/png', 'image/jpeg'].includes(file.type) || file.size > 20000000) {
+            announce(txt('For local preview, choose a PNG/JPEG up to 20 MB. Production file validation happens during upload.', 'Para la vista local, elige PNG/JPEG de hasta 20 MB. La validación de producción ocurre al cargar.'), true); return;
+        }
+        referenceUrl = URL.createObjectURL(file);
+        const image = node('img', null, { src: referenceUrl, alt: txt('Local Canvas Austin print reference, not an approved proof', 'Referencia local de impresión Canvas Austin, no es prueba aprobada'), width: '480', height: '480' });
+        image.addEventListener('error', () => { clearReferenceImage(); announce(txt('Image cannot be decoded. Choose another reference.', 'No se puede leer la imagen. Elige otra referencia.'), true); }, { once: true });
+        referenceBox.replaceChildren(image);
+    });
+    function clearReferenceImage() {
+        if (referenceUrl) URL.revokeObjectURL(referenceUrl);
+        referenceUrl = null;
+        referenceBox.replaceChildren(node('span', txt('Size reference · not a production proof', 'Referencia de tamaño · no es prueba de producción')));
+    }
+    function updateReferenceSize() {
+        const width = Number(configForm.elements.width?.value), height = Number(configForm.elements.height?.value);
+        referenceBox.style.aspectRatio = width > 0 && height > 0 && Number.isFinite(width / height)
+            ? String(Math.max(.1, Math.min(10, width / height))) : '1';
+        referenceBox.setAttribute('aria-label', width > 0 && height > 0
+            ? `${width} × ${height} ${configForm.elements.unit?.value || ''}` : txt('Artwork reference', 'Referencia del archivo'));
+    }
+    configForm.addEventListener('input', updateReferenceSize);
+    configForm.addEventListener('change', updateReferenceSize);
+    const dock = node('aside', null, { class: 'c-action-dock', 'aria-label': txt('Order summary and next step', 'Resumen y siguiente paso') });
+    const dockText = node('span', null, { role: 'status', 'aria-live': 'polite' });
+    const dockAction = button(txt('Review order', 'Revisar pedido'), async () => {
+        const valid = quote && quote.expiresAt > Date.now();
+        const target = document.getElementById(valid ? 'commerce-contact' : 'commerce-cart');
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        (target.querySelector(valid ? 'input' : 'button:last-child') || target).focus();
+    });
+    dock.append(dockText, dockAction); app.append(dock);
+    function updateDock() {
+        dock.hidden = Boolean(order) || Boolean(localStorage.getItem('canvas_commerce_recovered_order_v1'));
+        const valid = quote && quote.expiresAt > Date.now();
+        dockText.textContent = valid ? txt('CRM total: ', 'Total del CRM: ') + money(quote.totalMinor)
+            : cart.length + txt(' item lines · price not confirmed', ' artículos · precio sin confirmar');
+        dockAction.textContent = valid ? txt('Continue with this price', 'Continuar con este precio') : txt('Review order & price', 'Revisar pedido y precio');
+        dockAction.disabled = !cart.length;
+    }
+    const dockTimer = setInterval(updateDock, 5000);
+    window.addEventListener('pagehide', () => { clearInterval(dockTimer); clearReference(); }, { once: true });
     const saveCart = () => localStorage.setItem('canvas_commerce_cart_v1', JSON.stringify(cart));
     const invalidate = () => {
         quote = null; document.getElementById('commerce-quote').replaceChildren();
         document.getElementById('commerce-checkout').hidden = true;
+        updateDock();
     };
     const pricedRow = (parent, label, amount, total = false) => {
         const row = node('div', null, { class: 'c-price-row' + (total ? ' c-total' : '') });
@@ -4486,6 +4549,7 @@ window.initCanvasCommerce = async function () {
         const product = select(form, txt('Product', 'Producto'), 'product', catalog.products.map((p) => [p.productId, p.name[es ? 'es' : 'en']]));
         const fields = node('div', null, { class: 'c-fields' }); form.append(fields);
         const update = () => {
+            clearReference();
             fields.replaceChildren();
             const p = catalog.products.find((p) => p.productId === product.value);
             fields.append(node('p', txt('Pricing mode: ', 'Tipo de precio: ') + valueLabel(p.mode) + (p.mode === 'pack' ? txt(' · pieces per pack: ', ' · piezas por paquete: ') + p.unitsPerPack : ''), { class: 'c-small' }));
@@ -4521,6 +4585,7 @@ window.initCanvasCommerce = async function () {
             field(fields, txt('Design brief / notes', 'Descripción del diseño'), 'designBrief', 'textarea', { maxlength: 2000 });
             fields.append(node('p', txt('Each cart item is a separate purchased item. Multiple designs can be allocated after purchase.', 'Cada artículo es una compra independiente. Puedes asignar varios diseños después de comprar.'), { class: 'c-small' }));
             const add = node('button', txt('Add to order', 'Agregar al pedido'), { type: 'submit', class: 'c-button' }); fields.append(add);
+            updateReferenceSize();
         };
         product.addEventListener('change', update); update();
         form.addEventListener('submit', (event) => {
@@ -4542,6 +4607,7 @@ window.initCanvasCommerce = async function () {
         }, { once: false });
     }
     function renderCart() {
+        updateDock();
         const holder = document.getElementById('commerce-cart'); holder.replaceChildren();
         if (!cart.length) { holder.append(node('p', txt('Your order starts here.', 'Tu pedido comienza aquí.'))); return; }
         cart.forEach((item, i) => {
@@ -4590,6 +4656,7 @@ window.initCanvasCommerce = async function () {
         }));
     }
     function renderQuote() {
+        updateDock();
         const holder = document.getElementById('commerce-quote'); holder.replaceChildren();
         quote.items.forEach((item) => {
             const block = node('article', null, { class: 'c-line' });
@@ -4757,6 +4824,7 @@ window.initCanvasCommerce = async function () {
         }
     }
     async function renderOrder() {
+        updateDock();
         const holder = document.getElementById('commerce-order'); holder.replaceChildren(); holder.hidden = false;
         holder.append(node('h2', txt('Your order', 'Tu pedido')), node('p', order.id, { class: 'c-order-id' }));
         const badges = node('div', null, { class: 'c-badges' });
