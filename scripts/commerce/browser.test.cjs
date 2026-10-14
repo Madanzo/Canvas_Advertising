@@ -35,6 +35,12 @@ test('browser storefront → website HTTP → actual CRM handler: configuration,
         await page.screenshot({ path: '/private/tmp/canvas-commerce-' + width + '.png', fullPage: true });
     }
     await page.setViewportSize({ width: 1024, height: 1000 });
+    await page.locator('#commerce-config [name=designBrief]').fill('Synthetic draft survives refresh');
+    await page.reload();
+    await page.getByRole('button', { name: 'Add to order', exact: true }).waitFor();
+    assert.equal(await page.locator('#commerce-config [name=designBrief]').inputValue(), 'Synthetic draft survives refresh');
+    assert.equal(await page.locator('.c-artboard img').count(), 0, 'local reference is not a durable asset');
+    assert.equal(await page.locator('.c-action-dock button').isDisabled(), true);
     // Edit/duplicate preserve distinct item identities without cross-linked art.
     await page.locator('#commerce-config [name=quantity]').fill('2');
     await page.getByRole('button', { name: 'Add to order', exact: true }).click();
@@ -42,7 +48,12 @@ test('browser storefront → website HTTP → actual CRM handler: configuration,
     await page.getByRole('button', { name: 'Duplicate as a separate item', exact: true }).click();
     await page.getByRole('button', { name: 'Remove', exact: true }).last().click();
     await page.getByRole('button', { name: 'Edit configuration', exact: true }).click();
+    const editingId = await page.locator('#commerce-app').getAttribute('data-edit-line-item');
+    await page.reload();
+    await page.getByRole('button', { name: 'Save configuration', exact: true }).waitFor();
+    assert.equal(await page.locator('#commerce-app').getAttribute('data-edit-line-item'), editingId);
     await page.getByRole('button', { name: 'Save configuration', exact: true }).click();
+    assert.equal(await page.locator('.c-line').count(), 1, 'restored edit must update the same item rather than duplicate it');
     await page.locator('#commerce-config [name=quantity]').fill('1');
     await page.getByRole('button', { name: 'Add to order', exact: true }).click();
     await page.getByRole('button', { name: 'Get authoritative price', exact: true }).click();

@@ -4472,6 +4472,7 @@ window.initCanvasCommerce = async function () {
     let checkout = restore('canvas_commerce_checkout_v1', null);
     let payment = restore('canvas_commerce_payment_v1', null);
     let uploads = restore('canvas_commerce_uploads_v1', {});
+    let persistConfigurationDraft = () => {};
     // Local reference preview is never an upload, approved proof or assignment.
     // Purchased-item uploads below remain the only durable artwork handoff.
     const configForm = document.getElementById('commerce-config');
@@ -4604,7 +4605,36 @@ window.initCanvasCommerce = async function () {
             delete app.dataset.editLineItem;
             form.querySelector('[type=submit]').textContent = txt('Add to order', 'Agregar al pedido');
             saveCart(); invalidate(); renderCart(); announce(txt('Item added. Request the authoritative price below.', 'Artículo agregado. Solicita el precio autorizado abajo.'));
+            localStorage.removeItem('canvas_commerce_configuration_draft_v1');
         }, { once: false });
+        persistConfigurationDraft = () => {
+            const values = Object.fromEntries([...form.elements].filter((el) => el.name && el.type !== 'file' && el.type !== 'submit')
+                .map((el) => [el.name, el.value]));
+            localStorage.setItem('canvas_commerce_configuration_draft_v1', JSON.stringify({ catalogVersion: catalog.version,
+                values, editingLineItem: app.dataset.editLineItem || null }));
+        };
+        const savedDraft = restore('canvas_commerce_configuration_draft_v1', null);
+        if (savedDraft && savedDraft.catalogVersion === catalog.version && savedDraft.values
+            && catalog.products.some((p) => p.productId === savedDraft.values.product)) {
+            product.value = savedDraft.values.product; update();
+            for (const [name, value] of Object.entries(savedDraft.values)) {
+                const control = form.elements[name];
+                if (control && control.type !== 'file' && typeof value === 'string' && value.length <= 2200) control.value = value;
+            }
+            if (savedDraft.editingLineItem && cart.some((item) => item.lineItemId === savedDraft.editingLineItem && item.productId === product.value)) {
+                app.dataset.editLineItem = savedDraft.editingLineItem;
+                form.querySelector('[type=submit]').textContent = txt('Save configuration', 'Guardar configuración');
+            }
+            fields.append(node('p', txt('Configuration draft restored. Price and availability must be verified again; local image references must be reselected.',
+                'Borrador restaurado. Debes verificar otra vez precio y disponibilidad; vuelve a elegir las imágenes locales.'), { class: 'c-small', role: 'status' }));
+            updateReferenceSize();
+        } else if (savedDraft) {
+            localStorage.removeItem('canvas_commerce_configuration_draft_v1');
+            fields.append(node('p', txt('Catalog changed. The old configuration draft was not applied; choose current options.',
+                'Cambió el catálogo. No se aplicó el borrador anterior; elige las opciones actuales.'), { class: 'c-small', role: 'status' }));
+        }
+        form.addEventListener('input', persistConfigurationDraft);
+        form.addEventListener('change', persistConfigurationDraft);
     }
     function renderCart() {
         updateDock();
@@ -4627,6 +4657,7 @@ window.initCanvasCommerce = async function () {
                 p?.garmentStock.forEach((v, index) => { const variant = c.variants.find((row) => row.sku === v.sku && row.color === v.color && row.size === v.size);
                     fill('variant_' + index, variant?.quantity || 0); fill('personalization_' + index, variant?.personalization || ''); });
                 app.dataset.editLineItem = item.lineItemId;
+                persistConfigurationDraft();
                 form.querySelector('[type=submit]').textContent = txt('Save configuration', 'Guardar configuración');
                 form.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, true), button(txt('Duplicate as a separate item', 'Duplicar como artículo independiente'), async () => {

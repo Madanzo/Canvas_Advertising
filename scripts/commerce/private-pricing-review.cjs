@@ -6,6 +6,12 @@ const costFields = ['materialMinor', 'finishingMinor', 'laborMinutes',
     'laborHourlyMinor', 'wasteBasisPoints', 'packagingMinor', 'freightMinor',
     'collectionFixedMinor', 'collectionBasisPoints'];
 const policyKeys = ['minimumInterpretation', 'yardUnitAndStakes', 'designFeeScope', 'shippingRules'];
+function ceilRatio(a, b, denominator) {
+    const numerator = BigInt(a) * BigInt(b), divisor = BigInt(denominator);
+    const result = Number((numerator + divisor - 1n) / divisor);
+    if (!Number.isSafeInteger(result)) throw new Error('cost_overflow');
+    return result;
+}
 const blankCosts = () => Object.fromEntries(costFields.map((key) => [key, null]));
 const variant = (id, name, rateMinor, unit, details = {}) => ({
     id, name, retailProposal: { rateMinor, unit, ...details },
@@ -67,11 +73,11 @@ function reviewMargin({ revenueMinor, costs, targetMarginBasisPoints }) {
     if (missing.length) return { status: 'incomplete', missing, totalCostMinor: null, marginBasisPoints: null };
     // Material cost supplied is before waste. Waste is extra material consumed,
     // not an unapproved retail surcharge. Labor is rounded up to a whole cent.
-    const wasteMinor = Math.ceil(costs.materialMinor * costs.wasteBasisPoints / 10000);
-    const laborMinor = Math.ceil(costs.laborMinutes * costs.laborHourlyMinor / 60);
+    const wasteMinor = ceilRatio(costs.materialMinor, costs.wasteBasisPoints, 10000);
+    const laborMinor = ceilRatio(costs.laborMinutes, costs.laborHourlyMinor, 60);
     const fixedCostMinor = costs.materialMinor + wasteMinor + costs.finishingMinor + laborMinor
         + costs.packagingMinor + costs.freightMinor + costs.collectionFixedMinor;
-    const collectionVariableMinor = Math.ceil(revenueMinor * costs.collectionBasisPoints / 10000);
+    const collectionVariableMinor = ceilRatio(revenueMinor, costs.collectionBasisPoints, 10000);
     const totalCostMinor = fixedCostMinor + collectionVariableMinor;
     if (![fixedCostMinor, totalCostMinor].every(Number.isSafeInteger)) throw new Error('cost_overflow');
     const marginBasisPoints = Math.floor((revenueMinor - totalCostMinor) * 10000 / revenueMinor);
@@ -79,11 +85,14 @@ function reviewMargin({ revenueMinor, costs, targetMarginBasisPoints }) {
     if (targetMarginBasisPoints != null) {
         const denominator = 10000 - costs.collectionBasisPoints - targetMarginBasisPoints;
         if (denominator <= 0) throw new Error('unreachable_margin');
-        scenarioRevenueMinor = Math.max(1, Math.ceil(fixedCostMinor * 10000 / denominator));
+        scenarioRevenueMinor = Math.max(1, ceilRatio(fixedCostMinor, 10000, denominator));
         // Whole-cent provider rounding can need one or more cents more than the
         // continuous formula. Enforce the exact margin inequality, not a float.
-        while ((scenarioRevenueMinor - fixedCostMinor - Math.ceil(scenarioRevenueMinor * costs.collectionBasisPoints / 10000)) * 10000
-            < scenarioRevenueMinor * targetMarginBasisPoints) scenarioRevenueMinor++;
+        while (BigInt(scenarioRevenueMinor - fixedCostMinor - ceilRatio(scenarioRevenueMinor, costs.collectionBasisPoints, 10000)) * 10000n
+            < BigInt(scenarioRevenueMinor) * BigInt(targetMarginBasisPoints)) {
+            scenarioRevenueMinor++;
+            if (!Number.isSafeInteger(scenarioRevenueMinor)) throw new Error('cost_overflow');
+        }
         if (!Number.isSafeInteger(scenarioRevenueMinor)) throw new Error('cost_overflow');
     }
     return { status: 'review_only', revenueMinor, wasteMinor, laborMinor, collectionVariableMinor,

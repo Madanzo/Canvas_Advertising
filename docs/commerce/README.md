@@ -18,6 +18,10 @@ operations have been requested on CAM-291 before any backend/shared-file edits.
 Do not use purchased checkout to emulate an unpaid staff quote.
 
 Private pricing review: `node scripts/commerce/private-pricing-review.cjs`.
+Interactive local-only worksheet: `node scripts/commerce/private-review-server.cjs`
+then `http://127.0.0.1:3211/`. It validates Host and same-origin POSTs, does not
+persist entered costs or scenarios, and has no public/staff API or publishing action.
+Do not treat this loopback worksheet as authenticated deployed staff quote entry.
 This offline-only module records all 14 owner-proposed variants, yard-sign tier
 boundaries and the pasted unverified shipping schedule. It is excluded from Hosting
 and is not imported by browser, public API or CRM delivery code. Supplier costs
@@ -52,6 +56,11 @@ are revoked on product change/page exit, and explicitly are not uploaded, persis
 approved or assigned production assets. Durable **pre-purchase** artwork still needs
 the CRM draft/asset contract; this local reference is not substitute acceptance for it.
 Purchased artwork identity/recovery/proof services remain unchanged.
+Unsubmitted configuration drafts now retain catalog version and edit-line identity
+across refresh. A changed catalog does not silently apply an old configuration;
+editing a restored line updates that line rather than manufacturing a duplicate.
+No local reference image bytes/blob URLs, quote prices or staff privileges are saved
+in this draft. Prices/availability still require a new authoritative quote.
 
 Run `CRM_TEST_ROOT=/private/tmp/canvas-commerce npm run preview:commerce`, then open
 `http://127.0.0.1:3210/store` or `/store-es`. The CRM checkout must contain the
