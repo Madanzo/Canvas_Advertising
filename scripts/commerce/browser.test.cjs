@@ -80,7 +80,13 @@ test('browser storefront → website HTTP → actual CRM handler: configuration,
             await form.locator('[name=artwork]').setInputFiles({ name: 'synthetic.png', mimeType: 'image/png', buffer: png });
             await form.getByRole('button', { name: 'Upload to this purchased item', exact: true }).click();
             await page.getByText('File received for the selected item/design. Staff review is still required.', { exact: true }).waitFor();
-            await form.locator('[name=artwork]').waitFor();
+            // The same announcement from the previous upload is not a barrier.
+            // Wait for authoritative refresh to replace the form (empty file
+            // input), otherwise the next design can be filled into a stale form.
+            await page.waitForFunction((id) => {
+                const input = document.querySelector('[data-line-item="' + id + '"] [name=artwork]');
+                return input && input.files.length === 0;
+            }, items[i]);
         }
     }
     await page.getByRole('button', { name: 'Simulate staff preparation / revised proofs', exact: true }).click();

@@ -4,9 +4,14 @@ const { createHash, randomBytes } = require('node:crypto');
 const hash = (s) => createHash('sha256').update(s).digest('hex');
 const identifier = /^[A-Za-z0-9_-]{1,100}$/;
 const customerOperations = new Set(['catalog', 'quote', 'checkout', 'order', 'payment',
-    'create-upload', 'complete-upload', 'download', 'reorder', 'decide-proof']);
+    'create-upload', 'complete-upload', 'download', 'reorder', 'decide-proof',
+    'draft', 'create-draft-upload', 'complete-draft-upload', 'draft-download']);
 const mutableOperations = new Set(['quote', 'checkout', 'payment', 'create-upload',
-    'complete-upload', 'reorder', 'decide-proof']);
+    'complete-upload', 'reorder', 'decide-proof', 'create-draft-upload', 'complete-draft-upload']);
+const staffOperations = new Set(['staff-contact-lookup', 'staff-contact-create', 'staff-quote',
+    'staff-draft', 'staff-assign-draft', 'staff-create-draft-upload', 'staff-complete-draft-upload', 'staff-draft-download']);
+const staffMutations = new Set(['staff-contact-create', 'staff-quote', 'staff-assign-draft',
+    'staff-create-draft-upload', 'staff-complete-draft-upload']);
 const PRIVATE = 'canvas_commerce_private';
 
 class CommerceFailure extends Error {
@@ -85,7 +90,13 @@ class WebsiteCommerce {
     }
     async publicConfiguration() {
         const config = await this.gate();
+        const auth = config.staffAuth;
+        const staffAuth = config.staffDraftsEnabled === true && auth && /^[a-z][a-z0-9-]{4,62}$/.test(auth.projectId || '')
+            && auth.projectId !== 'canvas-adnvertising' && auth.authDomain === auth.projectId + '.firebaseapp.com'
+            && typeof auth.apiKey === 'string' && typeof auth.appId === 'string'
+            ? { projectId: auth.projectId, authDomain: auth.authDomain, apiKey: auth.apiKey, appId: auth.appId } : null;
         return { paymentEnvironment: 'sandbox',
+            staffDraftsAvailable: config.staffDraftsEnabled === true, staffAuth,
             finixApplicationId: /^AP[A-Za-z0-9]{10,100}$/.test(config.finixApplicationId || '') ? config.finixApplicationId : null,
             termsUrl: typeof config.termsUrl === 'string' && config.termsUrl.startsWith('https://canvas-advertising.com/') ? config.termsUrl : null };
     }
@@ -129,6 +140,79 @@ class WebsiteCommerce {
         requireCondition(session && session.expiresAt > this.clock(), 'session_expired', 401);
         return session;
     }
+    async buyerTicket(cookie) {
+        await this.gate();
+        const buyer = await this.principal(cookie);
+        requireCondition(!buyer.orderId, 'recovery_order_scope', 403);
+        await this.rate(`buyer-ticket:${buyer.customerId}`, 5);
+        const ticket = randomBytes(32).toString('hex');
+        const expiresAt = this.clock() + 30 * 60000;
+        await this.store.transaction(async (tx) => tx.set(`buyer_${hash(ticket)}`, {
+            customerId: buyer.customerId, expiresAt, binding: null
+        }));
+        return { ok: true, result: { ticket, expiresAt } };
+    }
+    async staffCall(token, operation, serializedBody, attemptId) {
+        const config = await this.config();
+        requireCondition(config?.staffDraftsEnabled === true, 'staff_drafts_disabled', 503);
+        requireCondition(staffOperations.has(operation), 'operation_forbidden', 403);
+        requireCondition(typeof token === 'string' && token.length <= 16000 && token.split('.').length === 3,
+            'staff_token_required', 401);
+        // CRM, not the website's different Firebase project, verifies revocation,
+        // tenant membership and BOTH modules. Do this before decoding identity,
+        // reading an intent or returning any cached receipt, including on retries.
+        const authorization = await this.transport('staff-contact-lookup',
+            JSON.stringify({ by: 'id', value: 'website_authorization_probe' }), token);
+        if (!authorization.ok) return authorization;
+        let uid;
+        try { uid = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString()).sub; } catch { /* reject below */ }
+        requireCondition(identifier.test(uid || ''), 'staff_token_required', 401);
+        await this.rate(`staff:${uid}`, 100);
+        const mutable = staffMutations.has(operation);
+        let key, prior;
+        if (mutable) {
+            requireCondition(identifier.test(attemptId || ''), 'attempt_required', 422);
+            key = `staff_intent_${hash([uid, operation, attemptId].join(':'))}`;
+            prior = await this.store.transaction((tx) => tx.get(key));
+        }
+        if (serializedBody == null) {
+            requireCondition(prior, 'retry_not_found', 404);
+        } else {
+            requireCondition(typeof serializedBody === 'string' && Buffer.byteLength(serializedBody) <= 128000, 'invalid_body', 413);
+            let body;
+            try { body = JSON.parse(serializedBody); } catch { throw new CommerceFailure('invalid_json', 422); }
+            requireCondition(body && !Array.isArray(body) && typeof body === 'object', 'invalid_body', 422);
+            for (const field of ['customerId', 'tenantId', 'actorId', 'test', 'source', 'suppressNotifications', 'amountMinor', 'capability']) {
+                requireCondition(!(field in body), 'forbidden_field', 422);
+            }
+            if (operation === 'staff-create-draft-upload') requireCondition(body.role === 'source', 'source_upload_only', 403);
+            if (mutable) {
+                const inputHash = hash(serializedBody);
+                prior = await this.store.transaction(async (tx) => {
+                    const old = await tx.get(key);
+                    if (old) { requireCondition(old.inputHash === inputHash, 'idempotency_conflict', 409); return old; }
+                    let exactBody = serializedBody;
+                    if (operation === 'staff-assign-draft') {
+                        requireCondition(Object.keys(body).every((k) => ['quoteId', 'requestId', 'quoteHash', 'buyerTicket'].includes(k))
+                            && identifier.test(body.quoteId || '') && identifier.test(body.requestId || '')
+                            && /^[a-f0-9]{64}$/.test(body.quoteHash || '')
+                            && /^[a-f0-9]{64}$/.test(body.buyerTicket || ''), 'invalid_buyer_ticket', 422);
+                        const ticketKey = `buyer_${hash(body.buyerTicket)}`;
+                        const ticket = await tx.get(ticketKey);
+                        requireCondition(ticket && ticket.expiresAt > this.clock() && !ticket.binding, 'buyer_ticket_unavailable', 409);
+                        exactBody = JSON.stringify({ quoteId: body.quoteId, requestId: body.requestId,
+                            quoteHash: body.quoteHash, customerId: ticket.customerId });
+                        tx.set(ticketKey, { ...ticket, binding: key });
+                    }
+                    const next = { operation, attemptId, inputHash, serializedBody: exactBody, createdAt: this.clock() };
+                    tx.set(key, next); return next;
+                });
+            }
+        }
+        // Never persist tokens, never cache authority. CRM rechecks even a fully
+        // committed retry; token refresh retains UID and the same exact body.
+        return this.transport(operation, mutable ? prior.serializedBody : serializedBody, token);
+    }
     async call(cookie, operation, serializedBody, attemptId) {
         await this.gate();
         requireCondition(customerOperations.has(operation), 'operation_forbidden', 403);
@@ -154,7 +238,7 @@ class WebsiteCommerce {
             'amount', 'amountMinor', 'merchantId', 'instrumentId', 'capability']) {
             requireCondition(!(key in body), 'forbidden_field', 422);
         }
-        if (operation === 'create-upload') requireCondition(body.role === 'source', 'source_upload_only', 403);
+        if (['create-upload', 'create-draft-upload'].includes(operation)) requireCondition(body.role === 'source', 'source_upload_only', 403);
         if (operation === 'payment') requireCondition(/^TK[A-Za-z0-9]{10,100}$/.test(body.token || ''), 'invalid_payment_token', 422);
         const mutable = mutableOperations.has(operation);
         let recordKey;

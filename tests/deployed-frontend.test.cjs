@@ -13,7 +13,12 @@ function legacyBytes(file) {
   source=source.replace("    if (document.getElementById('commerce-app')) {\n        initNavigation();\n        window.initCanvasCommerce();\n        window.addEventListener('hashchange', () => {\n            if (new URLSearchParams(location.hash.slice(1)).has('recover')) location.reload();\n        });\n        return;\n    }\n",'');
  }
  if(file==='css/styles.css') source=source.replace(/\/\* Commerce: scoped[\s\S]*?@media \(max-width: 480px\)[^\n]*\n/,'');
- if(file==='js/firebase-config.js') source=source.replace(/^    commerce: async [\s\S]*?^    init:/m,'    init:');
+ if(file==='js/firebase-config.js') {
+  // Strip the explicit commerce-only token state and staff/public methods;
+  // preserve the immutable legacy hash and every non-commerce byte.
+  source=source.replace('let commerceStaffAuth = null;\nlet commercePreviewStaffToken = null;\n','');
+  source=source.replace(/^    commerceStaffSignIn: async [\s\S]*?^    init:/m,'    init:');
+ }
  return Buffer.from(source);
 }
 for(const file of baseline.files) test("preserves deployed non-commerce frontend bytes: "+file.path,()=>{

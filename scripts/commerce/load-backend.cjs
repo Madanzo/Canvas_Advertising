@@ -3,13 +3,19 @@ const path = require('node:path');
 const { createRequire } = require('node:module');
 const fs = require('node:fs/promises');
 const os = require('node:os');
-async function loadBackend(crmRoot = process.env.CRM_TEST_ROOT) {
+async function loadBackend(crmRoot = process.env.CRM_TEST_ROOT, { realPersistence = false } = {}) {
     if (!crmRoot) throw new Error('Set CRM_TEST_ROOT to the reviewed PR #32 checkout.');
     const requireCrm = createRequire(path.join(crmRoot, 'package.json'));
     const esbuild = requireCrm('esbuild');
     const boundary = path.join(__dirname, 'preview-boundary.ts');
     const mocks = new Set(['lib/commerce/server/store', 'lib/commerce/server/finix-provider',
         'lib/firebase/admin', 'lib/leads/server/intake', 'lib/leads/server/api-key-auth']);
+    if (realPersistence) {
+        if (process.env.GCLOUD_PROJECT !== 'demo-canvas-commerce-isolated'
+            || process.env.FIRESTORE_EMULATOR_HOST !== '127.0.0.1:8186'
+            || process.env.FIREBASE_AUTH_EMULATOR_HOST !== '127.0.0.1:9186') throw Error('Local demo emulators required');
+        mocks.delete('lib/commerce/server/store'); mocks.delete('lib/leads/server/intake');
+    }
     const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'canvas-commerce-bundle-'));
     const outfile = path.join(temp, 'backend.cjs');
     await esbuild.build({

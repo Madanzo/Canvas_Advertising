@@ -4472,6 +4472,150 @@ window.initCanvasCommerce = async function () {
     let checkout = restore('canvas_commerce_checkout_v1', null);
     let payment = restore('canvas_commerce_payment_v1', null);
     let uploads = restore('canvas_commerce_uploads_v1', {});
+    let staffSignedIn = false, selectedStaffContact = null, activeDraft = null;
+    const draftHolder = node('section', null, { class: 'c-card c-panel', id: 'commerce-draft', hidden: '' });
+    document.getElementById('commerce-checkout').before(draftHolder);
+    async function staffMutation(operation, body) {
+        const saved = restore('canvas_commerce_staff_pending_v1', null);
+        if (saved) {
+            if (saved.operation !== operation) throw new Error(txt('Recover the pending staff request first.', 'Primero recupera la solicitud pendiente.'));
+            try {
+                const result = await api(operation, null, saved.attemptId);
+                localStorage.removeItem('canvas_commerce_staff_pending_v1'); return result;
+            } catch (error) {
+                if (error.code === 'retry_not_found') {
+                    localStorage.removeItem('canvas_commerce_staff_pending_v1');
+                    throw new Error(txt('The request never reached durable website storage. Re-enter and submit it again.', 'La solicitud no llegó al almacenamiento del sitio. Ingresa los datos y envíala de nuevo.'));
+                }
+                throw error;
+            }
+        }
+        const attemptId = body.requestId || body.quote?.requestId || uid();
+        localStorage.setItem('canvas_commerce_staff_pending_v1', JSON.stringify({ operation, attemptId }));
+        try {
+            const result = await api(operation, body, attemptId);
+            localStorage.removeItem('canvas_commerce_staff_pending_v1'); return result;
+        } catch (error) {
+            // A definite rejected request can be corrected. Transport uncertainty
+            // retains only the retry identifier; exact bytes are server-owned.
+            if (error.status && error.status < 500) localStorage.removeItem('canvas_commerce_staff_pending_v1');
+            throw error;
+        }
+    }
+    function installStaffTools() {
+        const tools = node('details', null, { class: 'c-card c-panel', id: 'commerce-staff' });
+        tools.append(node('summary', txt('Staff fast quote · sign-in required', 'Cotización rápida del equipo · requiere acceso')));
+        tools.append(node('p', txt('Uses CRM staff access to contacts and quotes. No payment or production job is created by a draft.',
+            'Usa acceso del CRM a contactos y cotizaciones. Un borrador no crea pagos ni trabajos de producción.')));
+        const login = node('form', null, { class: 'c-fields' });
+        const submit = node('button', txt('Sign in with CRM Google account', 'Entrar con cuenta Google del CRM'), { type: 'submit', class: 'c-button' }); login.append(submit);
+        const workspace = node('div', null, { hidden: '' }); tools.append(login, workspace);
+        const renderStaff = () => {
+            workspace.replaceChildren(); workspace.hidden = false; login.hidden = true;
+            workspace.append(node('p', txt('Staff mode: selected contact is used for the next configured draft. Checkout is buyer-only.',
+                'Modo del equipo: el contacto seleccionado se usa para el próximo borrador. Solo el comprador puede comprar.')));
+            const chosen = node('p', selectedStaffContact ? selectedStaffContact.name : txt('No customer selected', 'Ningún cliente seleccionado'), { id: 'commerce-staff-selected' });
+            workspace.append(chosen);
+            const search = node('form', null, { class: 'c-fields' });
+            select(search, txt('Find by', 'Buscar por'), 'by', [['email', txt('Email', 'Correo')], ['phone', txt('Phone', 'Teléfono')], ['id', 'ID'], ['name', txt('Name prefix (case-sensitive)', 'Inicio del nombre (distingue mayúsculas)')]]);
+            field(search, txt('Search value', 'Valor de búsqueda'), 'value', 'text', { required: '', maxlength: 254 });
+            search.append(node('button', txt('Find customer', 'Buscar cliente'), { type: 'submit', class: 'c-button' }));
+            const results = node('div'); workspace.append(search, results);
+            search.addEventListener('submit', (event) => { event.preventDefault(); run(event.submitter, async () => {
+                const data = new FormData(search); const found = await api('staff-contact-lookup', { by: data.get('by'), value: data.get('value') });
+                results.replaceChildren();
+                for (const contact of found.contacts) results.append(button(contact.name + ' · ' + (contact.email || contact.phone || contact.contactId), async () => {
+                    selectedStaffContact = contact; chosen.textContent = contact.name; invalidate();
+                }, true));
+                if (!found.contacts.length) results.append(node('p', txt('No exact match. Older records may require their exact CRM ID.', 'Sin coincidencias. Los registros antiguos pueden requerir su ID exacto.')));
+            }); });
+            const create = node('form', null, { class: 'c-fields' });
+            select(create, txt('Customer type', 'Tipo de cliente'), 'entityType', [['individual', txt('Individual', 'Persona')], ['business', txt('Business', 'Empresa')]]);
+            field(create, txt('First name', 'Nombre'), 'firstName', 'text', { maxlength: 200 });
+            field(create, txt('Last name', 'Apellido'), 'lastName', 'text', { maxlength: 200 });
+            field(create, txt('Business name', 'Empresa'), 'businessName', 'text', { maxlength: 200 });
+            field(create, txt('Customer email', 'Correo del cliente'), 'email', 'email', { maxlength: 254 });
+            field(create, txt('Customer phone', 'Teléfono del cliente'), 'phone', 'tel', { maxlength: 30 });
+            create.append(node('button', txt('Create customer explicitly', 'Crear cliente explícitamente'), { type: 'submit', class: 'c-button' })); workspace.append(create);
+            create.addEventListener('submit', (event) => { event.preventDefault(); run(event.submitter, async () => {
+                selectedStaffContact = await staffMutation('staff-contact-create', { requestId: uid(), contact: Object.fromEntries(new FormData(create)) });
+                chosen.textContent = selectedStaffContact.name; invalidate();
+            }); });
+            const recovery = node('form', null, { class: 'c-fields' });
+            field(recovery, txt('Saved draft quote ID', 'ID del borrador guardado'), 'quoteId', 'text', { required: '', maxlength: 100 });
+            recovery.append(node('button', txt('Open staff draft', 'Abrir borrador del equipo'), { type: 'submit', class: 'c-button' })); workspace.append(recovery);
+            recovery.addEventListener('submit', (event) => { event.preventDefault(); run(event.submitter, async () => {
+                activeDraft = await api('staff-draft', { quoteId: new FormData(recovery).get('quoteId') }); quote = activeDraft;
+                localStorage.setItem('canvas_commerce_draft_id_v1', quote.quoteId); renderQuote(); await renderDraft(true);
+            }); });
+            workspace.append(button(txt('Recover pending staff request', 'Recuperar solicitud pendiente del equipo'), async () => {
+                const pending = restore('canvas_commerce_staff_pending_v1', null);
+                if (!pending) { announce(txt('No pending staff request.', 'No hay solicitud pendiente del equipo.')); return; }
+                const result = await staffMutation(pending.operation, {});
+                if (pending.operation === 'staff-contact-create') { selectedStaffContact = result; chosen.textContent = result.name; }
+                if (pending.operation === 'staff-quote') { quote = result; renderQuote(); await showDraft(true); }
+                announce(txt('Original request recovered; no duplicate was created.', 'Solicitud original recuperada; no se creó un duplicado.'));
+            }, true));
+            workspace.append(button(txt('Sign out of staff mode', 'Salir del modo del equipo'), async () => {
+                await window.CanvasFirebase.commerceStaffSignOut(); staffSignedIn = false; selectedStaffContact = null;
+                workspace.hidden = true; login.hidden = false; activeDraft = null; invalidate(); draftHolder.hidden = true;
+            }, true));
+        };
+        login.addEventListener('submit', (event) => { event.preventDefault(); run(submit, async () => {
+            await window.CanvasFirebase.commerceStaffSignIn(publicConfiguration.staffAuth);
+            await api('staff-contact-lookup', { by: 'id', value: 'website_authorization_probe' });
+            staffSignedIn = true; selectedStaffContact = null; invalidate(); renderStaff();
+        }); });
+        document.getElementById('commerce-config').closest('.c-grid').before(tools);
+    }
+    async function showDraft(staff = false) {
+        localStorage.setItem('canvas_commerce_draft_id_v1', quote.quoteId);
+        activeDraft = await api(staff ? 'staff-draft' : 'draft', { quoteId: quote.quoteId });
+        await renderDraft(staff);
+    }
+    async function renderDraft(staff = staffSignedIn) {
+        updateDock();
+        draftHolder.replaceChildren(); draftHolder.hidden = false;
+        draftHolder.append(node('h2', txt('Saved unpaid draft', 'Borrador guardado sin pagar')), node('p', activeDraft.quoteId, { class: 'c-order-id' }));
+        pricedRow(draftHolder, txt('Authoritative draft total', 'Total autorizado del borrador'), activeDraft.totalMinor, true);
+        draftHolder.append(node('p', txt('No payment taken. Uploaded originals are not approved finals. Production still requires payment, technical review and proof approval.',
+            'No se ha cobrado. Los originales cargados no son archivos finales aprobados. La producción aún requiere pago, revisión técnica y aprobación.')));
+        for (const item of activeDraft.items) {
+            const block = node('article', null, { class: 'c-line' });
+            block.append(node('h3', item.name), node('p', item.lineItemId + ' · ' + item.pieces + txt(' pieces', ' piezas')));
+            for (const upload of activeDraft.uploads.filter((u) => u.lineItemId === item.lineItemId))
+                block.append(node('p', `${upload.placement} · ${upload.assignmentId} · ${upload.allocatedQuantity} · ${upload.filename} · ` +
+                    (upload.completed ? txt('Received; review required', 'Recibido; requiere revisión') : txt('Pending upload; reselect the same file to resume', 'Carga pendiente; selecciona el mismo archivo para continuar'))));
+            if (!activeDraft.orderId) {
+                const form = node('form', null, { class: 'c-fields' });
+                const file = field(form, txt('Artwork file', 'Archivo de diseño'), 'file', 'file', { accept: 'image/png,image/jpeg,application/pdf', required: '' });
+                const placement = select(form, txt('Side / placement', 'Lado / ubicación'), 'placement', item.productionPolicy.requiredPlacements.map((p) => [p, p]));
+                const assignment = field(form, txt('Design assignment', 'Asignación de diseño'), 'assignment', 'text', { value: 'main', pattern: '[A-Za-z0-9_-]{1,100}', required: '' });
+                const quantity = field(form, txt('Pieces using this design', 'Piezas con este diseño'), 'quantity', 'number', { value: item.pieces, min: 1, max: item.pieces, required: '' });
+                const submit = node('button', txt('Save original artwork', 'Guardar archivo original'), { type: 'submit', class: 'c-button' }); form.append(submit); block.append(form);
+                form.addEventListener('submit', (event) => { event.preventDefault(); run(submit, () => upload(file.files[0], { ...item, purchased: item }, placement.value, assignment.value, Number(quantity.value), { quoteId: activeDraft.quoteId, staff })); });
+            }
+            for (const asset of activeDraft.assets.filter((a) => a.lineItemId === item.lineItemId)) block.append(button(
+                txt('View original preview: ', 'Ver vista previa del original: ') + asset.placement + ' · ' + asset.assignmentId,
+                async () => {
+                    const result = await api(staff ? 'staff-draft-download' : 'draft-download', { quoteId: activeDraft.quoteId, lineItemId: item.lineItemId, assetId: asset.assetId, preview: true });
+                    const url = new URL(result.url);
+                    if (url.protocol !== 'https:' && !(preview && url.origin === location.origin)) throw new Error('invalid_preview');
+                    block.append(node('img', null, { src: url.href, alt: txt('Canvas Austin original artwork preview, not an approved proof', 'Vista del original Canvas Austin, no es prueba aprobada'), width: '480', height: '480', loading: 'lazy', referrerpolicy: 'no-referrer', class: 'c-proof-image' }));
+                }, true));
+            draftHolder.append(block);
+        }
+        draftHolder.append(button(txt('Refresh saved draft', 'Actualizar borrador guardado'), async () => { activeDraft = await api(staff ? 'staff-draft' : 'draft', { quoteId: activeDraft.quoteId }); await renderDraft(staff); }, true));
+        if (staff && !activeDraft.orderId) {
+            const form = node('form', null, { class: 'c-fields' });
+            field(form, txt('Buyer-generated handoff ticket (30 minutes)', 'Código generado por el comprador (30 minutos)'), 'buyerTicket', 'text', { pattern: '[a-f0-9]{64}', required: '', autocomplete: 'off' });
+            form.append(node('button', txt('Assign this exact draft to buyer', 'Asignar este borrador exacto al comprador'), { type: 'submit', class: 'c-button' })); draftHolder.append(form);
+            form.addEventListener('submit', (event) => { event.preventDefault(); run(event.submitter, async () => {
+                await staffMutation('staff-assign-draft', { quoteId: activeDraft.quoteId, quoteHash: activeDraft.quoteHash, requestId: uid(), buyerTicket: new FormData(form).get('buyerTicket') });
+                form.reset(); announce(txt('Assigned. Buyer must open this quote ID in their original browser and accept the current terms.', 'Asignado. El comprador debe abrir este ID en su navegador original y aceptar los términos.'));
+            }); });
+        }
+    }
     let persistConfigurationDraft = () => {};
     // Local reference preview is never an upload, approved proof or assignment.
     // Purchased-item uploads below remain the only durable artwork handoff.
@@ -4538,6 +4682,7 @@ window.initCanvasCommerce = async function () {
     const saveCart = () => localStorage.setItem('canvas_commerce_cart_v1', JSON.stringify(cart));
     const invalidate = () => {
         quote = null; document.getElementById('commerce-quote').replaceChildren();
+        activeDraft = null; draftHolder.hidden = true;
         document.getElementById('commerce-checkout').hidden = true;
         updateDock();
     };
@@ -4682,9 +4827,23 @@ window.initCanvasCommerce = async function () {
             const destination = { methodId: rule.methodId, destinationZone: rule.zone };
             if (rule.kind === 'shipping') destination.address = Object.fromEntries([...address.querySelectorAll('input')].map((input) => [input.name, input.value]));
             const requestId = uid();
-            quote = await api('quote', { version: 'canvas-commerce.v1', requestId, catalogVersion: catalog.version, items: cart,
-                delivery: destination, locale: es ? 'es' : 'en' }, requestId);
-            renderQuote();
+            const configured = { version: 'canvas-commerce.v1', requestId, catalogVersion: catalog.version, items: cart,
+                delivery: destination, locale: es ? 'es' : 'en' };
+            if (staffSignedIn) {
+                if (!selectedStaffContact) throw new Error(txt('Select or create the customer first.', 'Primero selecciona o crea el cliente.'));
+                quote = await staffMutation('staff-quote', { contactId: selectedStaffContact.contactId, quote: configured });
+            } else {
+                const pending = restore('canvas_commerce_quote_pending_v1', null);
+                if (!pending) localStorage.setItem('canvas_commerce_quote_pending_v1', JSON.stringify({ requestId }));
+                try {
+                    quote = await api('quote', pending ? null : configured, pending?.requestId || requestId);
+                    localStorage.removeItem('canvas_commerce_quote_pending_v1');
+                } catch (error) {
+                    if ((error.status && error.status < 500) || error.code === 'retry_not_found') localStorage.removeItem('canvas_commerce_quote_pending_v1');
+                    throw error;
+                }
+            }
+            renderQuote(); await showDraft(staffSignedIn);
         }));
     }
     function renderQuote() {
@@ -4692,7 +4851,7 @@ window.initCanvasCommerce = async function () {
         const holder = document.getElementById('commerce-quote'); holder.replaceChildren();
         quote.items.forEach((item) => {
             const block = node('article', null, { class: 'c-line' });
-            block.append(node('h3', item.name), node('p', txt('Purchased pieces: ', 'Piezas compradas: ') + item.pieces));
+            block.append(node('h3', item.name), node('p', txt('Configured pieces: ', 'Piezas configuradas: ') + item.pieces));
             for (const [key, en, spanish] of [['baseMinor', 'Base print', 'Impresión base'], ['optionsMinor', 'Options', 'Opciones'],
                 ['setupMinor', 'Setup', 'Preparación'], ['designMinor', 'Design help', 'Diseño']]) pricedRow(block, txt(en, spanish), item.price[key]);
             pricedRow(block, txt('Item tax', 'Impuesto del artículo'), item.taxMinor); holder.append(block);
@@ -4701,6 +4860,10 @@ window.initCanvasCommerce = async function () {
         pricedRow(holder, txt('Tax (includes item taxes)', 'Impuesto (incluye impuestos por artículo)'), quote.taxMinor);
         pricedRow(holder, txt('Order total', 'Total del pedido'), quote.totalMinor, true);
         holder.append(node('p', txt('Price valid until ', 'Precio válido hasta ') + new Date(quote.expiresAt).toLocaleString(), { class: 'c-small' }));
+        if (staffSignedIn) {
+            document.getElementById('commerce-checkout').hidden = true;
+            announce(txt('Unpaid CRM draft saved. No order, payment or production job created.', 'Borrador del CRM guardado sin pagar. No se creó pedido, pago ni trabajo de producción.')); return;
+        }
         document.getElementById('commerce-terms').textContent = txt('I accept this exact quote and terms version ', 'Acepto esta cotización exacta y los términos versión ') + quote.termsVersion;
         if (publicConfiguration?.termsUrl) document.getElementById('commerce-terms').append(node('a', txt(' Read terms', ' Leer términos'), { href: publicConfiguration.termsUrl, class: 'c-text-link', target: '_blank', rel: 'noopener noreferrer' }));
         if (!preview && !publicConfiguration?.termsUrl) {
@@ -4794,32 +4957,48 @@ window.initCanvasCommerce = async function () {
             });
         }) };
     }
-    async function upload(file, item, placement, assignmentId, allocatedQuantity) {
+    async function upload(file, item, placement, assignmentId, allocatedQuantity, draftContext = null) {
+        const recordId = draftContext ? draftContext.quoteId : order.id;
+        const identity = draftContext ? { quoteId: recordId } : { orderId: recordId };
+        const reserveOperation = draftContext ? (draftContext.staff ? 'staff-create-draft-upload' : 'create-draft-upload') : 'create-upload';
+        const completeOperation = draftContext ? (draftContext.staff ? 'staff-complete-draft-upload' : 'complete-draft-upload') : 'complete-upload';
+        const refreshUpload = async () => {
+            if (!draftContext) return refresh();
+            activeDraft = await api(draftContext.staff ? 'staff-draft' : 'draft', { quoteId: recordId }); await renderDraft(draftContext.staff);
+        };
         if (!file || !['image/png', 'image/jpeg', 'application/pdf'].includes(file.type)
             || file.size <= 0 || file.size > item.purchased.productionPolicy.maxFileBytes) {
             throw new Error(txt('Choose a supported file within the purchased size limit.', 'Elige un archivo permitido dentro del límite comprado.'));
         }
         const sha256 = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', await file.arrayBuffer()))).map((v) => v.toString(16).padStart(2, '0')).join('');
-        const key = [order.id, item.lineItemId, placement, assignmentId, allocatedQuantity, sha256].join(':');
+        const key = [draftContext ? 'draft_' + recordId : recordId, item.lineItemId, placement, assignmentId, allocatedQuantity, sha256].join(':');
         let intent = uploads[key];
+        if (draftContext && !intent) {
+            const saved = activeDraft.uploads.find((u) => u.lineItemId === item.lineItemId && u.placement === placement
+                && u.assignmentId === assignmentId && u.allocatedQuantity === allocatedQuantity && u.sha256 === sha256
+                && u.size === file.size && u.mime === file.type && u.filename === file.name && (u.completed || u.expiresAt > Date.now()));
+            if (saved) intent = { attemptId: saved.requestId, sessionId: saved.sessionId, body: JSON.stringify({ ...identity,
+                lineItemId: saved.lineItemId, placement, assignmentId, allocatedQuantity, role: 'source', filename: saved.filename,
+                mime: saved.mime, size: saved.size, sha256: saved.sha256, requestId: saved.requestId }) };
+        }
         if (!intent || intent.expired) {
             const requestId = uid();
-            intent = { attemptId: requestId, body: JSON.stringify({ orderId: order.id, lineItemId: item.lineItemId, placement,
+            intent = { attemptId: requestId, body: JSON.stringify({ ...identity, lineItemId: item.lineItemId, placement,
                 assignmentId, allocatedQuantity, role: 'source', filename: file.name, mime: file.type, size: file.size, sha256, requestId }) };
             uploads[key] = intent; localStorage.setItem('canvas_commerce_uploads_v1', JSON.stringify(uploads));
         }
         try {
             if (intent.sessionId) {
                 try {
-                    await api('complete-upload', { orderId: order.id, sessionId: intent.sessionId }, intent.attemptId + '_complete');
-                    await refresh(); return;
+                    await api(completeOperation, { ...identity, sessionId: intent.sessionId }, intent.attemptId + '_complete');
+                    await refreshUpload(); return;
                 } catch (error) {
                     // A completed object with a lost response is recovered without
                     // uploading/replacing it. Incomplete storage is safe to resume.
                     if (!['temporarily_unavailable', 'delivery_uncertain'].includes(error.code)) throw error;
                 }
             }
-            const session = await api('create-upload', intent.body, intent.attemptId);
+            const session = await api(reserveOperation, intent.body, intent.attemptId);
             intent.sessionId = session.sessionId;
             localStorage.setItem('canvas_commerce_uploads_v1', JSON.stringify(uploads));
             if (!session.completed) {
@@ -4847,9 +5026,9 @@ window.initCanvasCommerce = async function () {
                     else throw Object.assign(new Error(), { code: 'upload_failed' });
                 }
             }
-            await api('complete-upload', { orderId: order.id, sessionId: session.sessionId }, intent.attemptId + '_complete');
+            await api(completeOperation, { ...identity, sessionId: session.sessionId }, intent.attemptId + '_complete');
             announce(txt('File received for the selected item/design. Staff review is still required.', 'Archivo recibido para el artículo y diseño seleccionado. Aún requiere revisión técnica.'));
-            await refresh();
+            await refreshUpload();
         } catch (error) {
             if (error.code === 'upload_expired') { intent.expired = true; localStorage.setItem('canvas_commerce_uploads_v1', JSON.stringify(uploads)); }
             throw error;
@@ -4857,6 +5036,8 @@ window.initCanvasCommerce = async function () {
     }
     async function renderOrder() {
         updateDock();
+        draftHolder.hidden = true; activeDraft = null;
+        document.getElementById('commerce-checkout').hidden = true;
         const holder = document.getElementById('commerce-order'); holder.replaceChildren(); holder.hidden = false;
         holder.append(node('h2', txt('Your order', 'Tu pedido')), node('p', order.id, { class: 'c-order-id' }));
         const badges = node('div', null, { class: 'c-badges' });
@@ -5011,6 +5192,26 @@ window.initCanvasCommerce = async function () {
             return;
         }
         catalog = await api('catalog', {}); renderConfig(); renderCart();
+        if (publicConfiguration.staffDraftsAvailable) installStaffTools();
+        const buyer = node('details', null, { class: 'c-card c-panel' });
+        buyer.append(node('summary', txt('Open a saved draft / receive a staff quote', 'Abrir borrador guardado / recibir cotización del equipo')));
+        buyer.append(button(txt('Generate my buyer handoff ticket', 'Generar mi código de comprador'), async () => {
+            const result = await api('buyer-ticket', {});
+            buyer.querySelector('[data-buyer-ticket]')?.remove();
+            const ticket = node('p', result.ticket, { 'data-buyer-ticket': '', class: 'c-order-id' });
+            buyer.append(ticket, node('p', txt('Share only with Canvas staff. Valid for 30 minutes and one draft; keep this browser session.', 'Comparte solo con el equipo Canvas. Válido por 30 minutos y un borrador; conserva esta sesión.')));
+        }, true));
+        const open = node('form', null, { class: 'c-fields' });
+        const draftId = field(open, txt('Quote ID', 'ID de cotización'), 'quoteId', 'text', { maxlength: 100, required: '' });
+        draftId.value = localStorage.getItem('canvas_commerce_draft_id_v1') || '';
+        open.append(node('button', txt('Open my saved draft', 'Abrir mi borrador guardado'), { type: 'submit', class: 'c-button' })); buyer.append(open);
+        open.addEventListener('submit', (event) => { event.preventDefault(); run(event.submitter, async () => {
+            if (staffSignedIn) throw new Error(txt('Sign out of staff mode before buyer checkout.', 'Sal del modo del equipo antes de comprar.'));
+            activeDraft = await api('draft', { quoteId: draftId.value }); quote = activeDraft;
+            localStorage.setItem('canvas_commerce_draft_id_v1', quote.quoteId);
+            renderQuote(); await renderDraft(false);
+        }); });
+        document.getElementById('commerce-checkout').before(buyer);
         const lastOrder = localStorage.getItem('canvas_commerce_last_order_v1');
         if (lastOrder) { order = await api('order', { orderId: lastOrder }); await renderOrder(); }
         else if (checkout) {

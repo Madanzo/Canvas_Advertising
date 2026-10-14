@@ -7,7 +7,7 @@
   },
   "scripts": {
     "preview:commerce": "node scripts/commerce/preview-server.cjs",
-    "test:commerce": "node --test scripts/commerce/integration.test.cjs scripts/commerce/browser.test.cjs scripts/commerce/modes.test.cjs",
+    "test:commerce": "node --test --test-concurrency=1 scripts/commerce/integration.test.cjs scripts/commerce/browser.test.cjs scripts/commerce/modes.test.cjs scripts/commerce/staff-drafts.test.cjs scripts/commerce/staff-browser.test.cjs",
     "test:frontend": "node --test tests/*.test.cjs",
     "check:frontend": "node --check js/main.js && node --check js/firebase-config.js"
   }

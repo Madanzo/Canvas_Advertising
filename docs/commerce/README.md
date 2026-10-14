@@ -1,6 +1,9 @@
 # Canvas website commerce integration
 
-Integration against CRM PR #32, backend head `84f66cb` (adopted coordinated staff-review schema fix).
+Integration against CRM PR #37, exact backend head
+`bfb94286d540335ee7370162f680a86cf189b9b0`, extending unchanged PR #32
+`84f66cb`. Prior website `b87a6ad` tests/CI remain historical evidence for that
+baseline, not substituted for the new candidate.
 New commerce forwarding and live commerce payments remain disabled; no deployment
 or historical replay is authorized. Existing production CRM lead intake/forwarding
 is left unchanged by this commerce branch. This statement does not assert its live
@@ -8,9 +11,120 @@ configuration or disable an already active lead-delivery path.
 
 ## Review preview and contract
 
+### Connected staff drafts / durable pre-purchase artwork — October 14
+
+Acknowledged CAM-291/CAM-292 final handoff and read the pinned
+`docs/commerce/STAFF_DRAFT_HANDOFF.md`, generated OpenAPI, request schemas and
+actual exported handler. Website adapter, UI and harness are owned here; CRM
+extension implementation remains with its assigned owner. No shared CRM files
+were changed. Preserve all unresolved costs/pricing decisions below.
+
+The existing configurator/cart now supplies the same configuration to `quote`
+and `staff-quote`. Staff selects an existing tenant contact or explicitly creates
+one, then saves the canonical unpaid quote/item records; public checkout is NOT
+used for draft creation. Both contacts and quotes module access are checked by
+CRM on every staff call, including retries. Website `staffDraftsEnabled` defaults
+off; CRM has its own independent off-by-default gate. No production flags changed.
+
+Staff signs in through the CRM's existing Google provider using a separate named
+Firebase app with `Persistence.NONE`. This neither reuses Canvas Auth as CRM
+authority nor adds a provider, anonymous login or account. The short-lived CRM
+ID token is forwarded only in the authorization header to the fixed server-side
+tenant endpoint. The website first calls the supported CRM contact lookup read
+as a live authorization probe; only AFTER CRM verifies token/revocation/current
+tenant/both modules does it decode the subject to namespace retry persistence.
+Decoded claims never authorize access. CRM rechecks the actual requested operation;
+no successful receipt bypasses current membership. Tokens are never persisted.
+
+Exact staff mutation bytes are durably saved before delivery in server-only
+`canvas_commerce_private/staff_intent_*`, scoped to the CRM-verified UID,
+operation and attempt. Refreshing a token/new worker keeps the same subject/body.
+Browser pending state contains operation/attempt only, not contact details or
+tokens. Lost responses use the persisted body; changed bytes conflict. A request
+confirmed absent from website persistence can be re-entered rather than leaving
+the UI permanently stuck. Public quote retries also keep their original attempt.
+
+Buyer assignment accepts a **buyer-generated handoff ticket**, not a visitor
+customerId or email match. `buyer-ticket` derives identity from the existing
+HttpOnly guest session, rejects order-only recovery sessions, rate-limits issuance,
+and returns a random 30-minute code for deliberate sharing with authorized staff.
+Only its digest/customer/expiry/binding are saved in `buyer_*`. Staff submits the
+quote/hash/request + code; binding that one ticket and persisting the exact derived
+CRM assignment request is atomic. Retries use that saved body without requiring
+the code again; transaction failure consumes neither. It cannot assign a second
+draft under a different request. The code is not a customer capability and grants
+no draft access without staff authorization. No share email/message is sent.
+
+Both interfaces save source artwork against quote/item/side/design/allocated
+quantity using the actual draft handlers. Server upload history restores pending
+and completed session IDs after refresh and staff→buyer handoff. Same-file retries
+first recover completion, then reserve/resume the same version; signed transport
+URLs are held only for the current operation. Replacements use new request IDs,
+retain immutable historical versions and cannot be overwritten by an old retry.
+Local reference preview remains ephemeral and distinct from these durable originals.
+Editing configuration hides the old draft; it never silently copies its artwork
+into a new quote. Authorized recovery can still open its exact quote ID.
+
+The buyer opens the assigned quote in the original session and accepts its exact
+hash/terms through ordinary checkout. CRM atomically adopts the existing canonical
+items/assets/contact and records orderId; pending upload obligations block purchase.
+Source files remain originals requiring review/finals/proof; payment, artwork,
+approval and production readiness remain separate. No payment call is made by
+draft creation or adoption. Synthetic fixtures explicitly use deposit/5000.
+
+New connected preview: `CRM_TEST_ROOT=/private/tmp/canvas-commerce-staff-bfb9428`
+with `node -e 'require("./scripts/commerce/preview-server.cjs").startPreview({port:3216})'`,
+then `/store` or `/store-es` at `http://127.0.0.1:3216`. The preserved baseline
+preview on3210 is not proof of this new backend revision. Preview staff sign-in is
+a localhost-only synthetic credential edge, never a production authorization path.
+
+Affected acceptance commands:
+
+```sh
+CRM_TEST_ROOT=/private/tmp/canvas-commerce-staff-bfb9428 npm run test:commerce
+CRM_TEST_ROOT=/private/tmp/canvas-commerce-staff-bfb9428 \
+  npx -y firebase-tools@latest emulators:exec --only firestore,auth \
+  --project demo-canvas-commerce-isolated --config .firebase-commerce-emulator.json \
+  'GCLOUD_PROJECT=demo-canvas-commerce-isolated node --test scripts/commerce/staff-emulator.test.cjs scripts/commerce/persistence.test.cjs'
+```
+
+Use Java21+ for local emulators. Guards reject non-demo/non-loopback environments.
+HTTP/browser tests use actual CRM handlers/inspection with serializable stores and
+synthetic auth/provider/storage edges. The separate connected emulator test uses
+the actual CRM Firestore adapter, tenant resolver, real Auth verification and real
+website retry transactions; only machine-key authentication and GCS/provider
+boundaries are deterministic. It proves concurrent/lost-response contact/draft
+recovery, public/staff pricing parity, each missing-module denial, removed member,
+disabled account, server-derived assignment, original upload identity/completion
+and atomic adoption, with no duplicate contact/order/payment/lead/work order.
+Neither suite proves deployed GCS/IAM/CORS, a Google popup on the production domain,
+real Finix sandbox acceptance or customer notification delivery.
+
+Local candidate evidence:37 Functions and36 frontend checks pass; six connected
+HTTP/browser/mode scenarios pass across affected reruns, plus two real demo
+Auth/Firestore cases. The expanded combined run exposed an assertion counting
+quote line subdocuments as extra quotes and an upload test reusing the previous
+success announcement before authoritative form replacement. Both assertions were
+corrected and affected cases retested; mobile navigation is tested after restoring
+the intentionally auto-hidden header. Hosted checks run only offline units,
+frontend/syntax and trigger discovery, not these connected/emulator suites.
+
+Release configuration still required (no secret values in chat): verified CRM
+hostname/revision and existing dedicated server credential; reviewed public CRM
+Firebase `staffAuth` tuple (`projectId`, `authDomain`, `apiKey`, `appId`) and authorized
+website domain for the existing Google provider; independent website/CRM staff
+flags only after approval. `staffAuth` is projected to those public SDK fields only.
+Real catalog/pricing/terms, storage runtime/CORS and provider/reconciliation gates
+remain open. This revision still requires the existing `canvasCommerce` handler
+plus Hosting; no new proof issuer or staff Firebase Function was added. The earlier
+Square guard deployment scope and coordinated drain/cutover remain unchanged.
+No rules/Storage/IAM/auth-provider/workflow/deployment change is included. Reconcile
+CRM cumulative rules controls separately; inherited PR32 rules are NOT release artifacts.
+
 ### Fast Ordering continuation — October 14 approved scope
 
-Existing reviewed website head was `83c906c` (runtime `e0f5a74`). The previously
+Historical checkpoint before PR37's handoff: existing reviewed website head was
+`83c906c` (runtime `e0f5a74`). The previously
 tested CRM head was `84f66cb`; its temporary checkout is now absent, so earlier
 connected test evidence is historical, not a fresh assertion of current connectivity.
 Current CRM checkout/revision and server-authorized staff contact/draft-quote
@@ -53,8 +167,9 @@ keeps the desktop order summary sticky, and provides a persistent mobile next-st
 bar. The bar displays only an unexpired CRM quote total, never a client-calculated
 price; editing invalidates that total. Reference images use ephemeral local blob URLs,
 are revoked on product change/page exit, and explicitly are not uploaded, persisted,
-approved or assigned production assets. Durable **pre-purchase** artwork still needs
-the CRM draft/asset contract; this local reference is not substitute acceptance for it.
+approved or assigned production assets. Durable **pre-purchase** artwork was
+blocked at that checkpoint; the separate PR37-backed flow above now implements it.
+This local reference is not substitute acceptance for that durable flow.
 Purchased artwork identity/recovery/proof services remain unchanged.
 Unsubmitted configuration drafts now retain catalog version and edit-line identity
 across refresh. A changed catalog does not silently apply an old configuration;
@@ -69,18 +184,16 @@ in this draft. Prices/availability still require a new authoritative quote.
 | Private 14-variant review | Offline module + local worksheet; supplied retail proposals and yard tiers retained, all manufacturing costs unknown. Eight costing tests + loopback Host/origin/no-persistence test. Real margin approval awaits explicit supplier/material/finishing/labor/waste/packaging/freight/collection inputs. |
 | Original desktop/mobile interface | Local reference/settings beside sticky summary, fixed mobile next action; actual Chrome EN/ES widths and no overflow. Local reference is not durable pre-purchase artwork. |
 | Recoverable configuration | Browser refresh/edit retains line ID, discards stale catalog draft, and unavailable restored product cannot offer purchase. Exact purchased order/body/artwork/proof retry behavior retained. |
-| Staff fast quote + customer pricing parity | **Not implemented/blocked contract**: CRM owner confirms PR32 has no staff contact lookup/create or unpaid draft quote operation. Need contacts/quotes-authorized API using same calculateQuote and canonical lineItems, stable retry hash, zero payment/order/workorder/second-lead side effects. Never substitute customer checkout, public flags or direct CRM writes. |
-| Durable pre-purchase artwork | **Not implemented/blocked contract**: current create-upload requires purchased order. Need draft-owned item/side/design/quantity lifecycle and transactional adoption on purchase, expiry/quarantine/version checks. |
+| Staff fast quote + customer pricing parity | **Implemented/isolated connected acceptance** against pinned PR37; shared configurator and actual pricing/contacts/draft handlers, live CRM authorization on every retry. Real domain Google sign-in and deployment/configuration acceptance remain pending. |
+| Durable pre-purchase artwork | **Implemented/isolated connected acceptance**: item/side/design/quantity identity, upload-history recovery, immutable versions, staff→buyer assignment and atomic adoption. Deterministic GCS transport is not deployed bucket/IAM/CORS evidence. |
 | Initial real catalog | **Not published**. Four unresolved business policies remain null. Backend fixed option fees do not support acrylic10% contour surcharge; minimumArea applies per piece, not an unconfirmed total-job minimum; flat delivery rules do not implement the pasted shipping matrix. CRM owner must extend/review authoritative rules after bases are confirmed. |
 | Normal50% payment distinction | New actual-handler isolated deposit/5000 scenario verifies requiredMinor rounding, exact deposit retry, separate remaining balance and artwork hold. No deployment/published policy altered and no accepted snapshots rewritten. Real Finix sandbox remains a provisioning/acceptance dependency. |
 | Review PR/release | Branch pushed; draft creation connector403 is unresolved. Nothing merged/deployed. Existing lead intake/queue/notification ownership and all historical restrictions unchanged. |
 
-CRM owner acknowledged source assessment via existing commerce chat; dependency
-requests and acknowledgements are recorded in CAM-290/291/292. Backend ownership
-and exact extension contract/approval are the next coordination action. No proposed
-staff/draft API name or response is represented as already supported. Private cost
-worksheet and local blob previews are independent tools, not substitute acceptance
-for connected staff quotes or durable draft uploads.
+Earlier dependency requests are retained in CAM-290/291/292. The final PR37
+handoff now confirms extension ownership/contract, acknowledged above. Private
+cost worksheet and local blob previews remain independent tools, not substitutes
+for the connected staff quotes and durable draft upload acceptance.
 
 Run `CRM_TEST_ROOT=/private/tmp/canvas-commerce npm run preview:commerce`, then open
 `http://127.0.0.1:3210/store` or `/store-es`. The CRM checkout must contain the

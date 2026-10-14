@@ -20,6 +20,8 @@ let auth = null;
 let storage = null;
 let appCheck = null;
 let firebaseClientReadyPromise = null;
+let commerceStaffAuth = null;
+let commercePreviewStaffToken = null;
 
 function loadFirebaseCompatComponent(component) {
     if (typeof firebase === 'undefined') {
@@ -292,6 +294,27 @@ async function deleteTemplate(templateId) {
 
 // Export functions for use in main.js and admin.js
 window.CanvasFirebase = {
+    commerceStaffSignIn: async (configuration) => {
+        const preview = ['localhost', '127.0.0.1'].includes(location.hostname) && document.querySelector('[data-commerce-preview]');
+        if (preview) {
+            const response = await fetch('/preview/staff-login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+            const result = await response.json();
+            if (!response.ok || !result.token) throw new Error('staff_sign_in_failed');
+            commercePreviewStaffToken = result.token; return;
+        }
+        if (!configuration) throw new Error('staff_auth_not_configured');
+        await ensureFirebaseClient();
+        if (!firebase.auth) await loadFirebaseCompatComponent('auth');
+        const name = 'canvasCommerceStaff';
+        const staffApp = firebase.apps.find((app) => app.name === name) || firebase.initializeApp(configuration, name);
+        commerceStaffAuth = staffApp.auth();
+        await commerceStaffAuth.setPersistence(firebase.auth.Auth.Persistence.NONE);
+        await commerceStaffAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    },
+    commerceStaffSignOut: async () => {
+        commercePreviewStaffToken = null;
+        if (commerceStaffAuth) await commerceStaffAuth.signOut();
+    },
     commerce: async (operation, body, attemptId) => {
         let token;
         // Isolated preview declares itself in a server-only response; the normal
@@ -302,9 +325,15 @@ window.CanvasFirebase = {
             await ensureFirebaseClient();
             token = (await appCheck.getToken(false)).token;
         }
+        let staffToken;
+        if (operation.startsWith('staff-')) {
+            staffToken = preview ? commercePreviewStaffToken : await commerceStaffAuth?.currentUser?.getIdToken();
+            if (!staffToken) throw Object.assign(new Error('staff_token_required'), { code: 'staff_token_required' });
+        }
         const response = await fetch('/api/commerce', {
             method: 'POST', credentials: 'same-origin', redirect: 'error',
-            headers: { 'Content-Type': 'application/json', ...(token ? { 'X-Firebase-AppCheck': token } : {}) },
+            headers: { 'Content-Type': 'application/json', ...(token ? { 'X-Firebase-AppCheck': token } : {}),
+                ...(staffToken ? { Authorization: 'Bearer ' + staffToken } : {}) },
             body: JSON.stringify(['website-session', 'request-recovery', 'recover'].includes(operation)
                 ? { operation, ...body }
                 : { operation, serializedBody: typeof body === 'string' ? body : body == null ? null : JSON.stringify(body), attemptId })

@@ -51,8 +51,8 @@ async function prepareProofs(backend, orderId) {
 async function startPreview({ port = 3210 } = {}) {
     const backend = await loadBackend();
     const websiteStore = new WebsiteMemoryStore(); const mailbox = [];
-    websiteStore.data.set('config', { enabled: true, checkoutMode: 'finix_sandbox', legacySquareDisabled: true, legacyLinksDrained: true });
-    const origin = `http://127.0.0.1:${port}`; backend.controls.origin = origin;
+    websiteStore.data.set('config', { enabled: true, staffDraftsEnabled: true, checkoutMode: 'finix_sandbox', legacySquareDisabled: true, legacyLinksDrained: true });
+    let origin = `http://127.0.0.1:${port}`; backend.controls.origin = origin;
     const service = new WebsiteCommerce({ store: websiteStore,
         config: async () => websiteStore.data.get('config'),
         transport: async (op, body, token) => {
@@ -60,7 +60,7 @@ async function startPreview({ port = 3210 } = {}) {
             return backend.request(op, body, token);
         }, sendRecovery: async (letter) => mailbox.push(letter)
     });
-    const handler = commerceHttp({ service, origin, verifyAppCheck: async () => {}, secure: false });
+    let handler = commerceHttp({ service, origin, verifyAppCheck: async () => {}, secure: false });
     const server = http.createServer(async (req, res) => {
         try {
             const url = new URL(req.url, origin);
@@ -101,6 +101,7 @@ async function startPreview({ port = 3210 } = {}) {
                 if (req.headers.origin !== origin) { res.writeHead(403); res.end(); return; }
                 const body = JSON.parse(req.rawBody || '{}');
                 res.setHeader('Content-Type', 'application/json');
+                if (url.pathname === '/preview/staff-login') { res.end(JSON.stringify({ token: backend.staffTokens.admin })); return; }
                 if (url.pathname === '/preview/tokenize') { res.end(JSON.stringify({ token: 'TKisolatedPreviewTokenOnly1234' })); return; }
                 if (url.pathname === '/preview/lost-payment') { backend.controls.losePaymentResponse = true; res.end('{}'); return; }
                 const cookie = req.headers.cookie?.split(';').map((p) => p.trim()).find((p) => p.startsWith('__session='))?.slice(10);
@@ -131,6 +132,10 @@ async function startPreview({ port = 3210 } = {}) {
         } catch { res.writeHead(500, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ ok: false, code: 'preview_step_failed' })); }
     });
     await new Promise((resolve) => server.listen(port, '127.0.0.1', resolve));
+    if (port === 0) {
+        origin = `http://127.0.0.1:${server.address().port}`; backend.controls.origin = origin;
+        handler = commerceHttp({ service, origin, verifyAppCheck: async () => {}, secure: false });
+    }
     return { server, backend, websiteStore, service, origin, mailbox };
 }
 if (require.main === module) startPreview().then(({ origin }) => console.log(`Isolated Canvas commerce preview: ${origin}/store (simulated providers; no live calls)`)).catch((error) => { console.error(error.message); process.exitCode = 1; });

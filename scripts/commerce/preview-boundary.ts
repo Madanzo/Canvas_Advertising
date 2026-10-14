@@ -6,8 +6,19 @@ export const store = new MemoryStore();
 export const objects = new Map<string, any>();
 export const uploads = new Map<string, string>();
 export const transfers = new Map<string, any>();
-export const controls = { origin: 'http://127.0.0.1:3210', losePaymentResponse: false, submits: 0 };
-store.data.set('tenants/canvas_test', { productionStages: [{ key: 'print' }, { key: 'finished' }] });
+export const controls = { origin: 'http://127.0.0.1:3210', losePaymentResponse: false, submits: 0, revokedStaff: false };
+// Synthetic token edges only; real Auth acceptance belongs to the demo emulator.
+export const staffTokens = Object.fromEntries(['admin', 'quotes_only', 'contacts_only', 'outsider'].map((role) =>
+    [role, 'eyJhbGciOiJub25lIn0.' + Buffer.from(JSON.stringify({ sub: 'preview_' + role })).toString('base64url') + '.isolated']));
+let demoDb: any, demoAuth: any;
+export function setIsolatedAdmin(db: any, auth: any) {
+    if (process.env.GCLOUD_PROJECT !== 'demo-canvas-commerce-isolated'
+        || process.env.FIRESTORE_EMULATOR_HOST !== '127.0.0.1:8186'
+        || process.env.FIREBASE_AUTH_EMULATOR_HOST !== '127.0.0.1:9186') throw Error('Local demo emulators required');
+    demoDb = db; demoAuth = auth;
+}
+store.data.set('tenants/canvas_test', { productionStages: [{ key: 'print' }, { key: 'finished' }],
+    rolePermissions: { quotes_only: ['quotes'], contacts_only: ['contacts'] } });
 const catalog = fixtureCatalog();
 const sample = catalog.products[0];
 // Explicitly synthetic extensions exercise the configurator modes. These NEVER
@@ -31,16 +42,27 @@ for (const [productId, family, en, es] of [
     catalog.products.push(product);
 }
 store.data.set('tenants/canvas_test/commerceConfig/catalog', catalog);
-store.data.set('tenants/canvas_test/commerceConfig/access', { enabled: true, paymentMode: 'sandbox', finixSandboxVerified: true, legacySquareDisabled: true });
-export class FirestoreCommerceStore { transaction<T>(callback: any) { return store.transaction<T>(callback); } }
+store.data.set('tenants/canvas_test/commerceConfig/access', { enabled: true, staffDraftsEnabled: true, paymentMode: 'sandbox', finixSandboxVerified: true, legacySquareDisabled: true });
+export class FirestoreCommerceStore {
+    transaction<T>(callback: any) { return store.transaction<T>(callback); }
+    findContacts(...args: Parameters<MemoryStore['findContacts']>) { return store.findContacts(...args); }
+}
 export function getAdminDb() {
+    if (demoDb) return demoDb;
     return { doc: (path: string) => ({ get: async () => {
-        const data = path.endsWith('/members/preview_staff') ? { role: 'admin' } : store.data.get(path);
+        const role = Object.keys(staffTokens).find((r) => path.endsWith('/members/preview_' + r));
+        const data = path.endsWith('/members/preview_staff') ? { role: 'admin' }
+            : role && role !== 'outsider' ? { role }
+                : path.endsWith('/settings/roles') ? { rolePermissions: { quotes_only: ['quotes'], contacts_only: ['contacts'] } }
+                    : store.data.get(path);
         return { exists: Boolean(data), data: () => data };
     } }) };
 }
-export function getAdminAuth() { return { verifyIdToken: async (token: string) => {
-    if (token !== 'preview_staff_only') throw new Error('unauthorized'); return { uid: 'preview_staff' };
+export function getAdminAuth() { if (demoAuth) return demoAuth; return { verifyIdToken: async (token: string, revoked: boolean) => {
+    if (!revoked || controls.revokedStaff) throw new Error('unauthorized');
+    if (token === 'preview_staff_only') return { uid: 'preview_staff' };
+    const role = Object.keys(staffTokens).find((r) => staffTokens[r] === token);
+    if (!role) throw new Error('unauthorized'); return { uid: 'preview_' + role };
 } }; }
 export async function resolveTenantBySlug(_db: any, slug: string) { return slug === 'canvas_advertising' ? { id: 'canvas_test' } : null; }
 export async function authenticateIntake({ headers, requiredScope }: any) {

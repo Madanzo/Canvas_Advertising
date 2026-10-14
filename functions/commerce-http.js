@@ -28,6 +28,12 @@ function commerceHttp({ service, origin, verifyAppCheck, secure = true }) {
                 return res.status(200).json({ ok: true, result: { orderId: session.orderId } });
             }
             if (input.operation === 'request-recovery') return res.status(200).json(await service.requestRecovery(input.orderId, input.email, req.ip));
+            if (input.operation === 'buyer-ticket') return res.status(200).json(await service.buyerTicket(cookie));
+            if (typeof input.operation === 'string' && input.operation.startsWith('staff-')) {
+                const token = req.get('authorization')?.match(/^Bearer (\S+)$/)?.[1];
+                const response = await service.staffCall(token, input.operation, input.serializedBody, input.attemptId);
+                return res.status(response.ok ? 200 : response.httpStatus || 403).json(response);
+            }
             const response = await service.call(cookie, input.operation, input.serializedBody, input.attemptId);
             return res.status(response.ok ? 200 : response.httpStatus || 409).json(response);
         } catch (error) {
