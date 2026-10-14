@@ -4621,7 +4621,8 @@ window.initCanvasCommerce = async function () {
                 const control = form.elements[name];
                 if (control && control.type !== 'file' && typeof value === 'string' && value.length <= 2200) control.value = value;
             }
-            if (savedDraft.editingLineItem && cart.some((item) => item.lineItemId === savedDraft.editingLineItem && item.productId === product.value)) {
+            if (savedDraft.editingLineItem && form.querySelector('[type=submit]')
+                && cart.some((item) => item.lineItemId === savedDraft.editingLineItem && item.productId === product.value)) {
                 app.dataset.editLineItem = savedDraft.editingLineItem;
                 form.querySelector('[type=submit]').textContent = txt('Save configuration', 'Guardar configuración');
             }

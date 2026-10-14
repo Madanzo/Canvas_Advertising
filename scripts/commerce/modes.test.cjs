@@ -4,6 +4,45 @@ const assert = require('node:assert/strict');
 const { loadBackend } = require('./load-backend.cjs');
 const { WebsiteMemoryStore } = require('./preview-server.cjs');
 const { WebsiteCommerce } = require('../../functions/commerce-adapter');
+test('explicit isolated 50% policy keeps unpaid, deposit, artwork and balance distinct with exact payment retries',
+    { skip: !process.env.CRM_TEST_ROOT }, async () => {
+    const backend = await loadBackend();
+    const catalogRecord = backend.store.data.get('tenants/canvas_test/commerceConfig/catalog');
+    catalogRecord.paymentPolicy = { mode: 'deposit', depositBasisPoints: 5000 };
+    catalogRecord.version = 'isolated-deposit-v1'; // TEST ONLY; no deployed policy changed.
+    const store = new WebsiteMemoryStore();
+    store.data.set('config', { enabled: true, checkoutMode: 'finix_sandbox', legacySquareDisabled: true, legacyLinksDrained: true });
+    const service = new WebsiteCommerce({ store, transport: backend.request, config: async () => store.data.get('config') });
+    const { cookie } = await service.session(null, 'deposit');
+    const call = async (op, body, id) => {
+        const response = await service.call(cookie, op, body == null ? null : JSON.stringify(body), id);
+        assert.equal(response.ok, true, JSON.stringify(response)); return response.result;
+    };
+    const catalog = await call('catalog', {});
+    const quote = await call('quote', { version: 'canvas-commerce.v1', requestId: 'deposit_quote', catalogVersion: catalog.version, locale: 'en',
+        delivery: { methodId: 'pickup', destinationZone: 'shop' }, items: [{ lineItemId: 'deposit_item', productId: 'banner',
+            configuration: { dimensions: { width: 3, height: 4, unit: 'ft' }, quantity: 1, options: { material: 'vinyl', finish: 'hem' },
+                variants: [], artworkMode: 'later', designBrief: '', notes: '' } }] }, 'deposit_quote');
+    const order = await call('checkout', { version: 'canvas-commerce.v1', quoteId: quote.quoteId, acceptedHash: quote.quoteHash,
+        termsVersion: quote.termsVersion, sourceOrderId: 'deposit_order', contact: { name: 'Synthetic Deposit', email: 'deposit@example.com', phone: '5125550106' } }, 'deposit_order');
+    let workspace = await call('order', { orderId: order.id });
+    assert.equal(workspace.financial, 'unpaid');
+    assert.equal(workspace.requiredMinor, Math.ceil(quote.totalMinor / 2));
+    assert.ok(workspace.items.every(i => i.readiness === 'financial_hold'));
+    await call('payment', { orderId: order.id, requestId: 'deposit_payment', token: 'TKisolatedDeposit123456', collection: 'required' }, 'deposit_payment');
+    await call('payment', null, 'deposit_payment');
+    workspace = await call('order', { orderId: order.id });
+    assert.equal(workspace.capturedMinor, Math.ceil(quote.totalMinor / 2));
+    assert.equal(workspace.balanceMinor, quote.totalMinor - workspace.capturedMinor);
+    assert.ok(workspace.items.every(i => i.readiness === 'needs_artwork'), 'deposit is not artwork approval or production release');
+    assert.equal(backend.controls.submits, 1);
+    await call('payment', { orderId: order.id, requestId: 'balance_payment', token: 'TKisolatedBalance123456', collection: 'balance' }, 'balance_payment');
+    await call('payment', null, 'balance_payment');
+    workspace = await call('order', { orderId: order.id });
+    assert.equal(workspace.capturedMinor, quote.totalMinor); assert.equal(workspace.balanceMinor, 0);
+    assert.equal(backend.controls.submits, 2, 'one deposit and one explicit balance, not duplicate retries');
+    assert.ok(workspace.items.every(i => i.readiness === 'needs_artwork'));
+});
 test('mixed synthetic banner/mesh/decal/rigid/transfer/apparel quotes preserve pack/variant quantities and server authority',
     { skip: !process.env.CRM_TEST_ROOT }, async () => {
     const backend = await loadBackend();

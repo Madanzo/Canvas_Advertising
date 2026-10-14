@@ -53,6 +53,7 @@ test('malformed costs, revenue and impossible target margin reject rather than d
     for (const value of [-1, 1.5, '100', NaN]) assert.throws(() => reviewMargin({ revenueMinor: 1000, costs: { ...costs, materialMinor: value } }));
     assert.throws(() => reviewMargin({ revenueMinor: 0, costs }));
     assert.throws(() => reviewMargin({ revenueMinor: 1000, costs, targetMarginBasisPoints: 9800 }), /unreachable/);
+    assert.throws(() => reviewMargin({ revenueMinor: 1000, costs: { ...costs, laborMinutes: Number.MAX_SAFE_INTEGER, laborHourlyMinor: Number.MAX_SAFE_INTEGER } }), /overflow/);
 });
 test('even complete private review never authorizes public publication', () => {
     assert.equal(readiness({ ...variants[0], costs, costConfirmation: 'confirmed', supplierReference: 'owner-confirmed-reference',

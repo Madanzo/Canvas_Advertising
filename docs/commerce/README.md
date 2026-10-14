@@ -19,7 +19,7 @@ Do not use purchased checkout to emulate an unpaid staff quote.
 
 Private pricing review: `node scripts/commerce/private-pricing-review.cjs`.
 Interactive local-only worksheet: `node scripts/commerce/private-review-server.cjs`
-then `http://127.0.0.1:3211/`. It validates Host and same-origin POSTs, does not
+then `http://127.0.0.1:3215/`. It validates Host and same-origin POSTs, does not
 persist entered costs or scenarios, and has no public/staff API or publishing action.
 Do not treat this loopback worksheet as authenticated deployed staff quote entry.
 This offline-only module records all 14 owner-proposed variants, yard-sign tier
@@ -61,6 +61,26 @@ across refresh. A changed catalog does not silently apply an old configuration;
 editing a restored line updates that line rather than manufacturing a duplicate.
 No local reference image bytes/blob URLs, quote prices or staff privileges are saved
 in this draft. Prices/availability still require a new authoritative quote.
+
+### Current acceptance audit / owner handoff
+
+| Requirement | Current evidence / remaining dependency |
+| --- | --- |
+| Private 14-variant review | Offline module + local worksheet; supplied retail proposals and yard tiers retained, all manufacturing costs unknown. Eight costing tests + loopback Host/origin/no-persistence test. Real margin approval awaits explicit supplier/material/finishing/labor/waste/packaging/freight/collection inputs. |
+| Original desktop/mobile interface | Local reference/settings beside sticky summary, fixed mobile next action; actual Chrome EN/ES widths and no overflow. Local reference is not durable pre-purchase artwork. |
+| Recoverable configuration | Browser refresh/edit retains line ID, discards stale catalog draft, and unavailable restored product cannot offer purchase. Exact purchased order/body/artwork/proof retry behavior retained. |
+| Staff fast quote + customer pricing parity | **Not implemented/blocked contract**: CRM owner confirms PR32 has no staff contact lookup/create or unpaid draft quote operation. Need contacts/quotes-authorized API using same calculateQuote and canonical lineItems, stable retry hash, zero payment/order/workorder/second-lead side effects. Never substitute customer checkout, public flags or direct CRM writes. |
+| Durable pre-purchase artwork | **Not implemented/blocked contract**: current create-upload requires purchased order. Need draft-owned item/side/design/quantity lifecycle and transactional adoption on purchase, expiry/quarantine/version checks. |
+| Initial real catalog | **Not published**. Four unresolved business policies remain null. Backend fixed option fees do not support acrylic10% contour surcharge; minimumArea applies per piece, not an unconfirmed total-job minimum; flat delivery rules do not implement the pasted shipping matrix. CRM owner must extend/review authoritative rules after bases are confirmed. |
+| Normal50% payment distinction | New actual-handler isolated deposit/5000 scenario verifies requiredMinor rounding, exact deposit retry, separate remaining balance and artwork hold. No deployment/published policy altered and no accepted snapshots rewritten. Real Finix sandbox remains a provisioning/acceptance dependency. |
+| Review PR/release | Branch pushed; draft creation connector403 is unresolved. Nothing merged/deployed. Existing lead intake/queue/notification ownership and all historical restrictions unchanged. |
+
+CRM owner acknowledged source assessment via existing commerce chat; dependency
+requests and acknowledgements are recorded in CAM-290/291/292. Backend ownership
+and exact extension contract/approval are the next coordination action. No proposed
+staff/draft API name or response is represented as already supported. Private cost
+worksheet and local blob previews are independent tools, not substitute acceptance
+for connected staff quotes or durable draft uploads.
 
 Run `CRM_TEST_ROOT=/private/tmp/canvas-commerce npm run preview:commerce`, then open
 `http://127.0.0.1:3210/store` or `/store-es`. The CRM checkout must contain the

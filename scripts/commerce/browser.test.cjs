@@ -85,6 +85,7 @@ test('browser storefront → website HTTP → actual CRM handler: configuration,
     }
     await page.getByRole('button', { name: 'Simulate staff preparation / revised proofs', exact: true }).click();
     await page.getByRole('button', { name: 'Request changes', exact: true }).first().waitFor();
+    await page.locator('.c-proof-grid img').nth(2).waitFor();
     assert.equal(await page.locator('.c-proof-grid img').count(), 3);
     await page.getByRole('button', { name: 'Request changes', exact: true }).first().click();
     await page.getByText('Proof decision: changes_requested', { exact: true }).waitFor();
@@ -109,9 +110,26 @@ test('browser storefront → website HTTP → actual CRM handler: configuration,
     assert.equal(foreignRequests.length, 0, 'Preview must make NO non-local requests');
     assert.deepEqual(pageErrors, []);
     const spanish = await browser.newPage();
+    spanish.on('pageerror', (error) => pageErrors.push(error.message));
     await spanish.goto(preview.origin + '/store-es');
     await spanish.getByRole('button', { name: 'Agregar al pedido', exact: true }).waitFor();
     await spanish.setViewportSize({ width: 375, height: 900 });
     assert.equal(await spanish.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+    await spanish.locator('#commerce-config [name=quantity]').fill('3');
+    await spanish.getByRole('button', { name: 'Agregar al pedido', exact: true }).click();
+    await spanish.getByRole('button', { name: 'Editar configuración', exact: true }).click();
+    const activeCatalog = preview.backend.store.data.get('tenants/canvas_test/commerceConfig/catalog');
+    activeCatalog.products[0].capacityApproved = false;
+    await spanish.reload();
+    await spanish.getByText('Este producto requiere cotización o no está disponible.', { exact: true }).waitFor();
+    assert.equal(await spanish.locator('#commerce-config [type=submit]').count(), 0, 'unavailable draft must not offer purchase');
+    assert.deepEqual(pageErrors, [], 'unavailable restored edit must not crash initialization');
+    // MemoryStore transactions replace snapshots: mutate the current fixture,
+    // not the stale object retained across the preceding HTTP request.
+    const nextCatalog = preview.backend.store.data.get('tenants/canvas_test/commerceConfig/catalog');
+    nextCatalog.products[0].capacityApproved = true; nextCatalog.version = 'changed_catalog';
+    await spanish.reload();
+    await spanish.getByText('Cambió el catálogo. No se aplicó el borrador anterior; elige las opciones actuales.', { exact: true }).waitFor();
+    assert.equal(await spanish.locator('#commerce-config [name=quantity]').inputValue(), '1');
     await spanish.screenshot({ path: '/private/tmp/canvas-commerce-es.png', fullPage: true });
 });
