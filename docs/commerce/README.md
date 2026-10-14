@@ -8,6 +8,42 @@ configuration or disable an already active lead-delivery path.
 
 ## Review preview and contract
 
+### Fast Ordering continuation — October 14 approved scope
+
+Existing reviewed website head was `83c906c` (runtime `e0f5a74`). The previously
+tested CRM head was `84f66cb`; its temporary checkout is now absent, so earlier
+connected test evidence is historical, not a fresh assertion of current connectivity.
+Current CRM checkout/revision and server-authorized staff contact/draft-quote
+operations have been requested on CAM-291 before any backend/shared-file edits.
+Do not use purchased checkout to emulate an unpaid staff quote.
+
+Private pricing review: `node scripts/commerce/private-pricing-review.cjs`.
+This offline-only module records all 14 owner-proposed variants, yard-sign tier
+boundaries and the pasted unverified shipping schedule. It is excluded from Hosting
+and is not imported by browser, public API or CRM delivery code. Supplier costs
+remain **unknown**, never inferred from retail prices or the screenshot references.
+`reviewMargin` accepts an authoritative quote's pre-tax sales subtotal plus explicit
+material, finishing, labor/time, material-waste, packaging, freight and collection
+cost inputs. Missing values return no total/margin; an approved zero is distinct
+from unknown. Optional margin scenarios are private review, never published price
+rules or a second quote/payment/ledger service. Real private costs must not be
+committed into this public repository or included in CI logs/public responses.
+
+The four unresolved policies are configurable nulls: minimum area vs charge,
+yard-sign sale units/stakes, design-fee scope and shipping applicability/increments.
+All 14 variants remain unpublished until operational approval and backend catalog
+acceptance. Acrylic contour surcharge basis/thickness/standoff quantities, precise
+banner/mesh specification, shipping zones/mixed-cart aggregation/boundary precedence
+also need explicit values before enabling those options. No discounts were invented.
+Transfers/apparel are outside the initial sellable catalog; earlier synthetic tests
+remain regression fixtures, not approval to sell those products.
+
+Normal production deposit requirement remains **50%**. The earlier full-payment
+synthetic fixture tests are not permission to change that normal policy. Unpaid
+draft, confirmed capture, artwork approval and production eligibility stay separate.
+No invoice833 exception, historical promotion, workflow-queue activation, replay,
+customer message, live Finix activation or deployment is authorized here.
+
 Run `CRM_TEST_ROOT=/private/tmp/canvas-commerce npm run preview:commerce`, then open
 `http://127.0.0.1:3210/store` or `/store-es`. The CRM checkout must contain the
 reviewed PR #32 code and installed dependencies. The preview uses its actual HTTP
