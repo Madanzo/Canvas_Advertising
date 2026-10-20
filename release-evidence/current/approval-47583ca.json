@@ -1,0 +1,160 @@
+{
+  "root": "/private/tmp/canvas-hosting-approval-LiijUR",
+  "source": "47583ca3b248e34c40d0393a42a4db45b401436b",
+  "project": "canvas-adnvertising",
+  "site": "canvas-adnvertising",
+  "capturedAt": "2026-10-20T19:08:07.188Z",
+  "observedLiveVersion": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/61df100c11fd1d4f",
+  "exposedHistoricalVersionNotSafeForRollback": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/61df100c11fd1d4f",
+  "liveMapSha256": "7558b35a9b5c9e0251a30e94b22f1659e02dc46a465f46317e71b8e5ff9b96b0",
+  "sanitizedMapSha256": "fab822d5a0588091a835230a5e06ef33d3a93563fb63381988baa6a3425561c6",
+  "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3",
+  "omittedMetadataCount": 1878,
+  "omittedInventorySha256": "c3c102dee344eb9b88943189910209e0faa0e3100f8608b2515e8ba8d3b556db",
+  "metadataCategories": {
+    "git": 1876,
+    "other": [
+      "/.agents/AGENTS.md",
+      "/.codex/config.toml"
+    ]
+  },
+  "artifacts": [
+    {
+      "directory": "/private/tmp/canvas-hosting-approval-LiijUR/containment",
+      "package": "containment",
+      "source": "47583ca3b248e34c40d0393a42a4db45b401436b",
+      "counts": {
+        "filesBefore": 2020,
+        "filesAfter": 142,
+        "omissions": 1878,
+        "replacements": 0,
+        "unchanged": 142,
+        "additions": 0
+      },
+      "servedMapSha256": "fab822d5a0588091a835230a5e06ef33d3a93563fb63381988baa6a3425561c6",
+      "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3",
+      "metadataGuard": "PASS",
+      "status": "OFFLINE_VERIFIED_NOT_DEPLOYED",
+      "packageId": "canvas-containment-8861db9233fc1a5c468eec8c49f877accc8a48e055650eb09c533ef56205633d",
+      "identitySha256": "b986c6c9ff9f75901cf2ea168c7866c9d51be1a7335970fdedc4496da95c2056",
+      "guardSha256": "24a7b7f1031f05894c992c1a2acc04f0fc7229779b1cd65522fb7c5008b7a755",
+      "verifierSha256": "7004f5d3a94ff3dbc5bbe8974e8bb6a941832bd84b98e1778ad3ff57d79f5e28",
+      "archive": "/private/tmp/canvas-containment-47583ca.tar.gz",
+      "archiveSha256": "059c3cf7ae49124a13a8dcf5ba0160ce1a3b081630a050103085e8917d8d13c7",
+      "artifactFilesSha256": "b72f1b069cfbc0a0f508a4446d20d9a7567bb697f1a83bd8bc50177809ae0369"
+    },
+    {
+      "directory": "/private/tmp/canvas-hosting-approval-LiijUR/seo-after-containment",
+      "package": "seo-after-containment",
+      "source": "47583ca3b248e34c40d0393a42a4db45b401436b",
+      "counts": {
+        "filesBefore": 142,
+        "filesAfter": 142,
+        "omissions": 0,
+        "replacements": 4,
+        "unchanged": 138,
+        "additions": 0
+      },
+      "servedMapSha256": "dda424ddb8078ab022b2b840b8ccbd08ab2e94426742953467b107acd46b3d3a",
+      "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3",
+      "metadataGuard": "PASS",
+      "status": "OFFLINE_VERIFIED_NOT_DEPLOYED",
+      "packageId": "canvas-seo-after-containment-b99bb5d480fdaf87eea1f108314d0874b8c07f37554f79890a6be784d2bc0474",
+      "identitySha256": "59cbd23f8de9a2cdc34fab6ea192c046f6cc42994917180cf9bd6cc5270efc45",
+      "guardSha256": "24a7b7f1031f05894c992c1a2acc04f0fc7229779b1cd65522fb7c5008b7a755",
+      "verifierSha256": "7004f5d3a94ff3dbc5bbe8974e8bb6a941832bd84b98e1778ad3ff57d79f5e28",
+      "archive": "/private/tmp/canvas-seo-after-containment-47583ca.tar.gz",
+      "archiveSha256": "d99189f4182ded831a371e74ed888cb981766b65ba4fb4467f0a6b718485ae2d",
+      "artifactFilesSha256": "a3449e9fe62690cb4a5f91c9a0ba88190d8599b709996d47641e377d27e5f154"
+    },
+    {
+      "directory": "/private/tmp/canvas-hosting-approval-LiijUR/containment-preserving-fallback",
+      "package": "containment-preserving-fallback",
+      "source": "47583ca3b248e34c40d0393a42a4db45b401436b",
+      "counts": {
+        "filesBefore": 142,
+        "filesAfter": 142,
+        "omissions": 0,
+        "replacements": 4,
+        "unchanged": 138,
+        "additions": 0
+      },
+      "servedMapSha256": "fab822d5a0588091a835230a5e06ef33d3a93563fb63381988baa6a3425561c6",
+      "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3",
+      "metadataGuard": "PASS",
+      "status": "OFFLINE_VERIFIED_NOT_DEPLOYED",
+      "packageId": "canvas-containment-preserving-fallback-33dbbd61d9a38f8ea7d6d71718f1b75543023fdb20c2f8723d0f13682e1f4234",
+      "identitySha256": "33c83ebd381eff3b6683c8242e5e0ac10e15205684d834c9e3ab0ae2a4d5fa21",
+      "guardSha256": "24a7b7f1031f05894c992c1a2acc04f0fc7229779b1cd65522fb7c5008b7a755",
+      "verifierSha256": "7004f5d3a94ff3dbc5bbe8974e8bb6a941832bd84b98e1778ad3ff57d79f5e28",
+      "archive": "/private/tmp/canvas-containment-preserving-fallback-47583ca.tar.gz",
+      "archiveSha256": "7c6b0db59ce2e5d7c9bd28a7897b7ed62f021152cb2a9aba78f0e916adcf3be3",
+      "artifactFilesSha256": "229d04bf28563e80818877250af4253da48528d5e9749989e57877d1f33c0668"
+    }
+  ],
+  "qa": [
+    {
+      "directory": "/private/tmp/canvas-claims-qa-ruHGmn",
+      "renderedSource": "9e908efbd986d944f6f8fd3ba7e78d773d33c87d",
+      "cases": 24,
+      "failures": 0,
+      "pageErrors": 0,
+      "reportSha256": "8461c00c79a6fba5f622b7ab72d317f0af649ff34ba0e5326a68adf027148787"
+    },
+    {
+      "directory": "/private/tmp/canvas-claims-qa-UUJxGD",
+      "renderedSource": "47583ca3b248e34c40d0393a42a4db45b401436b",
+      "cases": 4,
+      "failures": 0,
+      "pageErrors": 0,
+      "reportSha256": "f1813e8941a62a3207fb4d69a131e22693159bf11ee3248d6bfeb73adf48e193"
+    },
+    {
+      "directory": "/private/tmp/canvas-claims-qa-OwZiri",
+      "renderedSource": "47583ca3b248e34c40d0393a42a4db45b401436b",
+      "cases": 4,
+      "failures": 0,
+      "pageErrors": 0,
+      "reportSha256": "041d01cce22fac6b90249146db00b46a663c63c802f5523f7eba911d6b6d3a3b"
+    }
+  ],
+  "qaBinding": [
+    {
+      "file": "index.html",
+      "currentRawSha256": "c83a346a783f44be292dcb0c5a14dfc3cfb902628ee1bee6dd36012ea7ab0408",
+      "bodyIdenticalToMatrix": true,
+      "acceptance": "Six-width matrix retained; body is byte-identical. Spanish printing metadata additionally checked in final-source follow-up."
+    },
+    {
+      "file": "index-es.html",
+      "currentRawSha256": "327b62cac886a7a4ddf538b581539d79c9fed7ac8613de19160828070503d0ce",
+      "bodyIdenticalToMatrix": false,
+      "acceptance": "Final source additionally tested at all six widths across the two follow-ups"
+    },
+    {
+      "file": "large-format-printing-austin.html",
+      "currentRawSha256": "d0c8f0b720e61cb10a71596de0f063d9952d6b87c8bb83a8eca3df13ce39299e",
+      "bodyIdenticalToMatrix": true,
+      "acceptance": "Six-width matrix retained; body is byte-identical. Spanish printing metadata additionally checked in final-source follow-up."
+    },
+    {
+      "file": "large-format-printing-austin-es.html",
+      "currentRawSha256": "a15daaba2a8e9e35902f70b2a5f4b4bfaec262cd50c021864019011014285cbf",
+      "bodyIdenticalToMatrix": true,
+      "acceptance": "Six-width matrix retained; body is byte-identical. Spanish printing metadata additionally checked in final-source follow-up."
+    }
+  ],
+  "ci": {
+    "source": "47583ca3b248e34c40d0393a42a4db45b401436b",
+    "url": "https://github.com/Madanzo/Canvas_Advertising/actions/runs/39480742076",
+    "status": "success",
+    "tests": 47,
+    "sourceTests": 16,
+    "guardTests": 31
+  },
+  "cacheAssessmentPath": "/private/tmp/canvas-cache-scope-F5GAIx/assessment.json",
+  "cacheAssessmentSha256": "ad1b8d239418e7aa84596c098ab11cca30f465f4d4332e6f043f236e5846d7c3",
+  "originalFilesUnchanged": true,
+  "commerceHead": "92d6f11ffca644a152e95434054ee8a0f211c9c3",
+  "productionActions": "NONE: no version creation, uploads, deploy, rollback, purge/channel mutation, credential rotation or permanent deletion"
+}
