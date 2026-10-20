@@ -1,0 +1,19 @@
+name: Website print buyer journey
+on:
+  push:
+    branches: ['codex/canvas-print-buyer-journey']
+  pull_request:
+    paths: ['large-format-printing*.html', 'tests/print-buyer-journey.test.cjs', '.github/workflows/print-buyer-ci.yml']
+permissions:
+  contents: read
+jobs:
+  affected-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --test tests/print-buyer-journey.test.cjs tests/hosting-artifact-guard.test.cjs

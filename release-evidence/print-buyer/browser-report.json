@@ -1,0 +1,212 @@
+{
+  "at": "2026-10-20T20:33:53.721Z",
+  "cases": 12,
+  "rows": [
+    {
+      "width": 320,
+      "language": "en",
+      "overflow": false,
+      "heroAction": {
+        "text": "Request a print quote",
+        "top": 602.359375,
+        "bottom": 663.15625,
+        "height": 60.796875,
+        "visible": true
+      },
+      "h1": 1,
+      "contactCount": 3,
+      "canonical": "https://canvas-advertising.com/large-format-printing-austin",
+      "fragments": true,
+      "pageErrors": []
+    },
+    {
+      "width": 320,
+      "language": "es",
+      "overflow": false,
+      "heroAction": {
+        "text": "Solicitar cotización de impresión",
+        "top": 592.84375,
+        "bottom": 653.640625,
+        "height": 60.796875,
+        "visible": true
+      },
+      "h1": 1,
+      "contactCount": 3,
+      "canonical": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "fragments": true,
+      "pageErrors": []
+    },
+    {
+      "width": 375,
+      "language": "en",
+      "overflow": false,
+      "heroAction": {
+        "text": "Request a print quote",
+        "top": 602.984375,
+        "bottom": 663.78125,
+        "height": 60.796875,
+        "visible": true
+      },
+      "h1": 1,
+      "contactCount": 3,
+      "canonical": "https://canvas-advertising.com/large-format-printing-austin",
+      "fragments": true,
+      "pageErrors": []
+    },
+    {
+      "width": 375,
+      "language": "es",
+      "overflow": false,
+      "heroAction": {
+        "text": "Solicitar cotización de impresión",
+        "top": 565.578125,
+        "bottom": 626.375,
+        "height": 60.796875,
+        "visible": true
+      },
+      "h1": 1,
+      "contactCount": 3,
+      "canonical": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "fragments": true,
+      "pageErrors": []
+    },
+    {
+      "width": 414,
+      "language": "en",
+      "overflow": false,
+      "heroAction": {
+        "text": "Request a print quote",
+        "top": 622.359375,
+        "bottom": 683.15625,
+        "height": 60.796875,
+        "visible": true
+      },
+      "h1": 1,
+      "contactCount": 3,
+      "canonical": "https://canvas-advertising.com/large-format-printing-austin",
+      "fragments": true,
+      "pageErrors": []
+    },
+    {
+      "width": 414,
+      "language": "es",
+      "overflow": false,
+      "heroAction": {
+        "text": "Solicitar cotización de impresión",
+        "top": 581.078125,
+        "bottom": 641.875,
+        "height": 60.796875,
+        "visible": true
+      },
+      "h1": 1,
+      "contactCount": 3,
+      "canonical": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "fragments": true,
+      "pageErrors": []
+    },
+    {
+      "width": 768,
+      "language": "en",
+      "overflow": false,
+      "heroAction": {
+        "text": "Request a print quote",
+        "top": 526.296875,
+        "bottom": 587.09375,
+        "height": 60.796875,
+        "visible": true
+      },
+      "h1": 1,
+      "contactCount": 3,
+      "canonical": "https://canvas-advertising.com/large-format-printing-austin",
+      "fragments": true,
+      "pageErrors": []
+    },
+    {
+      "width": 768,
+      "language": "es",
+      "overflow": false,
+      "heroAction": {
+        "text": "Solicitar cotización de impresión",
+        "top": 482.984375,
+        "bottom": 543.78125,
+        "height": 60.796875,
+        "visible": true
+      },
+      "h1": 1,
+      "contactCount": 3,
+      "canonical": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "fragments": true,
+      "pageErrors": []
+    },
+    {
+      "width": 1024,
+      "language": "en",
+      "overflow": false,
+      "heroAction": {
+        "text": "Request a print quote",
+        "top": 564.171875,
+        "bottom": 628.96875,
+        "height": 64.796875,
+        "visible": true
+      },
+      "h1": 1,
+      "contactCount": 3,
+      "canonical": "https://canvas-advertising.com/large-format-printing-austin",
+      "fragments": true,
+      "pageErrors": []
+    },
+    {
+      "width": 1024,
+      "language": "es",
+      "overflow": false,
+      "heroAction": {
+        "text": "Solicitar cotización de impresión",
+        "top": 517.11767578125,
+        "bottom": 583.21044921875,
+        "height": 66.0927734375,
+        "visible": true
+      },
+      "h1": 1,
+      "contactCount": 3,
+      "canonical": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "fragments": true,
+      "pageErrors": []
+    },
+    {
+      "width": 1440,
+      "language": "en",
+      "overflow": false,
+      "heroAction": {
+        "text": "Request a print quote",
+        "top": 582.40625,
+        "bottom": 647.203125,
+        "height": 64.796875,
+        "visible": true
+      },
+      "h1": 1,
+      "contactCount": 3,
+      "canonical": "https://canvas-advertising.com/large-format-printing-austin",
+      "fragments": true,
+      "pageErrors": []
+    },
+    {
+      "width": 1440,
+      "language": "es",
+      "overflow": false,
+      "heroAction": {
+        "text": "Solicitar cotización de impresión",
+        "top": 535.35205078125,
+        "bottom": 601.44482421875,
+        "height": 66.0927734375,
+        "visible": true
+      },
+      "h1": 1,
+      "contactCount": 3,
+      "canonical": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "fragments": true,
+      "pageErrors": []
+    }
+  ],
+  "assetErrors": [],
+  "policy": "Local preview, read-only GET, form/backend requests blocked; quote anchor and menu activated, contact focused but not called"
+}

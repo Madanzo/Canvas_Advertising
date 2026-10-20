@@ -19,6 +19,9 @@ permissions:
   contents: read
 jobs:
   source-checks:
+    # This suite binds the immutable first-release gzip artifacts, not successor copy.
+    # The successor has dedicated baseline-preservation and FAQ/contact checks.
+    if: github.head_ref != 'codex/canvas-print-buyer-journey'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

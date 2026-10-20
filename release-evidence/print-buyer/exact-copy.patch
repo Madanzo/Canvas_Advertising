@@ -1,0 +1,714 @@
+diff --git a/large-format-printing-austin-es.html b/large-format-printing-austin-es.html
+index 67402f5..046f5bb 100644
+--- a/large-format-printing-austin-es.html
++++ b/large-format-printing-austin-es.html
+@@ -18,15 +18,13 @@
+         gtag('js', new Date());
+         gtag('config', 'G-98HWWM4BDW');
+     </script>
+-    <meta name="description"
+-        content="Impresión de gran formato en Austin, TX. Impresión mayorista para carteles, murales, gráficos de ventanas y rotulación. Llama al (512) 945-9783 para cotizar.">
++    <meta name="description" content="Impresión, laminado y corte de gráficos en Austin. Envía medidas, cantidad y estado del diseño para confirmar tu cotización. Llama al (512) 945-9783 para empezar.">
+     <meta name="keywords"
+         content="large format printing Austin, wide format printing TX, custom vinyl printing Austin, banner printing Austin, wall murals, window graphics, wholesale print partner">
+ 
+         <!-- Open Graph / Facebook -->
+-    <meta property="og:title" content="Large Format Printing Austin | Canvas Advertising">
+-    <meta property="og:description"
+-        content="Impresión de gran formato en Austin, TX. Impresión mayorista para carteles, murales, gráficos de ventanas y rotulación. Llama al (512) 945-9783 para cotizar.">
++    <meta property="og:title" content="Impresión de Gran Formato Austin | Canvas Advertising">
++    <meta property="og:description" content="Impresión, laminado y corte de gráficos en Austin. Envía medidas, cantidad y estado del diseño para confirmar tu cotización. Llama al (512) 945-9783 para empezar.">
+     <meta property="og:type" content="website">
+     <meta property="og:url" content="https://canvas-advertising.com/large-format-printing-austin">
+     <meta property="og:image" content="https://canvas-advertising.com/images/og-share.jpg">
+@@ -37,15 +35,15 @@
+ 
+     <!-- Twitter Card -->
+     <meta name="twitter:card" content="summary_large_image">
+-    <meta name="twitter:title" content="Large Format Printing Austin | Canvas Advertising">
+-    <meta name="twitter:description" content="Impresión de gran formato en Austin, TX. Impresión mayorista para carteles, murales, gráficos de ventanas y rotulación. Llama al (512) 945-9783 para cotizar.">
++    <meta name="twitter:title" content="Impresión de Gran Formato Austin | Canvas Advertising">
++    <meta name="twitter:description" content="Impresión, laminado y corte de gráficos en Austin. Envía medidas, cantidad y estado del diseño para confirmar tu cotización. Llama al (512) 945-9783 para empezar.">
+     <meta name="twitter:image" content="https://canvas-advertising.com/images/og-share.jpg">
+ 
+     <!-- Canonical URL -->
+ 
+     <link rel="icon" type="image/png" href="favicon.png">
+ 
+-    <title>Large Format Printing Austin | Wide Format | Canvas Advertising</title>
++    <title>Impresión de Gran Formato Austin | Canvas Advertising</title>
+ 
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+@@ -58,71 +56,71 @@
+ 
+     <!-- Service Schema JSON-LD -->
+     <script type="application/ld+json">
++{
++  "@context": "https://schema.org",
++  "@graph": [
+     {
+-      "@context": "https://schema.org",
+-      "@graph": [
++      "@type": "Service",
++      "@id": "https://canvas-advertising.com/large-format-printing-austin#service",
++      "serviceType": "Large Format Printing",
++      "provider": {
++        "@type": "LocalBusiness",
++        "name": "Canvas Advertising LLC",
++        "address": {
++          "@type": "PostalAddress",
++          "streetAddress": "10601 N Lamar Blvd",
++          "addressLocality": "Austin",
++          "addressRegion": "TX",
++          "postalCode": "78753",
++          "addressCountry": "US"
++        }
++      },
++      "areaServed": {
++        "@type": "AdministrativeArea",
++        "name": "Austin"
++      },
++      "description": "Premium large format printing in Austin. Wide-format printing on HP Latex 800W with white ink. Custom banners, wall murals, window graphics, and vehicle wrap printing."
++    },
++    {
++      "@type": "FAQPage",
++      "@id": "https://canvas-advertising.com/large-format-printing-austin-es#faq",
++      "mainEntity": [
+         {
+-          "@type": "Service",
+-          "@id": "https://canvas-advertising.com/large-format-printing-austin#service",
+-          "serviceType": "Large Format Printing",
+-          "provider": {
+-            "@type": "LocalBusiness",
+-            "name": "Canvas Advertising LLC",
+-            "address": {
+-              "@type": "PostalAddress",
+-              "streetAddress": "10601 N Lamar Blvd",
+-              "addressLocality": "Austin",
+-              "addressRegion": "TX",
+-              "postalCode": "78753",
+-              "addressCountry": "US"
+-            }
+-          },
+-          "areaServed": {
+-            "@type": "AdministrativeArea",
+-            "name": "Austin"
+-          },
+-          "description": "Premium large format printing in Austin. Wide-format printing on HP Latex 800W with white ink. Custom banners, wall murals, window graphics, and vehicle wrap printing."
++          "@type": "Question",
++          "name": "¿Qué información necesito para elegir el material?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Indica el uso, la superficie, las medidas y las condiciones de instalación. Canvas revisará el material y los acabados para ese proyecto antes de confirmar la cotización. No todos los gráficos requieren la misma combinación de película y laminado."
++          }
+         },
+         {
+-          "@type": "FAQPage",
+-          "@id": "https://canvas-advertising.com/partner#faq",
+-          "mainEntity": [
+-            {
+-              "@type": "Question",
+-              "name": "¿Cómo se confirma el plazo de impresión?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "El plazo de producción y la fecha de entrega se confirman en la cotización después de revisar material, cantidad, acabados y archivo aprobado. Confirma la disponibilidad antes de programar la instalación."
+-              }
+-            },
+-            {
+-              "@type": "Question",
+-              "name": "Do you offer white-label blind shipping?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "Yes. We understand the importance of protecting your client relationships. We can ship your printed graphics directly to your installation facility or your client anywhere in the United States with blind, white-label packaging."
+-              }
+-            },
+-            {
+-              "@type": "Question",
+-              "name": "What vinyl brands do you print on?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "We utilize industry-leading cast vinyls optimized for our HP Latex 800W, including 3M, Avery Dennison, and Orafol. We match the right film and laminate combination to the specific requirements of your wrap job."
+-              }
+-            },
+-            {
+-              "@type": "Question",
+-              "name": "¿Cómo se confirman los mínimos del pedido?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "Los mínimos y el precio dependen del producto, material, dimensiones y cantidad. Solicita una cotización para confirmar los requisitos de tu proyecto."
+-              }
+-            }
+-          ]
++          "@type": "Question",
++          "name": "¿Puedo cotizar varias piezas o diseños?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Sí. Separa las cantidades por tamaño y diseño e identifica cada vehículo, ubicación o panel. Confirma qué piezas llevan laminado o corte de contorno para que el alcance quede claro antes de producir."
++          }
++        },
++        {
++          "@type": "Question",
++          "name": "¿Cómo se confirman los plazos y la entrega?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Los plazos, la recogida y las opciones de envío se confirman en la cotización después de revisar especificaciones y diseño. Incluye la fecha que necesitas y el código postal; confirma disponibilidad antes de programar la instalación."
++          }
++        },
++        {
++          "@type": "Question",
++          "name": "¿Qué pasa si mi archivo aún no está listo?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Indica qué tienes y qué falta. Usa la lista de preparación para organizar medidas, paneles y versiones; confirma con Canvas la revisión del diseño y el método de transferencia. No envíes información confidencial en una solicitud inicial."
++          }
+         }
+       ]
+     }
++  ]
++}
+     </script>
+ </head>
+ 
+@@ -186,18 +184,24 @@
+         <div class="container">
+             <div class="partner-hero__content" data-reveal="">
+                 <p class="section-label" style="color: var(--accent);">Producción en Gran Formato</p>
+-                <h1 class="partner-hero__title">IMPRESIÓN DE<br/><span class="text-accent">GRAN FORMATO AUSTIN.</span></h1>
+-                <p class="partner-hero__subtitle">Banners, murales, gráficos para ventanas e impresiones de alta calidad. Producido en nuestra HP Latex 800W con tinta blanca. Cada proyecto incluye **diseño profesional GRATIS**.</p>
++                <h1 class="partner-hero__title">IMPRESIÓN, LAMINADO<br/><span class="text-accent">Y CORTE DE GRÁFICOS.</span></h1>
++                <p class="partner-hero__subtitle">Gráficos para tu próximo proyecto en Austin. Envía medidas finales, cantidad, uso y estado del diseño. Confirmamos materiales, acabados, plazos y forma de entrega en tu cotización.</p>
+                 <div class="partner-hero__cta">
+-                    <button class="btn btn--primary btn--large btn--pulse" data-cal-config='{"layout":"month_view"}' data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting" data-cal-namespace="canvas-advertising-strategy-meeting">
+-                        Obtener Cotización Gratis
+-                    </button>
++                    <a class="btn btn--primary btn--large" href="#partner-contact">Solicitar cotización de impresión</a>
++                    <a class="btn btn--secondary btn--large" href="tel:+15129459783">Llamar en español</a>
+                     <a class="btn btn--secondary btn--large" href="#types">Explorar Impresiones</a>
+                 </div>
+             </div>
+         </div>
+     </section>
+-<section class="section"><div class="container"><h2>Qué confirmar antes de imprimir</h2><p>Indica el uso final, medidas terminadas, cantidad, superficie de aplicación y si necesitas laminado o corte de contorno. Confirma quién instala y si necesitas recoger en Austin o enviar el pedido. El material y acabado deben definirse antes de aprobar la cotización.</p><p><a href="lista-preparacion-archivos-wrap">Revisa la lista de preparación de archivos</a></p></div></section>
++<section class="section" id="quote-requirements"><div class="container">
++<h2>¿Qué necesitas para cotizar la impresión?</h2>
++<p>Organiza estos datos antes de contactar a Canvas. No necesitas decidir el material por tu cuenta: explica dónde se usará el gráfico y podemos revisar las opciones para ese proyecto.</p>
++<ul><li>Producto, medidas finales y cantidad por tamaño.</li><li>Uso interior o exterior y superficie de aplicación.</li><li>Material preferido y si necesitas laminado o corte de contorno.</li><li>Estado del diseño: listo, por revisar o por desarrollar.</li><li>Fecha que necesitas y quién realizará la instalación.</li><li>Recogida en Austin o código postal para revisar opciones de entrega.</li></ul>
++<p>Si hay varias piezas, identifica cada vehículo, ubicación o panel y la versión del diseño. Antes de enviar archivos pesados, confirma con Canvas el método de transferencia.</p>
++<p><a href="lista-preparacion-archivos-wrap">Revisa la lista de preparación de archivos</a> · <a href="partner-es">¿Tienes un taller? Consulta producción de apoyo</a></p>
++<div class="partner-hero__cta"><a class="btn btn--primary" href="#partner-contact">Preparar mi solicitud</a><a class="btn btn--secondary" href="mailto:sales@canvas-advertising.com">Enviar especificaciones por correo</a></div>
++</div></section>
+ 
+ 
+     <section class="site-flow-band" aria-label="Proceso de produccion de Canvas">
+@@ -205,14 +209,14 @@
+             <div class="site-flow-band__header">
+                 <p class="section-label">Proceso Simple</p>
+                 <h2>DE ARCHIVO A VINIL TERMINADO</h2>
+-                <p>Imprimimos, cortamos, laminamos, empacamos y entregamos desde Austin. Puede recoger localmente, pedir entrega local o recibir su orden por envio en Estados Unidos.</p>
++                <p>Impresión, laminado y corte en Austin. Confirma en tu cotización los materiales, acabados, plazos y opciones de entrega para tu proyecto.</p>
+             </div>
+             <div class="site-flow-band__chips" aria-label="Capacidades principales">
+                 <span>HP Latex 800W</span>
+                 <span>Corte Graphtec</span>
+                 <span>Laminado profesional</span>
+-                <span>Entrega local Austin</span>
+-                <span>Envio en EE. UU.</span>
++                <span>Producción en Austin</span>
++                <span>Entrega por confirmar</span>
+             </div>
+             <div class="site-flow-band__grid">
+                 <article>
+@@ -228,7 +232,7 @@
+                 <article>
+                     <span>03</span>
+                     <h3>Listo para instalar o entregar</h3>
+-                    <p>Empacamos por vehiculo, ubicacion o pieza. Ofrecemos recogida en Austin, entrega local y envio protegido a cualquier parte de Estados Unidos.</p>
++                    <p>Identifica cada vehículo, ubicación o pieza. Confirma la recogida o envío y sus cargos antes de aprobar la cotización.</p>
+                 </article>
+             </div>
+         </div>
+@@ -239,8 +243,8 @@
+         <div class="container">
+             <div class="section-header" data-reveal>
+                 <p class="section-label">Why Partner With Us</p>
+-                <h2 class="section-title">BUILT FOR WRAP SHOPS</h2>
+-                <p class="section-subtitle">Everything you need from a production partner — nothing you don't</p>
++                <h2 class="section-title">IMPRESIÓN SEGÚN TU PROYECTO</h2>
++                <p class="section-subtitle">Revisa especificaciones, acabados y entrega antes de producir.</p>
+             </div>
+ 
+             <div class="why-canvas__grid">
+@@ -256,66 +260,41 @@
+                 </div>
+                 <div class="why-item" data-reveal>
+                     <div class="why-item__icon">🏷️</div>
+-                    <h3 class="why-item__title">White-Label Ready</h3>
+-                    <p class="why-item__desc">Your brand, our production. We never contact your clients or add our branding.</p>
++                    <h3 class="why-item__title">Acabados por proyecto</h3><p class="why-item__desc">Confirma qué piezas requieren laminado y cuáles necesitan corte de contorno.</p>
+                 </div>
+                 <div class="why-item" data-reveal>
+                     <div class="why-item__icon">💰</div>
+-                    <h3 class="why-item__title">Wholesale Pricing</h3>
+-                    <p class="why-item__desc">Competitive rates for repeat partners. The more you print, the more you save.</p>
++                    <h3 class="why-item__title">Cotización según especificaciones</h3><p class="why-item__desc">Material, medidas, cantidad y acabados definen el alcance que debemos revisar.</p>
+                 </div>
+                 <div class="why-item" data-reveal>
+                     <div class="why-item__icon">🚚</div>
+-                    <h3 class="why-item__title">Ship Anywhere in the US</h3>
+-                    <p class="why-item__desc">Pick up at our Austin shop or we'll ship your order anywhere in the United States.</p>
++                    <h3 class="why-item__title">Confirma la entrega</h3><p class="why-item__desc">Indica recogida en Austin o código postal para confirmar opciones y cargos en tu cotización.</p>
+                 </div>
+                 <div class="why-item" data-reveal>
+                     <div class="why-item__icon">🇲🇽</div>
+-                    <h3 class="why-item__title">Bilingual Support</h3>
+-                    <p class="why-item__desc">Hablamos Español. Communicate in the language you're most comfortable with.</p>
++                    <h3 class="why-item__title">Atención bilingüe</h3>
++                    <p class="why-item__desc">Hablamos español e inglés. Comparte los detalles del proyecto en el idioma que prefieras.</p>
+                 </div>
+             </div>
+         </div>
+     </section>
+ 
+     <!-- ===== FAQ Section ===== -->
+-    <section class="faq section--dark">
+-        <div class="section__grain"></div>
+-        <div class="container">
+-            <div class="section-header section-header--light" data-reveal>
+-                <p class="section-label">Common Questions</p>
+-                <h2 class="section-title">WHOLESALE PRINTING FAQS</h2>
+-                <p class="section-subtitle">Everything you need to know about partnering with Canvas Advertising for your wrap production.</p>
+-            </div>
+-
+-            <div class="faq__list" data-reveal>
+-                <div class="faq__item">
+-                    <h3 class="faq__question">¿Cómo se confirma el plazo de impresión?</h3>
+-                    <p class="faq__answer">El plazo de producción y la fecha de entrega se confirman en la cotización después de revisar material, cantidad, acabados y archivo aprobado. Confirma la disponibilidad antes de programar la instalación.</p>
+-                </div>
+-                <div class="faq__item">
+-                    <h3 class="faq__question">Do you offer white-label blind shipping?</h3>
+-                    <p class="faq__answer">Yes. We understand the importance of protecting your client relationships. We can ship your printed graphics directly to your installation facility or your client anywhere in the United States with blind, white-label packaging.</p>
+-                </div>
+-                <div class="faq__item">
+-                    <h3 class="faq__question">What vinyl brands do you print on?</h3>
+-                    <p class="faq__answer">We utilize industry-leading cast vinyls optimized for our HP Latex 800W, including 3M, Avery Dennison, and Orafol. We match the right film and laminate combination to the specific requirements of your wrap job.</p>
+-                </div>
+-                <div class="faq__item">
+-                    <h3 class="faq__question">¿Cómo se confirman los mínimos del pedido?</h3>
+-                    <p class="faq__answer">Los mínimos y el precio dependen del producto, material, dimensiones y cantidad. Solicita una cotización para confirmar los requisitos de tu proyecto.</p>
+-                </div>
+-            </div>
+-        </div>
+-    </section>
++    <section class="faq section--dark" id="faq"><div class="section__grain"></div><div class="container">
++<div class="section-header section-header--light" data-reveal><p class="section-label">Antes de imprimir</p><h2 class="section-title">PREGUNTAS SOBRE TU IMPRESIÓN</h2><p class="section-subtitle">Especificaciones claras antes de confirmar la producción.</p></div>
++<div class="faq__list" data-reveal><div class="faq__item"><h3 class="faq__question">¿Qué información necesito para elegir el material?</h3><p class="faq__answer">Indica el uso, la superficie, las medidas y las condiciones de instalación. Canvas revisará el material y los acabados para ese proyecto antes de confirmar la cotización. No todos los gráficos requieren la misma combinación de película y laminado.</p></div>
++<div class="faq__item"><h3 class="faq__question">¿Puedo cotizar varias piezas o diseños?</h3><p class="faq__answer">Sí. Separa las cantidades por tamaño y diseño e identifica cada vehículo, ubicación o panel. Confirma qué piezas llevan laminado o corte de contorno para que el alcance quede claro antes de producir.</p></div>
++<div class="faq__item"><h3 class="faq__question">¿Cómo se confirman los plazos y la entrega?</h3><p class="faq__answer">Los plazos, la recogida y las opciones de envío se confirman en la cotización después de revisar especificaciones y diseño. Incluye la fecha que necesitas y el código postal; confirma disponibilidad antes de programar la instalación.</p></div>
++<div class="faq__item"><h3 class="faq__question">¿Qué pasa si mi archivo aún no está listo?</h3><p class="faq__answer">Indica qué tienes y qué falta. Usa la lista de preparación para organizar medidas, paneles y versiones; confirma con Canvas la revisión del diseño y el método de transferencia. No envíes información confidencial en una solicitud inicial.</p></div></div></div></section>
+ 
+     <!-- ===== Partner CTA / Form ===== -->
+     <section class="cta section--accent" id="partner-contact">
+         <div class="container">
+             <div class="cta__grid">
+                 <div class="cta__content" data-reveal>
+-                    <h2 class="cta__title">READY TO<br>PARTNER UP?</h2>
+-                    <p class="cta__subtitle">Let's discuss how we can support your wrap business</p>
++                    <h2 class="cta__title">HABLEMOS DE<br>TU IMPRESIÓN</h2>
++                    <p class="cta__subtitle">Comparte las especificaciones de arriba. Confirmamos el alcance y los siguientes pasos contigo; esta solicitud no es una compra.</p>
++<div class="partner-hero__cta"><a class="btn btn--white" href="tel:+15129459783">Llamar en español</a><a class="btn btn--white" href="mailto:sales@canvas-advertising.com">Enviar especificaciones</a></div>
+ 
+                     <button class="cta__phone"
+                         data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting"
+@@ -358,14 +337,14 @@
+                 </div>
+ 
+                 <div class="cta__form" data-reveal>
+-                    <h3 class="cta__form-title">Partner Inquiry</h3>
++                    <h3 class="cta__form-title">Solicitud de impresión</h3>
+                     <form id="quoteForm" class="form">
+                         <div class="form__group">
+                             <label for="name" class="form__label">Tu Nombre *</label>
+                             <input type="text" id="name" name="name" class="form__input" required>
+                         </div>
+                         <div class="form__group">
+-                            <label for="company" class="form__label">Company Name</label>
++                            <label for="company" class="form__label">Nombre de la empresa</label>
+                             <input type="text" id="company" name="company" class="form__input">
+                         </div>
+                         <div class="form__group">
+@@ -373,25 +352,25 @@
+                             <input type="tel" id="phone" name="phone" class="form__input" required>
+                         </div>
+                         <div class="form__group">
+-                            <label for="email" class="form__label">Email</label>
++                            <label for="email" class="form__label">Correo electrónico</label>
+                             <input type="email" id="email" name="email" class="form__input">
+                         </div>
+                         <div class="form__group">
+-                            <label for="service" class="form__label">What Do You Need?</label>
++                            <label for="service" class="form__label">¿Qué necesitas?</label>
+                             <select id="service" name="service" class="form__select">
+                                 <option value="">Seleccionar...</option>
+-                                <option value="print-partner">Print Partner / Wholesale Printing</option>
+-                                <option value="wrap-production">Wrap Production Only</option>
+-                                <option value="cutting-only">Cutting & Lamination Only</option>
+-                                <option value="full-service">Full Service (Design + Print + Cut)</option>
++                                <option value="print-partner">Producción para talleres / Impresión al por mayor</option>
++                                <option value="wrap-production">Solo producción de gráficos para rotulación</option>
++                                <option value="cutting-only">Solo corte y laminado</option>
++                                <option value="full-service">Servicio completo (diseño, impresión y corte)</option>
+                                 <option value="other">Otro</option>
+                             </select>
+                         </div>
+                         <div class="form__group">
+-                            <label for="message" class="form__label">Tell Us About Your Shop</label>
+-                            <textarea id="message" name="message" class="form__textarea" rows="4" placeholder="How many wraps do you do per month? What services are you looking for?"></textarea>
++                            <label for="message" class="form__label">Especificaciones de tu proyecto</label>
++                            <textarea id="message" name="message" class="form__textarea" rows="4" placeholder="Medidas, cantidad por diseño, uso, superficie, acabados, estado del archivo, fecha y código postal."></textarea>
+                         </div>
+-                        <button type="submit" class="btn btn--white btn--full">Send Partner Inquiry</button>
++                        <button type="submit" class="btn btn--white btn--full">Enviar solicitud de impresión</button>
+                     </form>
+                     <div id="formSuccess" class="form__success" style="display: none;">
+                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+diff --git a/large-format-printing-austin.html b/large-format-printing-austin.html
+index dfe9589..fc8cfbe 100644
+--- a/large-format-printing-austin.html
++++ b/large-format-printing-austin.html
+@@ -18,15 +18,13 @@
+         gtag('js', new Date());
+         gtag('config', 'G-98HWWM4BDW');
+     </script>
+-    <meta name="description"
+-        content="Vinyl and large-format printing in Austin with HP Latex production, contour cutting, lamination, decals, banners, murals, window graphics, wrap panels, pickup, and US shipping.">
++    <meta name="description" content="Vinyl printing, lamination and contour cutting in Austin. Send dimensions, quantity and artwork status for a project quote. Call (512) 434-3793 to discuss your job.">
+     <meta name="keywords"
+         content="vinyl printing Austin, large format vinyl printing, contour cut decals Austin, laminated vinyl graphics, banner printing Austin, wall murals, window graphics, wrap panels shipped">
+ 
+         <!-- Open Graph / Facebook -->
+     <meta property="og:title" content="Vinyl & Large-Format Printing Austin | Canvas Advertising">
+-    <meta property="og:description"
+-        content="HP Latex vinyl printing, lamination, contour cutting, decals, banners, murals, window graphics, and wrap panels with Austin pickup and US shipping.">
++    <meta property="og:description" content="Vinyl printing, lamination and contour cutting in Austin. Send dimensions, quantity and artwork status for a project quote. Call (512) 434-3793 to discuss your job.">
+     <meta property="og:type" content="website">
+     <meta property="og:url" content="https://canvas-advertising.com/large-format-printing-austin">
+     <meta property="og:image" content="https://canvas-advertising.com/images/og-share.jpg">
+@@ -38,7 +36,7 @@
+     <!-- Twitter Card -->
+     <meta name="twitter:card" content="summary_large_image">
+     <meta name="twitter:title" content="Vinyl & Large-Format Printing Austin | Canvas Advertising">
+-    <meta name="twitter:description" content="Vinyl printing, contour cutting, lamination, banners, murals, decals, window graphics, and wrap panels from Austin.">
++    <meta name="twitter:description" content="Vinyl printing, lamination and contour cutting in Austin. Send dimensions, quantity and artwork status for a project quote. Call (512) 434-3793 to discuss your job.">
+     <meta name="twitter:image" content="https://canvas-advertising.com/images/og-share.jpg">
+ 
+     <!-- Canonical URL -->
+@@ -58,77 +56,77 @@
+ 
+     <!-- Service Schema JSON-LD -->
+     <script type="application/ld+json">
++{
++  "@context": "https://schema.org",
++  "@graph": [
+     {
+-      "@context": "https://schema.org",
+-      "@graph": [
++      "@type": "Service",
++      "@id": "https://canvas-advertising.com/large-format-printing-austin#service",
++      "serviceType": "Vinyl printing, large-format graphics, contour cutting, lamination, decals, banners, murals, window graphics, and wrap panels",
++      "provider": {
++        "@type": "LocalBusiness",
++        "name": "Canvas Advertising LLC",
++        "address": {
++          "@type": "PostalAddress",
++          "streetAddress": "10601 N Lamar Blvd",
++          "addressLocality": "Austin",
++          "addressRegion": "TX",
++          "postalCode": "78753",
++          "addressCountry": "US"
++        }
++      },
++      "areaServed": [
+         {
+-          "@type": "Service",
+-          "@id": "https://canvas-advertising.com/large-format-printing-austin#service",
+-          "serviceType": "Vinyl printing, large-format graphics, contour cutting, lamination, decals, banners, murals, window graphics, and wrap panels",
+-          "provider": {
+-            "@type": "LocalBusiness",
+-            "name": "Canvas Advertising LLC",
+-            "address": {
+-              "@type": "PostalAddress",
+-              "streetAddress": "10601 N Lamar Blvd",
+-              "addressLocality": "Austin",
+-              "addressRegion": "TX",
+-              "postalCode": "78753",
+-              "addressCountry": "US"
+-            }
+-          },
+-          "areaServed": [
+-            {
+-              "@type": "City",
+-              "name": "Austin"
+-            },
+-            {
+-              "@type": "Country",
+-              "name": "United States"
+-            }
+-          ],
+-          "description": "Vinyl and large-format printing in Austin on HP Latex 800W with white ink, professional lamination, Graphtec contour cutting, decals, banners, wall murals, window graphics, replacement wrap panels, Austin pickup, and nationwide shipping."
++          "@type": "City",
++          "name": "Austin"
+         },
+         {
+-          "@type": "FAQPage",
+-          "@id": "https://canvas-advertising.com/partner#faq",
+-          "mainEntity": [
+-            {
+-              "@type": "Question",
+-              "name": "How is production timing confirmed?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "Production timing and delivery dates are confirmed in your project quote after material, quantity, finishing, and approved artwork are reviewed. Confirm availability before scheduling installation."
+-              }
+-            },
+-            {
+-              "@type": "Question",
+-              "name": "Do you offer white-label blind shipping across the United States?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "Yes. We understand the importance of protecting your client relationships. We can ship your printed graphics directly to your installation facility or your client anywhere in the United States with blind, white-label packaging."
+-              }
+-            },
+-            {
+-              "@type": "Question",
+-              "name": "What vinyl brands do you print on?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "We utilize industry-leading cast vinyls optimized for our HP Latex 800W, including 3M, Avery Dennison, and Orafol. We match the right film and laminate combination to the specific requirements of your wrap job."
+-              }
+-            },
+-            {
+-              "@type": "Question",
+-              "name": "Is there a minimum order quantity (MOQ)?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "Minimums and pricing depend on the product, material, dimensions, and quantity. Request a quote to confirm the requirements for your project."
+-              }
+-            }
+-          ]
++          "@type": "Country",
++          "name": "United States"
++        }
++      ],
++      "description": "Vinyl printing, lamination and contour cutting in Austin. Materials, finishing, timing and fulfillment are confirmed in the project quote."
++    },
++    {
++      "@type": "FAQPage",
++      "@id": "https://canvas-advertising.com/large-format-printing-austin#faq",
++      "mainEntity": [
++        {
++          "@type": "Question",
++          "name": "What information helps choose the right material?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Share the intended use, application surface, dimensions and installation conditions. Canvas will review the material and finishing for that project before confirming the quote. Not every graphic needs the same film and laminate combination."
++          }
++        },
++        {
++          "@type": "Question",
++          "name": "Can I request several pieces or designs in one quote?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Yes. Separate quantities by size and design, and identify each vehicle, location or panel. Confirm which pieces need lamination or contour cutting so the production scope is clear before work starts."
++          }
++        },
++        {
++          "@type": "Question",
++          "name": "How are timing and fulfillment confirmed?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Production timing, pickup and shipping options are confirmed in the quote after specifications and artwork are reviewed. Include your required date and destination ZIP code; confirm availability before scheduling installation."
++          }
++        },
++        {
++          "@type": "Question",
++          "name": "What if my artwork is not ready yet?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Tell us what you have and what still needs work. Use the preparation checklist to organize dimensions, panels and versions; confirm artwork review and the file-transfer method with Canvas. Do not include confidential information in an initial inquiry."
++          }
+         }
+       ]
+     }
++  ]
++}
+     </script>
+ </head>
+ 
+@@ -192,18 +190,24 @@
+         <div class="container">
+             <div class="partner-hero__content" data-reveal="">
+                 <p class="section-label" style="color: var(--accent);">Vinyl Print Production</p>
+-                <h1 class="partner-hero__title">VINYL PRINTING<br/><span class="text-accent">CUT & LAMINATED.</span></h1>
+-                <p class="partner-hero__subtitle">Banners, wall murals, window graphics, contour-cut decals, storefront vinyl, and replacement wrap panels produced on our HP Latex 800W with lamination, cutting, Austin pickup, and US shipping.</p>
++                <h1 class="partner-hero__title">PRINT, LAMINATE<br/><span class="text-accent">AND CONTOUR CUT.</span></h1>
++                <p class="partner-hero__subtitle">Graphics for your next project in Austin. Send finished dimensions, quantity, intended use and artwork status. We’ll confirm materials, finishing, timing and fulfillment in your project quote.</p>
+                 <div class="partner-hero__cta">
+-                    <button class="btn btn--primary btn--large btn--pulse" data-cal-config='{"layout":"month_view"}' data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting" data-cal-namespace="canvas-advertising-strategy-meeting">
+-                        Get a Free Quote
+-                    </button>
++                    <a class="btn btn--primary btn--large" href="#partner-contact">Request a print quote</a>
++                    <a class="btn btn--secondary btn--large" href="tel:+15124343793">Call Canvas</a>
+                     <a class="btn btn--secondary btn--large" href="#types">Explore Print Types</a>
+                 </div>
+             </div>
+         </div>
+     </section>
+-<section class="section"><div class="container"><h2>What to confirm before printing</h2><p>Send the intended use, finished dimensions, quantity, application surface, and whether you need lamination or contour cutting. Confirm who will install the graphics and whether you need Austin pickup or shipping. Material and finishing must be defined before approving the quote.</p><p><a href="vehicle-wrap-file-preparation-checklist">Use the artwork-preparation checklist</a></p></div></section>
++<section class="section" id="quote-requirements"><div class="container">
++<h2>What do you need for a print quote?</h2>
++<p>Gather these details before contacting Canvas. You do not need to choose a material on your own: explain where the graphic will be used so we can review suitable options for that project.</p>
++<ul><li>Product, finished dimensions and quantity for each size.</li><li>Indoor or outdoor use and the application surface.</li><li>Preferred material and whether you need lamination or contour cutting.</li><li>Artwork status: ready, needs review or needs development.</li><li>Required date and who will handle installation.</li><li>Austin pickup or destination ZIP code to review fulfillment options.</li></ul>
++<p>For multiple pieces, identify each vehicle, location or panel and the artwork version. Confirm the file-transfer method with Canvas before sending large files.</p>
++<p><a href="vehicle-wrap-file-preparation-checklist">Use the artwork-preparation checklist</a> · <a href="partner">Running a shop? Explore trade and overflow production</a></p>
++<div class="partner-hero__cta"><a class="btn btn--primary" href="#partner-contact">Prepare my quote request</a><a class="btn btn--secondary" href="mailto:sales@canvas-advertising.com">Email project specifications</a></div>
++</div></section>
+ 
+ 
+     <section class="site-flow-band" aria-label="Canvas production process">
+@@ -211,14 +215,14 @@
+             <div class="site-flow-band__header">
+                 <p class="section-label">Simple Production Flow</p>
+                 <h2>FROM FILE TO FINISHED VINYL</h2>
+-                <p>We print, cut, laminate, package, and deliver from Austin. Pick up locally, request local delivery, or ship finished vinyl graphics anywhere in the United States.</p>
++                <p>Print, lamination and cutting in Austin. Confirm materials, finishing, timing and fulfillment options for your project in the quote.</p>
+             </div>
+             <div class="site-flow-band__chips" aria-label="Core production capabilities">
+                 <span>HP Latex 800W</span>
+                 <span>Graphtec cutting</span>
+                 <span>Professional lamination</span>
+-                <span>Austin local delivery</span>
+-                <span>US shipping</span>
++                <span>Austin production</span>
++                <span>Fulfillment by quote</span>
+             </div>
+             <div class="site-flow-band__grid">
+                 <article>
+@@ -234,7 +238,7 @@
+                 <article>
+                     <span>03</span>
+                     <h3>Ready to install or deliver</h3>
+-                    <p>We package by vehicle, location, or piece. Orders are ready for Austin pickup, local delivery, or protected shipping anywhere in the United States.</p>
++                    <p>Identify each vehicle, location or piece. Confirm pickup or shipping arrangements and charges before approving the quote.</p>
+                 </article>
+             </div>
+         </div>
+@@ -245,8 +249,8 @@
+         <div class="container">
+             <div class="section-header" data-reveal>
+                 <p class="section-label">Why Partner With Us</p>
+-                <h2 class="section-title">BUILT FOR WRAP SHOPS</h2>
+-                <p class="section-subtitle">Everything needed to turn print files into finished vinyl graphics: print, cut, laminate, pack, and ship.</p>
++                <h2 class="section-title">PRINTING FOR YOUR PROJECT</h2>
++                <p class="section-subtitle">Review specifications, finishing and fulfillment before production.</p>
+             </div>
+ 
+             <div class="why-canvas__grid">
+@@ -262,18 +266,15 @@
+                 </div>
+                 <div class="why-item" data-reveal>
+                     <div class="why-item__icon">🏷️</div>
+-                    <h3 class="why-item__title">White-Label Ready</h3>
+-                    <p class="why-item__desc">Your brand, our production. We never contact your clients or add our branding.</p>
++                    <h3 class="why-item__title">Project-specific finishing</h3><p class="why-item__desc">Confirm which pieces need lamination and which require contour cutting.</p>
+                 </div>
+                 <div class="why-item" data-reveal>
+                     <div class="why-item__icon">💰</div>
+-                    <h3 class="why-item__title">Wholesale Pricing</h3>
+-                    <p class="why-item__desc">Competitive rates for repeat partners. The more you print, the more you save.</p>
++                    <h3 class="why-item__title">Specification-based quotes</h3><p class="why-item__desc">Material, dimensions, quantity and finishing define the scope we need to review.</p>
+                 </div>
+                 <div class="why-item" data-reveal>
+                     <div class="why-item__icon">🚚</div>
+-                    <h3 class="why-item__title">Ship Anywhere in the US</h3>
+-                    <p class="why-item__desc">Pick up at our Austin shop or we'll ship your order anywhere in the United States.</p>
++                    <h3 class="why-item__title">Confirm fulfillment</h3><p class="why-item__desc">Share Austin pickup needs or a destination ZIP code to confirm options and charges in your quote.</p>
+                 </div>
+                 <div class="why-item" data-reveal>
+                     <div class="why-item__icon">🇲🇽</div>
+@@ -285,43 +286,21 @@
+     </section>
+ 
+     <!-- ===== FAQ Section ===== -->
+-    <section class="faq section--dark">
+-        <div class="section__grain"></div>
+-        <div class="container">
+-            <div class="section-header section-header--light" data-reveal>
+-                <p class="section-label">Common Questions</p>
+-                <h2 class="section-title">WHOLESALE PRINTING FAQS</h2>
+-                <p class="section-subtitle">Everything you need to know about partnering with Canvas Advertising for your wrap production.</p>
+-            </div>
+-
+-            <div class="faq__list" data-reveal>
+-                <div class="faq__item">
+-                    <h3 class="faq__question">How is production timing confirmed?</h3>
+-                    <p class="faq__answer">Production timing and delivery dates are confirmed in your project quote after material, quantity, finishing, and approved artwork are reviewed. Confirm availability before scheduling installation.</p>
+-                </div>
+-                <div class="faq__item">
+-                    <h3 class="faq__question">Do you offer white-label blind shipping across the United States?</h3>
+-                    <p class="faq__answer">Yes. We understand the importance of protecting your client relationships. We can ship your printed graphics directly to your installation facility or your client anywhere in the United States with blind, white-label packaging.</p>
+-                </div>
+-                <div class="faq__item">
+-                    <h3 class="faq__question">What vinyl brands do you print on?</h3>
+-                    <p class="faq__answer">We utilize industry-leading cast vinyls optimized for our HP Latex 800W, including 3M, Avery Dennison, and Orafol. We match the right film and laminate combination to the specific requirements of your wrap job.</p>
+-                </div>
+-                <div class="faq__item">
+-                    <h3 class="faq__question">Is there a minimum order quantity (MOQ)?</h3>
+-                    <p class="faq__answer">Minimums and pricing depend on the product, material, dimensions, and quantity. Request a quote to confirm the requirements for your project.</p>
+-                </div>
+-            </div>
+-        </div>
+-    </section>
++    <section class="faq section--dark" id="faq"><div class="section__grain"></div><div class="container">
++<div class="section-header section-header--light" data-reveal><p class="section-label">Before printing</p><h2 class="section-title">YOUR PRINT PROJECT QUESTIONS</h2><p class="section-subtitle">Clear specifications before production is confirmed.</p></div>
++<div class="faq__list" data-reveal><div class="faq__item"><h3 class="faq__question">What information helps choose the right material?</h3><p class="faq__answer">Share the intended use, application surface, dimensions and installation conditions. Canvas will review the material and finishing for that project before confirming the quote. Not every graphic needs the same film and laminate combination.</p></div>
++<div class="faq__item"><h3 class="faq__question">Can I request several pieces or designs in one quote?</h3><p class="faq__answer">Yes. Separate quantities by size and design, and identify each vehicle, location or panel. Confirm which pieces need lamination or contour cutting so the production scope is clear before work starts.</p></div>
++<div class="faq__item"><h3 class="faq__question">How are timing and fulfillment confirmed?</h3><p class="faq__answer">Production timing, pickup and shipping options are confirmed in the quote after specifications and artwork are reviewed. Include your required date and destination ZIP code; confirm availability before scheduling installation.</p></div>
++<div class="faq__item"><h3 class="faq__question">What if my artwork is not ready yet?</h3><p class="faq__answer">Tell us what you have and what still needs work. Use the preparation checklist to organize dimensions, panels and versions; confirm artwork review and the file-transfer method with Canvas. Do not include confidential information in an initial inquiry.</p></div></div></div></section>
+ 
+     <!-- ===== Partner CTA / Form ===== -->
+     <section class="cta section--accent" id="partner-contact">
+         <div class="container">
+             <div class="cta__grid">
+                 <div class="cta__content" data-reveal>
+-                    <h2 class="cta__title">READY TO<br>PARTNER UP?</h2>
+-                    <p class="cta__subtitle">Let's discuss how we can support your wrap business</p>
++                    <h2 class="cta__title">LET’S QUOTE<br>YOUR PRINT PROJECT</h2>
++                    <p class="cta__subtitle">Share the specifications above. We’ll confirm scope and next steps with you; this inquiry is not a purchase.</p>
++<div class="partner-hero__cta"><a class="btn btn--white" href="tel:+15124343793">Call Canvas</a><a class="btn btn--white" href="mailto:sales@canvas-advertising.com">Email specifications</a></div>
+ 
+                     <button class="cta__phone"
+                         data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting"
+@@ -364,7 +343,7 @@
+                 </div>
+ 
+                 <div class="cta__form" data-reveal>
+-                    <h3 class="cta__form-title">Partner Inquiry</h3>
++                    <h3 class="cta__form-title">Print project inquiry</h3>
+                     <form id="quoteForm" class="form">
+                         <div class="form__group">
+                             <label for="name" class="form__label">Your Name *</label>
+@@ -394,10 +373,10 @@
+                             </select>
+                         </div>
+                         <div class="form__group">
+-                            <label for="message" class="form__label">Tell Us About Your Shop</label>
+-                            <textarea id="message" name="message" class="form__textarea" rows="4" placeholder="How many wraps do you do per month? What services are you looking for?"></textarea>
++                            <label for="message" class="form__label">Your project specifications</label>
++                            <textarea id="message" name="message" class="form__textarea" rows="4" placeholder="Dimensions, quantity per design, use, surface, finishing, artwork status, required date and ZIP code."></textarea>
+                         </div>
+-                        <button type="submit" class="btn btn--white btn--full">Send Partner Inquiry</button>
++                        <button type="submit" class="btn btn--white btn--full">Send print inquiry</button>
+                     </form>
+                     <div id="formSuccess" class="form__success" style="display: none;">
+                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
