@@ -1,5 +1,5 @@
 diff --git a/large-format-printing-austin-es.html b/large-format-printing-austin-es.html
-index 67402f5..046f5bb 100644
+index 67402f5..5b3c5a9 100644
 --- a/large-format-printing-austin-es.html
 +++ b/large-format-printing-austin-es.html
 @@ -18,15 +18,13 @@
@@ -320,6 +320,24 @@ index 67402f5..046f5bb 100644
  
                      <button class="cta__phone"
                          data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting"
+@@ -327,7 +306,7 @@
+                             <line x1="8" y1="2" x2="8" y2="6" />
+                             <line x1="3" y1="10" x2="21" y2="10" />
+                         </svg>
+-                        Programar una Consulta de Socios
++                        Consultar sobre tu impresión
+                     </button>
+ 
+                     <div class="cta__info">
+@@ -345,7 +324,7 @@
+                                 <circle cx="12" cy="12" r="10" />
+                                 <path d="M12 6v6l4 2" />
+                             </svg>
+-                            <span>Mon - Fri: 9:00 AM - 5:00 PM</span>
++                            <span>Lun – Vie: 9:00 AM – 5:00 PM</span>
+                         </div>
+                         <div class="cta__info-item">
+                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 @@ -358,14 +337,14 @@
                  </div>
  
@@ -373,7 +391,7 @@ index 67402f5..046f5bb 100644
                      <div id="formSuccess" class="form__success" style="display: none;">
                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 diff --git a/large-format-printing-austin.html b/large-format-printing-austin.html
-index dfe9589..fc8cfbe 100644
+index dfe9589..20a0c5b 100644
 --- a/large-format-printing-austin.html
 +++ b/large-format-printing-austin.html
 @@ -18,15 +18,13 @@
@@ -689,6 +707,15 @@ index dfe9589..fc8cfbe 100644
  
                      <button class="cta__phone"
                          data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting"
+@@ -333,7 +312,7 @@
+                             <line x1="8" y1="2" x2="8" y2="6" />
+                             <line x1="3" y1="10" x2="21" y2="10" />
+                         </svg>
+-                        Schedule a Partner Call
++                        Discuss Your Print Project
+                     </button>
+ 
+                     <div class="cta__info">
 @@ -364,7 +343,7 @@
                  </div>
  
