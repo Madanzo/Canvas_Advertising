@@ -1,5 +1,7 @@
 # Four-page first release — QA complete, publication ON HOLD
 
+> HISTORICAL f8a0c11 review. The authorized successor corrects the remaining claims and prepares metadata containment. The current plan is [current/RELEASE-PLAN.md](current/RELEASE-PLAN.md). Any historical instruction below to restore 61df100c11fd1d4f is SUPERSEDED AND PROHIBITED after containment: use the new containment-preserving fallback map instead. Historical artifacts remain unchanged evidence, not a publishing allowlist.
+
 ## Pinned identity and boundaries
 
 Release HTML source: `f8a0c11da9b532766c3c1311bfd3906291ecd301`.

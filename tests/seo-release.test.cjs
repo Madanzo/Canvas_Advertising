@@ -19,13 +19,18 @@ for(const file of files) test(file+': live-baseline preservation and SEO checks'
  assert.ok(!/7-12 years warranty|De 7 a 12 años|Zeno Certified|100% garantizada/i.test(b),'unsupported warranty/certification');
  assert.ok(!/<meta[^>]+noindex/i.test(b));
 });
-test('release artifacts bind exact bytes and restrict technical-first overlay to four paths',()=>{
- const p=JSON.parse(fs.readFileSync('release-evidence/package.json'));
- const t=JSON.parse(fs.readFileSync('release-evidence/technical-package.json'));
- assert.equal(p.status,'PREPARED_NOT_DEPLOYED');assert.equal(p.changed.length,8);assert.equal(t.changed.length,4);
- assert.equal(t.preservedFileCount,2016);assert.equal(p.fileCount,2020);
+test('corrected source artifacts bind exact reviewed bytes for only four paths',()=>{
+ const p=JSON.parse(fs.readFileSync('release-evidence/corrected-source/artifacts.json'));
+ assert.deepEqual(p.records.map(r=>r.path).sort(),['/index-es.html','/index.html','/large-format-printing-austin-es.html','/large-format-printing-austin.html']);
  const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
- const uploads=JSON.parse(fs.readFileSync('release-evidence/upload-bytes.json'));
- for(const c of p.changed){const b=fs.readFileSync(c.path.slice(1));const compressed=Buffer.from(uploads[c.path],'base64');assert.equal(hash(b),c.after);assert.equal(hash(compressed),c.afterHostingHash);assert.deepEqual(zlib.gunzipSync(compressed),b);assert.equal(hash(fs.readFileSync('release-evidence/baseline'+c.path)),c.before);}
- assert.deepEqual(t.hostingConfig,p.hostingConfig);assert.ok(t.hostingConfigUnchanged);
+ for(const c of p.records){const b=fs.readFileSync(c.path.slice(1)),compressed=fs.readFileSync('release-evidence/corrected-source'+c.path+'.gz');assert.equal(hash(b),c.rawSha256);assert.equal(hash(compressed),c.gzipSha256);assert.deepEqual(zlib.gunzipSync(compressed),b);}
+});
+for(const file of ['index.html','index-es.html','large-format-printing-austin.html','large-format-printing-austin-es.html'])test(file+': no unconfirmed minimum or fixed production deadline',()=>{
+ const html=fs.readFileSync(file,'utf8'),copy=html.replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi,'').replace(/<[^>]+>/g,' ');
+ assert.ok(!/no minimum order|sin pedido m[ií]nimo|no MOQ|same[- ]week|next[- ]day|misma semana|\b[1-5]\s*[-–]\s*[1-5]\s*(?:business\s+)?days|\b[1-5]\s*(?:-|–|a)\s*[1-5]\s*d[ií]as|within 24 hours|en 24 horas/i.test(copy),'unconfirmed production/minimum promise');
+});
+for(const file of ['large-format-printing-austin.html','large-format-printing-austin-es.html'])test(file+': timing/minimum FAQ visible and JSON-LD agree',()=>{
+ const html=fs.readFileSync(file,'utf8'),graphs=[...html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].flatMap(m=>JSON.parse(m[1])['@graph']||[]),faq=graphs.find(g=>g['@type']==='FAQPage');
+ for(const q of [faq.mainEntity[0],faq.mainEntity.at(-1)]){assert.ok(html.includes('<h3 class="faq__question">'+q.name+'</h3>'));assert.ok(html.includes('<p class="faq__answer">'+q.acceptedAnswer.text+'</p>'));assert.match(q.acceptedAnswer.text,/quote|cotizaci[oó]n/i);}
+ if(file.includes('-es.'))for(const q of [faq.mainEntity[0],faq.mainEntity.at(-1)])assert.match(q.name,/^¿/);
 });

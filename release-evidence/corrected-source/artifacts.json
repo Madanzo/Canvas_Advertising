@@ -1,0 +1,33 @@
+{
+  "historicalSource": "f8a0c11da9b532766c3c1311bfd3906291ecd301",
+  "records": [
+    {
+      "path": "/index.html",
+      "rawSha256": "c83a346a783f44be292dcb0c5a14dfc3cfb902628ee1bee6dd36012ea7ab0408",
+      "gzipSha256": "1cefc7341bf49a64f8a0275f6f1a31d24e60fc2a45f3eb42ad942a91cf5398ba",
+      "rawBytes": 104139,
+      "gzipBytes": 21114
+    },
+    {
+      "path": "/index-es.html",
+      "rawSha256": "68bfa4af401aee984ea01602bbcbb8abddf3e8644c1516262ba862cf20c34fd5",
+      "gzipSha256": "435197b205bbfaa8ea81884b4b69e7b29e70ca57df06cfbad901d0ba981e204f",
+      "rawBytes": 98976,
+      "gzipBytes": 20748
+    },
+    {
+      "path": "/large-format-printing-austin.html",
+      "rawSha256": "d0c8f0b720e61cb10a71596de0f063d9952d6b87c8bb83a8eca3df13ce39299e",
+      "gzipSha256": "40588d9672664420f046f4af6896bb9270720434d2626880e692084675a70bd2",
+      "rawBytes": 30052,
+      "gzipBytes": 7088
+    },
+    {
+      "path": "/large-format-printing-austin-es.html",
+      "rawSha256": "cf6da503bc34ee6224cb9d77fdcb2d212fe7c64ed44b1620ab0ae46a370b7f8e",
+      "gzipSha256": "6f01814425dba55516bb0c20bd5f1e0628edb5fa73bfb775629ecbead22d6a7f",
+      "rawBytes": 29740,
+      "gzipBytes": 7360
+    }
+  ]
+}

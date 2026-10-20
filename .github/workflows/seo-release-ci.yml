@@ -1,7 +1,7 @@
 name: Isolated SEO release checks
 on:
   push:
-    branches: ['codex/canvas-seo-oct20-live']
+    branches: ['codex/canvas-seo-oct20-live', 'codex/canvas-seo-claim-corrections']
   pull_request:
     paths:
       - 'index*.html'
@@ -11,6 +11,9 @@ on:
       - 'lista-preparacion-archivos-wrap.html'
       - 'release-evidence/**'
       - 'tests/seo-release.test.cjs'
+      - 'tests/hosting-artifact-guard.test.cjs'
+      - '.github/scripts/*hosting*'
+      - '.github/scripts/prepare-seo-source-bytes.cjs'
       - '.github/workflows/seo-release-ci.yml'
 permissions:
   contents: read
@@ -23,3 +26,4 @@ jobs:
         with:
           node-version: 22
       - run: node --test tests/seo-release.test.cjs
+      - run: node --test tests/hosting-artifact-guard.test.cjs
