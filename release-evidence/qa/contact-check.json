@@ -1,0 +1,282 @@
+{
+  "source": "f8a0c11da9b532766c3c1311bfd3906291ecd301",
+  "policy": "Focus and inspect only. No link activation, form submission, call, message or backend request.",
+  "results": [
+    {
+      "url": "https://canvas-advertising.com/index-es",
+      "links": [
+        {
+          "href": "https://canvas-advertising.com/quote-es",
+          "text": "Obtener Cotización",
+          "ariaLabel": null,
+          "visible": false,
+          "focusable": null,
+          "outline": null
+        },
+        {
+          "href": "tel:+15129459783",
+          "text": "(512) 945-9783",
+          "ariaLabel": "Llamar a Canvas Advertising al 512-945-9783",
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "tel:+15129459783",
+          "text": "Llámanos: (512) 945-9783",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "mailto:sales@canvas-advertising.com",
+          "text": "sales@canvas-advertising.com",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "tel:+15129459783",
+          "text": "(512) 945-9783",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "mailto:sales@canvas-advertising.com",
+          "text": "sales@canvas-advertising.com",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "https://canvas-advertising.com/quote-es",
+          "text": "Cotizador",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "tel:+15129459783",
+          "text": "Llamar Ahora",
+          "ariaLabel": "Llamar Ahora",
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "https://canvas-advertising.com/quote-es",
+          "text": "Cotizar proyecto",
+          "ariaLabel": null,
+          "visible": false,
+          "focusable": null,
+          "outline": null
+        }
+      ]
+    },
+    {
+      "url": "https://canvas-advertising.com/",
+      "links": [
+        {
+          "href": "https://canvas-advertising.com/quote",
+          "text": "Get a Quote",
+          "ariaLabel": null,
+          "visible": false,
+          "focusable": null,
+          "outline": null
+        },
+        {
+          "href": "tel:+15124343793",
+          "text": "(512) 434-3793",
+          "ariaLabel": "Call Canvas Advertising at 512-434-3793",
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "tel:+15124343793",
+          "text": "Call Us: (512) 434-3793",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "mailto:sales@canvas-advertising.com",
+          "text": "sales@canvas-advertising.com",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "tel:+15124343793",
+          "text": "(512) 434-3793",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "mailto:sales@canvas-advertising.com",
+          "text": "sales@canvas-advertising.com",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "https://canvas-advertising.com/quote",
+          "text": "Quote Estimator",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "tel:+15124343793",
+          "text": "Call Now",
+          "ariaLabel": "Call Now",
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "https://canvas-advertising.com/quote",
+          "text": "Start a quote",
+          "ariaLabel": null,
+          "visible": false,
+          "focusable": null,
+          "outline": null
+        }
+      ]
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "links": [
+        {
+          "href": "https://canvas-advertising.com/quote-es",
+          "text": "Obtener Cotización",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "tel:+15129459783",
+          "text": "(512) 945-9783",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "mailto:sales@canvas-advertising.com",
+          "text": "sales@canvas-advertising.com",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "tel:+15129459783",
+          "text": "(512) 945-9783",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "mailto:sales@canvas-advertising.com",
+          "text": "sales@canvas-advertising.com",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "https://canvas-advertising.com/quote-es",
+          "text": "Cotizador",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "https://canvas-advertising.com/quote-es",
+          "text": "Cotizar proyecto",
+          "ariaLabel": null,
+          "visible": false,
+          "focusable": null,
+          "outline": null
+        }
+      ]
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin",
+      "links": [
+        {
+          "href": "https://canvas-advertising.com/quote",
+          "text": "Get a Quote",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "tel:+15124343793",
+          "text": "(512) 434-3793",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "mailto:sales@canvas-advertising.com",
+          "text": "sales@canvas-advertising.com",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "tel:+15124343793",
+          "text": "(512) 434-3793",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "mailto:sales@canvas-advertising.com",
+          "text": "sales@canvas-advertising.com",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "https://canvas-advertising.com/quote",
+          "text": "Quote Estimator",
+          "ariaLabel": null,
+          "visible": true,
+          "focusable": true,
+          "outline": "auto"
+        },
+        {
+          "href": "https://canvas-advertising.com/quote",
+          "text": "Start a quote",
+          "ariaLabel": null,
+          "visible": false,
+          "focusable": null,
+          "outline": null
+        }
+      ]
+    }
+  ]
+}

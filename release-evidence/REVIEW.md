@@ -37,7 +37,7 @@ Local headless Chromium 149.0.7827.55, Playwright 1.61.0:
 
 Screenshots include full-page snapshots and viewport detail/gallery captures at mobile and desktop widths. Animation/lazy-load behavior makes full-page offscreen screenshots insufficient alone; viewport captures and focused image diagnostics supplement them. This is Chromium coverage, not Safari/Firefox/physical-device, full accessibility, CWV or production lead-delivery certification.
 
-See `qa/browser-report.json`, `qa/image-diagnostic.json`, `qa/reference-check.json`, and `qa/QA.md`.
+See `qa/browser-report.json`, `qa/image-diagnostic.json`, `qa/reference-check.json`, `qa/contact-check.json`, and `qa/QA.md`. The additional contact pass focused all visible phone/email/quote links at 375px with visible focus outlines, without activation or submission.
 
 ## Remaining findings — do not call the pinned release approved
 
