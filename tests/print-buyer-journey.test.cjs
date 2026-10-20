@@ -11,7 +11,7 @@ test(file+': no runtime/media/navigation or submission contract changes',()=>{
 test(file+': complete localized FAQ and clean metadata match',()=>{
  assert.equal(matches(s,/<h1\b/gi).length,1);const desc=s.match(/<meta name="description"\s+content="([^"]*)"/)[1];
  for(const name of ['og:description','twitter:description'])assert.ok(s.includes(name+'" content="'+desc+'"'));
- const url='https://canvas-advertising.com/'+file.replace('.html','');assert.ok(s.includes('rel="canonical" href="'+url+'"'));assert.deepEqual(matches(s,/<link[^>]+(?:canonical|hreflang)[^>]*>/g),matches(old,/<link[^>]+(?:canonical|hreflang)[^>]*>/g));
+ const url='https://canvas-advertising.com/'+file.replace('.html','');assert.ok(s.includes('rel="canonical" href="'+url+'"'));assert.ok(s.includes('property="og:url" content="'+url+'"'),'OG URL must match localized canonical');assert.deepEqual(matches(s,/<link[^>]+(?:canonical|hreflang)[^>]*>/g),matches(old,/<link[^>]+(?:canonical|hreflang)[^>]*>/g));
  const graph=JSON.parse(s.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])['@graph'];const faq=graph.find(x=>x['@type']==='FAQPage');assert.equal(faq['@id'],url+'#faq');assert.equal(faq.mainEntity.length,4);
  for(const q of faq.mainEntity){assert.ok(s.includes('<h3 class="faq__question">'+q.name+'</h3>'));assert.ok(s.includes('<p class="faq__answer">'+q.acceptedAnswer.text+'</p>'));if(es)assert.ok(q.name.startsWith('¿'));}
 });
