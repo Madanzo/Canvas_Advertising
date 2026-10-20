@@ -25,6 +25,7 @@ test('release artifacts bind exact bytes and restrict technical-first overlay to
  assert.equal(p.status,'PREPARED_NOT_DEPLOYED');assert.equal(p.changed.length,8);assert.equal(t.changed.length,4);
  assert.equal(t.preservedFileCount,2016);assert.equal(p.fileCount,2020);
  const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
- for(const c of p.changed){const b=fs.readFileSync(c.path.slice(1));assert.equal(hash(b),c.after);assert.equal(hash(zlib.gzipSync(b,{level:9})),c.afterHostingHash);assert.equal(hash(fs.readFileSync('release-evidence/baseline'+c.path)),c.before);}
+ const uploads=JSON.parse(fs.readFileSync('release-evidence/upload-bytes.json'));
+ for(const c of p.changed){const b=fs.readFileSync(c.path.slice(1));const compressed=Buffer.from(uploads[c.path],'base64');assert.equal(hash(b),c.after);assert.equal(hash(compressed),c.afterHostingHash);assert.deepEqual(zlib.gunzipSync(compressed),b);assert.equal(hash(fs.readFileSync('release-evidence/baseline'+c.path)),c.before);}
  assert.deepEqual(t.hostingConfig,p.hostingConfig);assert.ok(t.hostingConfigUnchanged);
 });

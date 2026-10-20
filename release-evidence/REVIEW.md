@@ -2,6 +2,8 @@
 
 ## Updated package sequence
 
+Cross-platform CI correction: gzip output can vary by Node/zlib/OS build even for identical HTML. `upload-bytes.json` binds the exact prepared compressed upload bytes. Tests verify their Hosting SHA-256 AND decompress them to the exact reviewed source bytes, rather than assuming Linux recompression equals the preparation environment. The release must upload these bytes verbatim, not recompress on another machine.
+
 The completed independent follow-on adds both manifest-verified homepages. There are now eight candidate paths, with **nine passing local tests**. `technical-package.json` is the first four-page release: `/`, `/index-es`, `/large-format-printing-austin`, `/large-format-printing-austin-es`. It corrects unsupported homepage minimum/free-design/warranty claims, removes an unverified Zeno certification badge, qualifies Avery/MCS scope against owner evidence, and repairs printing navigation and policy/schema claims. It retains 2,016 live files unchanged. Approved photos, scripts, form fields and EN/ES relationships are unchanged.
 
 The full `package.json` additionally includes the four fleet/resource paths and preserves 2,012 files. This is a **subsequent milestone**, not permission to bundle everything into the first release. After the first approved release, capture its new version as the next baseline/rollback and rebuild the follow-on four-file overlay. Do not assume the original eight-file proposal is the post-release baseline.
