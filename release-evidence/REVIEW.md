@@ -7,7 +7,9 @@ Hosted source CI: [run 39471573424](https://github.com/Madanzo/Canvas_Advertisin
 
 Publication package ID: `canvas-seo-first-907d3c0ac82b82c831fb3f71c80d1de47d02628d2ef9dd26e1bc9addc89b8ce7`.
 Live baseline and rollback: `projects/canvas-adnvertising/sites/canvas-adnvertising/versions/61df100c11fd1d4f`.
-Fresh manifest/configuration captured October 20 at 18:23:21 UTC. This is a local prepared package; no remote version, upload, finalization, release, indexing request or production submission was performed.
+Fresh Canvas manifest/configuration recaptured October 20 at 18:41:30.390 UTC after the project-identity correction. Live remains 61df100c11fd1d4f; complete map/configuration hashes and the four replacements are unchanged. Prior captures, review archives and recovery evidence are preserved. This is a local prepared package; no remote version, upload, finalization, release, indexing request or production submission was performed.
+
+Project-identity audit: recorded release actions used project/site canvas-adnvertising, Canvas repository/worktree paths and Canvas public/origin URLs. No Phantom-specific project/version was acted on, so no Phantom-driven restoration is warranted or attempted. The earlier six-file original-checkout incident was a Canvas local incident and remains documented separately; this confirmation does not establish recovery of its pre-incident state. Existing Canvas claim/security findings are retained on their own Canvas evidence, not treated as imported Phantom instructions.
 
 The release-source branch remains at the pinned SHA. QA/documentation are maintained separately on `codex/canvas-seo-oct20-release-evidence`; no release HTML is changed by this evidence work. Original checkout untouched during this follow-up. Commerce `92d6f11ffca644a152e95434054ee8a0f211c9c3` and its evidence remain separate. No checkout/payment, staff draft, upload, Functions, Firestore, Storage, IAM/secret, CRM forwarding, notification or App Check enforcement changes.
 

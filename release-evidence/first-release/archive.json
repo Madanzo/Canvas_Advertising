@@ -1,0 +1,15 @@
+{
+  "project": "canvas-adnvertising",
+  "site": "canvas-adnvertising",
+  "source": "f8a0c11da9b532766c3c1311bfd3906291ecd301",
+  "archive": "/private/tmp/canvas-seo-canvas-final-review-20261020.tar.gz",
+  "archiveSha256": "8b5c448194c651513021f8b8cd64affa493205e29437a31a41249bcdaa8f3ecd",
+  "freshLiveCapturedAt": "2026-10-20T18:41:30.390Z",
+  "liveAndRollbackVersion": "61df100c11fd1d4f",
+  "baselineManifestSha256": "7558b35a9b5c9e0251a30e94b22f1659e02dc46a465f46317e71b8e5ff9b96b0",
+  "proposedManifestSha256": "eb03a5b658009fd31402072f6ac4d00e39dafec31b4cf8ebe2b215b2f215d938",
+  "hostingConfigurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3",
+  "comparison": {"filesBefore": 2020, "filesAfter": 2020, "replacements": 4, "unchanged": 2016, "additions": 0, "deletions": 0, "configurationUnchanged": true},
+  "phantomTargetsActedOn": [],
+  "status": "PREPARED_FOR_REVIEW_NOT_APPROVED_FOR_PUBLICATION"
+}

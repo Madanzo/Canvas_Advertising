@@ -1,0 +1,14 @@
+{
+  "confirmedProject": "canvas-adnvertising",
+  "confirmedSite": "canvas-adnvertising",
+  "candidate": "f8a0c11da9b532766c3c1311bfd3906291ecd301",
+  "liveCapturedAt": "2026-10-20T18:41:30.390Z",
+  "currentLive": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/61df100c11fd1d4f",
+  "rollback": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/61df100c11fd1d4f",
+  "phantomTargetsActedOn": [],
+  "restorationAttempted": false,
+  "originalSixFileHashesUnchanged": true,
+  "previousRecoveryEvidencePreserved": true,
+  "qa": "Reuse completed exact-source Chromium QA and public-reference evidence; no source or live baseline drift. No claim of deployment, indexing or clean content/security approval.",
+  "boundaries": "Commerce/CRM/backend changes excluded; no App Check enforcement change; no upload/deploy/rollback."
+}
