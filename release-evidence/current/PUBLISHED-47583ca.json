@@ -1,0 +1,1262 @@
+{
+  "source": "47583ca3b248e34c40d0393a42a4db45b401436b",
+  "approvalEvidence": "345caf1e8f453f231400454e1c80432e625651a7",
+  "project": "canvas-adnvertising",
+  "site": "canvas-adnvertising",
+  "preflight": {
+    "at": "2026-10-20T19:34:06.193Z",
+    "release": {
+      "name": "projects/canvas-adnvertising/sites/canvas-adnvertising/channels/live/releases/1789074479486000",
+      "version": {
+        "name": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/61df100c11fd1d4f",
+        "status": "FINALIZED",
+        "config": {
+          "headers": [
+            {
+              "headers": {
+                "Cache-Control": "public, max-age=0, must-revalidate"
+              },
+              "glob": "**/*.@(html)"
+            },
+            {
+              "headers": {
+                "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800"
+              },
+              "glob": "**/*.@(css|js)"
+            },
+            {
+              "headers": {
+                "Cache-Control": "public, max-age=31536000, immutable"
+              },
+              "glob": "**/*.20260727.min.css"
+            },
+            {
+              "headers": {
+                "Cache-Control": "public, max-age=31536000, immutable"
+              },
+              "glob": "**/*.20260805b.min.js"
+            },
+            {
+              "headers": {
+                "Cache-Control": "public, max-age=31536000, immutable"
+              },
+              "glob": "**/*.@(webp|avif|png|jpg|jpeg|svg|woff2|mp4|m4v)"
+            }
+          ],
+          "redirects": [
+            {
+              "statusCode": 301,
+              "location": "/",
+              "glob": "/index.php"
+            },
+            {
+              "statusCode": 301,
+              "location": "/",
+              "glob": "/home"
+            },
+            {
+              "statusCode": 301,
+              "location": "/large-format-printing-austin",
+              "glob": "/digital-print"
+            },
+            {
+              "statusCode": 301,
+              "location": "/large-format-printing-austin",
+              "glob": "/signs"
+            },
+            {
+              "statusCode": 301,
+              "location": "/store",
+              "glob": "/merch-2"
+            },
+            {
+              "statusCode": 301,
+              "location": "/portfolio",
+              "glob": "/design-2"
+            },
+            {
+              "statusCode": 301,
+              "location": "/vehicle-wraps-austin",
+              "glob": "/wrap"
+            },
+            {
+              "statusCode": 301,
+              "location": "/quote",
+              "glob": "/cdn-cgi/l/email-protection"
+            }
+          ],
+          "rewrites": [
+            {
+              "functionRegion": "us-central1",
+              "glob": "/projects/**",
+              "function": "serveProjectPage"
+            },
+            {
+              "functionRegion": "us-central1",
+              "glob": "/es/proyectos/**",
+              "function": "serveProjectPage"
+            }
+          ],
+          "cleanUrls": true,
+          "trailingSlashBehavior": "REMOVE"
+        },
+        "labels": {
+          "deployment-tool": "cli-firebase"
+        },
+        "createTime": "2026-09-10T21:07:43.463524Z",
+        "createUser": {
+          "email": "camilo.reyna97@gmail.com"
+        },
+        "finalizeTime": "2026-09-10T21:07:59.582646Z",
+        "finalizeUser": {
+          "email": "camilo.reyna97@gmail.com"
+        },
+        "fileCount": "2020",
+        "versionBytes": "68260059"
+      },
+      "type": "DEPLOY",
+      "releaseTime": "2026-09-10T21:07:59.486Z",
+      "message": "Approved PR #7 Hosting-only three-file vinyl grade overlay; source 6edbc03319ee3df22c4391471734b309f78421c8; 2017 files and configuration preserved; manual request review",
+      "releaseUser": {
+        "email": "camilo.reyna97@gmail.com"
+      }
+    },
+    "fullMapSha256": "7558b35a9b5c9e0251a30e94b22f1659e02dc46a465f46317e71b8e5ff9b96b0",
+    "configSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3"
+  },
+  "releases": {
+    "containment": {
+      "version": "projects/835646149135/sites/canvas-adnvertising/versions/d1181c86b36b8049",
+      "release": "projects/835646149135/sites/canvas-adnvertising/channels/live/releases/1792524860438000",
+      "releaseTime": "2026-10-20T19:34:20.438Z",
+      "proposedVerification": {
+        "version": "projects/835646149135/sites/canvas-adnvertising/versions/d1181c86b36b8049",
+        "mapSha256": "fab822d5a0588091a835230a5e06ef33d3a93563fb63381988baa6a3425561c6",
+        "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3",
+        "checkedAt": "2026-10-20T19:34:18.496Z"
+      },
+      "finalizedVerification": {
+        "version": "projects/835646149135/sites/canvas-adnvertising/versions/d1181c86b36b8049",
+        "mapSha256": "fab822d5a0588091a835230a5e06ef33d3a93563fb63381988baa6a3425561c6",
+        "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3",
+        "checkedAt": "2026-10-20T19:34:19.739Z"
+      },
+      "verifiedAt": "2026-10-20T19:34:56.108Z",
+      "verification": {
+        "version": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/d1181c86b36b8049",
+        "package": "canvas-containment-8861db9233fc1a5c468eec8c49f877accc8a48e055650eb09c533ef56205633d",
+        "checks": [
+          {
+            "url": "https://canvas-advertising.com/.git/HEAD",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/.git/HEAD?canvas_containment_verify=1792524886849",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/.git/config",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/.git/config?canvas_containment_verify=1792524887675",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/.git/index",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/.git/index?canvas_containment_verify=1792524888274",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/%2egit/HEAD",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/%2egit/HEAD?canvas_containment_verify=1792524888739",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/.agents/AGENTS.md",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/.agents/AGENTS.md?canvas_containment_verify=1792524889162",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/.codex/config.toml",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/.codex/config.toml?canvas_containment_verify=1792524889654",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/",
+            "status": 200,
+            "finalUrl": "https://canvas-advertising.com/"
+          },
+          {
+            "url": "https://canvas-advertising.com/index-es",
+            "status": 200,
+            "finalUrl": "https://canvas-advertising.com/index-es"
+          },
+          {
+            "url": "https://canvas-advertising.com/large-format-printing-austin",
+            "status": 200,
+            "finalUrl": "https://canvas-advertising.com/large-format-printing-austin"
+          },
+          {
+            "url": "https://canvas-advertising.com/large-format-printing-austin-es",
+            "status": 200,
+            "finalUrl": "https://canvas-advertising.com/large-format-printing-austin-es"
+          },
+          {
+            "url": "https://canvas-advertising.com/robots.txt",
+            "status": 200,
+            "finalUrl": "https://canvas-advertising.com/robots.txt"
+          },
+          {
+            "url": "https://canvas-advertising.com/sitemap.xml",
+            "status": 200,
+            "finalUrl": "https://canvas-advertising.com/sitemap.xml"
+          },
+          {
+            "url": "https://canvas-advertising.com/images/logo.png",
+            "status": 200,
+            "finalUrl": "https://canvas-advertising.com/images/logo.png"
+          },
+          {
+            "url": "https://canvas-advertising.com/css/styles.20260727.min.css",
+            "status": 200,
+            "finalUrl": "https://canvas-advertising.com/css/styles.20260727.min.css"
+          },
+          {
+            "url": "https://canvas-advertising.com/projects/tech-center-signage",
+            "status": 200,
+            "finalUrl": "https://canvas-advertising.com/projects/tech-center-signage"
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.git/HEAD",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.git/HEAD?canvas_containment_verify=1792524892106",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.git/config",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.git/config?canvas_containment_verify=1792524892549",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.git/index",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.git/index?canvas_containment_verify=1792524892963",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/%2egit/HEAD",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/%2egit/HEAD?canvas_containment_verify=1792524893338",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.agents/AGENTS.md",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.agents/AGENTS.md?canvas_containment_verify=1792524893714",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.codex/config.toml",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.codex/config.toml?canvas_containment_verify=1792524894074",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/",
+            "status": 200,
+            "finalUrl": "https://canvas-adnvertising.web.app/"
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/index-es",
+            "status": 200,
+            "finalUrl": "https://canvas-adnvertising.web.app/index-es"
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/large-format-printing-austin",
+            "status": 200,
+            "finalUrl": "https://canvas-adnvertising.web.app/large-format-printing-austin"
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/large-format-printing-austin-es",
+            "status": 200,
+            "finalUrl": "https://canvas-adnvertising.web.app/large-format-printing-austin-es"
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/robots.txt",
+            "status": 200,
+            "finalUrl": "https://canvas-adnvertising.web.app/robots.txt"
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/sitemap.xml",
+            "status": 200,
+            "finalUrl": "https://canvas-adnvertising.web.app/sitemap.xml"
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/images/logo.png",
+            "status": 200,
+            "finalUrl": "https://canvas-adnvertising.web.app/images/logo.png"
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/css/styles.20260727.min.css",
+            "status": 200,
+            "finalUrl": "https://canvas-adnvertising.web.app/css/styles.20260727.min.css"
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/projects/tech-center-signage",
+            "status": 200,
+            "finalUrl": "https://canvas-adnvertising.web.app/projects/tech-center-signage"
+          }
+        ],
+        "metadataUnavailable": true,
+        "fullMapAndConfigurationMatch": true,
+        "oldVersionsPurged": false,
+        "priorAccessErased": false
+      }
+    },
+    "seo-after-containment": {
+      "version": "projects/835646149135/sites/canvas-adnvertising/versions/dffd5000bf0c16a6",
+      "release": "projects/835646149135/sites/canvas-adnvertising/channels/live/releases/1792524958676000",
+      "releaseTime": "2026-10-20T19:35:58.676Z",
+      "proposedVerification": {
+        "version": "projects/835646149135/sites/canvas-adnvertising/versions/dffd5000bf0c16a6",
+        "mapSha256": "dda424ddb8078ab022b2b840b8ccbd08ab2e94426742953467b107acd46b3d3a",
+        "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3",
+        "checkedAt": "2026-10-20T19:35:57.495Z"
+      },
+      "finalizedVerification": {
+        "version": "projects/835646149135/sites/canvas-adnvertising/versions/dffd5000bf0c16a6",
+        "mapSha256": "dda424ddb8078ab022b2b840b8ccbd08ab2e94426742953467b107acd46b3d3a",
+        "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3",
+        "checkedAt": "2026-10-20T19:35:58.359Z"
+      },
+      "verifiedAt": "2026-10-20T19:36:58.251Z",
+      "verification": {
+        "version": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/dffd5000bf0c16a6",
+        "package": "canvas-seo-after-containment-b99bb5d480fdaf87eea1f108314d0874b8c07f37554f79890a6be784d2bc0474",
+        "checks": [
+          {
+            "url": "https://canvas-advertising.com/.git/HEAD",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/.git/HEAD?canvas_containment_verify=1792525009460",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/.git/config",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/.git/config?canvas_containment_verify=1792525009975",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/.git/index",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/.git/index?canvas_containment_verify=1792525010380",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/%2egit/HEAD",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/%2egit/HEAD?canvas_containment_verify=1792525010943",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/.agents/AGENTS.md",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/.agents/AGENTS.md?canvas_containment_verify=1792525011383",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/.codex/config.toml",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/.codex/config.toml?canvas_containment_verify=1792525011824",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": "DYNAMIC"
+          },
+          {
+            "url": "https://canvas-advertising.com/",
+            "status": 200,
+            "finalUrl": "https://canvas-advertising.com/"
+          },
+          {
+            "url": "https://canvas-advertising.com/index-es",
+            "status": 200,
+            "finalUrl": "https://canvas-advertising.com/index-es"
+          },
+          {
+            "url": "https://canvas-advertising.com/large-format-printing-austin",
+            "status": 200,
+            "finalUrl": "https://canvas-advertising.com/large-format-printing-austin"
+          },
+          {
+            "url": "https://canvas-advertising.com/large-format-printing-austin-es",
+            "status": 200,
+            "finalUrl": "https://canvas-advertising.com/large-format-printing-austin-es"
+          },
+          {
+            "url": "https://canvas-advertising.com/robots.txt",
+            "status": 200,
+            "finalUrl": "https://canvas-advertising.com/robots.txt"
+          },
+          {
+            "url": "https://canvas-advertising.com/sitemap.xml",
+            "status": 200,
+            "finalUrl": "https://canvas-advertising.com/sitemap.xml"
+          },
+          {
+            "url": "https://canvas-advertising.com/images/logo.png",
+            "status": 200,
+            "finalUrl": "https://canvas-advertising.com/images/logo.png"
+          },
+          {
+            "url": "https://canvas-advertising.com/css/styles.20260727.min.css",
+            "status": 200,
+            "finalUrl": "https://canvas-advertising.com/css/styles.20260727.min.css"
+          },
+          {
+            "url": "https://canvas-advertising.com/projects/tech-center-signage",
+            "status": 200,
+            "finalUrl": "https://canvas-advertising.com/projects/tech-center-signage"
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.git/HEAD",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.git/HEAD?canvas_containment_verify=1792525013965",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.git/config",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.git/config?canvas_containment_verify=1792525014393",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.git/index",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.git/index?canvas_containment_verify=1792525014778",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/%2egit/HEAD",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/%2egit/HEAD?canvas_containment_verify=1792525015108",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.agents/AGENTS.md",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.agents/AGENTS.md?canvas_containment_verify=1792525015383",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.codex/config.toml",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/.codex/config.toml?canvas_containment_verify=1792525015719",
+            "status": 404,
+            "cacheControl": "public, max-age=0, must-revalidate",
+            "age": null,
+            "edgeCache": null
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/",
+            "status": 200,
+            "finalUrl": "https://canvas-adnvertising.web.app/"
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/index-es",
+            "status": 200,
+            "finalUrl": "https://canvas-adnvertising.web.app/index-es"
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/large-format-printing-austin",
+            "status": 200,
+            "finalUrl": "https://canvas-adnvertising.web.app/large-format-printing-austin"
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/large-format-printing-austin-es",
+            "status": 200,
+            "finalUrl": "https://canvas-adnvertising.web.app/large-format-printing-austin-es"
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/robots.txt",
+            "status": 200,
+            "finalUrl": "https://canvas-adnvertising.web.app/robots.txt"
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/sitemap.xml",
+            "status": 200,
+            "finalUrl": "https://canvas-adnvertising.web.app/sitemap.xml"
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/images/logo.png",
+            "status": 200,
+            "finalUrl": "https://canvas-adnvertising.web.app/images/logo.png"
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/css/styles.20260727.min.css",
+            "status": 200,
+            "finalUrl": "https://canvas-adnvertising.web.app/css/styles.20260727.min.css"
+          },
+          {
+            "url": "https://canvas-adnvertising.web.app/projects/tech-center-signage",
+            "status": 200,
+            "finalUrl": "https://canvas-adnvertising.web.app/projects/tech-center-signage"
+          }
+        ],
+        "metadataUnavailable": true,
+        "fullMapAndConfigurationMatch": true,
+        "oldVersionsPurged": false,
+        "priorAccessErased": false
+      },
+      "exactPublicHtml": [
+        {
+          "url": "https://canvas-adnvertising.web.app/?canvas_seo_verify=1792525016768",
+          "receivedSha256": "c83a346a783f44be292dcb0c5a14dfc3cfb902628ee1bee6dd36012ea7ab0408",
+          "comparedSha256": "c83a346a783f44be292dcb0c5a14dfc3cfb902628ee1bee6dd36012ea7ab0408",
+          "cloudflareEmailNormalization": false,
+          "status": 200
+        },
+        {
+          "url": "https://canvas-adnvertising.web.app/index-es?canvas_seo_verify=1792525016862",
+          "receivedSha256": "327b62cac886a7a4ddf538b581539d79c9fed7ac8613de19160828070503d0ce",
+          "comparedSha256": "327b62cac886a7a4ddf538b581539d79c9fed7ac8613de19160828070503d0ce",
+          "cloudflareEmailNormalization": false,
+          "status": 200
+        },
+        {
+          "url": "https://canvas-adnvertising.web.app/large-format-printing-austin?canvas_seo_verify=1792525017017",
+          "receivedSha256": "d0c8f0b720e61cb10a71596de0f063d9952d6b87c8bb83a8eca3df13ce39299e",
+          "comparedSha256": "d0c8f0b720e61cb10a71596de0f063d9952d6b87c8bb83a8eca3df13ce39299e",
+          "cloudflareEmailNormalization": false,
+          "status": 200
+        },
+        {
+          "url": "https://canvas-adnvertising.web.app/large-format-printing-austin-es?canvas_seo_verify=1792525017112",
+          "receivedSha256": "a15daaba2a8e9e35902f70b2a5f4b4bfaec262cd50c021864019011014285cbf",
+          "comparedSha256": "a15daaba2a8e9e35902f70b2a5f4b4bfaec262cd50c021864019011014285cbf",
+          "cloudflareEmailNormalization": false,
+          "status": 200
+        },
+        {
+          "url": "https://canvas-advertising.com/?canvas_seo_verify=1792525017265",
+          "receivedSha256": "7eb175eb703b7b453d9a7cdd884f7b4bb7dace3820ebe75bb0fdeb5e6171b39e",
+          "comparedSha256": "c83a346a783f44be292dcb0c5a14dfc3cfb902628ee1bee6dd36012ea7ab0408",
+          "cloudflareEmailNormalization": true,
+          "status": 200
+        },
+        {
+          "url": "https://canvas-advertising.com/index-es?canvas_seo_verify=1792525017452",
+          "receivedSha256": "208078b6e7111388f87f0bb794dd67ff7c70cd1122ee96179505fac757d66382",
+          "comparedSha256": "327b62cac886a7a4ddf538b581539d79c9fed7ac8613de19160828070503d0ce",
+          "cloudflareEmailNormalization": true,
+          "status": 200
+        },
+        {
+          "url": "https://canvas-advertising.com/large-format-printing-austin?canvas_seo_verify=1792525017634",
+          "receivedSha256": "9e933728c6ed1400661afcb113c7bee257bae603ff21c1b73cb53f89d74705e5",
+          "comparedSha256": "d0c8f0b720e61cb10a71596de0f063d9952d6b87c8bb83a8eca3df13ce39299e",
+          "cloudflareEmailNormalization": true,
+          "status": 200
+        },
+        {
+          "url": "https://canvas-advertising.com/large-format-printing-austin-es?canvas_seo_verify=1792525017761",
+          "receivedSha256": "b38c0ae08016dc92fdec3be2498204af239d944b9c5261cce7ad0d679930d5e8",
+          "comparedSha256": "a15daaba2a8e9e35902f70b2a5f4b4bfaec262cd50c021864019011014285cbf",
+          "cloudflareEmailNormalization": true,
+          "status": 200
+        }
+      ],
+      "resolvedVerificationFindings": {
+        "at": "2026-10-20T19:36:14.341Z",
+        "message": "Public HTML bytes differ: https://canvas-advertising.com/?canvas_seo_verify=1792524974138\n+ actual - expected\n\n+ '5cbb568b5aa5ccfe72a0d207a24f3c7ffd420edcbccb44f00fa6bef07cbcf380'\n- 'c83a346a783f44be292dcb0c5a14dfc3cfb902628ee1bee6dd36012ea7ab0408'\n"
+      }
+    }
+  },
+  "browser": {
+    "at": "2026-10-20T19:37:34.597Z",
+    "policy": "Read-only GET; contact focus only, no activations/submissions/calls; backend and analytics blocked",
+    "cases": [
+      {
+        "url": "https://canvas-advertising.com/",
+        "width": 375,
+        "h1": 1,
+        "canonical": "https://canvas-advertising.com/",
+        "alternates": [
+          {
+            "lang": "en",
+            "href": "https://canvas-advertising.com/"
+          },
+          {
+            "lang": "es",
+            "href": "https://canvas-advertising.com/index-es"
+          },
+          {
+            "lang": "x-default",
+            "href": "https://canvas-advertising.com/"
+          }
+        ],
+        "contacts": [
+          {
+            "href": "tel:+15124343793",
+            "focused": true
+          },
+          {
+            "href": "tel:+15124343793",
+            "focused": true
+          },
+          {
+            "href": "mailto:sales@canvas-advertising.com",
+            "focused": true
+          },
+          {
+            "href": "tel:+15124343793",
+            "focused": true
+          },
+          {
+            "href": "mailto:sales@canvas-advertising.com",
+            "focused": true
+          },
+          {
+            "href": "tel:+15124343793",
+            "focused": true
+          }
+        ],
+        "fragments": [
+          {
+            "fragment": "#main-content",
+            "exists": true
+          },
+          {
+            "fragment": "#services",
+            "exists": true
+          },
+          {
+            "fragment": "#book-meeting",
+            "exists": true
+          },
+          {
+            "fragment": "#gallery",
+            "exists": true
+          }
+        ],
+        "artworkLinks": [],
+        "overflow": false
+      },
+      {
+        "url": "https://canvas-advertising.com/index-es",
+        "width": 375,
+        "h1": 1,
+        "canonical": "https://canvas-advertising.com/index-es",
+        "alternates": [
+          {
+            "lang": "en",
+            "href": "https://canvas-advertising.com/"
+          },
+          {
+            "lang": "es",
+            "href": "https://canvas-advertising.com/index-es"
+          },
+          {
+            "lang": "x-default",
+            "href": "https://canvas-advertising.com/"
+          }
+        ],
+        "contacts": [
+          {
+            "href": "tel:+15129459783",
+            "focused": true
+          },
+          {
+            "href": "tel:+15129459783",
+            "focused": true
+          },
+          {
+            "href": "mailto:sales@canvas-advertising.com",
+            "focused": true
+          },
+          {
+            "href": "tel:+15129459783",
+            "focused": true
+          },
+          {
+            "href": "mailto:sales@canvas-advertising.com",
+            "focused": true
+          },
+          {
+            "href": "tel:+15129459783",
+            "focused": true
+          }
+        ],
+        "fragments": [
+          {
+            "fragment": "#main-content",
+            "exists": true
+          },
+          {
+            "fragment": "#services",
+            "exists": true
+          },
+          {
+            "fragment": "#book-meeting-es",
+            "exists": true
+          },
+          {
+            "fragment": "#gallery",
+            "exists": true
+          }
+        ],
+        "artworkLinks": [],
+        "overflow": false
+      },
+      {
+        "url": "https://canvas-advertising.com/large-format-printing-austin",
+        "width": 375,
+        "h1": 1,
+        "canonical": "https://canvas-advertising.com/large-format-printing-austin",
+        "alternates": [
+          {
+            "lang": "en",
+            "href": "https://canvas-advertising.com/large-format-printing-austin"
+          },
+          {
+            "lang": "es",
+            "href": "https://canvas-advertising.com/large-format-printing-austin-es"
+          },
+          {
+            "lang": "x-default",
+            "href": "https://canvas-advertising.com/large-format-printing-austin"
+          }
+        ],
+        "contacts": [
+          {
+            "href": "tel:+15124343793",
+            "focused": true
+          },
+          {
+            "href": "mailto:sales@canvas-advertising.com",
+            "focused": true
+          },
+          {
+            "href": "tel:+15124343793",
+            "focused": true
+          },
+          {
+            "href": "mailto:sales@canvas-advertising.com",
+            "focused": true
+          }
+        ],
+        "fragments": [
+          {
+            "fragment": "#main-content",
+            "exists": true
+          },
+          {
+            "fragment": "#main-content",
+            "exists": true
+          },
+          {
+            "fragment": "#types",
+            "exists": true
+          }
+        ],
+        "artworkLinks": [],
+        "overflow": false
+      },
+      {
+        "url": "https://canvas-advertising.com/large-format-printing-austin-es",
+        "width": 375,
+        "h1": 1,
+        "canonical": "https://canvas-advertising.com/large-format-printing-austin-es",
+        "alternates": [
+          {
+            "lang": "en",
+            "href": "https://canvas-advertising.com/large-format-printing-austin"
+          },
+          {
+            "lang": "es",
+            "href": "https://canvas-advertising.com/large-format-printing-austin-es"
+          },
+          {
+            "lang": "x-default",
+            "href": "https://canvas-advertising.com/large-format-printing-austin"
+          }
+        ],
+        "contacts": [
+          {
+            "href": "tel:+15129459783",
+            "focused": true
+          },
+          {
+            "href": "mailto:sales@canvas-advertising.com",
+            "focused": true
+          },
+          {
+            "href": "tel:+15129459783",
+            "focused": true
+          },
+          {
+            "href": "mailto:sales@canvas-advertising.com",
+            "focused": true
+          }
+        ],
+        "fragments": [
+          {
+            "fragment": "#main-content",
+            "exists": true
+          },
+          {
+            "fragment": "#main-content",
+            "exists": true
+          },
+          {
+            "fragment": "#types",
+            "exists": true
+          }
+        ],
+        "artworkLinks": [],
+        "overflow": false
+      },
+      {
+        "url": "https://canvas-advertising.com/",
+        "width": 1440,
+        "h1": 1,
+        "canonical": "https://canvas-advertising.com/",
+        "alternates": [
+          {
+            "lang": "en",
+            "href": "https://canvas-advertising.com/"
+          },
+          {
+            "lang": "es",
+            "href": "https://canvas-advertising.com/index-es"
+          },
+          {
+            "lang": "x-default",
+            "href": "https://canvas-advertising.com/"
+          }
+        ],
+        "contacts": [
+          {
+            "href": "tel:+15124343793",
+            "focused": true
+          },
+          {
+            "href": "tel:+15124343793",
+            "focused": true
+          },
+          {
+            "href": "mailto:sales@canvas-advertising.com",
+            "focused": true
+          },
+          {
+            "href": "tel:+15124343793",
+            "focused": true
+          },
+          {
+            "href": "mailto:sales@canvas-advertising.com",
+            "focused": true
+          }
+        ],
+        "fragments": [
+          {
+            "fragment": "#main-content",
+            "exists": true
+          },
+          {
+            "fragment": "#services",
+            "exists": true
+          },
+          {
+            "fragment": "#book-meeting",
+            "exists": true
+          },
+          {
+            "fragment": "#gallery",
+            "exists": true
+          }
+        ],
+        "artworkLinks": [],
+        "overflow": false
+      },
+      {
+        "url": "https://canvas-advertising.com/index-es",
+        "width": 1440,
+        "h1": 1,
+        "canonical": "https://canvas-advertising.com/index-es",
+        "alternates": [
+          {
+            "lang": "en",
+            "href": "https://canvas-advertising.com/"
+          },
+          {
+            "lang": "es",
+            "href": "https://canvas-advertising.com/index-es"
+          },
+          {
+            "lang": "x-default",
+            "href": "https://canvas-advertising.com/"
+          }
+        ],
+        "contacts": [
+          {
+            "href": "tel:+15129459783",
+            "focused": true
+          },
+          {
+            "href": "tel:+15129459783",
+            "focused": true
+          },
+          {
+            "href": "mailto:sales@canvas-advertising.com",
+            "focused": true
+          },
+          {
+            "href": "tel:+15129459783",
+            "focused": true
+          },
+          {
+            "href": "mailto:sales@canvas-advertising.com",
+            "focused": true
+          }
+        ],
+        "fragments": [
+          {
+            "fragment": "#main-content",
+            "exists": true
+          },
+          {
+            "fragment": "#services",
+            "exists": true
+          },
+          {
+            "fragment": "#book-meeting-es",
+            "exists": true
+          },
+          {
+            "fragment": "#gallery",
+            "exists": true
+          }
+        ],
+        "artworkLinks": [],
+        "overflow": false
+      },
+      {
+        "url": "https://canvas-advertising.com/large-format-printing-austin",
+        "width": 1440,
+        "h1": 1,
+        "canonical": "https://canvas-advertising.com/large-format-printing-austin",
+        "alternates": [
+          {
+            "lang": "en",
+            "href": "https://canvas-advertising.com/large-format-printing-austin"
+          },
+          {
+            "lang": "es",
+            "href": "https://canvas-advertising.com/large-format-printing-austin-es"
+          },
+          {
+            "lang": "x-default",
+            "href": "https://canvas-advertising.com/large-format-printing-austin"
+          }
+        ],
+        "contacts": [
+          {
+            "href": "tel:+15124343793",
+            "focused": true
+          },
+          {
+            "href": "mailto:sales@canvas-advertising.com",
+            "focused": true
+          },
+          {
+            "href": "tel:+15124343793",
+            "focused": true
+          },
+          {
+            "href": "mailto:sales@canvas-advertising.com",
+            "focused": true
+          }
+        ],
+        "fragments": [
+          {
+            "fragment": "#main-content",
+            "exists": true
+          },
+          {
+            "fragment": "#main-content",
+            "exists": true
+          },
+          {
+            "fragment": "#types",
+            "exists": true
+          }
+        ],
+        "artworkLinks": [],
+        "overflow": false
+      },
+      {
+        "url": "https://canvas-advertising.com/large-format-printing-austin-es",
+        "width": 1440,
+        "h1": 1,
+        "canonical": "https://canvas-advertising.com/large-format-printing-austin-es",
+        "alternates": [
+          {
+            "lang": "en",
+            "href": "https://canvas-advertising.com/large-format-printing-austin"
+          },
+          {
+            "lang": "es",
+            "href": "https://canvas-advertising.com/large-format-printing-austin-es"
+          },
+          {
+            "lang": "x-default",
+            "href": "https://canvas-advertising.com/large-format-printing-austin"
+          }
+        ],
+        "contacts": [
+          {
+            "href": "tel:+15129459783",
+            "focused": true
+          },
+          {
+            "href": "mailto:sales@canvas-advertising.com",
+            "focused": true
+          },
+          {
+            "href": "tel:+15129459783",
+            "focused": true
+          },
+          {
+            "href": "mailto:sales@canvas-advertising.com",
+            "focused": true
+          }
+        ],
+        "fragments": [
+          {
+            "fragment": "#main-content",
+            "exists": true
+          },
+          {
+            "fragment": "#main-content",
+            "exists": true
+          },
+          {
+            "fragment": "#types",
+            "exists": true
+          }
+        ],
+        "artworkLinks": [],
+        "overflow": false
+      }
+    ],
+    "fullReportSha256": "40bf69d25df0ac09ca93086a686764f537b15e98a058aa2689950b6bfca1af39"
+  },
+  "artworkLinkChecks": {
+    "domains": [
+      "canvas-advertising.com",
+      "canvas-adnvertising.web.app"
+    ],
+    "paths": [
+      "/vehicle-wrap-file-preparation-checklist",
+      "/lista-preparacion-archivos-wrap"
+    ],
+    "status": 200
+  },
+  "fallback": "NOT USED",
+  "exclusions": "No functions, CRM/commerce, rules/Storage, App Check, credential rotation, repository/history deletion, form submissions or calls",
+  "limits": "No prior-cache/download erasure or indexing/ranking improvement claimed",
+  "transferNotes": "SEO uploader option/HTTP400 transfer attempts were resolved on the same unpublished version; only hash-verified accepted gzip bytes were finalized. Initial numeric/named project alias mismatch resolved. Custom-domain raw-hash mismatch diagnosed as Cloudflare email obfuscation; origin exact bytes and narrowly normalized custom bytes verified.",
+  "finalLiveCheck": {
+    "at": "2026-10-20T19:37:50.915Z",
+    "version": "dffd5000bf0c16a6",
+    "release": "1792524958676000"
+  }
+}
