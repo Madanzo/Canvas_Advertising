@@ -34,3 +34,4 @@ for(const file of ['large-format-printing-austin.html','large-format-printing-au
  for(const q of [faq.mainEntity[0],faq.mainEntity.at(-1)]){assert.ok(html.includes('<h3 class="faq__question">'+q.name+'</h3>'));assert.ok(html.includes('<p class="faq__answer">'+q.acceptedAnswer.text+'</p>'));assert.match(q.acceptedAnswer.text,/quote|cotizaci[oó]n/i);}
  if(file.includes('-es.'))for(const q of [faq.mainEntity[0],faq.mainEntity.at(-1)])assert.match(q.name,/^¿/);
 });
+test('Spanish policy headline and search metadata do not promise speed',()=>{const home=fs.readFileSync('index-es.html','utf8'),print=fs.readFileSync('large-format-printing-austin-es.html','utf8');assert.ok(!/<h3[^>]*>Entrega Rápida<\/h3>/.test(home));assert.ok(!/<meta[^>]+Fast turnaround/.test(print));});

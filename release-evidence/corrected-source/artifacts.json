@@ -10,10 +10,10 @@
     },
     {
       "path": "/index-es.html",
-      "rawSha256": "68bfa4af401aee984ea01602bbcbb8abddf3e8644c1516262ba862cf20c34fd5",
-      "gzipSha256": "435197b205bbfaa8ea81884b4b69e7b29e70ca57df06cfbad901d0ba981e204f",
-      "rawBytes": 98976,
-      "gzipBytes": 20748
+      "rawSha256": "327b62cac886a7a4ddf538b581539d79c9fed7ac8613de19160828070503d0ce",
+      "gzipSha256": "fa2f8cfcdfac20e33afeab0ecf575329a806eaccc24425e3d32e8c0e2c4e923c",
+      "rawBytes": 98947,
+      "gzipBytes": 20716
     },
     {
       "path": "/large-format-printing-austin.html",
@@ -24,10 +24,10 @@
     },
     {
       "path": "/large-format-printing-austin-es.html",
-      "rawSha256": "cf6da503bc34ee6224cb9d77fdcb2d212fe7c64ed44b1620ab0ae46a370b7f8e",
-      "gzipSha256": "6f01814425dba55516bb0c20bd5f1e0628edb5fa73bfb775629ecbead22d6a7f",
-      "rawBytes": 29740,
-      "gzipBytes": 7360
+      "rawSha256": "a15daaba2a8e9e35902f70b2a5f4b4bfaec262cd50c021864019011014285cbf",
+      "gzipSha256": "dd319a218389aa1a46188c0df41331f8bb03d1cb9548ff7cf033beb005e254ec",
+      "rawBytes": 29805,
+      "gzipBytes": 7317
     }
   ]
 }
