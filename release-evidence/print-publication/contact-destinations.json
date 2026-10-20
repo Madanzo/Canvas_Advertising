@@ -1,0 +1,45 @@
+{
+  "english": {
+    "page": "/large-format-printing-austin",
+    "primary": "#partner-contact",
+    "phone": "tel:+15124343793",
+    "email": "mailto:sales@canvas-advertising.com",
+    "artwork": "/vehicle-wrap-file-preparation-checklist",
+    "trade": "/partner"
+  },
+  "spanish": {
+    "page": "/large-format-printing-austin-es",
+    "primary": "#partner-contact",
+    "phone": "tel:+15129459783",
+    "email": "mailto:sales@canvas-advertising.com",
+    "artwork": "/lista-preparacion-archivos-wrap",
+    "trade": "/partner-es"
+  },
+  "form": {
+    "id": "quoteForm",
+    "fields": [
+      "name",
+      "company",
+      "phone",
+      "email",
+      "service",
+      "message"
+    ],
+    "serviceValues": [
+      "",
+      "print-partner",
+      "wrap-production",
+      "cutting-only",
+      "full-service",
+      "other"
+    ],
+    "runtime": "Unchanged from current reviewed production; presentation labels/placeholder only",
+    "submissionAcceptance": "Not exercised; no production submission"
+  },
+  "calendar": {
+    "link": "canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting",
+    "namespace": "canvas-advertising-strategy-meeting",
+    "status": "Existing destination unchanged; no booking initiated"
+  },
+  "payments": "Existing Camilo invoicing/payment methods remain independent; no activation"
+}

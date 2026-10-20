@@ -1,0 +1,90 @@
+{
+  "headers": [
+    {
+      "headers": {
+        "Cache-Control": "public, max-age=0, must-revalidate"
+      },
+      "glob": "**/*.@(html)"
+    },
+    {
+      "headers": {
+        "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800"
+      },
+      "glob": "**/*.@(css|js)"
+    },
+    {
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      },
+      "glob": "**/*.20260727.min.css"
+    },
+    {
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      },
+      "glob": "**/*.20260805b.min.js"
+    },
+    {
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      },
+      "glob": "**/*.@(webp|avif|png|jpg|jpeg|svg|woff2|mp4|m4v)"
+    }
+  ],
+  "redirects": [
+    {
+      "statusCode": 301,
+      "location": "/",
+      "glob": "/index.php"
+    },
+    {
+      "statusCode": 301,
+      "location": "/",
+      "glob": "/home"
+    },
+    {
+      "statusCode": 301,
+      "location": "/large-format-printing-austin",
+      "glob": "/digital-print"
+    },
+    {
+      "statusCode": 301,
+      "location": "/large-format-printing-austin",
+      "glob": "/signs"
+    },
+    {
+      "statusCode": 301,
+      "location": "/store",
+      "glob": "/merch-2"
+    },
+    {
+      "statusCode": 301,
+      "location": "/portfolio",
+      "glob": "/design-2"
+    },
+    {
+      "statusCode": 301,
+      "location": "/vehicle-wraps-austin",
+      "glob": "/wrap"
+    },
+    {
+      "statusCode": 301,
+      "location": "/quote",
+      "glob": "/cdn-cgi/l/email-protection"
+    }
+  ],
+  "rewrites": [
+    {
+      "functionRegion": "us-central1",
+      "glob": "/projects/**",
+      "function": "serveProjectPage"
+    },
+    {
+      "functionRegion": "us-central1",
+      "glob": "/es/proyectos/**",
+      "function": "serveProjectPage"
+    }
+  ],
+  "cleanUrls": true,
+  "trailingSlashBehavior": "REMOVE"
+}

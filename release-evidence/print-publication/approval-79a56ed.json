@@ -1,0 +1,121 @@
+{
+  "source": "79a56edb1e763e1d974c48cc3acf265604ff61e3",
+  "capturedAt": "2026-10-20T20:45:14.181Z",
+  "archive": "/private/tmp/canvas-print-buyer-79a56ed-review.tar.gz",
+  "archiveSha256": "ddd9b0becf7caff71f394eef74867e61f8e328a1fb3c34023448f95b944df421",
+  "identityFileSha256": "575034addd5e55fb933009be4277e4c009fb67f10558463ad43038ae16424b77",
+  "artifactInventoryFileSha256": "4e8154d539bea794f9fb20450d7951abaa350167e3d7010c931bb1a074e6693a",
+  "baseline": {
+    "version": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/dffd5000bf0c16a6",
+    "release": "projects/canvas-adnvertising/sites/canvas-adnvertising/channels/live/releases/1792524958676000",
+    "releaseTime": "2026-10-20T19:35:58.676Z",
+    "manifestSha256": "dda424ddb8078ab022b2b840b8ccbd08ab2e94426742953467b107acd46b3d3a"
+  },
+  "proposed": {
+    "manifestSha256": "62d82391559f4cd7e74bf78351e20720b79d4d7028cf80ecdd0862f83d67df84"
+  },
+  "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3",
+  "fileSha256": {
+    "beforeMap": "213ac606835f9ecc63c30ce11d446b6f12f18b83668d21d87f1dd65488d7b07e",
+    "proposedMap": "9303adf125e0f16e34ed2b3877b3f9f78d740e5c7d4a7b1d08d4c0ce3c511d0b",
+    "configuration": "7396fc6c7b9e49f1b056e3e76dd271da00fa6ebb4d26609add29d909a4e3284e",
+    "comparison": "77ae12194cac11172afac30a988bda29bdfc6d594ecaffa65adaa111ddee6155",
+    "contactDestinations": "58d184738acf626ebfa228416471476f39628737dd70ae18aac529cb15e92c2e",
+    "verifier": "bd8386f4677837600a15153c98ca05a314c2181e6c5e499b277f4869ca1f350a"
+  },
+  "counts": {
+    "before": 142,
+    "after": 142,
+    "replacements": 2,
+    "unchanged": 140,
+    "additions": 0,
+    "deletions": 0,
+    "metadataPaths": 0
+  },
+  "rollback": {
+    "version": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/dffd5000bf0c16a6",
+    "release": "projects/canvas-adnvertising/sites/canvas-adnvertising/channels/live/releases/1792524958676000",
+    "manifestSha256": "dda424ddb8078ab022b2b840b8ccbd08ab2e94426742953467b107acd46b3d3a",
+    "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3",
+    "metadataSafe": true,
+    "conditions": "Only if our eventual release is still current and its exact proposed map/config verifies; do not overwrite an intervening publisher. Recheck all maps/config and current identity before release or rollback. Never use exposed61df100c11fd1d4f."
+  },
+  "records": [
+    {
+      "path": "/large-format-printing-austin.html",
+      "publicUrl": "https://canvas-advertising.com/large-format-printing-austin",
+      "beforeHostingHash": "40588d9672664420f046f4af6896bb9270720434d2626880e692084675a70bd2",
+      "beforeRawSha256": "d0c8f0b720e61cb10a71596de0f063d9952d6b87c8bb83a8eca3df13ce39299e",
+      "rawSha256": "58c1506c77b1232da4a613a587ec7edb9ae8daf4a45558c63015bcac39300354",
+      "gzipSha256": "4f35118c3924f1ca92e29c358f8595d0bc2ffc344a45e6ea366e5b40672c64c2",
+      "rawBytes": 30453,
+      "gzipBytes": 7315
+    },
+    {
+      "path": "/large-format-printing-austin-es.html",
+      "publicUrl": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "beforeHostingHash": "dd319a218389aa1a46188c0df41331f8bb03d1cb9548ff7cf033beb005e254ec",
+      "beforeRawSha256": "a15daaba2a8e9e35902f70b2a5f4b4bfaec262cd50c021864019011014285cbf",
+      "rawSha256": "c23c6a015f4489bb450d49bd5a08fcc9aabacdd739470a8f7f539ab6b1a206ab",
+      "gzipSha256": "2cd456916de557e74bec817622f29e1c5ef4e09dc92fc2a6530a418d20f37d54",
+      "rawBytes": 30592,
+      "gzipBytes": 7499
+    }
+  ],
+  "contacts": {
+    "english": {
+      "page": "/large-format-printing-austin",
+      "primary": "#partner-contact",
+      "phone": "tel:+15124343793",
+      "email": "mailto:sales@canvas-advertising.com",
+      "artwork": "/vehicle-wrap-file-preparation-checklist",
+      "trade": "/partner"
+    },
+    "spanish": {
+      "page": "/large-format-printing-austin-es",
+      "primary": "#partner-contact",
+      "phone": "tel:+15129459783",
+      "email": "mailto:sales@canvas-advertising.com",
+      "artwork": "/lista-preparacion-archivos-wrap",
+      "trade": "/partner-es"
+    },
+    "form": {
+      "id": "quoteForm",
+      "fields": [
+        "name",
+        "company",
+        "phone",
+        "email",
+        "service",
+        "message"
+      ],
+      "serviceValues": [
+        "",
+        "print-partner",
+        "wrap-production",
+        "cutting-only",
+        "full-service",
+        "other"
+      ],
+      "runtime": "Unchanged from current reviewed production; presentation labels/placeholder only",
+      "submissionAcceptance": "Not exercised; no production submission"
+    },
+    "calendar": {
+      "link": "canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting",
+      "namespace": "canvas-advertising-strategy-meeting",
+      "status": "Existing destination unchanged; no booking initiated"
+    },
+    "payments": "Existing Camilo invoicing/payment methods remain independent; no activation"
+  },
+  "ci": {
+    "source": "79a56edb1e763e1d974c48cc3acf265604ff61e3",
+    "url": "https://github.com/Madanzo/Canvas_Advertising/actions/runs/39494549676",
+    "status": "success",
+    "tests": 37
+  },
+  "verificationStatus": "PASS_OFFLINE_NOT_DEPLOYED",
+  "fullComparison": "/private/tmp/canvas-print-approval-IXZIj6/package/comparison.json",
+  "packageDirectory": "/private/tmp/canvas-print-approval-IXZIj6/package",
+  "remoteWrites": "NONE",
+  "scope": "Only2HTML replacements, complete current live map/config preserved otherwise; no functions/CRM/commerce/rules/Storage/AppCheck/payment/backend activation"
+}
