@@ -1,0 +1,17 @@
+name: Material guide contact journey
+on:
+  push:
+    branches: ['codex/canvas-material-contact-code']
+  pull_request:
+    paths: ['3m-vs-avery-dennison-wrap-film.html', 'tests/material-journey.test.cjs', '.github/workflows/material-journey-ci.yml']
+permissions:
+  contents: read
+jobs:
+  affected-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --test tests/material-journey.test.cjs tests/hosting-artifact-guard.test.cjs
