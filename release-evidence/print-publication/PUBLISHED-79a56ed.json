@@ -1,0 +1,245 @@
+{
+  "source": "79a56edb1e763e1d974c48cc3acf265604ff61e3",
+  "archiveSha256": "ddd9b0becf7caff71f394eef74867e61f8e328a1fb3c34023448f95b944df421",
+  "preflight": {
+    "at": "2026-10-20T21:08:24.333Z",
+    "version": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/dffd5000bf0c16a6",
+    "release": "projects/canvas-adnvertising/sites/canvas-adnvertising/channels/live/releases/1792524958676000",
+    "mapSha256": "dda424ddb8078ab022b2b840b8ccbd08ab2e94426742953467b107acd46b3d3a",
+    "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3"
+  },
+  "version": "projects/835646149135/sites/canvas-adnvertising/versions/f8d836b8492bd11b",
+  "release": "projects/835646149135/sites/canvas-adnvertising/channels/live/releases/1792530511786000",
+  "releaseTime": "2026-10-20T21:08:31.786Z",
+  "proposedVerification": {
+    "at": "2026-10-20T21:08:30.528Z",
+    "mapSha256": "62d82391559f4cd7e74bf78351e20720b79d4d7028cf80ecdd0862f83d67df84",
+    "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3"
+  },
+  "finalizedVerification": {
+    "at": "2026-10-20T21:08:31.453Z",
+    "mapSha256": "62d82391559f4cd7e74bf78351e20720b79d4d7028cf80ecdd0862f83d67df84",
+    "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3"
+  },
+  "verification": {
+    "at": "2026-10-20T21:09:22.063Z",
+    "status": "PASS",
+    "checks": [
+      {
+        "url": "https://canvas-advertising.com/.git/HEAD",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.git/HEAD?canvas_verify=1792530552455",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.git/config",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.git/config?canvas_verify=1792530553077",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.git/index",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.git/index?canvas_verify=1792530553505",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/%2egit/HEAD",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/%2egit/HEAD?canvas_verify=1792530554022",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.agents/AGENTS.md",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.agents/AGENTS.md?canvas_verify=1792530554637",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.codex/config.toml",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.codex/config.toml?canvas_verify=1792530555297",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/index-es",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/robots.txt",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/sitemap.xml",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/images/logo.png",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/css/styles.20260727.min.css",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/projects/tech-center-signage",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/es/proyectos/tech-center-signage",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/vehicle-wrap-file-preparation-checklist",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/lista-preparacion-archivos-wrap",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/large-format-printing-austin?canvas_print_verify=1792530557157",
+        "status": 200,
+        "rawReceivedSha256": "ad0588251f9b2ffe80689a3eb90bd08b65ff0cdc3c91212b5aa2e80f144b4526",
+        "comparedSha256": "58c1506c77b1232da4a613a587ec7edb9ae8daf4a45558c63015bcac39300354",
+        "cloudflareNormalization": true
+      },
+      {
+        "url": "https://canvas-advertising.com/large-format-printing-austin-es?canvas_print_verify=1792530557356",
+        "status": 200,
+        "rawReceivedSha256": "ca40868bbff2af60c510325bda9f4c2677b72259e22a80692e5359db80fe00a2",
+        "comparedSha256": "c23c6a015f4489bb450d49bd5a08fcc9aabacdd739470a8f7f539ab6b1a206ab",
+        "cloudflareNormalization": true
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.git/HEAD",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.git/HEAD?canvas_verify=1792530557530",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.git/config",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.git/config?canvas_verify=1792530557857",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.git/index",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.git/index?canvas_verify=1792530558214",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/%2egit/HEAD",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/%2egit/HEAD?canvas_verify=1792530558569",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.agents/AGENTS.md",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.agents/AGENTS.md?canvas_verify=1792530558953",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.codex/config.toml",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.codex/config.toml?canvas_verify=1792530559297",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/index-es",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/robots.txt",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/sitemap.xml",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/images/logo.png",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/css/styles.20260727.min.css",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/projects/tech-center-signage",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/es/proyectos/tech-center-signage",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/vehicle-wrap-file-preparation-checklist",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/lista-preparacion-archivos-wrap",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/large-format-printing-austin?canvas_print_verify=1792530561253",
+        "status": 200,
+        "rawReceivedSha256": "58c1506c77b1232da4a613a587ec7edb9ae8daf4a45558c63015bcac39300354",
+        "comparedSha256": "58c1506c77b1232da4a613a587ec7edb9ae8daf4a45558c63015bcac39300354",
+        "cloudflareNormalization": false
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/large-format-printing-austin-es?canvas_print_verify=1792530561382",
+        "status": 200,
+        "rawReceivedSha256": "c23c6a015f4489bb450d49bd5a08fcc9aabacdd739470a8f7f539ab6b1a206ab",
+        "comparedSha256": "c23c6a015f4489bb450d49bd5a08fcc9aabacdd739470a8f7f539ab6b1a206ab",
+        "cloudflareNormalization": false
+      }
+    ],
+    "completeMapAndConfigurationMatch": true,
+    "submissions": 0,
+    "calls": 0,
+    "emails": 0
+  },
+  "initialVerificationFinding": {
+    "at": "2026-10-20T21:08:46.175Z",
+    "message": "Unexpected HTML differences\n+ actual - expected\n\n+ 'bcb08ee1b2abc43778b39d9608b2f153b75d34c39d3acdeea9e9b3eb9a7d16ca'\n- '58c1506c77b1232da4a613a587ec7edb9ae8daf4a45558c63015bcac39300354'\n"
+  },
+  "resolution": "Observed Cloudflare obfuscation of additional labeled mailto anchors decoded to approved sales address; custom normalized exact hashes and origin exact hashes pass; no fallback required",
+  "rollback": "NOT USED",
+  "exclusions": "No functions/CRM/commerce/rules/Storage/AppCheck/payment changes, no form submissions/calls/emails; sealed archive unchanged"
+}
