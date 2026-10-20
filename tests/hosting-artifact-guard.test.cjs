@@ -22,3 +22,9 @@ test('transition refuses ordinary file loss, addition, unreviewed replacement or
  assert.throws(()=>assertTransition(before,{'/index.html':h},{omitted:['/logo.png'],configBefore:config,configAfter:config}));
 });
 test('malformed hashes and encoded metadata cannot bypass artifact/API guard',()=>{assert.throws(()=>assertSafeManifest({'/index.html':'bad'}));assert.throws(()=>assertSafeManifest({'/%25252egit/HEAD':h}));assert.throws(()=>assertSafeManifest({'/%252525252egit/HEAD':h}));assert.throws(()=>assertSafeManifest({'/.git-credentials':h}));});
+test('fallback explicitly reverts reviewed public hashes from SEO while retaining containment',()=>{
+ const safe={'/index.html':h,'/css/styles.css':j},seo={...safe,'/index.html':j};
+ assert.ok(assertTransition(seo,safe,{replacements:{'/index.html':h},configBefore:config,configAfter:config}));
+ assert.throws(()=>assertTransition(seo,{...safe,'/.git/HEAD':h},{replacements:{'/index.html':h},configBefore:config,configAfter:config}));
+ assert.throws(()=>assertTransition(seo,safe,{configBefore:config,configAfter:config}),'unrecorded reversion must fail');
+});
