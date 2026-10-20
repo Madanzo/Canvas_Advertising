@@ -1,0 +1,640 @@
+{
+  "source": "f8a0c11da9b532766c3c1311bfd3906291ecd301",
+  "checkedAt": "2026-10-20T18:25:32.875Z",
+  "extractionCorrectedAt": "2026-10-20T18:26:06.874Z",
+  "extractionNote": "Exact og:image/twitter:image properties only; width, height and MIME metadata are not URLs. Existing verified GETs retained, not repolled.",
+  "policy": "Public GET only. No form submission, call, tracking, auth, database or callable request.",
+  "resources": [
+    {
+      "url": "https://canvas-advertising.com/css/mobile-critical.20260727.min.css",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/css/mobile-critical.20260727.min.css",
+      "bytes": 7063,
+      "type": "text/css; charset=utf-8",
+      "sha256": "93e93dcf003edcfb2cb029e7ed8d73f46b82794dadd58cdcb694ffaf5f7012c9"
+    },
+    {
+      "url": "https://canvas-advertising.com/css/mobile-nav-fix.20260827.css",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/css/mobile-nav-fix.20260827.css",
+      "bytes": 141,
+      "type": "text/css; charset=utf-8",
+      "sha256": "2007668271d4d0584dfd7ca20b15c01c466c722dab388bd02c61325bb915ad95"
+    },
+    {
+      "url": "https://canvas-advertising.com/css/styles.20260727.min.css",
+      "pages": [
+        "/index-es.html",
+        "/index.html",
+        "/large-format-printing-austin-es.html",
+        "/large-format-printing-austin.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/css/styles.20260727.min.css",
+      "bytes": 129601,
+      "type": "text/css; charset=utf-8",
+      "sha256": "182e9744a708ca17a60bf9e6de4440e9aa255745941c60e77cb8f726b5e010ec"
+    },
+    {
+      "url": "https://canvas-advertising.com/favicon.png",
+      "pages": [
+        "/index-es.html",
+        "/index.html",
+        "/large-format-printing-austin-es.html",
+        "/large-format-printing-austin.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/favicon.png",
+      "bytes": 32688,
+      "type": "image/png",
+      "sha256": "3d507846ad270957fabbfd1052c7d34390584ea026cf567e4f99832ea4f6d97c"
+    },
+    {
+      "url": "https://canvas-advertising.com/fonts/bebas-neue.woff2",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/fonts/bebas-neue.woff2",
+      "bytes": 8596,
+      "type": "font/woff2",
+      "sha256": "441b026df205d28954f61b6989c7bbd228c0adff42f746a266c6a5d89134bc34"
+    },
+    {
+      "url": "https://canvas-advertising.com/fonts/dm-sans.woff2",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/fonts/dm-sans.woff2",
+      "bytes": 36980,
+      "type": "font/woff2",
+      "sha256": "468d56b6b25b05b70190b6c233d773f6f1770e8579827ce022a57f03fa8002fb"
+    },
+    {
+      "url": "https://canvas-advertising.com/images/before-after-after-mobile.20260727.webp",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/images/before-after-after-mobile.20260727.webp",
+      "bytes": 97392,
+      "type": "image/webp",
+      "sha256": "8d9bccc23520520645eb5b868dafeac956c2d242179e957498cd1de6ce26b275"
+    },
+    {
+      "url": "https://canvas-advertising.com/images/before-after-after.20260727.webp",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/images/before-after-after.20260727.webp",
+      "bytes": 269368,
+      "type": "image/webp",
+      "sha256": "b239d4831e33409ccd4ca11b6a068c707bddc90ac5f9874622b99b3b847ddf6f"
+    },
+    {
+      "url": "https://canvas-advertising.com/images/before-after-before-mobile.20260727.webp",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/images/before-after-before-mobile.20260727.webp",
+      "bytes": 78118,
+      "type": "image/webp",
+      "sha256": "83e614d616af95cdd403d911fff32e767524e4c35d0ae80e697c6ffaf2238510"
+    },
+    {
+      "url": "https://canvas-advertising.com/images/before-after-before.20260727.webp",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/images/before-after-before.20260727.webp",
+      "bytes": 219542,
+      "type": "image/webp",
+      "sha256": "a71533d58e993799805c8daca583954e43387c790d24f48af100481c13541b75"
+    },
+    {
+      "url": "https://canvas-advertising.com/images/fully-insured-company-96.png",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/images/fully-insured-company-96.png",
+      "bytes": 7351,
+      "type": "image/png",
+      "sha256": "322ad7729fdb02ef857f9df823727fdd17163f6793589995d1e2497651a447f8"
+    },
+    {
+      "url": "https://canvas-advertising.com/images/hero-poster-mobile.20260727.webp",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/images/hero-poster-mobile.20260727.webp",
+      "bytes": 22584,
+      "type": "image/webp",
+      "sha256": "a091ad5d6afa88fade0d79189ac0dd35fd2130d8731a4a4caa07aeb1689914c3"
+    },
+    {
+      "url": "https://canvas-advertising.com/images/hero-poster.20260727.webp",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/images/hero-poster.20260727.webp",
+      "bytes": 139684,
+      "type": "image/webp",
+      "sha256": "ce29cef276143eee5443146f20cdd63c53cde5d9ef26489b93eaf9ec632cc496"
+    },
+    {
+      "url": "https://canvas-advertising.com/images/logo.png",
+      "pages": [
+        "/index-es.html",
+        "/index.html",
+        "/large-format-printing-austin-es.html",
+        "/large-format-printing-austin.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/images/logo.png",
+      "bytes": 12421,
+      "type": "image/png",
+      "sha256": "cd12ad8001920328c0b7093d359664125f6a62766577733858b43c1fca2530b9"
+    },
+    {
+      "url": "https://canvas-advertising.com/images/og-share.jpg",
+      "pages": [
+        "/index-es.html",
+        "/index.html",
+        "/large-format-printing-austin-es.html",
+        "/large-format-printing-austin.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/images/og-share.jpg",
+      "bytes": 252398,
+      "type": "image/jpeg",
+      "sha256": "78e0a7019c966156af5fbd575dd94b005ed7cf22c9c15f4b4ee5916c43830c53"
+    },
+    {
+      "url": "https://canvas-advertising.com/js/firebase-config.js?v=20260910-2bf92bc",
+      "pages": [
+        "/large-format-printing-austin-es.html",
+        "/large-format-printing-austin.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/js/firebase-config.js?v=20260910-2bf92bc",
+      "bytes": 10383,
+      "type": "text/javascript; charset=utf-8",
+      "sha256": "99a6a6f892ef9e98509bd333b9b28577b1fe78ba157cc4b8df3f01a9384b05ee"
+    },
+    {
+      "url": "https://canvas-advertising.com/js/main.20260907b.min.js?v=20260814-phone-routing",
+      "pages": [
+        "/index-es.html",
+        "/index.html",
+        "/large-format-printing-austin-es.html",
+        "/large-format-printing-austin.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/js/main.20260907b.min.js?v=20260814-phone-routing",
+      "bytes": 69991,
+      "type": "text/javascript; charset=utf-8",
+      "sha256": "8f80f15178b5070d0c423588a51e4d81e12f052108081755669b257d002314ff"
+    },
+    {
+      "url": "https://canvas-advertising.com/videos/hero-desktop.20260727.mp4",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/videos/hero-desktop.20260727.mp4",
+      "bytes": 2086305,
+      "type": "video/mp4",
+      "sha256": "f89970a4739e05864487fcc6d4f89dfea0ab042d1827eef6a62cd155135b106c"
+    },
+    {
+      "url": "https://canvas-advertising.com/videos/hero-mobile.mp4",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/videos/hero-mobile.mp4",
+      "bytes": 264325,
+      "type": "video/mp4",
+      "sha256": "9f9e50f6a27eaa36a36681932da754cc2353cf59ce021eeb56622f03fcf2ab03"
+    },
+    {
+      "url": "https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js",
+      "pages": [
+        "/index-es.html",
+        "/index.html",
+        "/large-format-printing-austin-es.html",
+        "/large-format-printing-austin.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js",
+      "bytes": 72435,
+      "type": "application/javascript; charset=utf-8",
+      "sha256": "96c01b81f44a3290e2b4532f55e2c9534b2adc43273a19f3756b2cb41f0fd0b6"
+    },
+    {
+      "url": "https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js",
+      "pages": [
+        "/index-es.html",
+        "/index.html",
+        "/large-format-printing-austin-es.html",
+        "/large-format-printing-austin.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js",
+      "bytes": 44157,
+      "type": "application/javascript; charset=utf-8",
+      "sha256": "308219390e5e3b84cda0c481e70caa9820883ae10bda44e6e9a149a81aac4b3f"
+    },
+    {
+      "url": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FCommercial-Printing.svg?alt=media&token=0936b258-b059-47ea-9f15-208be7953790",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FCommercial-Printing.svg?alt=media&token=0936b258-b059-47ea-9f15-208be7953790",
+      "bytes": 2636,
+      "type": "image/svg+xml",
+      "sha256": "761383502c08ff261300319ee8babb3e53ca318e29c94d2247039ac60431cdaf"
+    },
+    {
+      "url": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FInterior-Branding.svg?alt=media&token=3a20a318-7bc5-4166-b265-c9eb26895417",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FInterior-Branding.svg?alt=media&token=3a20a318-7bc5-4166-b265-c9eb26895417",
+      "bytes": 9670,
+      "type": "image/svg+xml",
+      "sha256": "2c427a5ae619ef0527bbb7f24098472ee85f020610bafef35a8bb5a80fc6ca66"
+    },
+    {
+      "url": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FLarge-Format-Graphics.svg?alt=media&token=5d95dde3-bd19-4b98-ad3a-40d7d72334d8",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FLarge-Format-Graphics.svg?alt=media&token=5d95dde3-bd19-4b98-ad3a-40d7d72334d8",
+      "bytes": 1987,
+      "type": "image/svg+xml",
+      "sha256": "2ae00044df31d79648fc7ef5476c031a71d0a9f13c5b3d2b78d2d87ac5d28000"
+    },
+    {
+      "url": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FMerch-%26-Promotional.svg?alt=media&token=8b32c119-bd70-4613-9ace-e7f7f9ccc870",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FMerch-%26-Promotional.svg?alt=media&token=8b32c119-bd70-4613-9ace-e7f7f9ccc870",
+      "bytes": 2159,
+      "type": "image/svg+xml",
+      "sha256": "313aeaff25cf6c66bfcb69e57a84ac67553deb1edb2469ee73efb9515ca67146"
+    },
+    {
+      "url": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FStorefront-Signage.svg?alt=media&token=549d8c7f-7099-4161-8897-d2283a5fafec",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FStorefront-Signage.svg?alt=media&token=549d8c7f-7099-4161-8897-d2283a5fafec",
+      "bytes": 1726,
+      "type": "image/svg+xml",
+      "sha256": "b5b2a799239e08b8bb44836340c0ba841f9cedb434d48afa85f12a0930d73105"
+    },
+    {
+      "url": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FVehicle-Wraps.svg?alt=media&token=344eb630-97ea-41c9-b510-44343264fe96",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FVehicle-Wraps.svg?alt=media&token=344eb630-97ea-41c9-b510-44343264fe96",
+      "bytes": 3461,
+      "type": "image/svg+xml",
+      "sha256": "9f65882fbcc78d799ee35cde187421cc22b660a278fdd5e8d813d2e6b08f5afc"
+    },
+    {
+      "url": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fbanner-sign-mtz-austin.jpg?alt=media&token=400ca822-1e7d-4927-bc98-c8dbb3808d82",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fbanner-sign-mtz-austin.jpg?alt=media&token=400ca822-1e7d-4927-bc98-c8dbb3808d82",
+      "bytes": 178097,
+      "type": "image/jpeg",
+      "sha256": "eb15ed3c746fd33af92809d5b653e89289c76b1be9e479a46b01b5ea6ea30e5c"
+    },
+    {
+      "url": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_5200.jpg?alt=media&token=a00f5e84-bdd5-435c-a0f8-d8b8ba3bbe20",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_5200.jpg?alt=media&token=a00f5e84-bdd5-435c-a0f8-d8b8ba3bbe20",
+      "bytes": 2462334,
+      "type": "image/jpeg",
+      "sha256": "34311ef53fd9dbec9310a08d5ab493e29771b8a48d84d05827f61119e629af60"
+    },
+    {
+      "url": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_8357.jpg?alt=media&token=054eda4c-2eef-48ec-b090-11e793187b94",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_8357.jpg?alt=media&token=054eda4c-2eef-48ec-b090-11e793187b94",
+      "bytes": 1104183,
+      "type": "image/jpeg",
+      "sha256": "d572f25703f28821dc24a42e23e5148fc5128b9132122dbecf0b68a79ed39a7a"
+    },
+    {
+      "url": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fposey-car-sign-vinyl.webp?alt=media&token=8d7067f0-42c6-4a43-8de8-a6acdd874bae",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fposey-car-sign-vinyl.webp?alt=media&token=8d7067f0-42c6-4a43-8de8-a6acdd874bae",
+      "bytes": 74296,
+      "type": "image/webp",
+      "sha256": "ed44d3399ae7ff6df2f335cef2838a30fce255155c857b7ed62fdbe3549a5095"
+    },
+    {
+      "url": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fstorefront-vinyl-wild-heart.jpg?alt=media&token=382c9b3e-d770-4c11-9157-333114e30977",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fstorefront-vinyl-wild-heart.jpg?alt=media&token=382c9b3e-d770-4c11-9157-333114e30977",
+      "bytes": 175860,
+      "type": "image/jpeg",
+      "sha256": "f29e9f9d15d8cac48191c9be7c98c9c724b9b30ba153781613441dc0a61e0936"
+    },
+    {
+      "url": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fvinyl-truck-lightnin-dent.jpg?alt=media&token=a4152130-b799-4d79-b50c-c33d6819e336",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fvinyl-truck-lightnin-dent.jpg?alt=media&token=a4152130-b799-4d79-b50c-c33d6819e336",
+      "bytes": 148772,
+      "type": "image/jpeg",
+      "sha256": "242c3e28b478b7d9b2b5687592c0f38a27fc03c47416638ad6ab4d17a3b5bbf7"
+    },
+    {
+      "url": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fleet-branding-mobile-billboard-graphics.webp?alt=media&token=c7704a48-69a8-4292-aedf-e021bb631d9f",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fleet-branding-mobile-billboard-graphics.webp?alt=media&token=c7704a48-69a8-4292-aedf-e021bb631d9f",
+      "bytes": 436830,
+      "type": "image/webp",
+      "sha256": "ed5a1ccfa12e8bdcbb82456aa5a561c85f65f12b5a8fbb3f6905bccc0acf5ad6"
+    },
+    {
+      "url": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fmonument-sign-vinyl-refacing-austin-tx.webp?alt=media&token=49b080dc-897f-42bd-90c2-08f7dda1de3f",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fmonument-sign-vinyl-refacing-austin-tx.webp?alt=media&token=49b080dc-897f-42bd-90c2-08f7dda1de3f",
+      "bytes": 533656,
+      "type": "image/webp",
+      "sha256": "797f01d5d327d4376e00c6f73e620affb4e53347fe1943ea53fb86193a93da0f"
+    },
+    {
+      "url": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fretail-store-fixture-wrap-austin-tx.webp?alt=media&token=2e6d6698-c7b8-45c5-ad2c-da6faf658d08",
+      "pages": [
+        "/index-es.html",
+        "/index.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fretail-store-fixture-wrap-austin-tx.webp?alt=media&token=2e6d6698-c7b8-45c5-ad2c-da6faf658d08",
+      "bytes": 336224,
+      "type": "image/webp",
+      "sha256": "32c92f6bbcdd1446e6b6eb09fb65ee43c06fc212fbf77c91b65159573f28da64"
+    },
+    {
+      "url": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fwaterloo-sparkling-water-fleet-wrap-austin.webp?alt=media&token=c4805ad5-1929-4d37-a23d-fef7e1733aa4",
+      "pages": [
+        "/index-es.html",
+        "/index.html",
+        "/large-format-printing-austin-es.html",
+        "/large-format-printing-austin.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fwaterloo-sparkling-water-fleet-wrap-austin.webp?alt=media&token=c4805ad5-1929-4d37-a23d-fef7e1733aa4",
+      "bytes": 236630,
+      "type": "image/webp",
+      "sha256": "eff131356badc0b8bf1ea78ec6aa6ef6d20c1f171da6de4840a6ede0191d9e4a"
+    },
+    {
+      "url": "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap",
+      "pages": [
+        "/large-format-printing-austin-es.html",
+        "/large-format-printing-austin.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap",
+      "bytes": 1150,
+      "type": "text/css; charset=utf-8",
+      "sha256": "68e3937c1eaf96fef919ebde65db011ee34c617cd58e39326e8eeae55d8d3bbe"
+    },
+    {
+      "url": "https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check-compat.js",
+      "pages": [
+        "/large-format-printing-austin-es.html",
+        "/large-format-printing-austin.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check-compat.js",
+      "bytes": 23376,
+      "type": "text/javascript; charset=UTF-8",
+      "sha256": "3897630a79b188ddb4e69005057c63dae211a052a5887262d9f3e3d2166e0a19"
+    },
+    {
+      "url": "https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js",
+      "pages": [
+        "/large-format-printing-austin-es.html",
+        "/large-format-printing-austin.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js",
+      "bytes": 28949,
+      "type": "text/javascript; charset=UTF-8",
+      "sha256": "2d038b9f99cdc28119b4e5c2a4ed86d561fc36c051e515ef35176b1cabe780c1"
+    },
+    {
+      "url": "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js",
+      "pages": [
+        "/large-format-printing-austin-es.html",
+        "/large-format-printing-austin.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js",
+      "bytes": 132195,
+      "type": "text/javascript; charset=UTF-8",
+      "sha256": "1451e1285d1a09eed6c9f71b07ba01fb097add66b024d13e2454ba07d50a53c6"
+    },
+    {
+      "url": "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js",
+      "pages": [
+        "/large-format-printing-austin-es.html",
+        "/large-format-printing-austin.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js",
+      "bytes": 339106,
+      "type": "text/javascript; charset=UTF-8",
+      "sha256": "2334a57f785eb38ce1a6fdfaed55ecc1335734a5fd15f276b76bf2b45742406f"
+    },
+    {
+      "url": "https://www.gstatic.com/firebasejs/9.22.0/firebase-functions-compat.js",
+      "pages": [
+        "/large-format-printing-austin-es.html",
+        "/large-format-printing-austin.html"
+      ],
+      "status": 200,
+      "finalUrl": "https://www.gstatic.com/firebasejs/9.22.0/firebase-functions-compat.js",
+      "bytes": 8116,
+      "type": "text/javascript; charset=UTF-8",
+      "sha256": "19c1b4a2b75649a107c9e629f9fbf0ab78587d1ac6b08ae0e148d2f0f70f7929"
+    }
+  ],
+  "behaviors": [
+    {
+      "url": "https://canvas-advertising.com/index.html",
+      "status": 301,
+      "location": "/",
+      "finalUrl": "https://canvas-advertising.com/",
+      "finalStatus": 200,
+      "canonical": "<link rel=\"canonical\" href=\"https://canvas-advertising.com/\">"
+    },
+    {
+      "url": "https://canvas-advertising.com/index-es.html",
+      "status": 301,
+      "location": "/index-es",
+      "finalUrl": "https://canvas-advertising.com/index-es",
+      "finalStatus": 200,
+      "canonical": "<link rel=\"canonical\" href=\"https://canvas-advertising.com/index-es\">"
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin.html",
+      "status": 301,
+      "location": "/large-format-printing-austin",
+      "finalUrl": "https://canvas-advertising.com/large-format-printing-austin",
+      "finalStatus": 200,
+      "canonical": "<link rel=\"canonical\" href=\"https://canvas-advertising.com/large-format-printing-austin\">"
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin/",
+      "status": 301,
+      "location": "/large-format-printing-austin",
+      "finalUrl": "https://canvas-advertising.com/large-format-printing-austin",
+      "finalStatus": 200,
+      "canonical": "<link rel=\"canonical\" href=\"https://canvas-advertising.com/large-format-printing-austin\">"
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin-es.html",
+      "status": 301,
+      "location": "/large-format-printing-austin-es",
+      "finalUrl": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "finalStatus": 200,
+      "canonical": "<link rel=\"canonical\" href=\"https://canvas-advertising.com/large-format-printing-austin-es\">"
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin-es/",
+      "status": 301,
+      "location": "/large-format-printing-austin-es",
+      "finalUrl": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "finalStatus": 200,
+      "canonical": "<link rel=\"canonical\" href=\"https://canvas-advertising.com/large-format-printing-austin-es\">"
+    },
+    {
+      "url": "https://canvas-advertising.com/vehicle-wrap-file-preparation-checklist",
+      "status": 200,
+      "location": null,
+      "finalUrl": "https://canvas-advertising.com/vehicle-wrap-file-preparation-checklist",
+      "finalStatus": 200,
+      "canonical": "<link rel=\"canonical\" href=\"https://canvas-advertising.com/vehicle-wrap-file-preparation-checklist\">"
+    },
+    {
+      "url": "https://canvas-advertising.com/vehicle-wrap-file-preparation-checklist/",
+      "status": 301,
+      "location": "/vehicle-wrap-file-preparation-checklist",
+      "finalUrl": "https://canvas-advertising.com/vehicle-wrap-file-preparation-checklist",
+      "finalStatus": 200,
+      "canonical": "<link rel=\"canonical\" href=\"https://canvas-advertising.com/vehicle-wrap-file-preparation-checklist\">"
+    },
+    {
+      "url": "https://canvas-advertising.com/lista-preparacion-archivos-wrap",
+      "status": 200,
+      "location": null,
+      "finalUrl": "https://canvas-advertising.com/lista-preparacion-archivos-wrap",
+      "finalStatus": 200,
+      "canonical": "<link rel=\"canonical\" href=\"https://canvas-advertising.com/lista-preparacion-archivos-wrap\">"
+    },
+    {
+      "url": "https://canvas-advertising.com/lista-preparacion-archivos-wrap/",
+      "status": 301,
+      "location": "/lista-preparacion-archivos-wrap",
+      "finalUrl": "https://canvas-advertising.com/lista-preparacion-archivos-wrap",
+      "finalStatus": 200,
+      "canonical": "<link rel=\"canonical\" href=\"https://canvas-advertising.com/lista-preparacion-archivos-wrap\">"
+    },
+    {
+      "url": "https://canvas-advertising.com/quote-es",
+      "status": 200,
+      "location": null,
+      "finalUrl": "https://canvas-advertising.com/quote-es",
+      "finalStatus": 200,
+      "canonical": "<link rel=\"canonical\" href=\"https://canvas-advertising.com/quote-es\" />"
+    },
+    {
+      "url": "https://canvas-advertising.com/quote",
+      "status": 200,
+      "location": null,
+      "finalUrl": "https://canvas-advertising.com/quote",
+      "finalStatus": 200,
+      "canonical": "<link rel=\"canonical\" href=\"https://canvas-advertising.com/quote\" />"
+    }
+  ],
+  "assetFailures": []
+}

@@ -1,0 +1,16 @@
+{
+  "scope": "Existing live Hosting manifest and bounded public metadata-path GETs; no remediation executed",
+  "liveVersion": "61df100c11fd1d4f",
+  "gitPathCount": 1876,
+  "gitObjectPathCount": 1842,
+  "observations": [
+    {"url": "https://canvas-advertising.com/.git/HEAD", "status": 200, "bytes": 21},
+    {"url": "https://canvas-adnvertising.web.app/.git/HEAD", "status": 200, "bytes": 21},
+    {"url": "https://canvas-advertising.com/.git/config", "status": 200, "bytes": 348},
+    {"url": "https://canvas-adnvertising.web.app/.git/config", "status": 200, "bytes": 348}
+  ],
+  "contentsDisplayed": false,
+  "gitObjectsDownloaded": false,
+  "credentialValuesRead": false,
+  "remediation": "Separate owner-approved containment and credential-risk assessment; do not silently broaden the four-replacement, zero-deletion static SEO package. No credential creation/rotation or production mutation authorized."
+}

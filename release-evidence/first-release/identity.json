@@ -1,0 +1,71 @@
+{
+  "source": "f8a0c11da9b532766c3c1311bfd3906291ecd301",
+  "project": "canvas-adnvertising",
+  "site": "canvas-adnvertising",
+  "liveVersion": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/61df100c11fd1d4f",
+  "rollbackVersion": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/61df100c11fd1d4f",
+  "baselineManifestSha256": "7558b35a9b5c9e0251a30e94b22f1659e02dc46a465f46317e71b8e5ff9b96b0",
+  "proposedManifestSha256": "eb03a5b658009fd31402072f6ac4d00e39dafec31b4cf8ebe2b215b2f215d938",
+  "hostingConfigSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3",
+  "fileCount": 2020,
+  "replacements": [
+    {
+      "path": "/index-es.html",
+      "publicUrl": "https://canvas-advertising.com/index-es",
+      "sourceSha256": "7aed8a7ea12bf836ff5e9faf83d44d8a844feda88d0651683f68f57445951738",
+      "gzipSha256": "330793dce20fa56287067c4d87c22a6ad412dc1efe0ee2cf4bf49f252338a498",
+      "baselineHostingHash": "e2f05df4c4dcfd9abc71ac8badb230d319c33efde300b4e8324f724b6ab4cde5",
+      "sourceBytes": 98903,
+      "uploadBytes": 20832
+    },
+    {
+      "path": "/index.html",
+      "publicUrl": "https://canvas-advertising.com/",
+      "sourceSha256": "c7f085f1c6c618a9a4cb8375ecf823d3788910b7192a2e02c712d7cc1459931c",
+      "gzipSha256": "6d1ab522f85c122fbecdc68c3dc0a57c7f3389458fb9707d600d026c5e19bba8",
+      "baselineHostingHash": "4ea393cf8b9075ad8bbc8c1296589c996084633c206a2f7fc0b622cc111a0aec",
+      "sourceBytes": 104047,
+      "uploadBytes": 21120
+    },
+    {
+      "path": "/large-format-printing-austin-es.html",
+      "publicUrl": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "sourceSha256": "2be59498c52b07defc492a392452dba22e38787e9f8e938ec30656985727cf03",
+      "gzipSha256": "b12eb42f61c78cd4f8cdf100ac9024f47674bba5d02ad1bbbb89305cf2524e29",
+      "baselineHostingHash": "2831039cae6ce0d1a17aa2236cdda662117e498db5f0a7146c136a8c6ba86f04",
+      "sourceBytes": 29672,
+      "uploadBytes": 7406
+    },
+    {
+      "path": "/large-format-printing-austin.html",
+      "publicUrl": "https://canvas-advertising.com/large-format-printing-austin",
+      "sourceSha256": "ead19acb196ab3ffccd1827bf4d7c84b143b017c36257c09b498a18b52b68a83",
+      "gzipSha256": "f3d4bf3f76fad3fbafef91b50cf4c54b6c97d497599582ce6275a94ad54d27cd",
+      "baselineHostingHash": "b44398376930055e33ac273f644a1502a9ed64df17bf204abcb537ee06b855e7",
+      "sourceBytes": 30043,
+      "uploadBytes": 7126
+    }
+  ],
+  "comparison": {
+    "replacements": 4,
+    "unchanged": 2016,
+    "additions": 0,
+    "deletions": 0,
+    "configEqual": true
+  },
+  "existingDynamicRewrites": [
+    {
+      "functionRegion": "us-central1",
+      "glob": "/projects/**",
+      "function": "serveProjectPage"
+    },
+    {
+      "functionRegion": "us-central1",
+      "glob": "/es/proyectos/**",
+      "function": "serveProjectPage"
+    }
+  ],
+  "status": "PREPARED_NO_REMOTE_WRITES",
+  "checkedAt": "2026-10-20T18:23:21.239Z",
+  "packageId": "canvas-seo-first-907d3c0ac82b82c831fb3f71c80d1de47d02628d2ef9dd26e1bc9addc89b8ce7"
+}

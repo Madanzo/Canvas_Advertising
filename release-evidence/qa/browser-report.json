@@ -1,0 +1,2977 @@
+{
+  "source": "f8a0c11da9b532766c3c1311bfd3906291ecd301",
+  "startedAt": "2026-10-20T18:24:48.432Z",
+  "policy": "Candidate HTML intercepted at production URLs. All non-GET traffic and analytics/callable/database/App Check traffic blocked; form submission and tel/sms/mailto activation prevented. No live form submissions, calls or indexing.",
+  "viewports": [
+    {
+      "url": "https://canvas-advertising.com/index-es",
+      "width": 320,
+      "layout": {
+        "viewport": 320,
+        "scrollWidth": 320,
+        "h1": 1,
+        "images": [
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fwaterloo-sparkling-water-fleet-wrap-austin.webp?alt=media&token=c4805ad5-1929-4d37-a23d-fef7e1733aa4",
+            "alt": "Waterloo Sparkling Water Fleet Wrap - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fmonument-sign-vinyl-refacing-austin-tx.webp?alt=media&token=49b080dc-897f-42bd-90c2-08f7dda1de3f",
+            "alt": "Monument Sign Vinyl Refacing - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fleet-branding-mobile-billboard-graphics.webp?alt=media&token=c7704a48-69a8-4292-aedf-e021bb631d9f",
+            "alt": "Fleet Branding Mobile Billboard Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fretail-store-fixture-wrap-austin-tx.webp?alt=media&token=2e6d6698-c7b8-45c5-ad2c-da6faf658d08",
+            "alt": "Retail Store Fixture Wrap - Austin TX"
+          },
+          {
+            "src": "https://canvas-advertising.com/images/before-after-after-mobile.20260727.webp",
+            "alt": "Commercial Van Full Wrap - Completed Project"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_5200.jpg?alt=media&token=a00f5e84-bdd5-435c-a0f8-d8b8ba3bbe20",
+            "alt": "Construction Company Vehicle Wrap"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_8357.jpg?alt=media&token=054eda4c-2eef-48ec-b090-11e793187b94",
+            "alt": "Printed T-Shirts for Construction Company"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fposey-car-sign-vinyl.webp?alt=media&token=8d7067f0-42c6-4a43-8de8-a6acdd874bae",
+            "alt": "Posey Car Sign Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fbanner-sign-mtz-austin.jpg?alt=media&token=400ca822-1e7d-4927-bc98-c8dbb3808d82",
+            "alt": "MTZ Banner Sign - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fstorefront-vinyl-wild-heart.jpg?alt=media&token=382c9b3e-d770-4c11-9157-333114e30977",
+            "alt": "Wild Heart Storefront Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fvinyl-truck-lightnin-dent.jpg?alt=media&token=a4152130-b799-4d79-b50c-c33d6819e336",
+            "alt": "Lightnin Dent Truck Vinyl Wrap"
+          }
+        ],
+        "phones": [
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "Llámanos: (512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "Llamar Ahora",
+            "href": "tel:+15129459783"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Produccion"
+          },
+          {
+            "tag": "A",
+            "text": "Portafolio"
+          },
+          {
+            "tag": "A",
+            "text": "Asóciese con Nosotros"
+          },
+          {
+            "tag": "A",
+            "text": "Compañía"
+          },
+          {
+            "tag": "A",
+            "text": "🇺🇸 English"
+          },
+          {
+            "tag": "A",
+            "text": "Obtener Cotización"
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Proceso"
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Socios"
+          },
+          {
+            "tag": "A",
+            "text": "Conoce Nuestro Programa de Socios"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Ir al contenido principal",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15129459783"
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/",
+      "width": 320,
+      "layout": {
+        "viewport": 320,
+        "scrollWidth": 320,
+        "h1": 1,
+        "images": [
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fwaterloo-sparkling-water-fleet-wrap-austin.webp?alt=media&token=c4805ad5-1929-4d37-a23d-fef7e1733aa4",
+            "alt": "Waterloo Sparkling Water Fleet Wrap - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fmonument-sign-vinyl-refacing-austin-tx.webp?alt=media&token=49b080dc-897f-42bd-90c2-08f7dda1de3f",
+            "alt": "Monument Sign Vinyl Refacing - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fleet-branding-mobile-billboard-graphics.webp?alt=media&token=c7704a48-69a8-4292-aedf-e021bb631d9f",
+            "alt": "Fleet Branding Mobile Billboard Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fretail-store-fixture-wrap-austin-tx.webp?alt=media&token=2e6d6698-c7b8-45c5-ad2c-da6faf658d08",
+            "alt": "Retail Store Fixture Wrap - Austin TX"
+          },
+          {
+            "src": "https://canvas-advertising.com/images/before-after-after-mobile.20260727.webp",
+            "alt": "Commercial Van Full Wrap - Completed Project"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_5200.jpg?alt=media&token=a00f5e84-bdd5-435c-a0f8-d8b8ba3bbe20",
+            "alt": "Construction Company Vehicle Wrap"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_8357.jpg?alt=media&token=054eda4c-2eef-48ec-b090-11e793187b94",
+            "alt": "Printed T-Shirts for Construction Company"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fposey-car-sign-vinyl.webp?alt=media&token=8d7067f0-42c6-4a43-8de8-a6acdd874bae",
+            "alt": "Posey Car Sign Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fbanner-sign-mtz-austin.jpg?alt=media&token=400ca822-1e7d-4927-bc98-c8dbb3808d82",
+            "alt": "MTZ Banner Sign - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fstorefront-vinyl-wild-heart.jpg?alt=media&token=382c9b3e-d770-4c11-9157-333114e30977",
+            "alt": "Wild Heart Storefront Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fvinyl-truck-lightnin-dent.jpg?alt=media&token=a4152130-b799-4d79-b50c-c33d6819e336",
+            "alt": "Lightnin Dent Truck Vinyl Wrap"
+          }
+        ],
+        "phones": [
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "Call Us: (512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "Call Now",
+            "href": "tel:+15124343793"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Production"
+          },
+          {
+            "tag": "A",
+            "text": "Portfolio"
+          },
+          {
+            "tag": "A",
+            "text": "Partner With Us"
+          },
+          {
+            "tag": "A",
+            "text": "Company"
+          },
+          {
+            "tag": "A",
+            "text": "🇲🇽 Español"
+          },
+          {
+            "tag": "A",
+            "text": "Get a Quote"
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Partner"
+          },
+          {
+            "tag": "A",
+            "text": "Learn About Our Partner Program"
+          },
+          {
+            "tag": "H2",
+            "text": "READY TO MAKE YOURBRAND STAND OUT?"
+          },
+          {
+            "tag": "P",
+            "text": "Get started with a free consultation"
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Book Strategy Meeting"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Skip to main content",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15124343793"
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "width": 320,
+      "layout": {
+        "viewport": 320,
+        "scrollWidth": 320,
+        "h1": 1,
+        "images": [],
+        "phones": [
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Produccion"
+          },
+          {
+            "tag": "A",
+            "text": "Impresion de Vinil al Mayoreo"
+          },
+          {
+            "tag": "A",
+            "text": "Calcomanias con Corte"
+          },
+          {
+            "tag": "A",
+            "text": "Paneles de Wrap"
+          },
+          {
+            "tag": "A",
+            "text": "Vinil para Ventanas"
+          },
+          {
+            "tag": "A",
+            "text": "Murales de Vinil"
+          },
+          {
+            "tag": "A",
+            "text": "Banners de Vinil"
+          },
+          {
+            "tag": "A",
+            "text": "Flyers y Tarjetas Ricoh"
+          },
+          {
+            "tag": "A",
+            "text": "Rotulacion e Instalacion"
+          },
+          {
+            "tag": "A",
+            "text": "Rotulacion de Flotillas"
+          },
+          {
+            "tag": "A",
+            "text": "Portal de Socios"
+          },
+          {
+            "tag": "A",
+            "text": "Portafolio"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Saltar al contenido principal",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15129459783"
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin",
+      "width": 320,
+      "layout": {
+        "viewport": 320,
+        "scrollWidth": 320,
+        "h1": 1,
+        "images": [],
+        "phones": [
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Production"
+          },
+          {
+            "tag": "A",
+            "text": "Wholesale Vinyl Printing"
+          },
+          {
+            "tag": "A",
+            "text": "Contour-Cut Decals"
+          },
+          {
+            "tag": "A",
+            "text": "Replacement Wrap Panels"
+          },
+          {
+            "tag": "A",
+            "text": "Window Graphics"
+          },
+          {
+            "tag": "A",
+            "text": "Wall Murals"
+          },
+          {
+            "tag": "A",
+            "text": "Vinyl Banners"
+          },
+          {
+            "tag": "A",
+            "text": "Ricoh Flyers & Cards"
+          },
+          {
+            "tag": "A",
+            "text": "Vehicle Wraps & Install"
+          },
+          {
+            "tag": "A",
+            "text": "Fleet Wraps"
+          },
+          {
+            "tag": "A",
+            "text": "Trade Print Portal"
+          },
+          {
+            "tag": "A",
+            "text": "Portfolio"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Skip to main content",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15124343793"
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/index-es",
+      "width": 375,
+      "layout": {
+        "viewport": 375,
+        "scrollWidth": 375,
+        "h1": 1,
+        "images": [
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fwaterloo-sparkling-water-fleet-wrap-austin.webp?alt=media&token=c4805ad5-1929-4d37-a23d-fef7e1733aa4",
+            "alt": "Waterloo Sparkling Water Fleet Wrap - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fmonument-sign-vinyl-refacing-austin-tx.webp?alt=media&token=49b080dc-897f-42bd-90c2-08f7dda1de3f",
+            "alt": "Monument Sign Vinyl Refacing - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fleet-branding-mobile-billboard-graphics.webp?alt=media&token=c7704a48-69a8-4292-aedf-e021bb631d9f",
+            "alt": "Fleet Branding Mobile Billboard Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fretail-store-fixture-wrap-austin-tx.webp?alt=media&token=2e6d6698-c7b8-45c5-ad2c-da6faf658d08",
+            "alt": "Retail Store Fixture Wrap - Austin TX"
+          },
+          {
+            "src": "https://canvas-advertising.com/images/before-after-after-mobile.20260727.webp",
+            "alt": "Commercial Van Full Wrap - Completed Project"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_5200.jpg?alt=media&token=a00f5e84-bdd5-435c-a0f8-d8b8ba3bbe20",
+            "alt": "Construction Company Vehicle Wrap"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_8357.jpg?alt=media&token=054eda4c-2eef-48ec-b090-11e793187b94",
+            "alt": "Printed T-Shirts for Construction Company"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fposey-car-sign-vinyl.webp?alt=media&token=8d7067f0-42c6-4a43-8de8-a6acdd874bae",
+            "alt": "Posey Car Sign Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fbanner-sign-mtz-austin.jpg?alt=media&token=400ca822-1e7d-4927-bc98-c8dbb3808d82",
+            "alt": "MTZ Banner Sign - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fstorefront-vinyl-wild-heart.jpg?alt=media&token=382c9b3e-d770-4c11-9157-333114e30977",
+            "alt": "Wild Heart Storefront Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fvinyl-truck-lightnin-dent.jpg?alt=media&token=a4152130-b799-4d79-b50c-c33d6819e336",
+            "alt": "Lightnin Dent Truck Vinyl Wrap"
+          }
+        ],
+        "phones": [
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "Llámanos: (512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "Llamar Ahora",
+            "href": "tel:+15129459783"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Produccion"
+          },
+          {
+            "tag": "A",
+            "text": "Portafolio"
+          },
+          {
+            "tag": "A",
+            "text": "Asóciese con Nosotros"
+          },
+          {
+            "tag": "A",
+            "text": "Compañía"
+          },
+          {
+            "tag": "A",
+            "text": "🇺🇸 English"
+          },
+          {
+            "tag": "A",
+            "text": "Obtener Cotización"
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Socios"
+          },
+          {
+            "tag": "A",
+            "text": "Conoce Nuestro Programa de Socios"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Ir al contenido principal",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15129459783"
+      },
+      "screenshot": "index-es-375.png",
+      "detailScreenshot": "index-es-375-detail.png"
+    },
+    {
+      "url": "https://canvas-advertising.com/",
+      "width": 375,
+      "layout": {
+        "viewport": 375,
+        "scrollWidth": 375,
+        "h1": 1,
+        "images": [
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fmonument-sign-vinyl-refacing-austin-tx.webp?alt=media&token=49b080dc-897f-42bd-90c2-08f7dda1de3f",
+            "alt": "Monument Sign Vinyl Refacing - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fleet-branding-mobile-billboard-graphics.webp?alt=media&token=c7704a48-69a8-4292-aedf-e021bb631d9f",
+            "alt": "Fleet Branding Mobile Billboard Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fretail-store-fixture-wrap-austin-tx.webp?alt=media&token=2e6d6698-c7b8-45c5-ad2c-da6faf658d08",
+            "alt": "Retail Store Fixture Wrap - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_5200.jpg?alt=media&token=a00f5e84-bdd5-435c-a0f8-d8b8ba3bbe20",
+            "alt": "Construction Company Vehicle Wrap"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_8357.jpg?alt=media&token=054eda4c-2eef-48ec-b090-11e793187b94",
+            "alt": "Printed T-Shirts for Construction Company"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fposey-car-sign-vinyl.webp?alt=media&token=8d7067f0-42c6-4a43-8de8-a6acdd874bae",
+            "alt": "Posey Car Sign Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fbanner-sign-mtz-austin.jpg?alt=media&token=400ca822-1e7d-4927-bc98-c8dbb3808d82",
+            "alt": "MTZ Banner Sign - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fstorefront-vinyl-wild-heart.jpg?alt=media&token=382c9b3e-d770-4c11-9157-333114e30977",
+            "alt": "Wild Heart Storefront Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fvinyl-truck-lightnin-dent.jpg?alt=media&token=a4152130-b799-4d79-b50c-c33d6819e336",
+            "alt": "Lightnin Dent Truck Vinyl Wrap"
+          }
+        ],
+        "phones": [
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "Call Us: (512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "Call Now",
+            "href": "tel:+15124343793"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Production"
+          },
+          {
+            "tag": "A",
+            "text": "Portfolio"
+          },
+          {
+            "tag": "A",
+            "text": "Partner With Us"
+          },
+          {
+            "tag": "A",
+            "text": "Company"
+          },
+          {
+            "tag": "A",
+            "text": "🇲🇽 Español"
+          },
+          {
+            "tag": "A",
+            "text": "Get a Quote"
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Partner"
+          },
+          {
+            "tag": "A",
+            "text": "Learn About Our Partner Program"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Skip to main content",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15124343793"
+      },
+      "screenshot": "index-375.png",
+      "detailScreenshot": "index-375-detail.png"
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "width": 375,
+      "layout": {
+        "viewport": 375,
+        "scrollWidth": 375,
+        "h1": 1,
+        "images": [],
+        "phones": [
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Produccion"
+          },
+          {
+            "tag": "A",
+            "text": "Impresion de Vinil al Mayoreo"
+          },
+          {
+            "tag": "A",
+            "text": "Calcomanias con Corte"
+          },
+          {
+            "tag": "A",
+            "text": "Paneles de Wrap"
+          },
+          {
+            "tag": "A",
+            "text": "Vinil para Ventanas"
+          },
+          {
+            "tag": "A",
+            "text": "Murales de Vinil"
+          },
+          {
+            "tag": "A",
+            "text": "Banners de Vinil"
+          },
+          {
+            "tag": "A",
+            "text": "Flyers y Tarjetas Ricoh"
+          },
+          {
+            "tag": "A",
+            "text": "Rotulacion e Instalacion"
+          },
+          {
+            "tag": "A",
+            "text": "Rotulacion de Flotillas"
+          },
+          {
+            "tag": "A",
+            "text": "Portal de Socios"
+          },
+          {
+            "tag": "A",
+            "text": "Portafolio"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Saltar al contenido principal",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15129459783"
+      },
+      "screenshot": "large-format-printing-austin-es-375.png",
+      "detailScreenshot": "large-format-printing-austin-es-375-detail.png"
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin",
+      "width": 375,
+      "layout": {
+        "viewport": 375,
+        "scrollWidth": 375,
+        "h1": 1,
+        "images": [],
+        "phones": [
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Production"
+          },
+          {
+            "tag": "A",
+            "text": "Wholesale Vinyl Printing"
+          },
+          {
+            "tag": "A",
+            "text": "Contour-Cut Decals"
+          },
+          {
+            "tag": "A",
+            "text": "Replacement Wrap Panels"
+          },
+          {
+            "tag": "A",
+            "text": "Window Graphics"
+          },
+          {
+            "tag": "A",
+            "text": "Wall Murals"
+          },
+          {
+            "tag": "A",
+            "text": "Vinyl Banners"
+          },
+          {
+            "tag": "A",
+            "text": "Ricoh Flyers & Cards"
+          },
+          {
+            "tag": "A",
+            "text": "Vehicle Wraps & Install"
+          },
+          {
+            "tag": "A",
+            "text": "Fleet Wraps"
+          },
+          {
+            "tag": "A",
+            "text": "Trade Print Portal"
+          },
+          {
+            "tag": "A",
+            "text": "Portfolio"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Skip to main content",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15124343793"
+      },
+      "screenshot": "large-format-printing-austin-375.png",
+      "detailScreenshot": "large-format-printing-austin-375-detail.png"
+    },
+    {
+      "url": "https://canvas-advertising.com/index-es",
+      "width": 414,
+      "layout": {
+        "viewport": 414,
+        "scrollWidth": 414,
+        "h1": 1,
+        "images": [
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_8357.jpg?alt=media&token=054eda4c-2eef-48ec-b090-11e793187b94",
+            "alt": "Printed T-Shirts for Construction Company"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fposey-car-sign-vinyl.webp?alt=media&token=8d7067f0-42c6-4a43-8de8-a6acdd874bae",
+            "alt": "Posey Car Sign Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fbanner-sign-mtz-austin.jpg?alt=media&token=400ca822-1e7d-4927-bc98-c8dbb3808d82",
+            "alt": "MTZ Banner Sign - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fstorefront-vinyl-wild-heart.jpg?alt=media&token=382c9b3e-d770-4c11-9157-333114e30977",
+            "alt": "Wild Heart Storefront Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fvinyl-truck-lightnin-dent.jpg?alt=media&token=a4152130-b799-4d79-b50c-c33d6819e336",
+            "alt": "Lightnin Dent Truck Vinyl Wrap"
+          }
+        ],
+        "phones": [
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "Llámanos: (512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "Llamar Ahora",
+            "href": "tel:+15129459783"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Produccion"
+          },
+          {
+            "tag": "A",
+            "text": "Portafolio"
+          },
+          {
+            "tag": "A",
+            "text": "Asóciese con Nosotros"
+          },
+          {
+            "tag": "A",
+            "text": "Compañía"
+          },
+          {
+            "tag": "A",
+            "text": "🇺🇸 English"
+          },
+          {
+            "tag": "A",
+            "text": "Obtener Cotización"
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Socios"
+          },
+          {
+            "tag": "A",
+            "text": "Conoce Nuestro Programa de Socios"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Ir al contenido principal",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15129459783"
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/",
+      "width": 414,
+      "layout": {
+        "viewport": 414,
+        "scrollWidth": 414,
+        "h1": 1,
+        "images": [
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fposey-car-sign-vinyl.webp?alt=media&token=8d7067f0-42c6-4a43-8de8-a6acdd874bae",
+            "alt": "Posey Car Sign Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fbanner-sign-mtz-austin.jpg?alt=media&token=400ca822-1e7d-4927-bc98-c8dbb3808d82",
+            "alt": "MTZ Banner Sign - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fstorefront-vinyl-wild-heart.jpg?alt=media&token=382c9b3e-d770-4c11-9157-333114e30977",
+            "alt": "Wild Heart Storefront Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fvinyl-truck-lightnin-dent.jpg?alt=media&token=a4152130-b799-4d79-b50c-c33d6819e336",
+            "alt": "Lightnin Dent Truck Vinyl Wrap"
+          }
+        ],
+        "phones": [
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "Call Us: (512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "Call Now",
+            "href": "tel:+15124343793"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Production"
+          },
+          {
+            "tag": "A",
+            "text": "Portfolio"
+          },
+          {
+            "tag": "A",
+            "text": "Partner With Us"
+          },
+          {
+            "tag": "A",
+            "text": "Company"
+          },
+          {
+            "tag": "A",
+            "text": "🇲🇽 Español"
+          },
+          {
+            "tag": "A",
+            "text": "Get a Quote"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Skip to main content",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15124343793"
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "width": 414,
+      "layout": {
+        "viewport": 414,
+        "scrollWidth": 414,
+        "h1": 1,
+        "images": [],
+        "phones": [
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Produccion"
+          },
+          {
+            "tag": "A",
+            "text": "Impresion de Vinil al Mayoreo"
+          },
+          {
+            "tag": "A",
+            "text": "Calcomanias con Corte"
+          },
+          {
+            "tag": "A",
+            "text": "Paneles de Wrap"
+          },
+          {
+            "tag": "A",
+            "text": "Vinil para Ventanas"
+          },
+          {
+            "tag": "A",
+            "text": "Murales de Vinil"
+          },
+          {
+            "tag": "A",
+            "text": "Banners de Vinil"
+          },
+          {
+            "tag": "A",
+            "text": "Flyers y Tarjetas Ricoh"
+          },
+          {
+            "tag": "A",
+            "text": "Rotulacion e Instalacion"
+          },
+          {
+            "tag": "A",
+            "text": "Rotulacion de Flotillas"
+          },
+          {
+            "tag": "A",
+            "text": "Portal de Socios"
+          },
+          {
+            "tag": "A",
+            "text": "Portafolio"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Saltar al contenido principal",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15129459783"
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin",
+      "width": 414,
+      "layout": {
+        "viewport": 414,
+        "scrollWidth": 414,
+        "h1": 1,
+        "images": [],
+        "phones": [
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Production"
+          },
+          {
+            "tag": "A",
+            "text": "Wholesale Vinyl Printing"
+          },
+          {
+            "tag": "A",
+            "text": "Contour-Cut Decals"
+          },
+          {
+            "tag": "A",
+            "text": "Replacement Wrap Panels"
+          },
+          {
+            "tag": "A",
+            "text": "Window Graphics"
+          },
+          {
+            "tag": "A",
+            "text": "Wall Murals"
+          },
+          {
+            "tag": "A",
+            "text": "Vinyl Banners"
+          },
+          {
+            "tag": "A",
+            "text": "Ricoh Flyers & Cards"
+          },
+          {
+            "tag": "A",
+            "text": "Vehicle Wraps & Install"
+          },
+          {
+            "tag": "A",
+            "text": "Fleet Wraps"
+          },
+          {
+            "tag": "A",
+            "text": "Trade Print Portal"
+          },
+          {
+            "tag": "A",
+            "text": "Portfolio"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Skip to main content",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15124343793"
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/index-es",
+      "width": 768,
+      "layout": {
+        "viewport": 768,
+        "scrollWidth": 768,
+        "h1": 1,
+        "images": [],
+        "phones": [
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "Llámanos: (512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "Llamar Ahora",
+            "href": "tel:+15129459783"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Produccion"
+          },
+          {
+            "tag": "A",
+            "text": "Portafolio"
+          },
+          {
+            "tag": "A",
+            "text": "Asóciese con Nosotros"
+          },
+          {
+            "tag": "A",
+            "text": "Compañía"
+          },
+          {
+            "tag": "A",
+            "text": "🇺🇸 English"
+          },
+          {
+            "tag": "A",
+            "text": "Obtener Cotización"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Ir al contenido principal",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15129459783"
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/",
+      "width": 768,
+      "layout": {
+        "viewport": 768,
+        "scrollWidth": 768,
+        "h1": 1,
+        "images": [],
+        "phones": [
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "Call Us: (512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "Call Now",
+            "href": "tel:+15124343793"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Production"
+          },
+          {
+            "tag": "A",
+            "text": "Portfolio"
+          },
+          {
+            "tag": "A",
+            "text": "Partner With Us"
+          },
+          {
+            "tag": "A",
+            "text": "Company"
+          },
+          {
+            "tag": "A",
+            "text": "🇲🇽 Español"
+          },
+          {
+            "tag": "A",
+            "text": "Get a Quote"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Skip to main content",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15124343793"
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "width": 768,
+      "layout": {
+        "viewport": 768,
+        "scrollWidth": 768,
+        "h1": 1,
+        "images": [],
+        "phones": [
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Produccion"
+          },
+          {
+            "tag": "A",
+            "text": "Impresion de Vinil al Mayoreo"
+          },
+          {
+            "tag": "A",
+            "text": "Calcomanias con Corte"
+          },
+          {
+            "tag": "A",
+            "text": "Paneles de Wrap"
+          },
+          {
+            "tag": "A",
+            "text": "Vinil para Ventanas"
+          },
+          {
+            "tag": "A",
+            "text": "Murales de Vinil"
+          },
+          {
+            "tag": "A",
+            "text": "Banners de Vinil"
+          },
+          {
+            "tag": "A",
+            "text": "Flyers y Tarjetas Ricoh"
+          },
+          {
+            "tag": "A",
+            "text": "Rotulacion e Instalacion"
+          },
+          {
+            "tag": "A",
+            "text": "Rotulacion de Flotillas"
+          },
+          {
+            "tag": "A",
+            "text": "Portal de Socios"
+          },
+          {
+            "tag": "A",
+            "text": "Portafolio"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Saltar al contenido principal",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15129459783"
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin",
+      "width": 768,
+      "layout": {
+        "viewport": 768,
+        "scrollWidth": 768,
+        "h1": 1,
+        "images": [],
+        "phones": [
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Production"
+          },
+          {
+            "tag": "A",
+            "text": "Wholesale Vinyl Printing"
+          },
+          {
+            "tag": "A",
+            "text": "Contour-Cut Decals"
+          },
+          {
+            "tag": "A",
+            "text": "Replacement Wrap Panels"
+          },
+          {
+            "tag": "A",
+            "text": "Window Graphics"
+          },
+          {
+            "tag": "A",
+            "text": "Wall Murals"
+          },
+          {
+            "tag": "A",
+            "text": "Vinyl Banners"
+          },
+          {
+            "tag": "A",
+            "text": "Ricoh Flyers & Cards"
+          },
+          {
+            "tag": "A",
+            "text": "Vehicle Wraps & Install"
+          },
+          {
+            "tag": "A",
+            "text": "Fleet Wraps"
+          },
+          {
+            "tag": "A",
+            "text": "Trade Print Portal"
+          },
+          {
+            "tag": "A",
+            "text": "Portfolio"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Skip to main content",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15124343793"
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/index-es",
+      "width": 1024,
+      "layout": {
+        "viewport": 1024,
+        "scrollWidth": 1024,
+        "h1": 1,
+        "images": [],
+        "phones": [
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "Llámanos: (512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "Llamar Ahora",
+            "href": "tel:+15129459783"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Produccion"
+          },
+          {
+            "tag": "A",
+            "text": "Impresion de Vinil al Mayoreo"
+          },
+          {
+            "tag": "A",
+            "text": "Calcomanias con Corte"
+          },
+          {
+            "tag": "A",
+            "text": "Paneles de Wrap"
+          },
+          {
+            "tag": "A",
+            "text": "Vinil para Ventanas"
+          },
+          {
+            "tag": "A",
+            "text": "Murales de Vinil"
+          },
+          {
+            "tag": "A",
+            "text": "Banners de Vinil"
+          },
+          {
+            "tag": "A",
+            "text": "Flyers y Tarjetas Ricoh"
+          },
+          {
+            "tag": "A",
+            "text": "Rotulacion e Instalacion"
+          },
+          {
+            "tag": "A",
+            "text": "Rotulacion de Flotillas"
+          },
+          {
+            "tag": "A",
+            "text": "Portal de Socios"
+          },
+          {
+            "tag": "A",
+            "text": "Portafolio"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Ir al contenido principal",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15129459783"
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/",
+      "width": 1024,
+      "layout": {
+        "viewport": 1024,
+        "scrollWidth": 1024,
+        "h1": 1,
+        "images": [],
+        "phones": [
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "Call Us: (512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "Call Now",
+            "href": "tel:+15124343793"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Production"
+          },
+          {
+            "tag": "A",
+            "text": "Wholesale Vinyl Printing"
+          },
+          {
+            "tag": "A",
+            "text": "Contour-Cut Decals"
+          },
+          {
+            "tag": "A",
+            "text": "Replacement Wrap Panels"
+          },
+          {
+            "tag": "A",
+            "text": "Window Graphics"
+          },
+          {
+            "tag": "A",
+            "text": "Wall Murals"
+          },
+          {
+            "tag": "A",
+            "text": "Vinyl Banners"
+          },
+          {
+            "tag": "A",
+            "text": "Ricoh Flyers & Cards"
+          },
+          {
+            "tag": "A",
+            "text": "Vehicle Wraps & Install"
+          },
+          {
+            "tag": "A",
+            "text": "Fleet Wraps"
+          },
+          {
+            "tag": "A",
+            "text": "Trade Print Portal"
+          },
+          {
+            "tag": "A",
+            "text": "Portfolio"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Skip to main content",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15124343793"
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "width": 1024,
+      "layout": {
+        "viewport": 1024,
+        "scrollWidth": 1024,
+        "h1": 1,
+        "images": [],
+        "phones": [
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Produccion"
+          },
+          {
+            "tag": "A",
+            "text": "Impresion de Vinil al Mayoreo"
+          },
+          {
+            "tag": "A",
+            "text": "Calcomanias con Corte"
+          },
+          {
+            "tag": "A",
+            "text": "Paneles de Wrap"
+          },
+          {
+            "tag": "A",
+            "text": "Vinil para Ventanas"
+          },
+          {
+            "tag": "A",
+            "text": "Murales de Vinil"
+          },
+          {
+            "tag": "A",
+            "text": "Banners de Vinil"
+          },
+          {
+            "tag": "A",
+            "text": "Flyers y Tarjetas Ricoh"
+          },
+          {
+            "tag": "A",
+            "text": "Rotulacion e Instalacion"
+          },
+          {
+            "tag": "A",
+            "text": "Rotulacion de Flotillas"
+          },
+          {
+            "tag": "A",
+            "text": "Portal de Socios"
+          },
+          {
+            "tag": "A",
+            "text": "Portafolio"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Saltar al contenido principal",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15129459783"
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin",
+      "width": 1024,
+      "layout": {
+        "viewport": 1024,
+        "scrollWidth": 1024,
+        "h1": 1,
+        "images": [],
+        "phones": [
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Production"
+          },
+          {
+            "tag": "A",
+            "text": "Wholesale Vinyl Printing"
+          },
+          {
+            "tag": "A",
+            "text": "Contour-Cut Decals"
+          },
+          {
+            "tag": "A",
+            "text": "Replacement Wrap Panels"
+          },
+          {
+            "tag": "A",
+            "text": "Window Graphics"
+          },
+          {
+            "tag": "A",
+            "text": "Wall Murals"
+          },
+          {
+            "tag": "A",
+            "text": "Vinyl Banners"
+          },
+          {
+            "tag": "A",
+            "text": "Ricoh Flyers & Cards"
+          },
+          {
+            "tag": "A",
+            "text": "Vehicle Wraps & Install"
+          },
+          {
+            "tag": "A",
+            "text": "Fleet Wraps"
+          },
+          {
+            "tag": "A",
+            "text": "Trade Print Portal"
+          },
+          {
+            "tag": "A",
+            "text": "Portfolio"
+          }
+        ]
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Skip to main content",
+          "href": "#main-content"
+        },
+        "menuExpanded": "true",
+        "menuVisible": true,
+        "escapeExpanded": "false",
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15124343793"
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/index-es",
+      "width": 1440,
+      "layout": {
+        "viewport": 1440,
+        "scrollWidth": 1440,
+        "h1": 1,
+        "images": [],
+        "phones": [
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "Llámanos: (512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "Llamar Ahora",
+            "href": "tel:+15129459783"
+          }
+        ],
+        "overflow": []
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Ir al contenido principal",
+          "href": "#main-content"
+        },
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15129459783"
+      },
+      "screenshot": "index-es-1440.png",
+      "detailScreenshot": "index-es-1440-detail.png"
+    },
+    {
+      "url": "https://canvas-advertising.com/",
+      "width": 1440,
+      "layout": {
+        "viewport": 1440,
+        "scrollWidth": 1440,
+        "h1": 1,
+        "images": [],
+        "phones": [
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "Call Us: (512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "Call Now",
+            "href": "tel:+15124343793"
+          }
+        ],
+        "overflow": []
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Skip to main content",
+          "href": "#main-content"
+        },
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15124343793"
+      },
+      "screenshot": "index-1440.png",
+      "detailScreenshot": "index-1440-detail.png"
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "width": 1440,
+      "layout": {
+        "viewport": 1440,
+        "scrollWidth": 1440,
+        "h1": 1,
+        "images": [],
+        "phones": [
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          }
+        ],
+        "overflow": []
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Saltar al contenido principal",
+          "href": "#main-content"
+        },
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15129459783"
+      },
+      "screenshot": "large-format-printing-austin-es-1440.png",
+      "detailScreenshot": "large-format-printing-austin-es-1440-detail.png"
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin",
+      "width": 1440,
+      "layout": {
+        "viewport": 1440,
+        "scrollWidth": 1440,
+        "h1": 1,
+        "images": [],
+        "phones": [
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          }
+        ],
+        "overflow": []
+      },
+      "keyboard": {
+        "firstFocus": {
+          "tag": "A",
+          "text": "Skip to main content",
+          "href": "#main-content"
+        },
+        "phoneFocusable": true,
+        "phoneHref": "tel:+15124343793"
+      },
+      "screenshot": "large-format-printing-austin-1440.png",
+      "detailScreenshot": "large-format-printing-austin-1440-detail.png"
+    }
+  ],
+  "resources": {
+    "https://canvas-advertising.com/fonts/bebas-neue.woff2": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/fonts/bebas-neue.woff2",
+      "bytes": 8596,
+      "sha256": "441b026df205d28954f61b6989c7bbd228c0adff42f746a266c6a5d89134bc34",
+      "type": "font/woff2"
+    },
+    "https://canvas-advertising.com/images/hero-poster-mobile.20260727.webp": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/images/hero-poster-mobile.20260727.webp",
+      "bytes": 22584,
+      "sha256": "a091ad5d6afa88fade0d79189ac0dd35fd2130d8731a4a4caa07aeb1689914c3",
+      "type": "image/webp"
+    },
+    "https://canvas-advertising.com/css/mobile-nav-fix.20260827.css": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/css/mobile-nav-fix.20260827.css",
+      "bytes": 141,
+      "sha256": "2007668271d4d0584dfd7ca20b15c01c466c722dab388bd02c61325bb915ad95",
+      "type": "text/css; charset=utf-8"
+    },
+    "https://canvas-advertising.com/css/mobile-critical.20260727.min.css": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/css/mobile-critical.20260727.min.css",
+      "bytes": 7063,
+      "sha256": "93e93dcf003edcfb2cb029e7ed8d73f46b82794dadd58cdcb694ffaf5f7012c9",
+      "type": "text/css; charset=utf-8"
+    },
+    "https://canvas-advertising.com/css/styles.20260727.min.css": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/css/styles.20260727.min.css",
+      "bytes": 129601,
+      "sha256": "182e9744a708ca17a60bf9e6de4440e9aa255745941c60e77cb8f726b5e010ec",
+      "type": "text/css; charset=utf-8"
+    },
+    "https://canvas-advertising.com/fonts/dm-sans.woff2": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/fonts/dm-sans.woff2",
+      "bytes": 36980,
+      "sha256": "468d56b6b25b05b70190b6c233d773f6f1770e8579827ce022a57f03fa8002fb",
+      "type": "font/woff2"
+    },
+    "https://canvas-advertising.com/images/logo.png": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/images/logo.png",
+      "bytes": 12421,
+      "sha256": "cd12ad8001920328c0b7093d359664125f6a62766577733858b43c1fca2530b9",
+      "type": "image/png"
+    },
+    "https://canvas-advertising.com/js/main.20260907b.min.js?v=20260814-phone-routing": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/js/main.20260907b.min.js?v=20260814-phone-routing",
+      "bytes": 69991,
+      "sha256": "8f80f15178b5070d0c423588a51e4d81e12f052108081755669b257d002314ff",
+      "type": "text/javascript; charset=utf-8"
+    },
+    "https://canvas-advertising.com/images/before-after-after-mobile.20260727.webp": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/images/before-after-after-mobile.20260727.webp",
+      "bytes": 97392,
+      "sha256": "8d9bccc23520520645eb5b868dafeac956c2d242179e957498cd1de6ce26b275",
+      "type": "image/webp"
+    },
+    "https://canvas-advertising.com/images/before-after-before-mobile.20260727.webp": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/images/before-after-before-mobile.20260727.webp",
+      "bytes": 78118,
+      "sha256": "83e614d616af95cdd403d911fff32e767524e4c35d0ae80e697c6ffaf2238510",
+      "type": "image/webp"
+    },
+    "https://canvas-advertising.com/videos/hero-mobile.mp4": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/videos/hero-mobile.mp4",
+      "bytes": 264325,
+      "sha256": "9f9e50f6a27eaa36a36681932da754cc2353cf59ce021eeb56622f03fcf2ab03",
+      "type": "video/mp4"
+    },
+    "https://canvas-advertising.com/images/fully-insured-company-96.png": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/images/fully-insured-company-96.png",
+      "bytes": 7351,
+      "sha256": "322ad7729fdb02ef857f9df823727fdd17163f6793589995d1e2497651a447f8",
+      "type": "image/png"
+    },
+    "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FLarge-Format-Graphics.svg?alt=media&token=5d95dde3-bd19-4b98-ad3a-40d7d72334d8": {
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FLarge-Format-Graphics.svg?alt=media&token=5d95dde3-bd19-4b98-ad3a-40d7d72334d8",
+      "bytes": 1987,
+      "sha256": "2ae00044df31d79648fc7ef5476c031a71d0a9f13c5b3d2b78d2d87ac5d28000",
+      "type": "image/svg+xml"
+    },
+    "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FInterior-Branding.svg?alt=media&token=3a20a318-7bc5-4166-b265-c9eb26895417": {
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FInterior-Branding.svg?alt=media&token=3a20a318-7bc5-4166-b265-c9eb26895417",
+      "bytes": 9670,
+      "sha256": "2c427a5ae619ef0527bbb7f24098472ee85f020610bafef35a8bb5a80fc6ca66",
+      "type": "image/svg+xml"
+    },
+    "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FVehicle-Wraps.svg?alt=media&token=344eb630-97ea-41c9-b510-44343264fe96": {
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FVehicle-Wraps.svg?alt=media&token=344eb630-97ea-41c9-b510-44343264fe96",
+      "bytes": 3461,
+      "sha256": "9f65882fbcc78d799ee35cde187421cc22b660a278fdd5e8d813d2e6b08f5afc",
+      "type": "image/svg+xml"
+    },
+    "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FCommercial-Printing.svg?alt=media&token=0936b258-b059-47ea-9f15-208be7953790": {
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FCommercial-Printing.svg?alt=media&token=0936b258-b059-47ea-9f15-208be7953790",
+      "bytes": 2636,
+      "sha256": "761383502c08ff261300319ee8babb3e53ca318e29c94d2247039ac60431cdaf",
+      "type": "image/svg+xml"
+    },
+    "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FMerch-%26-Promotional.svg?alt=media&token=8b32c119-bd70-4613-9ace-e7f7f9ccc870": {
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FMerch-%26-Promotional.svg?alt=media&token=8b32c119-bd70-4613-9ace-e7f7f9ccc870",
+      "bytes": 2159,
+      "sha256": "313aeaff25cf6c66bfcb69e57a84ac67553deb1edb2469ee73efb9515ca67146",
+      "type": "image/svg+xml"
+    },
+    "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FStorefront-Signage.svg?alt=media&token=549d8c7f-7099-4161-8897-d2283a5fafec": {
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/Icons%2FStorefront-Signage.svg?alt=media&token=549d8c7f-7099-4161-8897-d2283a5fafec",
+      "bytes": 1726,
+      "sha256": "b5b2a799239e08b8bb44836340c0ba841f9cedb434d48afa85f12a0930d73105",
+      "type": "image/svg+xml"
+    },
+    "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap": {
+      "status": 200,
+      "finalUrl": "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap",
+      "bytes": 1150,
+      "sha256": "68e3937c1eaf96fef919ebde65db011ee34c617cd58e39326e8eeae55d8d3bbe",
+      "type": "text/css; charset=utf-8"
+    },
+    "https://www.gstatic.com/firebasejs/9.22.0/firebase-functions-compat.js": {
+      "status": 200,
+      "finalUrl": "https://www.gstatic.com/firebasejs/9.22.0/firebase-functions-compat.js",
+      "bytes": 8116,
+      "sha256": "19c1b4a2b75649a107c9e629f9fbf0ab78587d1ac6b08ae0e148d2f0f70f7929",
+      "type": "text/javascript; charset=UTF-8"
+    },
+    "https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js": {
+      "status": 200,
+      "finalUrl": "https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js",
+      "bytes": 28949,
+      "sha256": "2d038b9f99cdc28119b4e5c2a4ed86d561fc36c051e515ef35176b1cabe780c1",
+      "type": "text/javascript; charset=UTF-8"
+    },
+    "https://canvas-advertising.com/js/firebase-config.js?v=20260910-2bf92bc": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/js/firebase-config.js?v=20260910-2bf92bc",
+      "bytes": 10383,
+      "sha256": "99a6a6f892ef9e98509bd333b9b28577b1fe78ba157cc4b8df3f01a9384b05ee",
+      "type": "text/javascript; charset=utf-8"
+    },
+    "https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js": {
+      "status": 200,
+      "finalUrl": "https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js",
+      "bytes": 44157,
+      "sha256": "308219390e5e3b84cda0c481e70caa9820883ae10bda44e6e9a149a81aac4b3f",
+      "type": "application/javascript; charset=utf-8"
+    },
+    "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js": {
+      "status": 200,
+      "finalUrl": "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js",
+      "bytes": 132195,
+      "sha256": "1451e1285d1a09eed6c9f71b07ba01fb097add66b024d13e2454ba07d50a53c6",
+      "type": "text/javascript; charset=UTF-8"
+    },
+    "https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js": {
+      "status": 200,
+      "finalUrl": "https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js",
+      "bytes": 72435,
+      "sha256": "96c01b81f44a3290e2b4532f55e2c9534b2adc43273a19f3756b2cb41f0fd0b6",
+      "type": "application/javascript; charset=utf-8"
+    },
+    "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js": {
+      "status": 200,
+      "finalUrl": "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js",
+      "bytes": 339106,
+      "sha256": "2334a57f785eb38ce1a6fdfaed55ecc1335734a5fd15f276b76bf2b45742406f",
+      "type": "text/javascript; charset=UTF-8"
+    },
+    "https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check-compat.js": {
+      "status": 200,
+      "finalUrl": "https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check-compat.js",
+      "bytes": 23376,
+      "sha256": "3897630a79b188ddb4e69005057c63dae211a052a5887262d9f3e3d2166e0a19",
+      "type": "text/javascript; charset=UTF-8"
+    },
+    "https://app.cal.com/embed/embed.js": {
+      "status": 200,
+      "finalUrl": "https://app.cal.com/embed/embed.js",
+      "bytes": 92982,
+      "sha256": "2cc35cff6413ae2669155c92fe61221f70549ac58418f2d6a09d5c7a34a9615d",
+      "type": "application/javascript; charset=utf-8"
+    },
+    "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fwaterloo-sparkling-water-fleet-wrap-austin.webp?alt=media&token=c4805ad5-1929-4d37-a23d-fef7e1733aa4": {
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fwaterloo-sparkling-water-fleet-wrap-austin.webp?alt=media&token=c4805ad5-1929-4d37-a23d-fef7e1733aa4",
+      "bytes": 236630,
+      "sha256": "eff131356badc0b8bf1ea78ec6aa6ef6d20c1f171da6de4840a6ede0191d9e4a",
+      "type": "image/webp"
+    },
+    "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fretail-store-fixture-wrap-austin-tx.webp?alt=media&token=2e6d6698-c7b8-45c5-ad2c-da6faf658d08": {
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fretail-store-fixture-wrap-austin-tx.webp?alt=media&token=2e6d6698-c7b8-45c5-ad2c-da6faf658d08",
+      "bytes": 336224,
+      "sha256": "32c92f6bbcdd1446e6b6eb09fb65ee43c06fc212fbf77c91b65159573f28da64",
+      "type": "image/webp"
+    },
+    "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fleet-branding-mobile-billboard-graphics.webp?alt=media&token=c7704a48-69a8-4292-aedf-e021bb631d9f": {
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fleet-branding-mobile-billboard-graphics.webp?alt=media&token=c7704a48-69a8-4292-aedf-e021bb631d9f",
+      "bytes": 436830,
+      "sha256": "ed5a1ccfa12e8bdcbb82456aa5a561c85f65f12b5a8fbb3f6905bccc0acf5ad6",
+      "type": "image/webp"
+    },
+    "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_8357.jpg?alt=media&token=054eda4c-2eef-48ec-b090-11e793187b94": {
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_8357.jpg?alt=media&token=054eda4c-2eef-48ec-b090-11e793187b94",
+      "bytes": 1104183,
+      "sha256": "d572f25703f28821dc24a42e23e5148fc5128b9132122dbecf0b68a79ed39a7a",
+      "type": "image/jpeg"
+    },
+    "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fmonument-sign-vinyl-refacing-austin-tx.webp?alt=media&token=49b080dc-897f-42bd-90c2-08f7dda1de3f": {
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fmonument-sign-vinyl-refacing-austin-tx.webp?alt=media&token=49b080dc-897f-42bd-90c2-08f7dda1de3f",
+      "bytes": 533656,
+      "sha256": "797f01d5d327d4376e00c6f73e620affb4e53347fe1943ea53fb86193a93da0f",
+      "type": "image/webp"
+    },
+    "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_5200.jpg?alt=media&token=a00f5e84-bdd5-435c-a0f8-d8b8ba3bbe20": {
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_5200.jpg?alt=media&token=a00f5e84-bdd5-435c-a0f8-d8b8ba3bbe20",
+      "bytes": 2462334,
+      "sha256": "34311ef53fd9dbec9310a08d5ab493e29771b8a48d84d05827f61119e629af60",
+      "type": "image/jpeg"
+    },
+    "https://canvas-advertising.com/js/firebase-config.js?v=20260903-secure-intake": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/js/firebase-config.js?v=20260903-secure-intake",
+      "bytes": 10383,
+      "sha256": "99a6a6f892ef9e98509bd333b9b28577b1fe78ba157cc4b8df3f01a9384b05ee",
+      "type": "text/javascript; charset=utf-8"
+    },
+    "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fposey-car-sign-vinyl.webp?alt=media&token=8d7067f0-42c6-4a43-8de8-a6acdd874bae": {
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fposey-car-sign-vinyl.webp?alt=media&token=8d7067f0-42c6-4a43-8de8-a6acdd874bae",
+      "bytes": 74296,
+      "sha256": "ed44d3399ae7ff6df2f335cef2838a30fce255155c857b7ed62fdbe3549a5095",
+      "type": "image/webp"
+    },
+    "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fstorefront-vinyl-wild-heart.jpg?alt=media&token=382c9b3e-d770-4c11-9157-333114e30977": {
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fstorefront-vinyl-wild-heart.jpg?alt=media&token=382c9b3e-d770-4c11-9157-333114e30977",
+      "bytes": 175860,
+      "sha256": "f29e9f9d15d8cac48191c9be7c98c9c724b9b30ba153781613441dc0a61e0936",
+      "type": "image/jpeg"
+    },
+    "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fvinyl-truck-lightnin-dent.jpg?alt=media&token=a4152130-b799-4d79-b50c-c33d6819e336": {
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fvinyl-truck-lightnin-dent.jpg?alt=media&token=a4152130-b799-4d79-b50c-c33d6819e336",
+      "bytes": 148772,
+      "sha256": "242c3e28b478b7d9b2b5687592c0f38a27fc03c47416638ad6ab4d17a3b5bbf7",
+      "type": "image/jpeg"
+    },
+    "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fbanner-sign-mtz-austin.jpg?alt=media&token=400ca822-1e7d-4927-bc98-c8dbb3808d82": {
+      "status": 200,
+      "finalUrl": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fbanner-sign-mtz-austin.jpg?alt=media&token=400ca822-1e7d-4927-bc98-c8dbb3808d82",
+      "bytes": 178097,
+      "sha256": "eb15ed3c746fd33af92809d5b653e89289c76b1be9e479a46b01b5ea6ea30e5c",
+      "type": "image/jpeg"
+    },
+    "https://www.google.com/images/cleardot.gif?zx=u8mswfo8lltn": {
+      "status": 200,
+      "finalUrl": "https://www.google.com/images/cleardot.gif?zx=u8mswfo8lltn",
+      "bytes": 43,
+      "sha256": "2dfe28cbdb83f01c940de6a88ab86200154fd772d568035ac568664e52068363",
+      "type": "image/gif"
+    },
+    "https://canvas-advertising.com/images/before-after-after.20260727.webp": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/images/before-after-after.20260727.webp",
+      "bytes": 269368,
+      "sha256": "b239d4831e33409ccd4ca11b6a068c707bddc90ac5f9874622b99b3b847ddf6f",
+      "type": "image/webp"
+    },
+    "https://canvas-advertising.com/images/before-after-before.20260727.webp": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/images/before-after-before.20260727.webp",
+      "bytes": 219542,
+      "sha256": "a71533d58e993799805c8daca583954e43387c790d24f48af100481c13541b75",
+      "type": "image/webp"
+    },
+    "https://www.google.com/images/cleardot.gif?zx=cy8u5xctqqzr": {
+      "status": 200,
+      "finalUrl": "https://www.google.com/images/cleardot.gif?zx=cy8u5xctqqzr",
+      "bytes": 43,
+      "sha256": "2dfe28cbdb83f01c940de6a88ab86200154fd772d568035ac568664e52068363",
+      "type": "image/gif"
+    },
+    "https://www.google.com/images/cleardot.gif?zx=w3ri8jgpnags": {
+      "status": 200,
+      "finalUrl": "https://www.google.com/images/cleardot.gif?zx=w3ri8jgpnags",
+      "bytes": 43,
+      "sha256": "2dfe28cbdb83f01c940de6a88ab86200154fd772d568035ac568664e52068363",
+      "type": "image/gif"
+    },
+    "https://canvas-advertising.com/images/hero-poster.20260727.webp": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/images/hero-poster.20260727.webp",
+      "bytes": 139684,
+      "sha256": "ce29cef276143eee5443146f20cdd63c53cde5d9ef26489b93eaf9ec632cc496",
+      "type": "image/webp"
+    },
+    "https://canvas-advertising.com/videos/hero-desktop.20260727.mp4": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/videos/hero-desktop.20260727.mp4",
+      "bytes": 2086305,
+      "sha256": "f89970a4739e05864487fcc6d4f89dfea0ab042d1827eef6a62cd155135b106c",
+      "type": "video/mp4"
+    },
+    "https://www.google.com/images/cleardot.gif?zx=u74dsgd1vrkh": {
+      "status": 200,
+      "finalUrl": "https://www.google.com/images/cleardot.gif?zx=u74dsgd1vrkh",
+      "bytes": 43,
+      "sha256": "2dfe28cbdb83f01c940de6a88ab86200154fd772d568035ac568664e52068363",
+      "type": "image/gif"
+    },
+    "https://www.google.com/images/cleardot.gif?zx=unkk18fyc29z": {
+      "status": 200,
+      "finalUrl": "https://www.google.com/images/cleardot.gif?zx=unkk18fyc29z",
+      "bytes": 43,
+      "sha256": "2dfe28cbdb83f01c940de6a88ab86200154fd772d568035ac568664e52068363",
+      "type": "image/gif"
+    },
+    "https://www.google.com/images/cleardot.gif?zx=dkhe4dhztkqn": {
+      "status": 200,
+      "finalUrl": "https://www.google.com/images/cleardot.gif?zx=dkhe4dhztkqn",
+      "bytes": 43,
+      "sha256": "2dfe28cbdb83f01c940de6a88ab86200154fd772d568035ac568664e52068363",
+      "type": "image/gif"
+    },
+    "https://www.google.com/images/cleardot.gif?zx=tlui5m1d5gne": {
+      "status": 200,
+      "finalUrl": "https://www.google.com/images/cleardot.gif?zx=tlui5m1d5gne",
+      "bytes": 43,
+      "sha256": "2dfe28cbdb83f01c940de6a88ab86200154fd772d568035ac568664e52068363",
+      "type": "image/gif"
+    },
+    "https://canvas-advertising.com/lista-preparacion-archivos-wrap": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/lista-preparacion-archivos-wrap",
+      "bytes": 9912,
+      "sha256": "b5f31822596a792f979f86f3088e7dde54c20a9022c58a6215237d385b230d41",
+      "type": "text/html; charset=utf-8"
+    },
+    "https://canvas-advertising.com/vehicle-wrap-file-preparation-checklist": {
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/vehicle-wrap-file-preparation-checklist",
+      "bytes": 11145,
+      "sha256": "97fa408613fa02ed34975618b3507ef18104d7238c3d6f0794f7281b28b4b8d7",
+      "type": "text/html; charset=utf-8"
+    }
+  },
+  "blocked": {
+    "https://www.googletagmanager.com/gtag/js?id=G-98HWWM4BDW": 28,
+    "https://www.google.com/recaptcha/enterprise.js": 14,
+    "https://firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fcanvas-adnvertising%2Fdatabases%2F(default)&RID=51743&CVER=22&X-HTTP-Session-Id=gsessionid&zx=o5hyb3o1hs97&t=1": 1,
+    "https://firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fcanvas-adnvertising%2Fdatabases%2F(default)&RID=8372&CVER=22&X-HTTP-Session-Id=gsessionid&zx=x4w1dc906cmx&t=1": 1,
+    "https://firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fcanvas-adnvertising%2Fdatabases%2F(default)&RID=83589&CVER=22&X-HTTP-Session-Id=gsessionid&zx=z7zihbnvr9vc&t=1": 1,
+    "https://firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fcanvas-adnvertising%2Fdatabases%2F(default)&RID=44560&CVER=22&X-HTTP-Session-Id=gsessionid&zx=289xaa6kbxo8&t=1": 1,
+    "https://firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fcanvas-adnvertising%2Fdatabases%2F(default)&RID=2910&CVER=22&X-HTTP-Session-Id=gsessionid&zx=xt9zfvv9ezbw&t=1": 1,
+    "https://us-central1-canvas-adnvertising.cloudfunctions.net/getGoogleReviews": 3,
+    "https://firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fcanvas-adnvertising%2Fdatabases%2F(default)&RID=33774&CVER=22&X-HTTP-Session-Id=gsessionid&zx=h7iucbkrb6xn&t=1": 1,
+    "https://firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel?VER=8&database=projects%2Fcanvas-adnvertising%2Fdatabases%2F(default)&RID=30451&CVER=22&X-HTTP-Session-Id=gsessionid&zx=8qcxbs7onma4&t=1": 1
+  },
+  "pageErrors": [],
+  "failures": [
+    {
+      "url": "https://canvas-advertising.com/index-es",
+      "width": 320,
+      "kind": "layout/assets",
+      "layout": {
+        "viewport": 320,
+        "scrollWidth": 320,
+        "h1": 1,
+        "images": [
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fwaterloo-sparkling-water-fleet-wrap-austin.webp?alt=media&token=c4805ad5-1929-4d37-a23d-fef7e1733aa4",
+            "alt": "Waterloo Sparkling Water Fleet Wrap - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fmonument-sign-vinyl-refacing-austin-tx.webp?alt=media&token=49b080dc-897f-42bd-90c2-08f7dda1de3f",
+            "alt": "Monument Sign Vinyl Refacing - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fleet-branding-mobile-billboard-graphics.webp?alt=media&token=c7704a48-69a8-4292-aedf-e021bb631d9f",
+            "alt": "Fleet Branding Mobile Billboard Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fretail-store-fixture-wrap-austin-tx.webp?alt=media&token=2e6d6698-c7b8-45c5-ad2c-da6faf658d08",
+            "alt": "Retail Store Fixture Wrap - Austin TX"
+          },
+          {
+            "src": "https://canvas-advertising.com/images/before-after-after-mobile.20260727.webp",
+            "alt": "Commercial Van Full Wrap - Completed Project"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_5200.jpg?alt=media&token=a00f5e84-bdd5-435c-a0f8-d8b8ba3bbe20",
+            "alt": "Construction Company Vehicle Wrap"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_8357.jpg?alt=media&token=054eda4c-2eef-48ec-b090-11e793187b94",
+            "alt": "Printed T-Shirts for Construction Company"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fposey-car-sign-vinyl.webp?alt=media&token=8d7067f0-42c6-4a43-8de8-a6acdd874bae",
+            "alt": "Posey Car Sign Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fbanner-sign-mtz-austin.jpg?alt=media&token=400ca822-1e7d-4927-bc98-c8dbb3808d82",
+            "alt": "MTZ Banner Sign - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fstorefront-vinyl-wild-heart.jpg?alt=media&token=382c9b3e-d770-4c11-9157-333114e30977",
+            "alt": "Wild Heart Storefront Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fvinyl-truck-lightnin-dent.jpg?alt=media&token=a4152130-b799-4d79-b50c-c33d6819e336",
+            "alt": "Lightnin Dent Truck Vinyl Wrap"
+          }
+        ],
+        "phones": [
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "Llámanos: (512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "Llamar Ahora",
+            "href": "tel:+15129459783"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Produccion"
+          },
+          {
+            "tag": "A",
+            "text": "Portafolio"
+          },
+          {
+            "tag": "A",
+            "text": "Asóciese con Nosotros"
+          },
+          {
+            "tag": "A",
+            "text": "Compañía"
+          },
+          {
+            "tag": "A",
+            "text": "🇺🇸 English"
+          },
+          {
+            "tag": "A",
+            "text": "Obtener Cotización"
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Proceso"
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Socios"
+          },
+          {
+            "tag": "A",
+            "text": "Conoce Nuestro Programa de Socios"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/",
+      "width": 320,
+      "kind": "layout/assets",
+      "layout": {
+        "viewport": 320,
+        "scrollWidth": 320,
+        "h1": 1,
+        "images": [
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fwaterloo-sparkling-water-fleet-wrap-austin.webp?alt=media&token=c4805ad5-1929-4d37-a23d-fef7e1733aa4",
+            "alt": "Waterloo Sparkling Water Fleet Wrap - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fmonument-sign-vinyl-refacing-austin-tx.webp?alt=media&token=49b080dc-897f-42bd-90c2-08f7dda1de3f",
+            "alt": "Monument Sign Vinyl Refacing - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fleet-branding-mobile-billboard-graphics.webp?alt=media&token=c7704a48-69a8-4292-aedf-e021bb631d9f",
+            "alt": "Fleet Branding Mobile Billboard Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fretail-store-fixture-wrap-austin-tx.webp?alt=media&token=2e6d6698-c7b8-45c5-ad2c-da6faf658d08",
+            "alt": "Retail Store Fixture Wrap - Austin TX"
+          },
+          {
+            "src": "https://canvas-advertising.com/images/before-after-after-mobile.20260727.webp",
+            "alt": "Commercial Van Full Wrap - Completed Project"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_5200.jpg?alt=media&token=a00f5e84-bdd5-435c-a0f8-d8b8ba3bbe20",
+            "alt": "Construction Company Vehicle Wrap"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_8357.jpg?alt=media&token=054eda4c-2eef-48ec-b090-11e793187b94",
+            "alt": "Printed T-Shirts for Construction Company"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fposey-car-sign-vinyl.webp?alt=media&token=8d7067f0-42c6-4a43-8de8-a6acdd874bae",
+            "alt": "Posey Car Sign Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fbanner-sign-mtz-austin.jpg?alt=media&token=400ca822-1e7d-4927-bc98-c8dbb3808d82",
+            "alt": "MTZ Banner Sign - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fstorefront-vinyl-wild-heart.jpg?alt=media&token=382c9b3e-d770-4c11-9157-333114e30977",
+            "alt": "Wild Heart Storefront Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fvinyl-truck-lightnin-dent.jpg?alt=media&token=a4152130-b799-4d79-b50c-c33d6819e336",
+            "alt": "Lightnin Dent Truck Vinyl Wrap"
+          }
+        ],
+        "phones": [
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "Call Us: (512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "Call Now",
+            "href": "tel:+15124343793"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Production"
+          },
+          {
+            "tag": "A",
+            "text": "Portfolio"
+          },
+          {
+            "tag": "A",
+            "text": "Partner With Us"
+          },
+          {
+            "tag": "A",
+            "text": "Company"
+          },
+          {
+            "tag": "A",
+            "text": "🇲🇽 Español"
+          },
+          {
+            "tag": "A",
+            "text": "Get a Quote"
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Partner"
+          },
+          {
+            "tag": "A",
+            "text": "Learn About Our Partner Program"
+          },
+          {
+            "tag": "H2",
+            "text": "READY TO MAKE YOURBRAND STAND OUT?"
+          },
+          {
+            "tag": "P",
+            "text": "Get started with a free consultation"
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Book Strategy Meeting"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/index-es",
+      "width": 375,
+      "kind": "layout/assets",
+      "layout": {
+        "viewport": 375,
+        "scrollWidth": 375,
+        "h1": 1,
+        "images": [
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fwaterloo-sparkling-water-fleet-wrap-austin.webp?alt=media&token=c4805ad5-1929-4d37-a23d-fef7e1733aa4",
+            "alt": "Waterloo Sparkling Water Fleet Wrap - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fmonument-sign-vinyl-refacing-austin-tx.webp?alt=media&token=49b080dc-897f-42bd-90c2-08f7dda1de3f",
+            "alt": "Monument Sign Vinyl Refacing - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fleet-branding-mobile-billboard-graphics.webp?alt=media&token=c7704a48-69a8-4292-aedf-e021bb631d9f",
+            "alt": "Fleet Branding Mobile Billboard Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fretail-store-fixture-wrap-austin-tx.webp?alt=media&token=2e6d6698-c7b8-45c5-ad2c-da6faf658d08",
+            "alt": "Retail Store Fixture Wrap - Austin TX"
+          },
+          {
+            "src": "https://canvas-advertising.com/images/before-after-after-mobile.20260727.webp",
+            "alt": "Commercial Van Full Wrap - Completed Project"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_5200.jpg?alt=media&token=a00f5e84-bdd5-435c-a0f8-d8b8ba3bbe20",
+            "alt": "Construction Company Vehicle Wrap"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_8357.jpg?alt=media&token=054eda4c-2eef-48ec-b090-11e793187b94",
+            "alt": "Printed T-Shirts for Construction Company"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fposey-car-sign-vinyl.webp?alt=media&token=8d7067f0-42c6-4a43-8de8-a6acdd874bae",
+            "alt": "Posey Car Sign Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fbanner-sign-mtz-austin.jpg?alt=media&token=400ca822-1e7d-4927-bc98-c8dbb3808d82",
+            "alt": "MTZ Banner Sign - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fstorefront-vinyl-wild-heart.jpg?alt=media&token=382c9b3e-d770-4c11-9157-333114e30977",
+            "alt": "Wild Heart Storefront Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fvinyl-truck-lightnin-dent.jpg?alt=media&token=a4152130-b799-4d79-b50c-c33d6819e336",
+            "alt": "Lightnin Dent Truck Vinyl Wrap"
+          }
+        ],
+        "phones": [
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "Llámanos: (512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "Llamar Ahora",
+            "href": "tel:+15129459783"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Produccion"
+          },
+          {
+            "tag": "A",
+            "text": "Portafolio"
+          },
+          {
+            "tag": "A",
+            "text": "Asóciese con Nosotros"
+          },
+          {
+            "tag": "A",
+            "text": "Compañía"
+          },
+          {
+            "tag": "A",
+            "text": "🇺🇸 English"
+          },
+          {
+            "tag": "A",
+            "text": "Obtener Cotización"
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Socios"
+          },
+          {
+            "tag": "A",
+            "text": "Conoce Nuestro Programa de Socios"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/",
+      "width": 375,
+      "kind": "layout/assets",
+      "layout": {
+        "viewport": 375,
+        "scrollWidth": 375,
+        "h1": 1,
+        "images": [
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fmonument-sign-vinyl-refacing-austin-tx.webp?alt=media&token=49b080dc-897f-42bd-90c2-08f7dda1de3f",
+            "alt": "Monument Sign Vinyl Refacing - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fleet-branding-mobile-billboard-graphics.webp?alt=media&token=c7704a48-69a8-4292-aedf-e021bb631d9f",
+            "alt": "Fleet Branding Mobile Billboard Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fretail-store-fixture-wrap-austin-tx.webp?alt=media&token=2e6d6698-c7b8-45c5-ad2c-da6faf658d08",
+            "alt": "Retail Store Fixture Wrap - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_5200.jpg?alt=media&token=a00f5e84-bdd5-435c-a0f8-d8b8ba3bbe20",
+            "alt": "Construction Company Vehicle Wrap"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_8357.jpg?alt=media&token=054eda4c-2eef-48ec-b090-11e793187b94",
+            "alt": "Printed T-Shirts for Construction Company"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fposey-car-sign-vinyl.webp?alt=media&token=8d7067f0-42c6-4a43-8de8-a6acdd874bae",
+            "alt": "Posey Car Sign Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fbanner-sign-mtz-austin.jpg?alt=media&token=400ca822-1e7d-4927-bc98-c8dbb3808d82",
+            "alt": "MTZ Banner Sign - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fstorefront-vinyl-wild-heart.jpg?alt=media&token=382c9b3e-d770-4c11-9157-333114e30977",
+            "alt": "Wild Heart Storefront Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fvinyl-truck-lightnin-dent.jpg?alt=media&token=a4152130-b799-4d79-b50c-c33d6819e336",
+            "alt": "Lightnin Dent Truck Vinyl Wrap"
+          }
+        ],
+        "phones": [
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "Call Us: (512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "Call Now",
+            "href": "tel:+15124343793"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Production"
+          },
+          {
+            "tag": "A",
+            "text": "Portfolio"
+          },
+          {
+            "tag": "A",
+            "text": "Partner With Us"
+          },
+          {
+            "tag": "A",
+            "text": "Company"
+          },
+          {
+            "tag": "A",
+            "text": "🇲🇽 Español"
+          },
+          {
+            "tag": "A",
+            "text": "Get a Quote"
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Partner"
+          },
+          {
+            "tag": "A",
+            "text": "Learn About Our Partner Program"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/index-es",
+      "width": 414,
+      "kind": "layout/assets",
+      "layout": {
+        "viewport": 414,
+        "scrollWidth": 414,
+        "h1": 1,
+        "images": [
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2FIMG_8357.jpg?alt=media&token=054eda4c-2eef-48ec-b090-11e793187b94",
+            "alt": "Printed T-Shirts for Construction Company"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fposey-car-sign-vinyl.webp?alt=media&token=8d7067f0-42c6-4a43-8de8-a6acdd874bae",
+            "alt": "Posey Car Sign Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fbanner-sign-mtz-austin.jpg?alt=media&token=400ca822-1e7d-4927-bc98-c8dbb3808d82",
+            "alt": "MTZ Banner Sign - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fstorefront-vinyl-wild-heart.jpg?alt=media&token=382c9b3e-d770-4c11-9157-333114e30977",
+            "alt": "Wild Heart Storefront Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fvinyl-truck-lightnin-dent.jpg?alt=media&token=a4152130-b799-4d79-b50c-c33d6819e336",
+            "alt": "Lightnin Dent Truck Vinyl Wrap"
+          }
+        ],
+        "phones": [
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "Llámanos: (512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "(512) 945-9783",
+            "href": "tel:+15129459783"
+          },
+          {
+            "text": "Llamar Ahora",
+            "href": "tel:+15129459783"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Produccion"
+          },
+          {
+            "tag": "A",
+            "text": "Portafolio"
+          },
+          {
+            "tag": "A",
+            "text": "Asóciese con Nosotros"
+          },
+          {
+            "tag": "A",
+            "text": "Compañía"
+          },
+          {
+            "tag": "A",
+            "text": "🇺🇸 English"
+          },
+          {
+            "tag": "A",
+            "text": "Obtener Cotización"
+          },
+          {
+            "tag": "BUTTON",
+            "text": "Socios"
+          },
+          {
+            "tag": "A",
+            "text": "Conoce Nuestro Programa de Socios"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://canvas-advertising.com/",
+      "width": 414,
+      "kind": "layout/assets",
+      "layout": {
+        "viewport": 414,
+        "scrollWidth": 414,
+        "h1": 1,
+        "images": [
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fposey-car-sign-vinyl.webp?alt=media&token=8d7067f0-42c6-4a43-8de8-a6acdd874bae",
+            "alt": "Posey Car Sign Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fbanner-sign-mtz-austin.jpg?alt=media&token=400ca822-1e7d-4927-bc98-c8dbb3808d82",
+            "alt": "MTZ Banner Sign - Austin TX"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fstorefront-vinyl-wild-heart.jpg?alt=media&token=382c9b3e-d770-4c11-9157-333114e30977",
+            "alt": "Wild Heart Storefront Vinyl Graphics"
+          },
+          {
+            "src": "https://firebasestorage.googleapis.com/v0/b/canvas-adnvertising.firebasestorage.app/o/jobs%20done%2Fvinyl-truck-lightnin-dent.jpg?alt=media&token=a4152130-b799-4d79-b50c-c33d6819e336",
+            "alt": "Lightnin Dent Truck Vinyl Wrap"
+          }
+        ],
+        "phones": [
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "Call Us: (512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "(512) 434-3793",
+            "href": "tel:+15124343793"
+          },
+          {
+            "text": "Call Now",
+            "href": "tel:+15124343793"
+          }
+        ],
+        "overflow": [
+          {
+            "tag": "A",
+            "text": "Production"
+          },
+          {
+            "tag": "A",
+            "text": "Portfolio"
+          },
+          {
+            "tag": "A",
+            "text": "Partner With Us"
+          },
+          {
+            "tag": "A",
+            "text": "Company"
+          },
+          {
+            "tag": "A",
+            "text": "🇲🇽 Español"
+          },
+          {
+            "tag": "A",
+            "text": "Get a Quote"
+          }
+        ]
+      }
+    }
+  ],
+  "links": [
+    {
+      "from": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "href": "#main-content",
+      "finalUrl": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "targetExists": 1,
+      "targetTop": 0
+    },
+    {
+      "from": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "href": "#types",
+      "finalUrl": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "targetExists": 1,
+      "targetTop": 117.40625
+    },
+    {
+      "from": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "href": "lista-preparacion-archivos-wrap",
+      "finalUrl": "https://canvas-advertising.com/lista-preparacion-archivos-wrap",
+      "h1": "PREPARACIÓN DE ARCHIVOS\nPARA ROTULACIÓN VEHICULAR",
+      "status": 200
+    },
+    {
+      "from": "https://canvas-advertising.com/large-format-printing-austin",
+      "href": "#main-content",
+      "finalUrl": "https://canvas-advertising.com/large-format-printing-austin",
+      "targetExists": 1,
+      "targetTop": 0
+    },
+    {
+      "from": "https://canvas-advertising.com/large-format-printing-austin",
+      "href": "#types",
+      "finalUrl": "https://canvas-advertising.com/large-format-printing-austin",
+      "targetExists": 1,
+      "targetTop": 116.65625
+    },
+    {
+      "from": "https://canvas-advertising.com/large-format-printing-austin",
+      "href": "vehicle-wrap-file-preparation-checklist",
+      "finalUrl": "https://canvas-advertising.com/vehicle-wrap-file-preparation-checklist",
+      "h1": "VEHICLE-WRAP FILE\nPREPARATION CHECKLIST",
+      "status": 200
+    }
+  ],
+  "browser": "149.0.7827.55",
+  "playwright": "1.61.0",
+  "finishedAt": "2026-10-20T18:26:19.330Z"
+}

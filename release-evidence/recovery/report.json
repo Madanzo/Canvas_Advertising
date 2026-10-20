@@ -1,0 +1,321 @@
+{
+  "startedAt": "2026-10-20T18:21:15.258Z",
+  "originalRoot": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising",
+  "destination": "/private/tmp/canvas-recovery-oct20",
+  "policy": "No original files restored or modified. Candidate copies and comparisons only.",
+  "status": "?? commercial-fleet-wraps-austin-es.html\n?? commercial-fleet-wraps-austin.html\n?? large-format-printing-austin-es.html\n?? large-format-printing-austin.html\n?? lista-preparacion-archivos-wrap.html\n?? vehicle-wrap-file-preparation-checklist.html\n",
+  "preserved": [
+    {
+      "name": "commercial-fleet-wraps-austin.html",
+      "sha256": "fbbde8f955789b14daf616b4fef2314f8b0fa62a9057ddf18948cd7a7aec6b67",
+      "bytes": 29278,
+      "mtime": "2026-10-20T17:57:50.139Z"
+    },
+    {
+      "name": "commercial-fleet-wraps-austin-es.html",
+      "sha256": "fae9c7a2fd87ddbe704c5ab1cfc5d75b9897fb824cd4f7febf82fc12cba17e25",
+      "bytes": 29811,
+      "mtime": "2026-10-20T17:57:50.567Z"
+    },
+    {
+      "name": "large-format-printing-austin.html",
+      "sha256": "cc9bdc58acf5469ddde3c849875d63499fcc9a3604986b5689bcb5ec285d4317",
+      "bytes": 29722,
+      "mtime": "2026-10-20T17:57:50.932Z"
+    },
+    {
+      "name": "large-format-printing-austin-es.html",
+      "sha256": "ab454f292d1d0e9ffece4cb7e9b4a8e746fc2aa43312febcdabfca8654bddbf1",
+      "bytes": 29192,
+      "mtime": "2026-10-20T17:57:51.244Z"
+    },
+    {
+      "name": "vehicle-wrap-file-preparation-checklist.html",
+      "sha256": "f00b0a4ad9860b509516a096e1ac8f87c93e0acb525ffe9925d322866b10262a",
+      "bytes": 11146,
+      "mtime": "2026-10-20T17:57:51.531Z"
+    },
+    {
+      "name": "lista-preparacion-archivos-wrap.html",
+      "sha256": "23e4690c90437be670249ea757c4a6b94130464ef3799a3c313fea65f63e9a99",
+      "bytes": 9913,
+      "mtime": "2026-10-20T17:57:51.777Z"
+    }
+  ],
+  "candidates": [
+    {
+      "original": "commercial-fleet-wraps-austin-es.html",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/before/commercial-fleet-wraps-austin-es.html",
+      "kind": "repository-backup",
+      "sha256": "4e5c69399fda3ee1975e325c39a591c876fca9b7b5cd6daeb456031a5fe880c7",
+      "bytes": 29820,
+      "copy": "/private/tmp/canvas-recovery-oct20/candidates/commercial-fleet-wraps-austin-es.html/4e5c69399fda3ee1975e325c39a591c876fca9b7b5cd6daeb456031a5fe880c7.html",
+      "matchesCurrent": false
+    },
+    {
+      "original": "commercial-fleet-wraps-austin.html",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/before/commercial-fleet-wraps-austin.html",
+      "kind": "repository-backup",
+      "sha256": "488a2c5c9a005fbf22fea6bd1da1890c1873b13dc070f21fe18d671fa9756ffe",
+      "bytes": 29287,
+      "copy": "/private/tmp/canvas-recovery-oct20/candidates/commercial-fleet-wraps-austin.html/488a2c5c9a005fbf22fea6bd1da1890c1873b13dc070f21fe18d671fa9756ffe.html",
+      "matchesCurrent": false
+    },
+    {
+      "original": "large-format-printing-austin-es.html",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/before/large-format-printing-austin-es.html",
+      "kind": "repository-backup",
+      "sha256": "7c3275d2fc6463b996f4fb278f18234ad7baa722b31e92ec04888ad15171722a",
+      "bytes": 29201,
+      "copy": "/private/tmp/canvas-recovery-oct20/candidates/large-format-printing-austin-es.html/7c3275d2fc6463b996f4fb278f18234ad7baa722b31e92ec04888ad15171722a.html",
+      "matchesCurrent": false
+    },
+    {
+      "original": "large-format-printing-austin.html",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/before/large-format-printing-austin.html",
+      "kind": "repository-backup",
+      "sha256": "b941d6134d7a10260b626d2d246c40f823e7515adaf9c3703b93d2e3a8d98d4b",
+      "bytes": 29731,
+      "copy": "/private/tmp/canvas-recovery-oct20/candidates/large-format-printing-austin.html/b941d6134d7a10260b626d2d246c40f823e7515adaf9c3703b93d2e3a8d98d4b.html",
+      "matchesCurrent": false
+    },
+    {
+      "original": "commercial-fleet-wraps-austin-es.html",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/overlay/commercial-fleet-wraps-austin-es.html",
+      "kind": "repository-backup",
+      "sha256": "63efe1d586dfe017746c0fb7d7f0428d360d6610ff6c4152074e540160b3b743",
+      "bytes": 29810,
+      "copy": "/private/tmp/canvas-recovery-oct20/candidates/commercial-fleet-wraps-austin-es.html/63efe1d586dfe017746c0fb7d7f0428d360d6610ff6c4152074e540160b3b743.html",
+      "matchesCurrent": false
+    },
+    {
+      "original": "commercial-fleet-wraps-austin.html",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/overlay/commercial-fleet-wraps-austin.html",
+      "kind": "repository-backup",
+      "sha256": "b8540ad3da3247c1c6d940c71b038e8af0b51c4c24f963d7712fc6af5118e0e9",
+      "bytes": 29277,
+      "copy": "/private/tmp/canvas-recovery-oct20/candidates/commercial-fleet-wraps-austin.html/b8540ad3da3247c1c6d940c71b038e8af0b51c4c24f963d7712fc6af5118e0e9.html",
+      "matchesCurrent": false
+    },
+    {
+      "original": "large-format-printing-austin-es.html",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/overlay/large-format-printing-austin-es.html",
+      "kind": "repository-backup",
+      "sha256": "631453d6e26a172e28d1c8f973d19b624d504f03cf27b5a5175133c5a5d77eed",
+      "bytes": 29191,
+      "copy": "/private/tmp/canvas-recovery-oct20/candidates/large-format-printing-austin-es.html/631453d6e26a172e28d1c8f973d19b624d504f03cf27b5a5175133c5a5d77eed.html",
+      "matchesCurrent": false
+    },
+    {
+      "original": "large-format-printing-austin.html",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/overlay/large-format-printing-austin.html",
+      "kind": "repository-backup",
+      "sha256": "05f4ec213daec3488d12def5e7e27de609013535fd6f2ba99802a98d584ecab3",
+      "bytes": 29721,
+      "copy": "/private/tmp/canvas-recovery-oct20/candidates/large-format-printing-austin.html/05f4ec213daec3488d12def5e7e27de609013535fd6f2ba99802a98d584ecab3.html",
+      "matchesCurrent": false
+    },
+    {
+      "original": "commercial-fleet-wraps-austin-es.html",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/cam-268-isolated-overlay/commercial-fleet-wraps-austin-es.html",
+      "kind": "repository-backup",
+      "sha256": "4e5c69399fda3ee1975e325c39a591c876fca9b7b5cd6daeb456031a5fe880c7",
+      "bytes": 29820,
+      "copy": "/private/tmp/canvas-recovery-oct20/candidates/commercial-fleet-wraps-austin-es.html/4e5c69399fda3ee1975e325c39a591c876fca9b7b5cd6daeb456031a5fe880c7.html",
+      "matchesCurrent": false
+    },
+    {
+      "original": "commercial-fleet-wraps-austin.html",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/cam-268-isolated-overlay/commercial-fleet-wraps-austin.html",
+      "kind": "repository-backup",
+      "sha256": "488a2c5c9a005fbf22fea6bd1da1890c1873b13dc070f21fe18d671fa9756ffe",
+      "bytes": 29287,
+      "copy": "/private/tmp/canvas-recovery-oct20/candidates/commercial-fleet-wraps-austin.html/488a2c5c9a005fbf22fea6bd1da1890c1873b13dc070f21fe18d671fa9756ffe.html",
+      "matchesCurrent": false
+    },
+    {
+      "original": "large-format-printing-austin-es.html",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/cam-268-isolated-overlay/large-format-printing-austin-es.html",
+      "kind": "repository-backup",
+      "sha256": "7c3275d2fc6463b996f4fb278f18234ad7baa722b31e92ec04888ad15171722a",
+      "bytes": 29201,
+      "copy": "/private/tmp/canvas-recovery-oct20/candidates/large-format-printing-austin-es.html/7c3275d2fc6463b996f4fb278f18234ad7baa722b31e92ec04888ad15171722a.html",
+      "matchesCurrent": false
+    },
+    {
+      "original": "large-format-printing-austin.html",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/cam-268-isolated-overlay/large-format-printing-austin.html",
+      "kind": "repository-backup",
+      "sha256": "b941d6134d7a10260b626d2d246c40f823e7515adaf9c3703b93d2e3a8d98d4b",
+      "bytes": 29731,
+      "copy": "/private/tmp/canvas-recovery-oct20/candidates/large-format-printing-austin.html/b941d6134d7a10260b626d2d246c40f823e7515adaf9c3703b93d2e3a8d98d4b.html",
+      "matchesCurrent": false
+    }
+  ],
+  "searched": [
+    {
+      "root": "/Users/camiloreyna/Library/Application Support/Antigravity/User/History",
+      "metadataScanned": 651,
+      "matchingResources": 0,
+      "maxFolders": 2500,
+      "maxVersionsPerResource": 80
+    },
+    {
+      "root": "/Users/camiloreyna/Library/Application Support/Code/User/History",
+      "metadataScanned": 1,
+      "matchingResources": 0,
+      "maxFolders": 2500,
+      "maxVersionsPerResource": 80
+    },
+    {
+      "root": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch",
+      "maxDepth": 3
+    },
+    {
+      "root": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/checkpoints",
+      "maxDepth": 3
+    },
+    {
+      "root": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/backups",
+      "maxDepth": 3
+    },
+    {
+      "root": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/.history",
+      "maxDepth": 3
+    },
+    {
+      "root": "/Users/camiloreyna/.codex/worktrees/canvas-commerce-website/Canvas_Advertising",
+      "worktreeTopLevelOnly": true
+    }
+  ],
+  "completedAt": "2026-10-20T18:21:25.442Z",
+  "originalUnchanged": true,
+  "captureTree": {
+    "tree": "43dafcca79495f7fc9e344338e59b1cdb4c9db1d",
+    "refTimestamp": "2026-10-20T18:19:51.811Z",
+    "postIncident": true,
+    "files": [
+      {
+        "name": "commercial-fleet-wraps-austin.html",
+        "sha256": "fbbde8f955789b14daf616b4fef2314f8b0fa62a9057ddf18948cd7a7aec6b67",
+        "matchesPreserved": true
+      },
+      {
+        "name": "commercial-fleet-wraps-austin-es.html",
+        "sha256": "fae9c7a2fd87ddbe704c5ab1cfc5d75b9897fb824cd4f7febf82fc12cba17e25",
+        "matchesPreserved": true
+      },
+      {
+        "name": "large-format-printing-austin.html",
+        "sha256": "cc9bdc58acf5469ddde3c849875d63499fcc9a3604986b5689bcb5ec285d4317",
+        "matchesPreserved": true
+      },
+      {
+        "name": "large-format-printing-austin-es.html",
+        "sha256": "ab454f292d1d0e9ffece4cb7e9b4a8e746fc2aa43312febcdabfca8654bddbf1",
+        "matchesPreserved": true
+      },
+      {
+        "name": "vehicle-wrap-file-preparation-checklist.html",
+        "sha256": "f00b0a4ad9860b509516a096e1ac8f87c93e0acb525ffe9925d322866b10262a",
+        "matchesPreserved": true
+      },
+      {
+        "name": "lista-preparacion-archivos-wrap.html",
+        "sha256": "23e4690c90437be670249ea757c4a6b94130464ef3799a3c313fea65f63e9a99",
+        "matchesPreserved": true
+      }
+    ]
+  },
+  "comparisons": [
+    {
+      "name": "commercial-fleet-wraps-austin-es.html",
+      "hash": "4e5c69399fda3ee1975e325c39a591c876fca9b7b5cd6daeb456031a5fe880c7",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/before/commercial-fleet-wraps-austin-es.html",
+      "diffFile": "/private/tmp/canvas-recovery-oct20/commercial-fleet-wraps-austin-es.html-4e5c6939.diff",
+      "changes": [
+        "-    <script src=\"js/firebase-config.js?v=20260910-2bf92bc\"></script>",
+        "+    <script src=\"js/firebase-config.js?v=20260907-app-check-monitor\"></script>",
+        "-"
+      ]
+    },
+    {
+      "name": "commercial-fleet-wraps-austin.html",
+      "hash": "488a2c5c9a005fbf22fea6bd1da1890c1873b13dc070f21fe18d671fa9756ffe",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/before/commercial-fleet-wraps-austin.html",
+      "diffFile": "/private/tmp/canvas-recovery-oct20/commercial-fleet-wraps-austin.html-488a2c5c.diff",
+      "changes": [
+        "-    <script src=\"js/firebase-config.js?v=20260910-2bf92bc\"></script>",
+        "+    <script src=\"js/firebase-config.js?v=20260907-app-check-monitor\"></script>",
+        "-"
+      ]
+    },
+    {
+      "name": "large-format-printing-austin-es.html",
+      "hash": "7c3275d2fc6463b996f4fb278f18234ad7baa722b31e92ec04888ad15171722a",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/before/large-format-printing-austin-es.html",
+      "diffFile": "/private/tmp/canvas-recovery-oct20/large-format-printing-austin-es.html-7c3275d2.diff",
+      "changes": [
+        "-    <script src=\"js/firebase-config.js?v=20260910-2bf92bc\"></script>",
+        "+    <script src=\"js/firebase-config.js?v=20260907-app-check-monitor\"></script>",
+        "-"
+      ]
+    },
+    {
+      "name": "large-format-printing-austin.html",
+      "hash": "b941d6134d7a10260b626d2d246c40f823e7515adaf9c3703b93d2e3a8d98d4b",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/before/large-format-printing-austin.html",
+      "diffFile": "/private/tmp/canvas-recovery-oct20/large-format-printing-austin.html-b941d613.diff",
+      "changes": [
+        "-    <script src=\"js/firebase-config.js?v=20260910-2bf92bc\"></script>",
+        "+    <script src=\"js/firebase-config.js?v=20260907-app-check-monitor\"></script>",
+        "-"
+      ]
+    },
+    {
+      "name": "commercial-fleet-wraps-austin-es.html",
+      "hash": "63efe1d586dfe017746c0fb7d7f0428d360d6610ff6c4152074e540160b3b743",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/overlay/commercial-fleet-wraps-austin-es.html",
+      "diffFile": "/private/tmp/canvas-recovery-oct20/commercial-fleet-wraps-austin-es.html-63efe1d5.diff",
+      "changes": [
+        "-"
+      ]
+    },
+    {
+      "name": "commercial-fleet-wraps-austin.html",
+      "hash": "b8540ad3da3247c1c6d940c71b038e8af0b51c4c24f963d7712fc6af5118e0e9",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/overlay/commercial-fleet-wraps-austin.html",
+      "diffFile": "/private/tmp/canvas-recovery-oct20/commercial-fleet-wraps-austin.html-b8540ad3.diff",
+      "changes": [
+        "-"
+      ]
+    },
+    {
+      "name": "large-format-printing-austin-es.html",
+      "hash": "631453d6e26a172e28d1c8f973d19b624d504f03cf27b5a5175133c5a5d77eed",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/overlay/large-format-printing-austin-es.html",
+      "diffFile": "/private/tmp/canvas-recovery-oct20/large-format-printing-austin-es.html-631453d6.diff",
+      "changes": [
+        "-"
+      ]
+    },
+    {
+      "name": "large-format-printing-austin.html",
+      "hash": "05f4ec213daec3488d12def5e7e27de609013535fd6f2ba99802a98d584ecab3",
+      "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/overlay/large-format-printing-austin.html",
+      "diffFile": "/private/tmp/canvas-recovery-oct20/large-format-printing-austin.html-05f4ec21.diff",
+      "changes": [
+        "-"
+      ]
+    }
+  ],
+  "patchRecords": {
+    "availableGenerators": [
+      "prepare-seo.cjs",
+      "prepare-home.cjs",
+      "reconcile-claims.cjs"
+    ],
+    "finding": "Available generation records start from captured live bytes; they are not snapshots of pre-incident untracked files."
+  },
+  "disposition": "No restore selected or performed. Four affected fleet/printing files have older repository backups (two unique versions each); differences are Firebase config cache-query version plus an added terminal newline. Two artwork guides have no pre-incident backup found in this bounded search. The post-incident capture tree matches all six current copies, not their unknown pre-incident state. Prior local byte state remains unproven."
+}

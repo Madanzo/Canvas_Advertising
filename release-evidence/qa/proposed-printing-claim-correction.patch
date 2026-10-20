@@ -1,0 +1,56 @@
+--- a/large-format-printing-austin.html
++++ b/large-format-printing-austin.html
+@@ -252,13 +252,13 @@
+             <div class="why-canvas__grid">
+                 <div class="why-item" data-reveal>
+                     <div class="why-item__icon">📦</div>
+-                    <h3 class="why-item__title">No Minimum Order</h3>
++                    <h3 class="why-item__title">Project Requirements</h3>
+                     <p class="why-item__desc">Send material, dimensions, and quantity to confirm scope and applicable minimums.</p>
+                 </div>
+                 <div class="why-item" data-reveal>
+                     <div class="why-item__icon">⚡</div>
+-                    <h3 class="why-item__title">Same-Week Turnaround</h3>
+-                    <p class="why-item__desc">Rush jobs welcome. Most print, cut, and laminate orders are ready for pickup or shipping within 2-3 business days.</p>
++                    <h3 class="why-item__title">Confirm Production Timing</h3>
++                    <p class="why-item__desc">Confirm production timing after the material, quantity, finishing, and approved artwork have been reviewed.</p>
+                 </div>
+                 <div class="why-item" data-reveal>
+                     <div class="why-item__icon">🏷️</div>
+--- a/large-format-printing-austin-es.html
++++ b/large-format-printing-austin-es.html
+@@ -92,7 +92,7 @@
+               "name": "What is the turnaround time for wholesale printing?",
+               "acceptedAnswer": {
+                 "@type": "Answer",
+-                "text": "Most wholesale print orders are ready for pickup or shipping within 2-3 business days. If you have an urgent rush job, let us know and we can often accommodate same-week or next-day turnarounds."
++                "text": "Confirma el plazo de producción y la fecha de entrega al revisar el material, cantidad y archivo aprobado. No programes la instalación hasta confirmar la disponibilidad."
+               }
+             },
+             {
+@@ -246,13 +246,13 @@
+             <div class="why-canvas__grid">
+                 <div class="why-item" data-reveal>
+                     <div class="why-item__icon">📦</div>
+-                    <h3 class="why-item__title">No Minimum Order</h3>
++                    <h3 class="why-item__title">Requisitos del proyecto</h3>
+                     <p class="why-item__desc">Indica material, dimensiones y cantidad para confirmar el alcance y los mínimos del proyecto.</p>
+                 </div>
+                 <div class="why-item" data-reveal>
+                     <div class="why-item__icon">⚡</div>
+-                    <h3 class="why-item__title">Same-Week Turnaround</h3>
+-                    <p class="why-item__desc">Rush jobs welcome. Most orders ready for pickup within 2-3 business days.</p>
++                    <h3 class="why-item__title">Confirmar plazos de producción</h3>
++                    <p class="why-item__desc">Confirma el plazo de producción después de revisar material, cantidad, acabados y archivo aprobado.</p>
+                 </div>
+                 <div class="why-item" data-reveal>
+                     <div class="why-item__icon">🏷️</div>
+@@ -291,7 +291,7 @@
+             <div class="faq__list" data-reveal>
+                 <div class="faq__item">
+                     <h3 class="faq__question">What is the turnaround time for wholesale printing?</h3>
+-                    <p class="faq__answer">Most wholesale print orders are ready for pickup or shipping within 2-3 business days. If you have an urgent rush job, let us know and we can often accommodate same-week or next-day turnarounds.</p>
++                    <p class="faq__answer">Confirma el plazo de producción y la fecha de entrega al revisar el material, cantidad y archivo aprobado. No programes la instalación hasta confirmar la disponibilidad.</p>
+                 </div>
+                 <div class="faq__item">
+                     <h3 class="faq__question">Do you offer white-label blind shipping?</h3>

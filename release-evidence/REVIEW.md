@@ -1,59 +1,91 @@
-# October 20 isolated SEO/AEO candidate — NOT DEPLOYED
+# Four-page first release — QA complete, publication ON HOLD
 
-## Updated package sequence
+## Pinned identity and boundaries
 
-Cross-platform CI correction: gzip output can vary by Node/zlib/OS build even for identical HTML. `upload-bytes.json` binds the exact prepared compressed upload bytes. Tests verify their Hosting SHA-256 AND decompress them to the exact reviewed source bytes, rather than assuming Linux recompression equals the preparation environment. The release must upload these bytes verbatim, not recompress on another machine.
+Release HTML source: `f8a0c11da9b532766c3c1311bfd3906291ecd301`.
+Hosted source CI: [run 39471573424](https://github.com/Madanzo/Canvas_Advertising/actions/runs/39471573424), SUCCESS on that exact SHA: eight HTML source checks plus one artifact check. These nine tests are not browser evidence.
 
-The completed independent follow-on adds both manifest-verified homepages. There are now eight candidate paths, with **nine passing local tests**. `technical-package.json` is the first four-page release: `/`, `/index-es`, `/large-format-printing-austin`, `/large-format-printing-austin-es`. It corrects unsupported homepage minimum/free-design/warranty claims, removes an unverified Zeno certification badge, qualifies Avery/MCS scope against owner evidence, and repairs printing navigation and policy/schema claims. It retains 2,016 live files unchanged. Approved photos, scripts, form fields and EN/ES relationships are unchanged.
+Publication package ID: `canvas-seo-first-907d3c0ac82b82c831fb3f71c80d1de47d02628d2ef9dd26e1bc9addc89b8ce7`.
+Live baseline and rollback: `projects/canvas-adnvertising/sites/canvas-adnvertising/versions/61df100c11fd1d4f`.
+Fresh manifest/configuration captured October 20 at 18:23:21 UTC. This is a local prepared package; no remote version, upload, finalization, release, indexing request or production submission was performed.
 
-The full `package.json` additionally includes the four fleet/resource paths and preserves 2,012 files. This is a **subsequent milestone**, not permission to bundle everything into the first release. After the first approved release, capture its new version as the next baseline/rollback and rebuild the follow-on four-file overlay. Do not assume the original eight-file proposal is the post-release baseline.
+The release-source branch remains at the pinned SHA. QA/documentation are maintained separately on `codex/canvas-seo-oct20-release-evidence`; no release HTML is changed by this evidence work. Original checkout untouched during this follow-up. Commerce `92d6f11ffca644a152e95434054ee8a0f211c9c3` and its evidence remain separate. No checkout/payment, staff draft, upload, Functions, Firestore, Storage, IAM/secret, CRM forwarding, notification or App Check enforcement changes.
 
-The homepage findings noted below are now addressed in candidate sources, not on production. Current public verification covers all eight URLs; no deployed outcome is claimed. Homepage SVG certification artwork is not treated as approval evidence: the unverified Zeno badge is removed, while published photos remain unchanged. Existing homepage fragment behavior is preserved rather than broadened into a navigation redesign. Browser/mobile checks and concrete production authorization remain open.
+## Exactly four first-release paths
 
-## Source and scope
+| Hosting path | Public URL | Scope at the pinned source |
+| --- | --- | --- |
+| /index.html | / | Homepage claim-safety copy; remove unsupported Zeno badge; qualify warranty/program scope |
+| /index-es.html | /index-es | Matching homepage claim-safety scope |
+| /large-format-printing-austin.html | /large-format-printing-austin | Correct fragments, quote inputs and artwork-resource link; policy/FAQ changes, with residual claims identified below |
+| /large-format-printing-austin-es.html | /large-format-printing-austin-es | Matching printing scope; residual claims and legacy untranslated copy remain |
 
-Read CAM-172's October 20 goal with CAM-140, CAM-252 and CAM-270. Git base is remote main `5aac3208abde699b87a674dc7a2c2cd9c4e17ba8`, not the dirty original checkout or commerce candidate. Actual public baseline is Hosting version `61df100c11fd1d4f`, released September 10, 2026. The six baseline HTML files were fetched from the Firebase origin and their level-9 gzip SHA-256 values matched the live Hosting manifest. Public custom-domain GETs also returned 200, unchanged canonical targets and expected script sources; see public-check.json. Cloudflare transformations mean public response bytes are not origin bytes.
+`technical-package.json` is the four-page proposal. `package.json` is the broader eight-page candidate, NOT this publication allowlist. Its additional fleet EN/ES and existing artwork-checklist EN/ES improvements are a later milestone. Their HTML MUST NOT be uploaded in this first release. The new printing links correctly lead to the currently published checklist resources; they do not depend on publishing the later resource changes.
 
-Commerce `92d6f11ffca644a152e95434054ee8a0f211c9c3` and its connected evidence are outside this branch and release. No backend, uploads, checkout, payments, staff drafts, CRM forwarding or customer notification changes are included.
+After an authorized first release, capture its actual new live version as the subsequent milestone's baseline and rollback. Do not reuse the original eight-page candidate as if it were that fresh baseline.
 
-## Exact public URL/content diff
+## Browser and public-resource evidence
 
-| Existing path (no URL change) | Candidate change |
-| --- | --- |
-| /commercial-fleet-wraps-austin | Repair broken Production fragment; add fleet quote inputs and link to existing artwork checklist; withhold unscoped free-design promises in description/Twitter/process/CTA |
-| /commercial-fleet-wraps-austin-es | Same scope in Spanish; remove unqualified certified-installation sentence rather than infer a credential |
-| /large-format-printing-austin | Repair broken Production and print-types fragments; remove no-MOQ claim in visible copy and FAQ JSON-LD; remove unsupported next-day/2–3-day commitment; add printing quote requirements and resource link |
-| /large-format-printing-austin-es | Same functional scope; preserve existing EN/ES URL relationship (legacy body still contains English sections, a separate translation milestone) |
-| /vehicle-wrap-file-preparation-checklist | Add multi-vehicle/piece file manifest, version and approval matching guidance; no new upload or workflow feature |
-| /lista-preparacion-archivos-wrap | Add matching Spanish artwork guidance |
+Local headless Chromium 149.0.7827.55, Playwright 1.61.0:
+- Four pinned pages rendered at 320, 375, 414, 768, 1024 and 1440 pixels: 24 page/viewport combinations.
+- No document-level horizontal overflow; one H1 per page; no uncaught JavaScript page errors observed.
+- Skip links received initial Tab focus. At mobile/tablet widths, Enter opened the menu and Escape closed it with corresponding aria-expanded state. Phone links received keyboard focus and retained EN `tel:+15124343793` / ES `tel:+15129459783`. No phone, SMS, mail or form action was executed.
+- Six initial small-homepage image observations were harness timing/lazy-load issues, not confirmed missing assets. A focused six-case image diagnostic brought each image into view and waited: every visible image decoded successfully at 320/375/414 on EN/ES. Raw reports retain the initial observations; do not report their unqualified failure count as the final outcome.
+- All 43 explicitly referenced asset URLs returned HTTP 200. Browser-requested resources also succeeded. Tracking/App Check/backend traffic was deliberately blocked; this is not an integration or enforcement test.
+- Both printing-page corrected fragment targets exist and scroll into view. Keyboard activation reached the live EN and ES checklist URLs and their matching H1s with HTTP 200.
+- Actual public .html and trailing-slash variants returned the expected 301 clean-URL redirects. Quote/quote-es GETs returned 200 with matching canonicals. No live forms/calls were submitted.
 
-No redirect, canonical, robots, sitemap, image, video, stylesheet, script-source, phone-link or form-field changes. No new product prices, minimum values, warranties or certifications. JSON-LD remains parseable; printing FAQ answers match visible answers for the corrected policies. Baselines are committed so source diff is reviewable independently of the large difference between old Git main and live production.
+Screenshots include full-page snapshots and viewport detail/gallery captures at mobile and desktop widths. Animation/lazy-load behavior makes full-page offscreen screenshots insufficient alone; viewport captures and focused image diagnostics supplement them. This is Chromium coverage, not Safari/Firefox/physical-device, full accessibility, CWV or production lead-delivery certification.
 
-## Claim evidence and remaining audit
+See `qa/browser-report.json`, `qa/image-diagnostic.json`, `qa/reference-check.json`, and `qa/QA.md`.
 
-- September 2 owner evidence in `campaigns/cam-252-website-code-truth-audit-2026-09-02.md` records professional design with three revisions and paid additional revisions. October 6 printing instructions specify paid design and material/order minimums, with units/policies unresolved. Therefore this package removes blanket free-design/no-minimum claims rather than choosing a replacement price or universal policy.
-- The same evidence records a Texas-certified business, 3M Preferred Installer, working with Avery-certified installers and MCS program eligibility. These are not proof that every installer/project holds each credential or receives a particular warranty. The Spanish fleet blanket credential statement is withheld.
-- Fresh homepage inspection still finds no-MOQ/free-design badges, Zeno/Avery certification labels, MCS eligibility and 7–12-year warranty copy. A general 7–12-year project warranty and Zeno credential were not established by the reviewed evidence. These are explicit outstanding homepage claim corrections, NOT cleared by this six-page candidate. No replacement term is invented. Existing published photography is authorized for reuse; unpublished Drive assets are not.
-- Historical GSC May 26–August 25 baseline is useful for prioritization only: fleet 1 click/546 impressions. It is not October performance or indexing evidence. Current GSC/Bing access/export is not established in this work; no new indexing or ranking outcome is claimed.
+## Remaining findings — do not call the pinned release approved
 
-## Dedicated Hosting release plan and authorization gate
+1. **Residual unsupported printing claims**: both printing pages retain the visible “No Minimum Order” heading and “Same-Week Turnaround”/2–3-business-day card promises. Spanish printing also retains the 2–3-day/same-week/next-day answer in FAQ JSON-LD and visible FAQ. These contradict the intended policy withholding. Nine source tests did not establish claim completeness. `qa/proposed-printing-claim-correction.patch` is an UNAPPLIED proposal. Applying it requires a new source SHA, affected tests/CI, exact compressed bytes/package identity and affected browser checks. No replacement price, minimum or deadline is proposed.
+2. **Existing public Git metadata exposure**: the fresh live manifest contains 1,876 /.git/ paths, including 1,842 object paths. Bounded GETs to /.git/HEAD and /.git/config returned HTTP 200 on both custom and Firebase origin domains. Contents were not displayed, objects were not downloaded, and no credential contents were read. A four-replacement/zero-deletion overlay necessarily preserves these existing files. Record and obtain a separate containment/credential-risk review decision; do not silently remove them, rotate credentials, or expand this package. No production deployment is authorized.
+3. Legacy untranslated Spanish printing sections and unchanged unrelated marketing/material claims are not a site-wide content clearance. They remain separately tracked, not proof that every public claim is verified.
 
-`package.json` records the six exact before/after file hashes, unchanged deployed configuration, 2,014 preserved files out of 2,020, and rollback version. This is a locally prepared manifest overlay, NOT an uploaded/finalized version or deployment. Do not deploy this repository/worktree root: it does not represent the live file set, and `--only hosting` alone is not an isolation proof.
+## Full manifest and configuration proof
 
-1. Finish browser/mobile/contact-link and referenced-asset checks and attach hosted CI for the exact commit. Homepage candidate claim corrections are prepared as described above. No live form submissions/calls are authorized by this preparation.
-2. Present concrete paths, content diff, exact source SHA, retained full live manifest/configuration and rollback to Camilo for production authorization under CAM-270. This document does not grant that authorization.
-3. From the original project root using existing reviewed Hosting API procedure, re-read live release/configuration/full manifest. Stop on drift. Create a dedicated static version by preserving the full live manifest and replacing ONLY explicitly approved paths with tested gzip hashes. Do not use a fresh whole-directory CLI deployment. Preserve dynamic project rewrites verbatim; do not deploy their Functions.
-4. Before release, list the proposed version's full files and configuration; independently prove exact approved path changes and no additions/deletions/unrelated hashes. Recheck live has not changed. Finalize/release only after approval; record release/version/time and source SHA.
-5. Fetch all changed public URLs and origin bytes; verify headers, schema, canonical/hreflang, navigation, contact CTAs, assets and indexing eligibility. Record deployment evidence separately from CI.
-6. Rollback: release the previous finalized Hosting version `61df100c11fd1d4f` to live using the same reviewed Hosting-only API release procedure, after confirming it is still the correct rollback target. No Functions/rules/backend rollback is required or authorized.
-7. Request indexing only for actually deployed material changes when authorized/access exists. Record URL Inspection submitted/observed canonical and index status separately; compare performance at 7/14/30 days with dates and attribution caveats. Eligibility is not a ranking or AI-citation guarantee.
+Local publication directory: `/private/tmp/canvas-seo-publication-f8a0c11`.
+It contains only four source HTML files, four exact reviewed gzip upload files, identity, full baseline/proposed file maps, full Hosting configuration, and an offline verifier. No later-milestone HTML or backend source belongs in the upload allowlist.
 
-## Worktree incident
+- Baseline manifest SHA-256 (canonical JSON): `7558b35a9b5c9e0251a30e94b22f1659e02dc46a465f46317e71b8e5ff9b96b0`.
+- Proposed manifest SHA-256: `eb03a5b658009fd31402072f6ac4d00e39dafec31b4cf8ebe2b215b2f215d938`.
+- Full Hosting configuration SHA-256: `7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3`.
+- 2,020 paths before and after; exactly four hash replacements, 2,016 identical paths/hashes, zero additions, zero deletions.
+- Fresh deployed configuration deep-compares equal to the pinned configuration; both /projects/** and /es/proyectos/** rewrites to serveProjectPage in us-central1 are preserved.
+- The offline verifier checks both full maps, path counts, allowlist, raw source hashes, compressed upload hashes, gzip decompression equality and rewrites. The two full maps are local evidence; no claim is made that an uncreated server-side version was listed or verified.
 
-A generated patch initially targeted six untracked HTML pages in the original dirty checkout instead of this worktree. Those six pages were restored to the captured, manifest-verified live baseline; all subsequent implementation uses absolute paths in this isolated worktree. A pre-edit byte snapshot of those original untracked files was not captured, so byte-for-byte equality with their prior local state cannot be certified. No commerce/backend files were targeted; nothing was deployed. Do not use the original checkout as an exact-source release artifact.
+Exact per-path raw/gzip/baseline hashes are in `first-release/identity.json`. Upload the prepared gzip bytes verbatim, not a recompression from a different Node/zlib/OS build. No repository-directory deployment; `--only hosting` alone is not sufficient isolation proof.
+
+## Authorization, publication and rollback procedure
+
+This package is prepared for review, ON HOLD for the findings above, and is NOT production authorization.
+
+1. Resolve the residual-claim source amendment and separate Git-metadata containment decision. A source amendment creates a new package identity and must not be mislabeled f8a0c11.
+2. Present final corrected exact SHA, four-path content diff, QA findings/dispositions, full map/config proof and rollback to Camilo for concrete release authorization under CAM-270. Do not wait for CRM/App Check completion; they are separate scopes.
+3. After authorization only, from the original project root using the reviewed API release procedure, GET fresh live version/config/file map and stop on any drift. Do not edit or deploy the dirty checkout.
+4. Create a dedicated static Hosting version preserving the authorized full map/config and replacing ONLY its four allowed hashes. Upload only the reviewed .gz bytes verbatim. No Functions/rules/backend deployment.
+5. List the actual proposed server version's entire file map/config and independently compare it against the approved package. Recheck live did not change. Only then finalize/release with approval.
+6. Record release/version/source/time; GET origin and custom public URLs to verify exact bytes and semantic content, canonicals/hreflang, schema, assets, fragments and contact links. Deployment evidence remains distinct from CI.
+7. Rollback first release by releasing finalized version 61df100c11fd1d4f to live after verifying it remains the intended rollback. An existing exposure in that version is not repaired by rollback; security containment is separately coordinated.
+8. Indexing requests only after actual authorized publication and access/approval; record URL Inspection/index/canonical observations separately. Historical GSC is not current measurement. No ranking or AI-citation guarantee.
+
+## Separate original-checkout recovery record
+
+See `recovery/RECOVERY.md`, not the publication upload map. Six current files and hashes were preserved elsewhere before recovery review. Bounded relevant editor histories, repository backups/worktrees, available patch generators and two Codex capture/checkpoint refs were reviewed. No original file was restored or edited this turn.
+
+Four fleet/printing files have older backups: differences are Firebase-config query version and terminal newline. No pre-incident backup was found for the two artwork guides in this search. The available capture tree is post-incident and matches the current copies, not an unknown pre-incident state. Prior local edits remain unproven; incident disposition remains open.
 
 ## Status
 
-Implementation: six-page candidate prepared. Local source checks: six passing. Hosted CI: pending push/run. Deployment: not executed. Indexing: not requested or verified. Browser/mobile and homepage claim corrections: still open. Full CAM-172/CAM-270 launch acceptance remains open.
+Implementation: pinned four-page proposal; eight-page candidate/later milestone clearly separate.
+Source CI: exact f8a0c11 hosted success, nine source/artifact tests.
+Browser QA: completed Chromium matrix and focused image/link/resource checks; residual content/security findings prevent a clean publication clearance.
+Deployment/upload/finalization: NOT performed.
+Indexing: NOT requested or verified.
+Original checkout: unchanged during this follow-up.
+App Check enforcement: unchanged; insufficient callable logs are no enforcement recommendation and not a static-release blocker.
 
-Editorial guidance: https://developers.google.com/search/docs/fundamentals/creating-helpful-content — useful buyer answers and accurate, non-exaggerated claims, not invented credentials or promised rankings.
+Editorial guidance: https://developers.google.com/search/docs/fundamentals/creating-helpful-content

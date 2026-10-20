@@ -1,0 +1,82 @@
+[
+  {
+    "name": "commercial-fleet-wraps-austin-es.html",
+    "hash": "4e5c69399fda3ee1975e325c39a591c876fca9b7b5cd6daeb456031a5fe880c7",
+    "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/before/commercial-fleet-wraps-austin-es.html",
+    "diffFile": "/private/tmp/canvas-recovery-oct20/commercial-fleet-wraps-austin-es.html-4e5c6939.diff",
+    "changes": [
+      "-    <script src=\"js/firebase-config.js?v=20260910-2bf92bc\"></script>",
+      "+    <script src=\"js/firebase-config.js?v=20260907-app-check-monitor\"></script>",
+      "-"
+    ]
+  },
+  {
+    "name": "commercial-fleet-wraps-austin.html",
+    "hash": "488a2c5c9a005fbf22fea6bd1da1890c1873b13dc070f21fe18d671fa9756ffe",
+    "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/before/commercial-fleet-wraps-austin.html",
+    "diffFile": "/private/tmp/canvas-recovery-oct20/commercial-fleet-wraps-austin.html-488a2c5c.diff",
+    "changes": [
+      "-    <script src=\"js/firebase-config.js?v=20260910-2bf92bc\"></script>",
+      "+    <script src=\"js/firebase-config.js?v=20260907-app-check-monitor\"></script>",
+      "-"
+    ]
+  },
+  {
+    "name": "large-format-printing-austin-es.html",
+    "hash": "7c3275d2fc6463b996f4fb278f18234ad7baa722b31e92ec04888ad15171722a",
+    "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/before/large-format-printing-austin-es.html",
+    "diffFile": "/private/tmp/canvas-recovery-oct20/large-format-printing-austin-es.html-7c3275d2.diff",
+    "changes": [
+      "-    <script src=\"js/firebase-config.js?v=20260910-2bf92bc\"></script>",
+      "+    <script src=\"js/firebase-config.js?v=20260907-app-check-monitor\"></script>",
+      "-"
+    ]
+  },
+  {
+    "name": "large-format-printing-austin.html",
+    "hash": "b941d6134d7a10260b626d2d246c40f823e7515adaf9c3703b93d2e3a8d98d4b",
+    "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/before/large-format-printing-austin.html",
+    "diffFile": "/private/tmp/canvas-recovery-oct20/large-format-printing-austin.html-b941d613.diff",
+    "changes": [
+      "-    <script src=\"js/firebase-config.js?v=20260910-2bf92bc\"></script>",
+      "+    <script src=\"js/firebase-config.js?v=20260907-app-check-monitor\"></script>",
+      "-"
+    ]
+  },
+  {
+    "name": "commercial-fleet-wraps-austin-es.html",
+    "hash": "63efe1d586dfe017746c0fb7d7f0428d360d6610ff6c4152074e540160b3b743",
+    "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/overlay/commercial-fleet-wraps-austin-es.html",
+    "diffFile": "/private/tmp/canvas-recovery-oct20/commercial-fleet-wraps-austin-es.html-63efe1d5.diff",
+    "changes": [
+      "-"
+    ]
+  },
+  {
+    "name": "commercial-fleet-wraps-austin.html",
+    "hash": "b8540ad3da3247c1c6d940c71b038e8af0b51c4c24f963d7712fc6af5118e0e9",
+    "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/overlay/commercial-fleet-wraps-austin.html",
+    "diffFile": "/private/tmp/canvas-recovery-oct20/commercial-fleet-wraps-austin.html-b8540ad3.diff",
+    "changes": [
+      "-"
+    ]
+  },
+  {
+    "name": "large-format-printing-austin-es.html",
+    "hash": "631453d6e26a172e28d1c8f973d19b624d504f03cf27b5a5175133c5a5d77eed",
+    "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/overlay/large-format-printing-austin-es.html",
+    "diffFile": "/private/tmp/canvas-recovery-oct20/large-format-printing-austin-es.html-631453d6.diff",
+    "changes": [
+      "-"
+    ]
+  },
+  {
+    "name": "large-format-printing-austin.html",
+    "hash": "05f4ec213daec3488d12def5e7e27de609013535fd6f2ba99802a98d584ecab3",
+    "source": "/Users/camiloreyna/Antigravity Projects/Canvas_Advertising/scratch/app-check-client-2bf92bc/overlay/large-format-printing-austin.html",
+    "diffFile": "/private/tmp/canvas-recovery-oct20/large-format-printing-austin.html-05f4ec21.diff",
+    "changes": [
+      "-"
+    ]
+  }
+]
