@@ -1,0 +1,78 @@
+{
+  "checkedAt": "2026-10-20T18:01:59.763Z",
+  "checks": [
+    {
+      "url": "https://canvas-advertising.com/commercial-fleet-wraps-austin-es",
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/commercial-fleet-wraps-austin-es",
+      "canonicalMatches": true,
+      "baselineScriptsPresent": true,
+      "publicSha256": "9e94806015032443e5df75e7436a2491da300c5660e2b5fbae5e235f5f672b90",
+      "bytes": 30071
+    },
+    {
+      "url": "https://canvas-advertising.com/commercial-fleet-wraps-austin",
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/commercial-fleet-wraps-austin",
+      "canonicalMatches": true,
+      "baselineScriptsPresent": true,
+      "publicSha256": "734a37a25759ff7e7fb5e357b650c4bdfa81c59a94bf4b9301a6d43c7f30104c",
+      "bytes": 29538
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "canonicalMatches": true,
+      "baselineScriptsPresent": true,
+      "publicSha256": "4272dc62f13de0ed0443f0fe2b0a17d5887465a8c783c7ac555c64a6c6769332",
+      "bytes": 29605
+    },
+    {
+      "url": "https://canvas-advertising.com/large-format-printing-austin",
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/large-format-printing-austin",
+      "canonicalMatches": true,
+      "baselineScriptsPresent": true,
+      "publicSha256": "f6a9b718272729c8693e3fdbb48de8c93898ac7469c512bdf7deaf16bf809199",
+      "bytes": 30135
+    },
+    {
+      "url": "https://canvas-advertising.com/lista-preparacion-archivos-wrap",
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/lista-preparacion-archivos-wrap",
+      "canonicalMatches": true,
+      "baselineScriptsPresent": true,
+      "publicSha256": "b5f31822596a792f979f86f3088e7dde54c20a9022c58a6215237d385b230d41",
+      "bytes": 9912
+    },
+    {
+      "url": "https://canvas-advertising.com/vehicle-wrap-file-preparation-checklist",
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/vehicle-wrap-file-preparation-checklist",
+      "canonicalMatches": true,
+      "baselineScriptsPresent": true,
+      "publicSha256": "97fa408613fa02ed34975618b3507ef18104d7238c3d6f0794f7281b28b4b8d7",
+      "bytes": 11145
+    },
+    {
+      "url": "https://canvas-advertising.com/index-es",
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/index-es",
+      "canonicalMatches": true,
+      "baselineScriptsPresent": true,
+      "publicSha256": "e9cc15a8ec5abb680475ce565332a4bbbb8f99ed5813682aa560ac3550e0240a",
+      "bytes": 100260
+    },
+    {
+      "url": "https://canvas-advertising.com/",
+      "status": 200,
+      "finalUrl": "https://canvas-advertising.com/",
+      "canonicalMatches": true,
+      "baselineScriptsPresent": true,
+      "publicSha256": "cf2c7ac37e4ea5ccabeeade0ae0793daf1367dd3d832972a2b2578926c04c46c",
+      "bytes": 105357
+    }
+  ],
+  "note": "Public custom-domain HTML may include Cloudflare transforms; exact baseline bytes are verified separately against Hosting gzip hashes. This is pre-release evidence, not deployed-candidate evidence."
+}

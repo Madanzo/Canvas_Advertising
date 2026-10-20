@@ -1,0 +1,25 @@
+name: Isolated SEO release checks
+on:
+  push:
+    branches: ['codex/canvas-seo-oct20-live']
+  pull_request:
+    paths:
+      - 'index*.html'
+      - '*fleet-wraps*.html'
+      - 'large-format-printing*.html'
+      - '*preparation-checklist.html'
+      - 'lista-preparacion-archivos-wrap.html'
+      - 'release-evidence/**'
+      - 'tests/seo-release.test.cjs'
+      - '.github/workflows/seo-release-ci.yml'
+permissions:
+  contents: read
+jobs:
+  source-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --test tests/seo-release.test.cjs

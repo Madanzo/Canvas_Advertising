@@ -1,0 +1,747 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- === HOMEPAGE === -->
+  <url>
+    <loc>https://canvas-advertising.com/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/index-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/index-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/index-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- === SERVICE PAGES (Priority 0.9) === -->
+  <url>
+    <loc>https://canvas-advertising.com/vehicle-wraps-austin</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vehicle-wraps-austin"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/vehicle-wraps-austin-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/vehicle-wraps-austin-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vehicle-wraps-austin"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/vehicle-wraps-austin-es"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/commercial-fleet-wraps-austin</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/commercial-fleet-wraps-austin"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/commercial-fleet-wraps-austin-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/commercial-fleet-wraps-austin-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/commercial-fleet-wraps-austin"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/commercial-fleet-wraps-austin-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/food-truck-wraps-austin</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/food-truck-wraps-austin"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/food-truck-wraps-austin-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/food-truck-wraps-austin-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/food-truck-wraps-austin"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/food-truck-wraps-austin-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/color-change-wraps-austin</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/color-change-wraps-austin"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/color-change-wraps-austin-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/color-change-wraps-austin-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/color-change-wraps-austin"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/color-change-wraps-austin-es"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/large-format-printing-austin</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/large-format-printing-austin"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/large-format-printing-austin-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/large-format-printing-austin-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/large-format-printing-austin"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/large-format-printing-austin-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- === KEY PAGES (Priority 0.8) === -->
+  <url>
+    <loc>https://canvas-advertising.com/partner</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/partner"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/partner-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/partner-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/partner"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/partner-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/portfolio</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/portfolio-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/portfolio-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/portfolio"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/portfolio-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/quote</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/quote"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/quote-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/quote-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/quote"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/quote-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/get-started</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/get-started"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/get-started"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/remote-sales-recruitment</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/remote-sales-recruitment"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/remote-sales-recruitment"/>
+    <lastmod>2026-08-26</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/store</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/store"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/store-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/store-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/store"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/store-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/case-studies</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/case-studies"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/case-studies-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/case-studies"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/case-studies-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/case-studies"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/case-studies-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- === GEO PAGES + BLOG (Priority 0.7) === -->
+  <url>
+    <loc>https://canvas-advertising.com/vehicle-wraps-cedar-park</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vehicle-wraps-cedar-park"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/vehicle-wraps-cedar-park-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/vehicle-wraps-cedar-park"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/vehicle-wraps-cedar-park-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vehicle-wraps-cedar-park"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/vehicle-wraps-cedar-park-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/vehicle-wraps-round-rock</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vehicle-wraps-round-rock"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/vehicle-wraps-round-rock-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/vehicle-wraps-round-rock"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/vehicle-wraps-round-rock-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vehicle-wraps-round-rock"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/vehicle-wraps-round-rock-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/vehicle-wraps-pflugerville</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vehicle-wraps-pflugerville"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/vehicle-wraps-pflugerville-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/vehicle-wraps-pflugerville"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/vehicle-wraps-pflugerville-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vehicle-wraps-pflugerville"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/vehicle-wraps-pflugerville-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/how-much-does-a-vehicle-wrap-cost</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/how-much-does-a-vehicle-wrap-cost"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/cuanto-cuesta-wrap-vehicular-austin"/>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/cuanto-cuesta-wrap-vehicular-austin</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/how-much-does-a-vehicle-wrap-cost"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/cuanto-cuesta-wrap-vehicular-austin"/>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/vinyl-wrap-vs-paint</loc>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/3m-vs-avery-dennison-wrap-film</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/3m-vs-avery-dennison-wrap-film"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/3m-vs-avery-dennison-wrap-film-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/3m-vs-avery-dennison-wrap-film"/>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/3m-vs-avery-dennison-wrap-film-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/3m-vs-avery-dennison-wrap-film"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/3m-vs-avery-dennison-wrap-film-es"/>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/vehicle-wrap-process</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vehicle-wrap-process"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/vehicle-wrap-process-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/vehicle-wrap-process"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/vehicle-wrap-process-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vehicle-wrap-process"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/vehicle-wrap-process-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/wrap-care-guide</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/wrap-care-guide"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/wrap-care-guide-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/wrap-care-guide"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/wrap-care-guide-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/wrap-care-guide"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/wrap-care-guide-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/vehicle-wraps-georgetown</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vehicle-wraps-georgetown"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/vehicle-wraps-georgetown-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/vehicle-wraps-georgetown"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/vehicle-wraps-georgetown-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vehicle-wraps-georgetown"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/vehicle-wraps-georgetown-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/vehicle-wraps-san-marcos</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vehicle-wraps-san-marcos"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/vehicle-wraps-san-marcos-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/vehicle-wraps-san-marcos"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/vehicle-wraps-san-marcos-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vehicle-wraps-san-marcos"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/vehicle-wraps-san-marcos-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/vehicle-wraps-kyle</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vehicle-wraps-kyle"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/vehicle-wraps-kyle-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/vehicle-wraps-kyle"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/vehicle-wraps-kyle-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vehicle-wraps-kyle"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/vehicle-wraps-kyle-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- === SERVICE LANDING PAGES (Priority 0.7) === -->
+  <url>
+    <loc>https://canvas-advertising.com/boat-wraps-austin</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/boat-wraps-austin"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/boat-wraps-austin-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/boat-wraps-austin"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/boat-wraps-austin-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/boat-wraps-austin"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/boat-wraps-austin-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/trailer-wraps-austin</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/trailer-wraps-austin"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/trailer-wraps-austin-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/trailer-wraps-austin"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/trailer-wraps-austin-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/trailer-wraps-austin"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/trailer-wraps-austin-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/wholesale-printing-austin</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/wholesale-printing-austin"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/wholesale-printing-austin-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/wholesale-printing-austin"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/wholesale-printing-austin-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/wholesale-printing-austin"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/wholesale-printing-austin-es"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://canvas-advertising.com/case-study-construction</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/case-study-construction"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/case-study-construction-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/case-study-construction"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/case-study-construction-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/case-study-construction"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/case-study-construction-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/case-study-food-truck</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/case-study-food-truck"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/case-study-food-truck-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/case-study-food-truck"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/case-study-food-truck-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/case-study-food-truck"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/case-study-food-truck-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/case-study-waterloo</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/case-study-waterloo"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/case-study-waterloo-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/case-study-waterloo"/>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/case-study-waterloo-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/case-study-waterloo"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/case-study-waterloo-es"/>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- === SECONDARY PAGES (Priority 0.6) === -->
+  <url>
+    <loc>https://canvas-advertising.com/resources</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/resources"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/resources-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/resources"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/resources-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/resources"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/resources-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/review</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/review"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/review-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/review"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/review-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/review"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/review-es"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- === PRODUCTION SERVICE PAGES (Priority 0.9) === -->
+  <url>
+    <loc>https://canvas-advertising.com/wholesale-vinyl-printing</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/wholesale-vinyl-printing"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/wholesale-vinyl-printing"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/contour-cut-decals</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/contour-cut-decals"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/contour-cut-decals"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/replacement-wrap-panels</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/replacement-wrap-panels"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/replacement-wrap-panels"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/window-graphics-printing</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/window-graphics-printing"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/window-graphics-printing"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/wall-murals-printing</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/wall-murals-printing"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/wall-murals-printing"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/laminated-vinyl-banners</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/laminated-vinyl-banners"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/laminated-vinyl-banners"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/ricoh-flyers-business-cards</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/ricoh-flyers-business-cards"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/ricoh-flyers-business-cards"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/basic-visibility-package</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/basic-visibility-package"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/basic-visibility-package-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/basic-visibility-package"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/basic-visibility-package-es</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/basic-visibility-package"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/basic-visibility-package-es"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/basic-visibility-package"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://canvas-advertising.com/vinyl-printing-shipping</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vinyl-printing-shipping"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/impresion-vinil-envios"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/vinyl-printing-shipping"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/impresion-vinil-envios</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vinyl-printing-shipping"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/impresion-vinil-envios"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/restaurant-menus</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://canvas-advertising.com/vehicle-wrap-file-preparation-checklist</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vehicle-wrap-file-preparation-checklist"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/lista-preparacion-archivos-wrap"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/vehicle-wrap-file-preparation-checklist"/>
+    <lastmod>2026-08-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/lista-preparacion-archivos-wrap</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/vehicle-wrap-file-preparation-checklist"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/lista-preparacion-archivos-wrap"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/vehicle-wrap-file-preparation-checklist"/>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://canvas-advertising.com/contractor-fleet-graphics-planning-checklist</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/contractor-fleet-graphics-planning-checklist"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/lista-planificacion-graficos-flotilla-contratistas"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/contractor-fleet-graphics-planning-checklist"/>
+    <lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/lista-planificacion-graficos-flotilla-contratistas</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/contractor-fleet-graphics-planning-checklist"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/lista-planificacion-graficos-flotilla-contratistas"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/contractor-fleet-graphics-planning-checklist"/>
+    <lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/food-truck-branding-launch-checklist</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/food-truck-branding-launch-checklist"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/lista-lanzamiento-marca-food-truck"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/food-truck-branding-launch-checklist"/>
+    <lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/lista-lanzamiento-marca-food-truck</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/food-truck-branding-launch-checklist"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/lista-lanzamiento-marca-food-truck"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/food-truck-branding-launch-checklist"/>
+    <lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/replacement-wrap-panel-ordering-checklist</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/replacement-wrap-panel-ordering-checklist"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/lista-pedido-panel-reemplazo-wrap"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/replacement-wrap-panel-ordering-checklist"/>
+    <lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/lista-pedido-panel-reemplazo-wrap</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/replacement-wrap-panel-ordering-checklist"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/lista-pedido-panel-reemplazo-wrap"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/replacement-wrap-panel-ordering-checklist"/>
+    <lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/projects/tech-center-signage</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/production-capabilities-austin</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/production-capabilities-austin"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/capacidades-produccion-austin"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/production-capabilities-austin"/>
+    <lastmod>2026-08-31</lastmod><changefreq>yearly</changefreq><priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/capacidades-produccion-austin</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/production-capabilities-austin"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/capacidades-produccion-austin"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/production-capabilities-austin"/>
+    <lastmod>2026-08-31</lastmod><changefreq>yearly</changefreq><priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/texas-commercial-wrap-durability-maintenance-guide</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/texas-commercial-wrap-durability-maintenance-guide"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/guia-mantenimiento-wraps-comerciales-texas"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/texas-commercial-wrap-durability-maintenance-guide"/>
+    <lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/guia-mantenimiento-wraps-comerciales-texas</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/texas-commercial-wrap-durability-maintenance-guide"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/guia-mantenimiento-wraps-comerciales-texas"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/texas-commercial-wrap-durability-maintenance-guide"/>
+    <lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/fleet-wrap-panel-labeling-installation-map-template</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/fleet-wrap-panel-labeling-installation-map-template"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/plantilla-etiquetado-paneles-mapa-instalacion-wrap"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/fleet-wrap-panel-labeling-installation-map-template"/>
+    <lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/plantilla-etiquetado-paneles-mapa-instalacion-wrap</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/fleet-wrap-panel-labeling-installation-map-template"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/plantilla-etiquetado-paneles-mapa-instalacion-wrap"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/fleet-wrap-panel-labeling-installation-map-template"/>
+    <lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/full-wrap-vs-partial-wrap-decals-lettering</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/full-wrap-vs-partial-wrap-decals-lettering"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/wrap-completo-vs-parcial-calcomanias-letras"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/full-wrap-vs-partial-wrap-decals-lettering"/>
+    <lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://canvas-advertising.com/wrap-completo-vs-parcial-calcomanias-letras</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://canvas-advertising.com/full-wrap-vs-partial-wrap-decals-lettering"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://canvas-advertising.com/wrap-completo-vs-parcial-calcomanias-letras"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://canvas-advertising.com/full-wrap-vs-partial-wrap-decals-lettering"/>
+    <lastmod>2026-08-31</lastmod><changefreq>monthly</changefreq><priority>0.7</priority>
+  </url>
+
+</urlset>

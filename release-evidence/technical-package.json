@@ -1,0 +1,147 @@
+{
+  "project": "canvas-adnvertising",
+  "site": "canvas-adnvertising",
+  "baseGit": "5aac3208abde699b87a674dc7a2c2cd9c4e17ba8",
+  "liveVersion": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/61df100c11fd1d4f",
+  "rollbackVersion": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/61df100c11fd1d4f",
+  "liveReleaseTime": "2026-09-10T21:07:59.486Z",
+  "fileCount": 2020,
+  "preservedFileCount": 2016,
+  "hostingConfig": {
+    "headers": [
+      {
+        "headers": {
+          "Cache-Control": "public, max-age=0, must-revalidate"
+        },
+        "glob": "**/*.@(html)"
+      },
+      {
+        "headers": {
+          "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800"
+        },
+        "glob": "**/*.@(css|js)"
+      },
+      {
+        "headers": {
+          "Cache-Control": "public, max-age=31536000, immutable"
+        },
+        "glob": "**/*.20260727.min.css"
+      },
+      {
+        "headers": {
+          "Cache-Control": "public, max-age=31536000, immutable"
+        },
+        "glob": "**/*.20260805b.min.js"
+      },
+      {
+        "headers": {
+          "Cache-Control": "public, max-age=31536000, immutable"
+        },
+        "glob": "**/*.@(webp|avif|png|jpg|jpeg|svg|woff2|mp4|m4v)"
+      }
+    ],
+    "redirects": [
+      {
+        "statusCode": 301,
+        "location": "/",
+        "glob": "/index.php"
+      },
+      {
+        "statusCode": 301,
+        "location": "/",
+        "glob": "/home"
+      },
+      {
+        "statusCode": 301,
+        "location": "/large-format-printing-austin",
+        "glob": "/digital-print"
+      },
+      {
+        "statusCode": 301,
+        "location": "/large-format-printing-austin",
+        "glob": "/signs"
+      },
+      {
+        "statusCode": 301,
+        "location": "/store",
+        "glob": "/merch-2"
+      },
+      {
+        "statusCode": 301,
+        "location": "/portfolio",
+        "glob": "/design-2"
+      },
+      {
+        "statusCode": 301,
+        "location": "/vehicle-wraps-austin",
+        "glob": "/wrap"
+      },
+      {
+        "statusCode": 301,
+        "location": "/quote",
+        "glob": "/cdn-cgi/l/email-protection"
+      }
+    ],
+    "rewrites": [
+      {
+        "functionRegion": "us-central1",
+        "glob": "/projects/**",
+        "function": "serveProjectPage"
+      },
+      {
+        "functionRegion": "us-central1",
+        "glob": "/es/proyectos/**",
+        "function": "serveProjectPage"
+      }
+    ],
+    "cleanUrls": true,
+    "trailingSlashBehavior": "REMOVE"
+  },
+  "hostingConfigUnchanged": true,
+  "changed": [
+    {
+      "path": "/index-es.html",
+      "url": "https://canvas-advertising.com/index-es",
+      "before": "55d5c57de4f1a96b82a38334226f06f22cc2bd0d48e2f184be308614d517e7f8",
+      "after": "7aed8a7ea12bf836ff5e9faf83d44d8a844feda88d0651683f68f57445951738",
+      "beforeHostingHash": "e2f05df4c4dcfd9abc71ac8badb230d319c33efde300b4e8324f724b6ab4cde5",
+      "afterHostingHash": "330793dce20fa56287067c4d87c22a6ad412dc1efe0ee2cf4bf49f252338a498"
+    },
+    {
+      "path": "/index.html",
+      "url": "https://canvas-advertising.com/",
+      "before": "463c5514d960213b5e19611af65a263865f9731afd2a0adfef8c30bf267aba71",
+      "after": "c7f085f1c6c618a9a4cb8375ecf823d3788910b7192a2e02c712d7cc1459931c",
+      "beforeHostingHash": "4ea393cf8b9075ad8bbc8c1296589c996084633c206a2f7fc0b622cc111a0aec",
+      "afterHostingHash": "6d1ab522f85c122fbecdc68c3dc0a57c7f3389458fb9707d600d026c5e19bba8"
+    },
+    {
+      "path": "/large-format-printing-austin-es.html",
+      "url": "https://canvas-advertising.com/large-format-printing-austin-es",
+      "before": "631453d6e26a172e28d1c8f973d19b624d504f03cf27b5a5175133c5a5d77eed",
+      "after": "2be59498c52b07defc492a392452dba22e38787e9f8e938ec30656985727cf03",
+      "beforeHostingHash": "2831039cae6ce0d1a17aa2236cdda662117e498db5f0a7146c136a8c6ba86f04",
+      "afterHostingHash": "b12eb42f61c78cd4f8cdf100ac9024f47674bba5d02ad1bbbb89305cf2524e29"
+    },
+    {
+      "path": "/large-format-printing-austin.html",
+      "url": "https://canvas-advertising.com/large-format-printing-austin",
+      "before": "05f4ec213daec3488d12def5e7e27de609013535fd6f2ba99802a98d584ecab3",
+      "after": "ead19acb196ab3ffccd1827bf4d7c84b143b017c36257c09b498a18b52b68a83",
+      "beforeHostingHash": "b44398376930055e33ac273f644a1502a9ed64df17bf204abcb537ee06b855e7",
+      "afterHostingHash": "f3d4bf3f76fad3fbafef91b50cf4c54b6c97d497599582ce6275a94ad54d27cd"
+    }
+  ],
+  "excluded": [
+    "Functions",
+    "Firestore rules/indexes",
+    "Storage rules",
+    "secrets/IAM",
+    "checkout/payments",
+    "staff drafts",
+    "upload implementation",
+    "commerce activation"
+  ],
+  "status": "PREPARED_NOT_DEPLOYED",
+  "nextMilestone": "Fleet quote guidance and bilingual artwork resource; separate approval/revalidated baseline required."
+}
