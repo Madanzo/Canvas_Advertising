@@ -1,0 +1,637 @@
+{
+  "project": "canvas-adnvertising",
+  "site": "canvas-adnvertising",
+  "source": "cd9a2fe6f4ca7daafaa2c757d4a01f1db994a8a1",
+  "archiveSha256": "9843e28af58b62768ee289f7622304a3966d330796dac2fcc63c253785b93378",
+  "preflight": {
+    "at": "2026-10-25T20:07:59.326Z",
+    "version": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/da702e43d434c404",
+    "release": "projects/canvas-adnvertising/sites/canvas-adnvertising/channels/live/releases/1792533440193000",
+    "releaseTime": "2026-10-20T21:57:20.193Z",
+    "manifestSha256": "06a53c696059b4ca9674fd97481808aa731c3e328fc6b46ea47d81eaeddf0bd1",
+    "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3"
+  },
+  "counts": {
+    "before": 142,
+    "after": 142,
+    "replacements": 2,
+    "unchanged": 140,
+    "additions": 0,
+    "deletions": 0,
+    "metadataPaths": 0
+  },
+  "proposedVerification": {
+    "at": "2026-10-25T20:08:26.772Z",
+    "manifestSha256": "c5d0994b00ef307f9506623f23749f64e914d5e0ab0f674c0a56ffa4a72298f6",
+    "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3"
+  },
+  "finalizedVerification": {
+    "at": "2026-10-25T20:08:27.666Z",
+    "manifestSha256": "c5d0994b00ef307f9506623f23749f64e914d5e0ab0f674c0a56ffa4a72298f6",
+    "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3"
+  },
+  "release": "projects/835646149135/sites/canvas-adnvertising/channels/live/releases/1792958907952000",
+  "version": "projects/835646149135/sites/canvas-adnvertising/versions/045ff606071bf95f",
+  "releaseTime": "2026-10-25T20:08:27.952Z",
+  "httpVerification": {
+    "status": "PASS",
+    "at": "2026-10-25T20:09:00.207Z",
+    "completeMapAndConfigurationMatch": true,
+    "checks": [
+      {
+        "url": "https://canvas-advertising.com/.git/HEAD",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.git/HEAD?fleet_verify=1792958924331",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.git/config",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.git/config?fleet_verify=1792958925153",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.git/index",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.git/index?fleet_verify=1792958925710",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/%2egit/HEAD",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/%2egit/HEAD?fleet_verify=1792958926361",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.agents/AGENTS.md",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.agents/AGENTS.md?fleet_verify=1792958926880",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.codex/config.toml",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.codex/config.toml?fleet_verify=1792958928383",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/index-es",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/large-format-printing-austin",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/large-format-printing-austin-es",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/3m-vs-avery-dennison-wrap-film",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/projects/tech-center-signage",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/es/proyectos/tech-center-signage",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/images/logo.png",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/css/styles.20260727.min.css",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/commercial-fleet-wraps-austin",
+        "status": 200,
+        "receivedSha256": "3738b80da89c172715b455081ecf3a60df7c3a8cad4457c3bd71eebb65123e42",
+        "normalizedSha256": "b05b576f4aee7d2a26ec9a88466a35430a0c202bab75131d1863a4b5c3edd757",
+        "validatedCloudflareOnly": true
+      },
+      {
+        "url": "https://canvas-advertising.com/commercial-fleet-wraps-austin-es",
+        "status": 200,
+        "receivedSha256": "fe69ecc58a2037dcc9ca9be5c5d26044f1cf6bcf9c4fd35e7e182b701ce24ba1",
+        "normalizedSha256": "5dc47c745093fab66300efc2981b25f6f816693f1f87bb63cbd1a16f94ec8d5d",
+        "validatedCloudflareOnly": true
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.git/HEAD",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.git/HEAD?fleet_verify=1792958934505",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.git/config",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.git/config?fleet_verify=1792958935105",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.git/index",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.git/index?fleet_verify=1792958935476",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/%2egit/HEAD",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/%2egit/HEAD?fleet_verify=1792958936013",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.agents/AGENTS.md",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.agents/AGENTS.md?fleet_verify=1792958936546",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.codex/config.toml",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.codex/config.toml?fleet_verify=1792958937045",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/index-es",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/large-format-printing-austin",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/large-format-printing-austin-es",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/3m-vs-avery-dennison-wrap-film",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/projects/tech-center-signage",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/es/proyectos/tech-center-signage",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/images/logo.png",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/css/styles.20260727.min.css",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/commercial-fleet-wraps-austin",
+        "status": 200,
+        "receivedSha256": "b05b576f4aee7d2a26ec9a88466a35430a0c202bab75131d1863a4b5c3edd757",
+        "normalizedSha256": "b05b576f4aee7d2a26ec9a88466a35430a0c202bab75131d1863a4b5c3edd757",
+        "validatedCloudflareOnly": false
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/commercial-fleet-wraps-austin-es",
+        "status": 200,
+        "receivedSha256": "5dc47c745093fab66300efc2981b25f6f816693f1f87bb63cbd1a16f94ec8d5d",
+        "normalizedSha256": "5dc47c745093fab66300efc2981b25f6f816693f1f87bb63cbd1a16f94ec8d5d",
+        "validatedCloudflareOnly": false
+      }
+    ],
+    "submissions": 0,
+    "calls": 0,
+    "emails": 0
+  },
+  "browserVerification": [
+    {
+      "host": "https://canvas-advertising.com",
+      "at": "2026-10-25T20:10:02.131Z",
+      "status": "PASS",
+      "cases": 4,
+      "rows": [
+        {
+          "slug": "commercial-fleet-wraps-austin",
+          "width": 375,
+          "overflow": false,
+          "heroTop": 568.140625,
+          "heroHeight": 60.796875,
+          "anchors": true,
+          "keyboard": true,
+          "emptyFormInvalid": true,
+          "contract": {
+            "valid": false,
+            "fields": [
+              {
+                "name": "name",
+                "type": "text",
+                "required": true
+              },
+              {
+                "name": "phone",
+                "type": "tel",
+                "required": true
+              },
+              {
+                "name": "service",
+                "type": "select-one",
+                "required": false
+              },
+              {
+                "name": "message",
+                "type": "textarea",
+                "required": false
+              }
+            ],
+            "services": [
+              "",
+              "van",
+              "truck",
+              "box-truck",
+              "food-truck",
+              "fleet",
+              "other"
+            ]
+          },
+          "mediaLoaded": 4,
+          "pageErrors": []
+        },
+        {
+          "slug": "commercial-fleet-wraps-austin",
+          "width": 1440,
+          "overflow": false,
+          "heroTop": 612.421875,
+          "heroHeight": 64.796875,
+          "anchors": true,
+          "keyboard": true,
+          "emptyFormInvalid": true,
+          "contract": {
+            "valid": false,
+            "fields": [
+              {
+                "name": "name",
+                "type": "text",
+                "required": true
+              },
+              {
+                "name": "phone",
+                "type": "tel",
+                "required": true
+              },
+              {
+                "name": "service",
+                "type": "select-one",
+                "required": false
+              },
+              {
+                "name": "message",
+                "type": "textarea",
+                "required": false
+              }
+            ],
+            "services": [
+              "",
+              "van",
+              "truck",
+              "box-truck",
+              "food-truck",
+              "fleet",
+              "other"
+            ]
+          },
+          "mediaLoaded": 4,
+          "pageErrors": []
+        },
+        {
+          "slug": "commercial-fleet-wraps-austin-es",
+          "width": 375,
+          "overflow": false,
+          "heroTop": 605.546875,
+          "heroHeight": 60.796875,
+          "anchors": true,
+          "keyboard": true,
+          "emptyFormInvalid": true,
+          "contract": {
+            "valid": false,
+            "fields": [
+              {
+                "name": "name",
+                "type": "text",
+                "required": true
+              },
+              {
+                "name": "phone",
+                "type": "tel",
+                "required": true
+              },
+              {
+                "name": "service",
+                "type": "select-one",
+                "required": false
+              },
+              {
+                "name": "message",
+                "type": "textarea",
+                "required": false
+              }
+            ],
+            "services": [
+              "",
+              "van",
+              "truck",
+              "box-truck",
+              "food-truck",
+              "fleet",
+              "other"
+            ]
+          },
+          "mediaLoaded": 4,
+          "pageErrors": []
+        },
+        {
+          "slug": "commercial-fleet-wraps-austin-es",
+          "width": 1440,
+          "overflow": false,
+          "heroTop": 612.5355224609375,
+          "heroHeight": 64.8050537109375,
+          "anchors": true,
+          "keyboard": true,
+          "emptyFormInvalid": true,
+          "contract": {
+            "valid": false,
+            "fields": [
+              {
+                "name": "name",
+                "type": "text",
+                "required": true
+              },
+              {
+                "name": "phone",
+                "type": "tel",
+                "required": true
+              },
+              {
+                "name": "service",
+                "type": "select-one",
+                "required": false
+              },
+              {
+                "name": "message",
+                "type": "textarea",
+                "required": false
+              }
+            ],
+            "services": [
+              "",
+              "van",
+              "truck",
+              "box-truck",
+              "food-truck",
+              "fleet",
+              "other"
+            ]
+          },
+          "mediaLoaded": 4,
+          "pageErrors": []
+        }
+      ],
+      "policy": "Live read-only acceptance; nonGET/tracking/callable/backend/calendar requests blocked. Empty native form validity inspected only; anchors/menu clicked, contact focused, no submissions/calls/emails."
+    },
+    {
+      "host": "https://canvas-adnvertising.web.app",
+      "at": "2026-10-25T20:10:01.239Z",
+      "status": "PASS",
+      "cases": 4,
+      "rows": [
+        {
+          "slug": "commercial-fleet-wraps-austin",
+          "width": 375,
+          "overflow": false,
+          "heroTop": 568.140625,
+          "heroHeight": 60.796875,
+          "anchors": true,
+          "keyboard": true,
+          "emptyFormInvalid": true,
+          "contract": {
+            "valid": false,
+            "fields": [
+              {
+                "name": "name",
+                "type": "text",
+                "required": true
+              },
+              {
+                "name": "phone",
+                "type": "tel",
+                "required": true
+              },
+              {
+                "name": "service",
+                "type": "select-one",
+                "required": false
+              },
+              {
+                "name": "message",
+                "type": "textarea",
+                "required": false
+              }
+            ],
+            "services": [
+              "",
+              "van",
+              "truck",
+              "box-truck",
+              "food-truck",
+              "fleet",
+              "other"
+            ]
+          },
+          "mediaLoaded": 4,
+          "pageErrors": []
+        },
+        {
+          "slug": "commercial-fleet-wraps-austin",
+          "width": 1440,
+          "overflow": false,
+          "heroTop": 612.6783447265625,
+          "heroHeight": 64.8154296875,
+          "anchors": true,
+          "keyboard": true,
+          "emptyFormInvalid": true,
+          "contract": {
+            "valid": false,
+            "fields": [
+              {
+                "name": "name",
+                "type": "text",
+                "required": true
+              },
+              {
+                "name": "phone",
+                "type": "tel",
+                "required": true
+              },
+              {
+                "name": "service",
+                "type": "select-one",
+                "required": false
+              },
+              {
+                "name": "message",
+                "type": "textarea",
+                "required": false
+              }
+            ],
+            "services": [
+              "",
+              "van",
+              "truck",
+              "box-truck",
+              "food-truck",
+              "fleet",
+              "other"
+            ]
+          },
+          "mediaLoaded": 4,
+          "pageErrors": []
+        },
+        {
+          "slug": "commercial-fleet-wraps-austin-es",
+          "width": 375,
+          "overflow": false,
+          "heroTop": 605.546875,
+          "heroHeight": 60.796875,
+          "anchors": true,
+          "keyboard": true,
+          "emptyFormInvalid": true,
+          "contract": {
+            "valid": false,
+            "fields": [
+              {
+                "name": "name",
+                "type": "text",
+                "required": true
+              },
+              {
+                "name": "phone",
+                "type": "tel",
+                "required": true
+              },
+              {
+                "name": "service",
+                "type": "select-one",
+                "required": false
+              },
+              {
+                "name": "message",
+                "type": "textarea",
+                "required": false
+              }
+            ],
+            "services": [
+              "",
+              "van",
+              "truck",
+              "box-truck",
+              "food-truck",
+              "fleet",
+              "other"
+            ]
+          },
+          "mediaLoaded": 4,
+          "pageErrors": []
+        },
+        {
+          "slug": "commercial-fleet-wraps-austin-es",
+          "width": 1440,
+          "overflow": false,
+          "heroTop": 612.7476806640625,
+          "heroHeight": 64.8203125,
+          "anchors": true,
+          "keyboard": true,
+          "emptyFormInvalid": true,
+          "contract": {
+            "valid": false,
+            "fields": [
+              {
+                "name": "name",
+                "type": "text",
+                "required": true
+              },
+              {
+                "name": "phone",
+                "type": "tel",
+                "required": true
+              },
+              {
+                "name": "service",
+                "type": "select-one",
+                "required": false
+              },
+              {
+                "name": "message",
+                "type": "textarea",
+                "required": false
+              }
+            ],
+            "services": [
+              "",
+              "van",
+              "truck",
+              "box-truck",
+              "food-truck",
+              "fleet",
+              "other"
+            ]
+          },
+          "mediaLoaded": 4,
+          "pageErrors": []
+        }
+      ],
+      "policy": "Live read-only acceptance; nonGET/tracking/callable/backend/calendar requests blocked. Empty native form validity inspected only; anchors/menu clicked, contact focused, no submissions/calls/emails."
+    }
+  ],
+  "finalConfirmation": {
+    "at": "2026-10-25T20:10:16.648Z",
+    "completeMapAndConfigurationMatch": true,
+    "releaseStillCurrent": true
+  },
+  "fallback": "UNUSED",
+  "boundaries": "Only exact reviewed2gzip files uploaded;140ordinary files/config preserved. No rebuild/directory deploy, no backend/CRM/payment/tracking/indexing/messaging changes. No production submissions/calls/emails. Private measurement reports excluded. No indexing/ranking improvement or cache-erasure claim."
+}
