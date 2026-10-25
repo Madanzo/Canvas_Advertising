@@ -1,0 +1,17 @@
+name: Website commercial buyer journey
+on:
+  push:
+    branches: ['codex/canvas-commercial-intent-oct25']
+  pull_request:
+    paths: ['vehicle-wraps-austin*.html', 'tests/commercial-intent.test.cjs', '.github/workflows/commercial-intent-ci.yml']
+permissions:
+  contents: read
+jobs:
+  affected-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --test tests/commercial-intent.test.cjs tests/print-buyer-journey.test.cjs tests/fleet-journey.test.cjs tests/foodtruck-journey.test.cjs tests/material-journey.test.cjs tests/hosting-artifact-guard.test.cjs
