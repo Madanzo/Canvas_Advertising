@@ -1,0 +1,17 @@
+name: Food truck buyer journey
+on:
+  push:
+    branches: ['codex/canvas-food-truck-buyer-guide']
+  pull_request:
+    paths: ['food-truck-wraps-austin*.html', 'tests/foodtruck-journey.test.cjs', '.github/workflows/foodtruck-journey-ci.yml']
+permissions:
+  contents: read
+jobs:
+  affected-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --test tests/foodtruck-journey.test.cjs tests/fleet-journey.test.cjs tests/material-journey.test.cjs tests/hosting-artifact-guard.test.cjs

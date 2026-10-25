@@ -1,0 +1,17 @@
+{
+  "fleetMeasurementCutoffDate": "2026-10-25",
+  "publishedFleetVersion": "045ff606071bf95f",
+  "publishedFleetRelease": "1792958907952000",
+  "publishedAt": "2026-10-25T20:08:27.952Z",
+  "publicationEvidenceCommit": "6a13fc0375c3fc8d493751305ef8317470bef640",
+  "policy": "Preserve release/evidence; do not republish. October25 is mixed exposure, not a full post-release period. Define equal dated periods and reporting timezone, excluding the mixed day for whole-day comparisons. No small-sample outcome conclusion.",
+  "definitions": {
+    "searchVisits": "Search Console clicks and Analytics organic sessions are distinct measures, with date/coverage differences; not unique inquiries.",
+    "quoteInteractions": "Form starts, phone clicks and calendar opens are intent, not submitted inquiries or issued quotes.",
+    "savedSubmissions": "Accepted saved records require duplicate/test/spam/recruitment exclusions before genuine inquiry classification; Analytics acceptance events are not a substitute.",
+    "qualifiedInquiries": "UNKNOWN until reliable classification",
+    "issuedQuotes": "UNKNOWN until supported by actual quote records",
+    "paidWork": "UNKNOWN until supported by payment/invoice records"
+  },
+  "privacy": "Private Analytics/Firestore aggregate findings remain outside public repository; no new aggregate polling/index/tracking change for this candidate."
+}
