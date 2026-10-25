@@ -1,0 +1,26 @@
+[
+  {
+    "from": "food-truck-wraps-austin.html",
+    "location": "navigation",
+    "href": "food-truck-wraps-austin-es",
+    "label": "🇲🇽 Español"
+  },
+  {
+    "from": "food-truck-wraps-austin-es.html",
+    "location": "navigation",
+    "href": "food-truck-wraps-austin",
+    "label": "🇺🇸 English"
+  },
+  {
+    "from": "commercial-fleet-wraps-austin.html",
+    "location": "contextualBody",
+    "href": "food-truck-wraps-austin",
+    "label": "Food Truck Wraps\nAustin is the food truck capital. Stand out in the crowded parks with vibrant, mouth-watering graphics that draw a crowd.\nLearn More →"
+  },
+  {
+    "from": "commercial-fleet-wraps-austin-es.html",
+    "location": "contextualBody",
+    "href": "food-truck-wraps-austin-es",
+    "label": "Rotulación de Food Trucks\nAustin es la capital de los food trucks. Destaca en los parques concurridos con gráficos vibrantes y apetitosos que atraigan a la gente.\nMás Información →"
+  }
+]

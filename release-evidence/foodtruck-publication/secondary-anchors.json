@@ -1,0 +1,30 @@
+{
+  "at": "2026-10-25T20:25:03.720Z",
+  "status": "PASS",
+  "rows": [
+    {
+      "slug": "food-truck-wraps-austin",
+      "width": 375,
+      "secondaryChecklistAnchor": "PASS"
+    },
+    {
+      "slug": "food-truck-wraps-austin",
+      "width": 1440,
+      "secondaryChecklistAnchor": "PASS"
+    },
+    {
+      "slug": "food-truck-wraps-austin-es",
+      "width": 375,
+      "secondaryChecklistAnchor": "PASS"
+    },
+    {
+      "slug": "food-truck-wraps-austin-es",
+      "width": 1440,
+      "secondaryChecklistAnchor": "PASS"
+    }
+  ],
+  "submissions": 0,
+  "calls": 0,
+  "emails": 0,
+  "trackingAndBackendBlocked": true
+}

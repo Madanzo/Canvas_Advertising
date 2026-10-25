@@ -1,0 +1,39 @@
+{
+  "english": {
+    "page": "/food-truck-wraps-austin",
+    "form": "#contact",
+    "checklistAnchor": "#truck-specs",
+    "phone": "tel:+15124343793",
+    "launch": "/food-truck-branding-launch-checklist",
+    "artwork": "/vehicle-wrap-file-preparation-checklist",
+    "serviceValues": [
+      "food-truck",
+      "food-trailer",
+      "concession-trailer",
+      "other"
+    ]
+  },
+  "spanish": {
+    "page": "/food-truck-wraps-austin-es",
+    "form": "#contact",
+    "checklistAnchor": "#truck-specs",
+    "phone": "tel:+15129459783",
+    "launch": "/lista-lanzamiento-marca-food-truck",
+    "artwork": "/lista-preparacion-archivos-wrap",
+    "serviceValues": [
+      "food-truck",
+      "food-trailer",
+      "other"
+    ]
+  },
+  "email": "mailto:sales@canvas-advertising.com",
+  "fields": [
+    "name",
+    "phone",
+    "service",
+    "message"
+  ],
+  "contract": "Fields/constraints/options/executable runtime exact; submit label only changed. Preserve existing EN/ES service-value difference. No live submission.",
+  "calendar": "Existing destination unchanged, not activated",
+  "payments": "Existing invoicing arrangements unchanged"
+}

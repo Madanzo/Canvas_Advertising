@@ -1,0 +1,262 @@
+{
+  "at": "2026-10-25T20:25:11.129Z",
+  "status": "PASS",
+  "rows": [
+    {
+      "slug": "food-truck-wraps-austin",
+      "width": 320,
+      "overflow": false,
+      "heroTop": 541.109375,
+      "heroHeight": 60.796875,
+      "anchors": true,
+      "keyboard": true,
+      "emptyFormInvalid": true,
+      "contract": {
+        "valid": false,
+        "fields": [
+          {
+            "name": "name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "phone",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "service",
+            "type": "select-one",
+            "required": false
+          },
+          {
+            "name": "message",
+            "type": "textarea",
+            "required": false
+          }
+        ],
+        "services": [
+          "food-truck",
+          "food-trailer",
+          "concession-trailer",
+          "other"
+        ]
+      },
+      "referenceBackgroundPreserved": true,
+      "pageErrors": []
+    },
+    {
+      "slug": "food-truck-wraps-austin",
+      "width": 375,
+      "overflow": false,
+      "heroTop": 530.734375,
+      "heroHeight": 60.796875,
+      "anchors": true,
+      "keyboard": true,
+      "emptyFormInvalid": true,
+      "contract": {
+        "valid": false,
+        "fields": [
+          {
+            "name": "name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "phone",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "service",
+            "type": "select-one",
+            "required": false
+          },
+          {
+            "name": "message",
+            "type": "textarea",
+            "required": false
+          }
+        ],
+        "services": [
+          "food-truck",
+          "food-trailer",
+          "concession-trailer",
+          "other"
+        ]
+      },
+      "referenceBackgroundPreserved": true,
+      "pageErrors": []
+    },
+    {
+      "slug": "food-truck-wraps-austin",
+      "width": 1440,
+      "overflow": false,
+      "heroTop": 599.625,
+      "heroHeight": 64.796875,
+      "anchors": true,
+      "keyboard": true,
+      "emptyFormInvalid": true,
+      "contract": {
+        "valid": false,
+        "fields": [
+          {
+            "name": "name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "phone",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "service",
+            "type": "select-one",
+            "required": false
+          },
+          {
+            "name": "message",
+            "type": "textarea",
+            "required": false
+          }
+        ],
+        "services": [
+          "food-truck",
+          "food-trailer",
+          "concession-trailer",
+          "other"
+        ]
+      },
+      "referenceBackgroundPreserved": true,
+      "pageErrors": []
+    },
+    {
+      "slug": "food-truck-wraps-austin-es",
+      "width": 320,
+      "overflow": false,
+      "heroTop": 595.40625,
+      "heroHeight": 60.796875,
+      "anchors": true,
+      "keyboard": true,
+      "emptyFormInvalid": true,
+      "contract": {
+        "valid": false,
+        "fields": [
+          {
+            "name": "name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "phone",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "service",
+            "type": "select-one",
+            "required": false
+          },
+          {
+            "name": "message",
+            "type": "textarea",
+            "required": false
+          }
+        ],
+        "services": [
+          "food-truck",
+          "food-trailer",
+          "other"
+        ]
+      },
+      "referenceBackgroundPreserved": true,
+      "pageErrors": []
+    },
+    {
+      "slug": "food-truck-wraps-austin-es",
+      "width": 375,
+      "overflow": false,
+      "heroTop": 590.53125,
+      "heroHeight": 60.796875,
+      "anchors": true,
+      "keyboard": true,
+      "emptyFormInvalid": true,
+      "contract": {
+        "valid": false,
+        "fields": [
+          {
+            "name": "name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "phone",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "service",
+            "type": "select-one",
+            "required": false
+          },
+          {
+            "name": "message",
+            "type": "textarea",
+            "required": false
+          }
+        ],
+        "services": [
+          "food-truck",
+          "food-trailer",
+          "other"
+        ]
+      },
+      "referenceBackgroundPreserved": true,
+      "pageErrors": []
+    },
+    {
+      "slug": "food-truck-wraps-austin-es",
+      "width": 1440,
+      "overflow": false,
+      "heroTop": 645.21875,
+      "heroHeight": 64.796875,
+      "anchors": true,
+      "keyboard": true,
+      "emptyFormInvalid": true,
+      "contract": {
+        "valid": false,
+        "fields": [
+          {
+            "name": "name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "phone",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "service",
+            "type": "select-one",
+            "required": false
+          },
+          {
+            "name": "message",
+            "type": "textarea",
+            "required": false
+          }
+        ],
+        "services": [
+          "food-truck",
+          "food-trailer",
+          "other"
+        ]
+      },
+      "referenceBackgroundPreserved": true,
+      "pageErrors": []
+    }
+  ],
+  "policy": "Local preview, tracking/backend requests blocked. No submit event triggered; empty form validity inspected only. Contact focused, not called/emailed."
+}

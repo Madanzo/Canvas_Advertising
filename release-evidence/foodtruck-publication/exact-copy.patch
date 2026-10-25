@@ -1,0 +1,730 @@
+diff --git a/private/tmp/canvas-foodtruck-live-BytvIx/food-truck-wraps-austin.html b/private/tmp/canvas-foodtruck-oct25/food-truck-wraps-austin.html
+index 9c929f3..f87bd2e 100644
+--- a/private/tmp/canvas-foodtruck-live-BytvIx/food-truck-wraps-austin.html
++++ b/private/tmp/canvas-foodtruck-oct25/food-truck-wraps-austin.html
+@@ -17,11 +17,11 @@
+         gtag('js', new Date());
+         gtag('config', 'G-98HWWM4BDW');
+     </script>
+-<meta content="Stand out in Austin's food parks with a custom food truck wrap! Canvas Advertising offers premium design, printing, and installation for food trucks. Free design included." name="description"/>
++<meta content="Food truck wraps in Austin for trucks and trailers. Send dimensions, photos, service-window details and artwork to review coverage and request a project quote." name="description"/>
+ <meta content="food truck wraps Austin, food truck wrap cost, custom food truck graphics, food trailer wraps, vinyl wrap food truck Austin TX" name="keywords"/>
+ <!-- Open Graph / Facebook -->
+-<meta content="Food Truck Wraps Austin | Custom Graphics | Canvas Advertising" property="og:title"/>
+-<meta content="Austin's premier food truck wrap shop. We design, print, and install mouth-watering graphics that draw a crowd. Free professional design included." property="og:description"/>
++<meta content="Food Truck Wraps Austin | Canvas Advertising" property="og:title"/>
++<meta content="Food truck wraps in Austin for trucks and trailers. Send dimensions, photos, service-window details and artwork to review coverage and request a project quote." property="og:description"/>
+ <meta content="website" property="og:type"/>
+ <meta content="https://canvas-advertising.com/food-truck-wraps-austin" property="og:url"/>
+ <!-- Using a general commercial wrap image since specific food truck image wasn't found, but it serves as a good placeholder -->
+@@ -33,7 +33,7 @@
+ <!-- Canonical URL -->
+ 
+ <link href="favicon.png" rel="icon" type="image/png"/>
+-<title>Food Truck Wraps Austin | Custom Design &amp; Installation | Canvas Advertising</title>
++<title>Food Truck Wraps Austin | Canvas Advertising</title>
+ <link href="https://fonts.googleapis.com" rel="preconnect"/>
+ <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+ <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+@@ -42,69 +42,87 @@
+ <script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+ <!-- Service Schema JSON-LD -->
+ <script type="application/ld+json">
++{
++  "@context": "https://schema.org",
++  "@graph": [
+     {
+-      "@context": "https://schema.org",
+-      "@graph": [
++      "@type": "Service",
++      "@id": "https://canvas-advertising.com/food-truck-wraps-austin#service",
++      "serviceType": "Food Truck Wrapping & Branding",
++      "provider": {
++        "@type": "LocalBusiness",
++        "name": "Canvas Advertising LLC",
++        "address": {
++          "@type": "PostalAddress",
++          "streetAddress": "10601 N Lamar Blvd",
++          "addressLocality": "Austin",
++          "addressRegion": "TX",
++          "postalCode": "78753",
++          "addressCountry": "US"
++        }
++      },
++      "areaServed": {
++        "@type": "AdministrativeArea",
++        "name": "Austin"
++      },
++      "description": "Food truck wraps in Austin for trucks and trailers. Send dimensions, photos, service-window details and artwork to review coverage and request a project quote.",
++      "name": "Food Truck Wraps Austin | Canvas Advertising",
++      "url": "https://canvas-advertising.com/food-truck-wraps-austin"
++    },
++    {
++      "@type": "FAQPage",
++      "@id": "https://canvas-advertising.com/food-truck-wraps-austin#faq",
++      "mainEntity": [
++        {
++          "@type": "Question",
++          "name": "What does Canvas need to quote my food truck?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Share whether it is a truck or trailer, approximate dimensions, photos of every side and intended coverage. Mark windows, doors, exhaust outlets and existing graphics. Describe your artwork and identify the design approver; we will review surfaces, production and installation requirements before preparing a project-specific quote."
++          }
++        },
++        {
++          "@type": "Question",
++          "name": "Should I choose a full wrap or partial graphics?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Partial graphics can focus your name, offer and contact details on selected areas while using the existing vehicle color. A full wrap covers more surface. Compare the options using photos and dimensions of your unit; the choice depends on coverage, paint condition and the approved design rather than a one-size-fits-all package."
++          }
++        },
++        {
++          "@type": "Question",
++          "name": "How are service windows, vents and hot areas planned?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Photograph exhaust outlets, vents, hinges, doors and access panels, with service windows open and closed. We will review application areas and exclusions before design approval. Do not assume graphics can cover an opening or withstand direct heat; required service access must remain available."
++          }
++        },
+         {
+-          "@type": "Service",
+-          "@id": "https://canvas-advertising.com/food-truck-wraps-austin#service",
+-          "serviceType": "Food Truck Wrapping & Branding",
+-          "provider": {
+-            "@type": "LocalBusiness",
+-            "name": "Canvas Advertising LLC",
+-            "address": {
+-              "@type": "PostalAddress",
+-              "streetAddress": "10601 N Lamar Blvd",
+-              "addressLocality": "Austin",
+-              "addressRegion": "TX",
+-              "postalCode": "78753",
+-              "addressCountry": "US"
+-            }
+-          },
+-          "areaServed": {
+-            "@type": "AdministrativeArea",
+-            "name": "Austin"
+-          },
+-          "description": "Custom food truck and trailer graphics in Austin, TX, with design, printing, finishing, and local installation coordinated for the approved project."
++          "@type": "Question",
++          "name": "What artwork should I prepare, including menu changes?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Organize your logo, brand colors, images and the menu wording that needs to appear. Separate permanent details from information that changes, and confirm the version before design approval. Describe available files in the form; we will confirm how to send them afterward."
++          }
+         },
+         {
+-          "@type": "FAQPage",
+-          "@id": "https://canvas-advertising.com/food-truck-wraps-austin#faq",
+-          "mainEntity": [
+-            {
+-              "@type": "Question",
+-              "name": "How much does it cost to wrap a food truck in Austin?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "Food truck wraps typically range from $2,500 to $5,500 depending on the size of the truck or trailer, the number of windows, and whether you need a full or partial wrap. We provide free custom design with every wrap project."
+-              }
+-            },
+-            {
+-              "@type": "Question",
+-              "name": "How long does a food truck wrap last?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "Service life depends on the selected film and laminate, installation, surfaces, heat and exhaust exposure, cleaning, storage, and maintenance. Review the applicable product documentation for the approved system."
+-              }
+-            },
+-            {
+-              "@type": "Question",
+-              "name": "Do I need to clean the food truck before wrapping?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "Yes. Follow the preparation instructions provided for the project and disclose grease, old adhesive, repairs, corrosion, loose paint, sealants, or contamination. Final surface acceptance occurs before installation."
+-              }
+-            }
+-          ]
++          "@type": "Question",
++          "name": "What needs checking before installation and during care?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Disclose grease, old adhesive, repairs, corrosion, loose paint or contamination, and follow the project’s preparation instructions. Surfaces are reviewed before installation. Service life depends on the selected system, exposure, heat, cleaning and maintenance; request the applicable documentation and written terms rather than assume a fixed lifespan."
++          }
+         }
+       ]
+     }
+-    </script>
++  ]
++}
++</script>
+ 
+         <!-- Twitter Card metadata -->
+     <meta name="twitter:card" content="summary_large_image">
+-    <meta name="twitter:title" content="Food Truck Wraps Austin | Custom Design &amp; Installation | Canvas Advertising">
+-    <meta name="twitter:description" content="Stand out in Austin's food parks with a custom food truck wrap! Canvas Advertising offers premium design, printing, and installation for food trucks. Free design included.">
++    <meta name="twitter:title" content="Food Truck Wraps Austin | Canvas Advertising">
++    <meta name="twitter:description" content="Food truck wraps in Austin for trucks and trailers. Send dimensions, photos, service-window details and artwork to review coverage and request a project quote.">
+     <meta name="twitter:image" content="https://canvas-advertising.com/images/og-share.jpg">
+ </head>
+ <body>
+@@ -163,15 +181,14 @@
+ <div class="partner-hero__overlay overlay-dark" ></div>
+ <div class="container">
+ <div class="partner-hero__content" data-reveal="">
+-<p class="section-label" style="color: var(--accent);">Austin's Premier Wrap Shop</p>
+-<h1 class="partner-hero__title">FOOD TRUCK WRAPS<br/><span class="text-accent">THAT DRAW A CROWD.</span></h1>
+-<p class="partner-hero__subtitle">In Austin's competitive food scene, your truck is your best marketing tool. We design, print, and install mouth-watering, vibrant graphics. Get started with a <strong>FREE professional 3D mockup</strong> of your food truck.</p>
++<p class="section-label" style="color: var(--accent);">Truck and Trailer Graphics</p>
++<h1 class="partner-hero__title">FOOD TRUCK WRAPS<br/><span class="text-accent">IN AUSTIN.</span></h1>
++<p class="partner-hero__subtitle">Plan graphics for your truck or trailer around service windows, doors and access areas. Send dimensions, photos and available artwork; Canvas will review design, printing and installation requirements for a project-specific quote.</p>
+ <div class="partner-hero__cta">
+-<button class="btn btn--primary btn--large btn--pulse" data-cal-config='{"layout":"month_view"}' data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting" data-cal-namespace="canvas-advertising-strategy-meeting">
+-                        Get a Free Quote &amp; Design
+-                    </button>
+-<a class="btn btn--secondary btn--large" href="#why">Why Wrap Your Truck?</a>
++<a class="btn btn--primary btn--large" href="#contact">Request a Food Truck Quote</a>
++<a class="btn btn--secondary btn--large" href="#truck-specs">See the Quote Checklist</a>
+ </div>
++<p>Reference image. We review the layout for your truck or trailer individually.</p>
+ </div>
+ </div>
+ </section>
+@@ -210,48 +227,19 @@
+         </div>
+     </section>
+ <!-- ===== Trust Bar ===== -->
+-<section class="trust-bar" data-reveal="">
++<section class="site-flow-band" id="truck-specs" aria-labelledby="truck-specs-title">
+ <div class="container">
+-<div class="trust-bar__grid">
+-<div class="trust-bar__item">
+-<div class="trust-bar__icon">
+-<svg fill="none" stroke="currentColor" viewbox="0 0 24 24">
+-<path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+-<path d="M22 4L12 14.01l-3-3"></path>
+-</svg>
+-</div>
+-<span class="trust-bar__number">Premium</span>
+-<span class="trust-bar__label">3M &amp; Avery Vinyl</span>
+-</div>
+-<div class="trust-bar__item">
+-<div class="trust-bar__icon">
+-<svg fill="none" stroke="currentColor" viewbox="0 0 24 24">
+-<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+-</svg>
+-</div>
+-<span class="trust-bar__number">Fast</span>
+-<span class="trust-bar__label">Turnaround Times</span>
+-</div>
+-<div class="trust-bar__item">
+-<div class="trust-bar__icon trust-bar__icon--accent">
+-<svg fill="none" stroke="currentColor" viewbox="0 0 24 24">
+-<path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+-<path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+-<path d="M2 2l7.586 7.586"></path>
+-<circle cx="11" cy="11" r="2"></circle>
+-</svg>
+-</div>
+-<span class="trust-bar__number trust-bar__number--accent">FREE</span>
+-<span class="trust-bar__label">Custom Food Truck Design</span>
+-</div>
+-<div class="trust-bar__item trust-bar__item--insured">
+-<div class="trust-bar__icon trust-bar__icon--dark">
+-<img src="images/fully-insured-company.png" alt="Fully Insured" width="48" height="48" loading="lazy">
+-</div>
+-<span class="trust-bar__number">Fully</span>
+-<span class="trust-bar__label">Insured Shop</span>
+-</div>
+-</div>
++<h2 id="truck-specs-title">WHAT SHOULD I SEND FOR A FOOD TRUCK WRAP QUOTE?</h2>
++<ul>
++<li>Unit type and dimensions of the sides, front and rear areas you want covered.</li>
++<li>Photos of each side, service windows open and closed, vents, doors and service access.</li>
++<li>Desired coverage and condition: existing graphics, damage, repairs or loose paint.</li>
++<li>Logo, colors, images and the menu/message version; flag information likely to change.</li>
++<li>Design approver, unit availability and local installation versus production only.</li>
++</ul>
++<p>Use Project Details to describe the unit and available artwork. Coverage, materials, design scope and scheduling are confirmed after your project is reviewed.</p>
++<div class="partner-hero__cta"><a class="btn btn--primary btn--large" href="#contact">Send Project Details</a><a class="btn btn--secondary btn--large" href="tel:+15124343793">Call (512) 434-3793</a></div>
++<p><a href="food-truck-branding-launch-checklist">Branding and launch checklist</a> · <a href="vehicle-wrap-file-preparation-checklist">Artwork preparation</a></p>
+ </div>
+ </section>
+ <!-- ===== Why Wrap Your Truck ===== -->
+@@ -260,23 +248,13 @@
+ <div class="container">
+ <div class="section-header section-header--light" data-reveal="">
+ <p class="section-label">Stand Out in ATX</p>
+-<h2 class="section-title">WHY WRAP YOUR FOOD TRUCK?</h2>
+-<p class="section-subtitle">A stunning food truck wrap isn't just decoration—it's your menu, your brand, and your best sales pitch combined into one.</p>
++<h2 class="section-title">HOW SHOULD YOU PLAN FOOD TRUCK GRAPHICS?</h2>
++<p class="section-subtitle">Organize the message and application areas before approving a design.</p>
+ </div>
+ <div class="services__grid">
+-<div class="service-card" data-reveal="">
+-<h3 class="service-card__title">Attract Hungry Customers</h3>
+-<p class="service-card__desc">People eat with their eyes first. A high-resolution, vibrant wrap showcasing your brand and best dishes will pull customers from across the food park.</p>
+-<span class="service-card__tag">More Sales</span>
+-</div>
+-<div class="service-card" data-reveal="">
+-<h3 class="service-card__title">Protect Your Asset</h3>
+-<p class="service-card__desc">Vinyl wraps protect your truck's exterior from minor scratches, UV damage, and grease. It keeps the vehicle beneath looking newer for longer.</p>
+-</div>
+-<div class="service-card" data-reveal="">
+-<h3 class="service-card__title">Professional Branding</h3>
+-<p class="service-card__desc">A clean, professionally wrapped truck builds immediate trust. It tells customers that you take your food and your business seriously.</p>
+-</div>
++<div class="service-card" data-reveal=""><h3 class="service-card__title">Plan the message</h3><p class="service-card__desc">Prioritize your name, food offering and contact details. Review what needs to remain readable with the service window open, closed and from each side of the unit.</p></div>
++<div class="service-card" data-reveal=""><h3 class="service-card__title">Define coverage</h3><p class="service-card__desc">Compare lettering and partial graphics with a full wrap. Mark rivets, curves and repaired areas so the application system and exclusions can be reviewed.</p></div>
++<div class="service-card" data-reveal=""><h3 class="service-card__title">Confirm the artwork</h3><p class="service-card__desc">Check spelling, menu wording, contact details and versions before approval. Confirm the scope of later revisions or menu updates before production.</p></div>
+ </div>
+ </div>
+ </section>
+@@ -292,7 +270,7 @@
+ <div class="process__step" data-reveal="">
+ <div class="process__number">01</div>
+ <h3 class="process__title">Menu &amp; Brand Design</h3>
+-<p class="process__desc">We take your logo and menu items to create a stunning 3D visual of your food truck. We integrate your service windows and vents flawlessly.</p>
++<p class="process__desc">We review the logo, message and a panel plan around windows, doors and access areas. Design scope and approval are agreed before production.</p>
+ </div>
+ <div class="process__step" data-reveal="">
+ <div class="process__number">02</div>
+@@ -308,7 +286,7 @@
+ </div>
+ </section>
+ <!-- ===== FAQ Section ===== -->
+-<section class="faq section--dark">
++<section class="faq section--dark" id="faq">
+ <div class="section__grain"></div>
+ <div class="container">
+ <div class="section-header section-header--light" data-reveal="">
+@@ -317,18 +295,11 @@
+ <p class="section-subtitle">Preparing for opening day? Use the <a href="food-truck-branding-launch-checklist">food-truck branding launch checklist</a> to organize customer flow, menus, required notices, artwork, and future updates.</p>
+ </div>
+ <div class="faq__list" data-reveal="">
+-<div class="faq__item">
+-<h3 class="faq__question">How much does it cost to wrap a food truck in Austin?</h3>
+-<p class="faq__answer">Food truck wraps typically range from $2,500 to $5,500 depending on the size of the truck or trailer, the number of windows, and whether you need a full or partial wrap. We provide free custom design with every wrap project.</p>
+-</div>
+-<div class="faq__item">
+-<h3 class="faq__question">How long does a food truck wrap last?</h3>
+-<p class="faq__answer">Service life depends on the selected film and laminate, installation, surfaces, heat and exhaust exposure, cleaning, storage, and maintenance. Review the applicable product documentation for the approved system.</p>
+-</div>
+-<div class="faq__item">
+-<h3 class="faq__question">Do I need to clean the food truck before wrapping?</h3>
+-<p class="faq__answer">Yes. Follow the preparation instructions provided for the project and disclose grease, old adhesive, repairs, corrosion, loose paint, sealants, or contamination. Final surface acceptance occurs before installation.</p>
+-</div>
++<div class="faq__item"><h3 class="faq__question">What does Canvas need to quote my food truck?</h3><p class="faq__answer">Share whether it is a truck or trailer, approximate dimensions, photos of every side and intended coverage. Mark windows, doors, exhaust outlets and existing graphics. Describe your artwork and identify the design approver; we will review surfaces, production and installation requirements before preparing a project-specific quote.</p></div>
++<div class="faq__item"><h3 class="faq__question">Should I choose a full wrap or partial graphics?</h3><p class="faq__answer">Partial graphics can focus your name, offer and contact details on selected areas while using the existing vehicle color. A full wrap covers more surface. Compare the options using photos and dimensions of your unit; the choice depends on coverage, paint condition and the approved design rather than a one-size-fits-all package.</p></div>
++<div class="faq__item"><h3 class="faq__question">How are service windows, vents and hot areas planned?</h3><p class="faq__answer">Photograph exhaust outlets, vents, hinges, doors and access panels, with service windows open and closed. We will review application areas and exclusions before design approval. Do not assume graphics can cover an opening or withstand direct heat; required service access must remain available.</p></div>
++<div class="faq__item"><h3 class="faq__question">What artwork should I prepare, including menu changes?</h3><p class="faq__answer">Organize your logo, brand colors, images and the menu wording that needs to appear. Separate permanent details from information that changes, and confirm the version before design approval. Describe available files in the form; we will confirm how to send them afterward.</p></div>
++<div class="faq__item"><h3 class="faq__question">What needs checking before installation and during care?</h3><p class="faq__answer">Disclose grease, old adhesive, repairs, corrosion, loose paint or contamination, and follow the project’s preparation instructions. Surfaces are reviewed before installation. Service life depends on the selected system, exposure, heat, cleaning and maintenance; request the applicable documentation and written terms rather than assume a fixed lifespan.</p></div>
+ </div>
+ </div>
+ </section>
+@@ -336,9 +307,9 @@
+ <section class="cta section--accent" id="contact">
+ <div class="container">
+ <div class="cta__grid">
+-<div class="cta__content" data-reveal="">
++<div class="cta__content" data-reveal="" style="min-width: 0;">
+ <h2 class="cta__title">READY TO WRAP<br/>YOUR FOOD TRUCK?</h2>
+-<p class="cta__subtitle">Fill out the form to get your free design mockup and quote.</p>
++<p class="cta__subtitle">Describe your unit, coverage and available artwork. We will review the details before preparing a quote. Sending this request is not a purchase.</p>
+ <button class="cta__phone" data-cal-config='{"layout":"month_view"}' data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting" data-cal-namespace="canvas-advertising-strategy-meeting">
+ <svg class="cta__phone-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+ <rect height="18" rx="2" width="18" x="3" y="4"></rect>
+@@ -346,7 +317,7 @@
+ <line x1="8" x2="8" y1="2" y2="6"></line>
+ <line x1="3" x2="21" y1="10" y2="10"></line>
+ </svg>
+-                        Schedule a Consultation
++                        Discuss Project
+                     </button>
+ <div class="cta__info">
+ <div class="cta__info-item">
+@@ -360,7 +331,7 @@
+ </div>
+ </div>
+ </div>
+-<div class="cta__form" data-reveal="">
++<div class="cta__form" data-reveal="" style="min-width: 0;">
+ <h3 class="cta__form-title">Request a Quote</h3>
+ <form class="form" id="quoteForm">
+ <div class="form__group">
+@@ -384,7 +355,7 @@
+ <label class="form__label" for="message">Project Details</label>
+ <textarea class="form__textarea" id="message" name="message" placeholder="Length of your truck/trailer? Do you need logo design too?" rows="4"></textarea>
+ </div>
+-<button class="btn btn--white btn--full" type="submit">Get Free Quote &amp; Design</button>
++<button class="btn btn--white btn--full" type="submit">Request a Quote</button>
+ </form>
+ <div class="form__success" id="formSuccess" style="display: none;">
+ <svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+
+diff --git a/private/tmp/canvas-foodtruck-live-BytvIx/food-truck-wraps-austin-es.html b/private/tmp/canvas-foodtruck-oct25/food-truck-wraps-austin-es.html
+index b27f560..7c0a258 100644
+--- a/private/tmp/canvas-foodtruck-live-BytvIx/food-truck-wraps-austin-es.html
++++ b/private/tmp/canvas-foodtruck-oct25/food-truck-wraps-austin-es.html
+@@ -17,11 +17,11 @@
+         gtag('js', new Date());
+         gtag('config', 'G-98HWWM4BDW');
+     </script>
+-<meta content="¡Destaca en los parques de comida de Austin con rotulación para food trucks! Canvas Advertising ofrece diseño premium, impresión e instalación. Diseño gratis incluido." name="description"/>
++<meta content="Rotulación de food trucks y remolques en Austin. Comparta medidas, fotos, ventanas de servicio y archivos para revisar la cobertura y solicitar su cotización." name="description"/>
+ <meta content="rotulacion de food trucks austin tx, costo de rotular food truck, graficos para food trucks, rotulacion de remolques de comida, vinyl wrap food truck austin" name="keywords"/>
+ <!-- Open Graph / Facebook -->
+-<meta content="Rotulación de Food Trucks Austin | Canvas Advertising" property="og:title"/>
+-<meta content="El mejor taller de rotulación de food trucks en Austin. Diseñamos, imprimimos e instalamos gráficos vibrantes. Diseño 3D profesional GRATIS." property="og:description"/>
++<meta content="Rotulación de Food Trucks en Austin | Canvas Advertising" property="og:title"/>
++<meta content="Rotulación de food trucks y remolques en Austin. Comparta medidas, fotos, ventanas de servicio y archivos para revisar la cobertura y solicitar su cotización." property="og:description"/>
+ <meta content="website" property="og:type"/>
+ <meta content="https://canvas-advertising.com/food-truck-wraps-austin-es" property="og:url"/>
+ <!-- Using a general commercial wrap image since specific food truck image wasn't found, but it serves as a good placeholder -->
+@@ -29,11 +29,11 @@
+ <meta content="1200" property="og:image:width"/>
+ <meta content="630" property="og:image:height"/>
+ <meta content="image/jpeg" property="og:image:type"/>
+-<meta content="es_US" property="og:locale"/>
++<meta content="es_MX" property="og:locale"/>
+ <!-- Canonical URL -->
+ 
+ <link href="favicon.png" rel="icon" type="image/png"/>
+-<title>Rotulación de Food Trucks Austin | Diseño e Instalación | Canvas Advertising</title>
++<title>Rotulación de Food Trucks en Austin | Canvas Advertising</title>
+ <link href="https://fonts.googleapis.com" rel="preconnect"/>
+ <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+ <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+@@ -42,69 +42,87 @@
+ <script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+ <!-- Service Schema JSON-LD -->
+ <script type="application/ld+json">
++{
++  "@context": "https://schema.org",
++  "@graph": [
+     {
+-      "@context": "https://schema.org",
+-      "@graph": [
++      "@type": "Service",
++      "@id": "https://canvas-advertising.com/food-truck-wraps-austin-es#service",
++      "serviceType": "Rotulación de Food Trucks",
++      "provider": {
++        "@type": "LocalBusiness",
++        "name": "Canvas Advertising LLC",
++        "address": {
++          "@type": "PostalAddress",
++          "streetAddress": "10601 N Lamar Blvd",
++          "addressLocality": "Austin",
++          "addressRegion": "TX",
++          "postalCode": "78753",
++          "addressCountry": "US"
++        }
++      },
++      "areaServed": {
++        "@type": "AdministrativeArea",
++        "name": "Austin"
++      },
++      "description": "Rotulación de food trucks y remolques en Austin. Comparta medidas, fotos, ventanas de servicio y archivos para revisar la cobertura y solicitar su cotización.",
++      "name": "Rotulación de Food Trucks en Austin | Canvas Advertising",
++      "url": "https://canvas-advertising.com/food-truck-wraps-austin-es"
++    },
++    {
++      "@type": "FAQPage",
++      "@id": "https://canvas-advertising.com/food-truck-wraps-austin-es#faq",
++      "mainEntity": [
++        {
++          "@type": "Question",
++          "name": "¿Qué información necesita Canvas para cotizar mi food truck?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Comparta si es camión o remolque, medidas aproximadas, fotos de todos los lados y la cobertura deseada. Señale ventanas, puertas, extractores y gráficos anteriores. Describa sus archivos y quién aprueba el diseño; revisaremos superficie, producción e instalación antes de preparar una cotización específica."
++          }
++        },
++        {
++          "@type": "Question",
++          "name": "¿Conviene una rotulación completa o gráficos parciales?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Los gráficos parciales pueden concentrar el nombre, la oferta y los datos de contacto en áreas seleccionadas, aprovechando el color existente. Una rotulación completa cubre más superficie. Compare ambas opciones con fotos y medidas de su unidad; la selección depende de la cobertura, el estado de la pintura y el diseño aprobado."
++          }
++        },
++        {
++          "@type": "Question",
++          "name": "¿Cómo se planifican ventanas de servicio, extractores y zonas calientes?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Fotografíe salidas de escape, extractores, bisagras, puertas y paneles de acceso, con las ventanas abiertas y cerradas. Revisaremos áreas de aplicación y exclusiones antes de aprobar el diseño. No suponga que se puede cubrir una abertura o aplicar gráficos expuestos a calor directo; el acceso de servicio debe permanecer disponible."
++          }
++        },
+         {
+-          "@type": "Service",
+-          "@id": "https://canvas-advertising.com/food-truck-wraps-austin-es#service",
+-          "serviceType": "Rotulación de Food Trucks",
+-          "provider": {
+-            "@type": "LocalBusiness",
+-            "name": "Canvas Advertising LLC",
+-            "address": {
+-              "@type": "PostalAddress",
+-              "streetAddress": "10601 N Lamar Blvd",
+-              "addressLocality": "Austin",
+-              "addressRegion": "TX",
+-              "postalCode": "78753",
+-              "addressCountry": "US"
+-            }
+-          },
+-          "areaServed": {
+-            "@type": "AdministrativeArea",
+-            "name": "Austin"
+-          },
+-          "description": "Gráficos personalizados para food trucks y remolques en Austin, TX, con diseño, impresión, acabado e instalación local coordinados para el proyecto aprobado."
++          "@type": "Question",
++          "name": "¿Qué archivos debo preparar y cómo describo cambios de menú?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Organice el logotipo, colores de marca, imágenes y el texto del menú que debe aparecer. Distinga datos permanentes de información que cambia y confirme la versión antes de aprobar el diseño. Describa los archivos disponibles en el formulario; después confirmaremos cómo enviarlos."
++          }
+         },
+         {
+-          "@type": "FAQPage",
+-          "@id": "https://canvas-advertising.com/food-truck-wraps-austin-es#faq",
+-          "mainEntity": [
+-            {
+-              "@type": "Question",
+-              "name": "¿Cuánto cuesta rotular un food truck en Austin?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "La rotulación de un food truck suele costar entre $2,500 y $5,500 dependiendo del tamaño del camión o remolque, la cantidad de ventanas y si necesita una rotulación completa o parcial. El diseño personalizado es gratuito con cada proyecto."
+-              }
+-            },
+-            {
+-              "@type": "Question",
+-              "name": "¿Cuánto dura el vinilo de un food truck?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "La vida útil depende del vinil y laminado, instalación, superficies, calor y escape, limpieza, almacenamiento y mantenimiento. Consulte la documentación aplicable del sistema aprobado."
+-              }
+-            },
+-            {
+-              "@type": "Question",
+-              "name": "¿Necesito lavar el food truck antes de la instalación?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "Sí, el camión debe estar lavado y sin grasa, tierra ni adhesivos viejos. Nosotros haremos una limpieza química final antes de la instalación para asegurar una adherencia perfecta."
+-              }
+-            }
+-          ]
++          "@type": "Question",
++          "name": "¿Qué debe revisarse antes de instalar y para cuidar los gráficos?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Informe sobre grasa, adhesivo anterior, reparaciones, corrosión, pintura suelta o contaminación y siga las instrucciones de preparación del proyecto. La superficie se revisa antes de instalar. La duración depende del sistema seleccionado, exposición, calor, limpieza y mantenimiento; solicite su documentación y condiciones escritas, sin asumir una vida útil fija."
++          }
+         }
+       ]
+     }
+-    </script>
++  ]
++}
++</script>
+ 
+         <!-- Twitter Card metadata -->
+     <meta name="twitter:card" content="summary_large_image">
+-    <meta name="twitter:title" content="Rotulación de Food Trucks Austin | Diseño e Instalación | Canvas Advertising">
+-    <meta name="twitter:description" content="¡Destaca en los parques de comida de Austin con rotulación para food trucks! Canvas Advertising ofrece diseño premium, impresión e instalación. Diseño gratis incluido.">
++    <meta name="twitter:title" content="Rotulación de Food Trucks en Austin | Canvas Advertising">
++    <meta name="twitter:description" content="Rotulación de food trucks y remolques en Austin. Comparta medidas, fotos, ventanas de servicio y archivos para revisar la cobertura y solicitar su cotización.">
+     <meta name="twitter:image" content="https://canvas-advertising.com/images/og-share.jpg">
+ </head>
+ <body>
+@@ -163,15 +181,14 @@
+ <div class="partner-hero__overlay overlay-dark" ></div>
+ <div class="container">
+ <div class="partner-hero__content" data-reveal="">
+-<p class="section-label" style="color: var(--accent);">Rotulación Profesional en Austin</p>
+-<h1 class="partner-hero__title">FOOD TRUCKS QUE<br/><span class="text-accent">ATRAEN MULTITUDES.</span></h1>
+-<p class="partner-hero__subtitle">En la competitiva escena culinaria de Austin, tu food truck es tu mejor herramienta de marketing. Diseñamos, imprimimos e instalamos gráficos increíbles. Comienza con un <strong>mockup 3D GRATIS</strong> de tu food truck.</p>
++<p class="section-label" style="color: var(--accent);">Gráficos para Camiones y Remolques</p>
++<h1 class="partner-hero__title">ROTULACIÓN DE FOOD TRUCKS<br/><span class="text-accent">EN AUSTIN.</span></h1>
++<p class="partner-hero__subtitle">Planifique gráficos para su camión o remolque alrededor de ventanas de servicio, puertas y áreas de acceso. Envíe medidas, fotos y archivos disponibles; Canvas revisará diseño, impresión e instalación para preparar una cotización específica.</p>
+ <div class="partner-hero__cta">
+-<button class="btn btn--primary btn--large btn--pulse" data-cal-config='{"layout":"month_view"}' data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting" data-cal-namespace="canvas-advertising-strategy-meeting">
+-                        Obtener Cotización Gratis
+-                    </button>
+-<a class="btn btn--secondary btn--large" href="#why">¿Por qué rotular?</a>
++<a class="btn btn--primary btn--large" href="#contact">Cotizar mi Food Truck</a>
++<a class="btn btn--secondary btn--large" href="#truck-specs">Ver Datos Necesarios</a>
+ </div>
++<p>Imagen de referencia. Revisamos el diseño de su camión o remolque de forma individual.</p>
+ </div>
+ </div>
+ </section>
+@@ -210,48 +227,19 @@
+         </div>
+     </section>
+ <!-- ===== Trust Bar ===== -->
+-<section class="trust-bar" data-reveal="">
++<section class="site-flow-band" id="truck-specs" aria-labelledby="truck-specs-title">
+ <div class="container">
+-<div class="trust-bar__grid">
+-<div class="trust-bar__item">
+-<div class="trust-bar__icon">
+-<svg fill="none" stroke="currentColor" viewbox="0 0 24 24">
+-<path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+-<path d="M22 4L12 14.01l-3-3"></path>
+-</svg>
+-</div>
+-<span class="trust-bar__number">Premium</span>
+-<span class="trust-bar__label">Sistema Según el Proyecto</span>
+-</div>
+-<div class="trust-bar__item">
+-<div class="trust-bar__icon">
+-<svg fill="none" stroke="currentColor" viewbox="0 0 24 24">
+-<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+-</svg>
+-</div>
+-<span class="trust-bar__number">Rápido</span>
+-<span class="trust-bar__label">Tiempo de Entrega</span>
+-</div>
+-<div class="trust-bar__item">
+-<div class="trust-bar__icon trust-bar__icon--accent">
+-<svg fill="none" stroke="currentColor" viewbox="0 0 24 24">
+-<path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+-<path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+-<path d="M2 2l7.586 7.586"></path>
+-<circle cx="11" cy="11" r="2"></circle>
+-</svg>
+-</div>
+-<span class="trust-bar__number trust-bar__number--accent">GRATIS</span>
+-<span class="trust-bar__label">Diseño Personalizado</span>
+-</div>
+-<div class="trust-bar__item trust-bar__item--insured">
+-<div class="trust-bar__icon trust-bar__icon--dark">
+-<img src="images/fully-insured-company.png" alt="Completamente Asegurados" width="48" height="48" loading="lazy">
+-</div>
+-<span class="trust-bar__number">Totalmente</span>
+-<span class="trust-bar__label">Asegurados</span>
+-</div>
+-</div>
++<h2 id="truck-specs-title">¿QUÉ DEBO ENVIAR PARA COTIZAR LA ROTULACIÓN DE MI FOOD TRUCK?</h2>
++<ul>
++<li>Tipo de unidad y medidas de los lados, frente y parte trasera que quiere rotular.</li>
++<li>Fotos de cada lado, ventanas abiertas y cerradas, extractores, puertas y acceso de servicio.</li>
++<li>Cobertura deseada y condición: gráficos anteriores, daños, reparaciones o pintura desprendida.</li>
++<li>Logotipo, colores, imágenes y versión del menú o mensaje; indique qué podría cambiar.</li>
++<li>Persona que aprueba, disponibilidad de la unidad e instalación local o solo producción.</li>
++</ul>
++<p>Use Detalles del Proyecto para describir la unidad y los archivos disponibles. La cobertura, materiales, diseño y programación se confirman después de revisar su proyecto.</p>
++<div class="partner-hero__cta"><a class="btn btn--primary btn--large" href="#contact">Enviar mi Proyecto</a><a class="btn btn--secondary btn--large" href="tel:+15129459783">Llamar al (512) 945-9783</a></div>
++<p><a href="lista-lanzamiento-marca-food-truck">Lista de marca y lanzamiento</a> · <a href="lista-preparacion-archivos-wrap">Preparación de archivos</a></p>
+ </div>
+ </section>
+ <!-- ===== Why Wrap Your Truck ===== -->
+@@ -260,23 +248,13 @@
+ <div class="container">
+ <div class="section-header section-header--light" data-reveal="">
+ <p class="section-label">Destaca en Austin</p>
+-<h2 class="section-title">¿POR QUÉ ROTULAR TU FOOD TRUCK?</h2>
+-<p class="section-subtitle">Una rotulación impresionante no es solo decoración—es tu menú, tu marca y tu mejor vendedor, todo en uno.</p>
++<h2 class="section-title">¿CÓMO PLANIFICAR LOS GRÁFICOS DE SU FOOD TRUCK?</h2>
++<p class="section-subtitle">Organice el mensaje y las áreas de aplicación antes de aprobar un diseño.</p>
+ </div>
+ <div class="services__grid">
+-<div class="service-card" data-reveal="">
+-<h3 class="service-card__title">Atrae Clientes</h3>
+-<p class="service-card__desc">La gente come con los ojos. Gráficos de alta resolución mostrando tus mejores platos atraerán clientes de todo el parque de food trucks.</p>
+-<span class="service-card__tag">Más Ventas</span>
+-</div>
+-<div class="service-card" data-reveal="">
+-<h3 class="service-card__title">Protege tu Inversión</h3>
+-<p class="service-card__desc">El vinilo protege la pintura original de rasguños menores, daños por el sol y la grasa diaria de la cocina.</p>
+-</div>
+-<div class="service-card" data-reveal="">
+-<h3 class="service-card__title">Branding Profesional</h3>
+-<p class="service-card__desc">Un camión profesionalmente rotulado genera confianza inmediata y demuestra que te tomas en serio la calidad de tu comida.</p>
+-</div>
++<div class="service-card" data-reveal=""><h3 class="service-card__title">Ordenar el mensaje</h3><p class="service-card__desc">Priorice nombre, tipo de comida y datos de contacto. Revise qué debe leerse con la ventana abierta, cerrada y desde cada lado de la unidad.</p></div>
++<div class="service-card" data-reveal=""><h3 class="service-card__title">Definir la cobertura</h3><p class="service-card__desc">Compare letras y gráficos parciales con cobertura completa. Señale remaches, curvas y zonas reparadas para revisar el sistema y las áreas que se excluyen.</p></div>
++<div class="service-card" data-reveal=""><h3 class="service-card__title">Confirmar el arte</h3><p class="service-card__desc">Revise ortografía, menú, datos de contacto y versiones antes de aprobar. Confirme el alcance de revisiones o cambios posteriores del menú antes de producir.</p></div>
+ </div>
+ </div>
+ </section>
+@@ -292,7 +270,7 @@
+ <div class="process__step" data-reveal="">
+ <div class="process__number">01</div>
+ <h3 class="process__title">Diseño de Menú</h3>
+-<p class="process__desc">Usamos tu logo y menú para crear un mockup visual 3D. Adaptamos los gráficos a tus ventanas de servicio y extractores.</p>
++<p class="process__desc">Revisamos el logotipo, el mensaje y un plan por panel alrededor de ventanas, puertas y accesos. El alcance del diseño y la aprobación se acuerdan antes de producir.</p>
+ </div>
+ <div class="process__step" data-reveal="">
+ <div class="process__number">02</div>
+@@ -308,7 +286,7 @@
+ </div>
+ </section>
+ <!-- ===== FAQ Section ===== -->
+-<section class="faq section--dark">
++<section class="faq section--dark" id="faq">
+ <div class="section__grain"></div>
+ <div class="container">
+ <div class="section-header section-header--light" data-reveal="">
+@@ -317,18 +295,11 @@
+ <p class="section-subtitle">¿Se prepara para abrir? Use la <a href="lista-lanzamiento-marca-food-truck">lista de lanzamiento para food trucks</a> y organice recorrido del cliente, menús, avisos, arte y futuras actualizaciones.</p>
+ </div>
+ <div class="faq__list" data-reveal="">
+-<div class="faq__item">
+-<h3 class="faq__question">¿Cuánto cuesta rotular un food truck en Austin?</h3>
+-<p class="faq__answer">La rotulación típica varía de $2,500 a $5,500 según el tamaño del camión, el número de ventanas y si es rotulación completa o parcial. Incluimos el diseño gratis con tu proyecto.</p>
+-</div>
+-<div class="faq__item">
+-<h3 class="faq__question">¿Cuánto tiempo dura el vinilo?</h3>
+-<p class="faq__answer">La vida útil depende del vinil y laminado, instalación, superficies, calor y escape, limpieza, almacenamiento y mantenimiento. Consulte la documentación aplicable del sistema aprobado.</p>
+-</div>
+-<div class="faq__item">
+-<h3 class="faq__question">¿Debo limpiar el food truck antes de llevarlo?</h3>
+-<p class="faq__answer">Sí. Siga las instrucciones del proyecto e informe sobre grasa, adhesivo anterior, reparaciones, corrosión, pintura suelta, selladores o contaminación. La superficie se acepta antes de instalar.</p>
+-</div>
++<div class="faq__item"><h3 class="faq__question">¿Qué información necesita Canvas para cotizar mi food truck?</h3><p class="faq__answer">Comparta si es camión o remolque, medidas aproximadas, fotos de todos los lados y la cobertura deseada. Señale ventanas, puertas, extractores y gráficos anteriores. Describa sus archivos y quién aprueba el diseño; revisaremos superficie, producción e instalación antes de preparar una cotización específica.</p></div>
++<div class="faq__item"><h3 class="faq__question">¿Conviene una rotulación completa o gráficos parciales?</h3><p class="faq__answer">Los gráficos parciales pueden concentrar el nombre, la oferta y los datos de contacto en áreas seleccionadas, aprovechando el color existente. Una rotulación completa cubre más superficie. Compare ambas opciones con fotos y medidas de su unidad; la selección depende de la cobertura, el estado de la pintura y el diseño aprobado.</p></div>
++<div class="faq__item"><h3 class="faq__question">¿Cómo se planifican ventanas de servicio, extractores y zonas calientes?</h3><p class="faq__answer">Fotografíe salidas de escape, extractores, bisagras, puertas y paneles de acceso, con las ventanas abiertas y cerradas. Revisaremos áreas de aplicación y exclusiones antes de aprobar el diseño. No suponga que se puede cubrir una abertura o aplicar gráficos expuestos a calor directo; el acceso de servicio debe permanecer disponible.</p></div>
++<div class="faq__item"><h3 class="faq__question">¿Qué archivos debo preparar y cómo describo cambios de menú?</h3><p class="faq__answer">Organice el logotipo, colores de marca, imágenes y el texto del menú que debe aparecer. Distinga datos permanentes de información que cambia y confirme la versión antes de aprobar el diseño. Describa los archivos disponibles en el formulario; después confirmaremos cómo enviarlos.</p></div>
++<div class="faq__item"><h3 class="faq__question">¿Qué debe revisarse antes de instalar y para cuidar los gráficos?</h3><p class="faq__answer">Informe sobre grasa, adhesivo anterior, reparaciones, corrosión, pintura suelta o contaminación y siga las instrucciones de preparación del proyecto. La superficie se revisa antes de instalar. La duración depende del sistema seleccionado, exposición, calor, limpieza y mantenimiento; solicite su documentación y condiciones escritas, sin asumir una vida útil fija.</p></div>
+ </div>
+ </div>
+ </section>
+@@ -336,9 +307,9 @@
+ <section class="cta section--accent" id="contact">
+ <div class="container">
+ <div class="cta__grid">
+-<div class="cta__content" data-reveal="">
++<div class="cta__content" data-reveal="" style="min-width: 0;">
+ <h2 class="cta__title">¿LISTO PARA ROTULAR<br/>TU FOOD TRUCK?</h2>
+-<p class="cta__subtitle">Llena el formulario y obtén tu mockup 3D y cotización GRATIS.</p>
++<p class="cta__subtitle">Describa su unidad, cobertura y archivos disponibles. Revisaremos los datos antes de preparar una cotización. Enviar esta solicitud no realiza una compra.</p>
+ <button class="cta__phone" data-cal-config='{"layout":"month_view"}' data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting" data-cal-namespace="canvas-advertising-strategy-meeting">
+ <svg class="cta__phone-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+ <rect height="18" rx="2" width="18" x="3" y="4"></rect>
+@@ -346,7 +317,7 @@
+ <line x1="8" x2="8" y1="2" y2="6"></line>
+ <line x1="3" x2="21" y1="10" y2="10"></line>
+ </svg>
+-                        Agendar Consulta
++                        Hablar del Proyecto
+                     </button>
+ <div class="cta__info">
+ <div class="cta__info-item">
+@@ -360,7 +331,7 @@
+ </div>
+ </div>
+ </div>
+-<div class="cta__form" data-reveal="">
++<div class="cta__form" data-reveal="" style="min-width: 0;">
+ <h3 class="cta__form-title">Pedir Cotización</h3>
+ <form class="form" id="quoteForm">
+ <div class="form__group">
+@@ -383,7 +354,7 @@
+ <label class="form__label" for="message">Detalles del Proyecto</label>
+ <textarea class="form__textarea" id="message" name="message" placeholder="¿Longitud del camión/remolque? ¿También necesitas diseño del logo?" rows="4"></textarea>
+ </div>
+-<button class="btn btn--white btn--full" type="submit">Obtener Cotización Gratis</button>
++<button class="btn btn--white btn--full" type="submit">Pedir Cotización</button>
+ </form>
+ <div class="form__success" id="formSuccess" style="display: none;">
+ <svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">

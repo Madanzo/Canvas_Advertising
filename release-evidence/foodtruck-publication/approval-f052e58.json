@@ -1,0 +1,92 @@
+{
+  "root": "/private/tmp/canvas-foodtruck-review-hAUqT1",
+  "dir": "/private/tmp/canvas-foodtruck-review-hAUqT1/package",
+  "archive": "/private/tmp/canvas-foodtruck-review-hAUqT1/canvas-foodtruck-f052e58.tar.gz",
+  "archiveSha256": "10c424b2cf4700292220fa2f1574ca395f95555f989acfe50dfe9f0f3e0512a4",
+  "proposedMapFileSha256": "9a52d4661152c5e571d68ad2445360b7a09c911de85cd27228a6f31e2efcb256",
+  "configurationFileSha256": "7396fc6c7b9e49f1b056e3e76dd271da00fa6ebb4d26609add29d909a4e3284e",
+  "identity": {
+    "source": "f052e584fc6d9b2fb617e4c35dbb106450bd993a",
+    "project": "canvas-adnvertising",
+    "site": "canvas-adnvertising",
+    "capturedAt": "2026-10-25T20:25:30.323Z",
+    "baseline": {
+      "version": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/045ff606071bf95f",
+      "release": "projects/canvas-adnvertising/sites/canvas-adnvertising/channels/live/releases/1792958907952000",
+      "releaseTime": "2026-10-25T20:08:27.952Z",
+      "manifestSha256": "c5d0994b00ef307f9506623f23749f64e914d5e0ab0f674c0a56ffa4a72298f6"
+    },
+    "proposed": {
+      "manifestSha256": "53dadcf41e3a8184ffeeeaa0eea5948d6186d97408b5998d4405db68c9f83b70"
+    },
+    "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3",
+    "counts": {
+      "before": 142,
+      "after": 142,
+      "replacements": 2,
+      "unchanged": 140,
+      "additions": 0,
+      "deletions": 0,
+      "metadataPaths": 0
+    },
+    "records": [
+      {
+        "path": "/food-truck-wraps-austin.html",
+        "beforeHostingHash": "0bd6fb1d63b34e41ab6351a72df602fcc9c03f0e24b0962a0af9665e61a1e2b0",
+        "beforeRawSha256": "6177e397fddd21b776f3d248eacf0c9547fa6c1ec8e980c2ba4c084a3b6b5a9b",
+        "rawSha256": "909abc7f11c2d0df1b90230d502f5d140824836b9713cdf7d588f8ab152d3a1f",
+        "gzipSha256": "64e592cefe2b2e88403fd1cfd3529b32f8c622936c0e16cce8e62c199262913a"
+      },
+      {
+        "path": "/food-truck-wraps-austin-es.html",
+        "beforeHostingHash": "841a590264bc4b0f360059ef1b48bdd68f2ef9ab7171de766826e85be96c68a0",
+        "beforeRawSha256": "456466ed36d606d307a86993f94ce3c59de6f3438ab6230f35315e271d13f5fd",
+        "rawSha256": "accdb0255d716ac6903621a535fd5a371bb8dcfb0cbb61ffdc6d7bd61495cfd9",
+        "gzipSha256": "d6df3bb43a768f4525e34dd165e2860c618cd511ddb3d62d13c7d57f0e92587c"
+      }
+    ],
+    "replacements": {
+      "/food-truck-wraps-austin.html": "64e592cefe2b2e88403fd1cfd3529b32f8c622936c0e16cce8e62c199262913a",
+      "/food-truck-wraps-austin-es.html": "d6df3bb43a768f4525e34dd165e2860c618cd511ddb3d62d13c7d57f0e92587c"
+    },
+    "ci": {
+      "source": "f052e584fc6d9b2fb617e4c35dbb106450bd993a",
+      "result": "success",
+      "tests": 51,
+      "url": "https://github.com/Madanzo/Canvas_Advertising/actions/runs/40230583586"
+    },
+    "browser": {
+      "at": "2026-10-25T20:22:48.204Z",
+      "cases": 12,
+      "widths": [
+        320,
+        375,
+        414,
+        768,
+        1024,
+        1440
+      ],
+      "status": "PASS",
+      "reusedSource": "1ee4e5e32be4ff46fc70b0a26934e70e7d7db2df",
+      "followup": {
+        "source": "f052e584fc6d9b2fb617e4c35dbb106450bd993a",
+        "at": "2026-10-25T20:25:11.129Z",
+        "cases": 6,
+        "widths": [
+          320,
+          375,
+          1440
+        ],
+        "status": "PASS",
+        "scope": "Only2hero reference paragraphs changed; all other HTML/metadata/runtime/form/media exact to matrix source. Secondary anchors rechecked at final source."
+      }
+    },
+    "rollback": {
+      "version": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/045ff606071bf95f",
+      "manifestSha256": "c5d0994b00ef307f9506623f23749f64e914d5e0ab0f674c0a56ffa4a72298f6",
+      "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3",
+      "conditions": "No rollback authorized now. Only a separately approved recovery while our eventual release remains current and complete expected maps/config match. Never overwrite an intervening publisher or restore exposed61df100c11fd1d4f."
+    },
+    "status": "SEALED_FOR_REVIEW_NOT_DEPLOYED"
+  }
+}
