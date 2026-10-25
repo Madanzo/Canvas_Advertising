@@ -1,0 +1,71 @@
+{
+  "source": "cd9a2fe6f4ca7daafaa2c757d4a01f1db994a8a1",
+  "project": "canvas-adnvertising",
+  "site": "canvas-adnvertising",
+  "capturedAt": "2026-10-25T20:03:40.409Z",
+  "baseline": {
+    "version": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/da702e43d434c404",
+    "release": "projects/canvas-adnvertising/sites/canvas-adnvertising/channels/live/releases/1792533440193000",
+    "releaseTime": "2026-10-20T21:57:20.193Z",
+    "manifestSha256": "06a53c696059b4ca9674fd97481808aa731c3e328fc6b46ea47d81eaeddf0bd1"
+  },
+  "proposed": {
+    "manifestSha256": "c5d0994b00ef307f9506623f23749f64e914d5e0ab0f674c0a56ffa4a72298f6"
+  },
+  "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3",
+  "counts": {
+    "before": 142,
+    "after": 142,
+    "replacements": 2,
+    "unchanged": 140,
+    "additions": 0,
+    "deletions": 0,
+    "metadataPaths": 0
+  },
+  "records": [
+    {
+      "path": "/commercial-fleet-wraps-austin.html",
+      "beforeHostingHash": "1ea9de5d92687bda6e2f655b55aebfcd7b119854ce0f5e7e2a0b7680f4f6fde1",
+      "beforeRawSha256": "b8540ad3da3247c1c6d940c71b038e8af0b51c4c24f963d7712fc6af5118e0e9",
+      "rawSha256": "b05b576f4aee7d2a26ec9a88466a35430a0c202bab75131d1863a4b5c3edd757",
+      "gzipSha256": "64c18cdcd2bb26964ff643bd09bad9bd529bc02b307350d15a70642e90c39057"
+    },
+    {
+      "path": "/commercial-fleet-wraps-austin-es.html",
+      "beforeHostingHash": "d38201f4d5a900ec8137224438a1fb6343e6d072d2cfc825387fbf892c0418f5",
+      "beforeRawSha256": "63efe1d586dfe017746c0fb7d7f0428d360d6610ff6c4152074e540160b3b743",
+      "rawSha256": "5dc47c745093fab66300efc2981b25f6f816693f1f87bb63cbd1a16f94ec8d5d",
+      "gzipSha256": "3f879046356fb73d913afdaf41aa0befc151f01bb311a43e2b2ddaad099b1d0f"
+    }
+  ],
+  "replacements": {
+    "/commercial-fleet-wraps-austin.html": "64c18cdcd2bb26964ff643bd09bad9bd529bc02b307350d15a70642e90c39057",
+    "/commercial-fleet-wraps-austin-es.html": "3f879046356fb73d913afdaf41aa0befc151f01bb311a43e2b2ddaad099b1d0f"
+  },
+  "ci": {
+    "source": "cd9a2fe6f4ca7daafaa2c757d4a01f1db994a8a1",
+    "result": "success",
+    "tests": 43,
+    "url": "https://github.com/Madanzo/Canvas_Advertising/actions/runs/40228792594"
+  },
+  "browser": {
+    "at": "2026-10-25T20:03:31.131Z",
+    "cases": 12,
+    "widths": [
+      320,
+      375,
+      414,
+      768,
+      1024,
+      1440
+    ],
+    "status": "PASS"
+  },
+  "rollback": {
+    "version": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/da702e43d434c404",
+    "manifestSha256": "06a53c696059b4ca9674fd97481808aa731c3e328fc6b46ea47d81eaeddf0bd1",
+    "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3",
+    "conditions": "No rollback authorized now. Only a separately approved recovery while our eventual release remains current and complete expected maps/config match. Never overwrite an intervening publisher or restore exposed61df100c11fd1d4f."
+  },
+  "status": "SEALED_FOR_REVIEW_NOT_DEPLOYED"
+}

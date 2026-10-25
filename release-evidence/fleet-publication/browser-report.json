@@ -1,0 +1,559 @@
+{
+  "at": "2026-10-25T20:03:31.131Z",
+  "status": "PASS",
+  "rows": [
+    {
+      "slug": "commercial-fleet-wraps-austin",
+      "width": 320,
+      "overflow": false,
+      "heroTop": 573.015625,
+      "heroHeight": 60.796875,
+      "anchors": true,
+      "keyboard": true,
+      "emptyFormInvalid": true,
+      "contract": {
+        "valid": false,
+        "fields": [
+          {
+            "name": "name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "phone",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "service",
+            "type": "select-one",
+            "required": false
+          },
+          {
+            "name": "message",
+            "type": "textarea",
+            "required": false
+          }
+        ],
+        "services": [
+          "",
+          "van",
+          "truck",
+          "box-truck",
+          "food-truck",
+          "fleet",
+          "other"
+        ]
+      },
+      "mediaLoaded": 4,
+      "pageErrors": []
+    },
+    {
+      "slug": "commercial-fleet-wraps-austin",
+      "width": 375,
+      "overflow": false,
+      "heroTop": 568.140625,
+      "heroHeight": 60.796875,
+      "anchors": true,
+      "keyboard": true,
+      "emptyFormInvalid": true,
+      "contract": {
+        "valid": false,
+        "fields": [
+          {
+            "name": "name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "phone",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "service",
+            "type": "select-one",
+            "required": false
+          },
+          {
+            "name": "message",
+            "type": "textarea",
+            "required": false
+          }
+        ],
+        "services": [
+          "",
+          "van",
+          "truck",
+          "box-truck",
+          "food-truck",
+          "fleet",
+          "other"
+        ]
+      },
+      "mediaLoaded": 4,
+      "pageErrors": []
+    },
+    {
+      "slug": "commercial-fleet-wraps-austin",
+      "width": 414,
+      "overflow": false,
+      "heroTop": 556.765625,
+      "heroHeight": 60.796875,
+      "anchors": true,
+      "keyboard": true,
+      "emptyFormInvalid": true,
+      "contract": {
+        "valid": false,
+        "fields": [
+          {
+            "name": "name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "phone",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "service",
+            "type": "select-one",
+            "required": false
+          },
+          {
+            "name": "message",
+            "type": "textarea",
+            "required": false
+          }
+        ],
+        "services": [
+          "",
+          "van",
+          "truck",
+          "box-truck",
+          "food-truck",
+          "fleet",
+          "other"
+        ]
+      },
+      "mediaLoaded": 4,
+      "pageErrors": []
+    },
+    {
+      "slug": "commercial-fleet-wraps-austin",
+      "width": 768,
+      "overflow": false,
+      "heroTop": 484.265625,
+      "heroHeight": 60.796875,
+      "anchors": true,
+      "keyboard": true,
+      "emptyFormInvalid": true,
+      "contract": {
+        "valid": false,
+        "fields": [
+          {
+            "name": "name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "phone",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "service",
+            "type": "select-one",
+            "required": false
+          },
+          {
+            "name": "message",
+            "type": "textarea",
+            "required": false
+          }
+        ],
+        "services": [
+          "",
+          "van",
+          "truck",
+          "box-truck",
+          "food-truck",
+          "fleet",
+          "other"
+        ]
+      },
+      "mediaLoaded": 4,
+      "pageErrors": []
+    },
+    {
+      "slug": "commercial-fleet-wraps-austin",
+      "width": 1024,
+      "overflow": false,
+      "heroTop": 594.18798828125,
+      "heroHeight": 64.7969970703125,
+      "anchors": true,
+      "keyboard": true,
+      "emptyFormInvalid": true,
+      "contract": {
+        "valid": false,
+        "fields": [
+          {
+            "name": "name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "phone",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "service",
+            "type": "select-one",
+            "required": false
+          },
+          {
+            "name": "message",
+            "type": "textarea",
+            "required": false
+          }
+        ],
+        "services": [
+          "",
+          "van",
+          "truck",
+          "box-truck",
+          "food-truck",
+          "fleet",
+          "other"
+        ]
+      },
+      "mediaLoaded": 4,
+      "pageErrors": []
+    },
+    {
+      "slug": "commercial-fleet-wraps-austin",
+      "width": 1440,
+      "overflow": false,
+      "heroTop": 612.421875,
+      "heroHeight": 64.796875,
+      "anchors": true,
+      "keyboard": true,
+      "emptyFormInvalid": true,
+      "contract": {
+        "valid": false,
+        "fields": [
+          {
+            "name": "name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "phone",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "service",
+            "type": "select-one",
+            "required": false
+          },
+          {
+            "name": "message",
+            "type": "textarea",
+            "required": false
+          }
+        ],
+        "services": [
+          "",
+          "van",
+          "truck",
+          "box-truck",
+          "food-truck",
+          "fleet",
+          "other"
+        ]
+      },
+      "mediaLoaded": 4,
+      "pageErrors": []
+    },
+    {
+      "slug": "commercial-fleet-wraps-austin-es",
+      "width": 320,
+      "overflow": false,
+      "heroTop": 654.1875,
+      "heroHeight": 60.796875,
+      "anchors": true,
+      "keyboard": true,
+      "emptyFormInvalid": true,
+      "contract": {
+        "valid": false,
+        "fields": [
+          {
+            "name": "name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "phone",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "service",
+            "type": "select-one",
+            "required": false
+          },
+          {
+            "name": "message",
+            "type": "textarea",
+            "required": false
+          }
+        ],
+        "services": [
+          "",
+          "van",
+          "truck",
+          "box-truck",
+          "food-truck",
+          "fleet",
+          "other"
+        ]
+      },
+      "mediaLoaded": 4,
+      "pageErrors": []
+    },
+    {
+      "slug": "commercial-fleet-wraps-austin-es",
+      "width": 375,
+      "overflow": false,
+      "heroTop": 605.546875,
+      "heroHeight": 60.796875,
+      "anchors": true,
+      "keyboard": true,
+      "emptyFormInvalid": true,
+      "contract": {
+        "valid": false,
+        "fields": [
+          {
+            "name": "name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "phone",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "service",
+            "type": "select-one",
+            "required": false
+          },
+          {
+            "name": "message",
+            "type": "textarea",
+            "required": false
+          }
+        ],
+        "services": [
+          "",
+          "van",
+          "truck",
+          "box-truck",
+          "food-truck",
+          "fleet",
+          "other"
+        ]
+      },
+      "mediaLoaded": 4,
+      "pageErrors": []
+    },
+    {
+      "slug": "commercial-fleet-wraps-austin-es",
+      "width": 414,
+      "overflow": false,
+      "heroTop": 598.046875,
+      "heroHeight": 60.796875,
+      "anchors": true,
+      "keyboard": true,
+      "emptyFormInvalid": true,
+      "contract": {
+        "valid": false,
+        "fields": [
+          {
+            "name": "name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "phone",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "service",
+            "type": "select-one",
+            "required": false
+          },
+          {
+            "name": "message",
+            "type": "textarea",
+            "required": false
+          }
+        ],
+        "services": [
+          "",
+          "van",
+          "truck",
+          "box-truck",
+          "food-truck",
+          "fleet",
+          "other"
+        ]
+      },
+      "mediaLoaded": 4,
+      "pageErrors": []
+    },
+    {
+      "slug": "commercial-fleet-wraps-austin-es",
+      "width": 768,
+      "overflow": false,
+      "heroTop": 527.578125,
+      "heroHeight": 60.796875,
+      "anchors": true,
+      "keyboard": true,
+      "emptyFormInvalid": true,
+      "contract": {
+        "valid": false,
+        "fields": [
+          {
+            "name": "name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "phone",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "service",
+            "type": "select-one",
+            "required": false
+          },
+          {
+            "name": "message",
+            "type": "textarea",
+            "required": false
+          }
+        ],
+        "services": [
+          "",
+          "van",
+          "truck",
+          "box-truck",
+          "food-truck",
+          "fleet",
+          "other"
+        ]
+      },
+      "mediaLoaded": 4,
+      "pageErrors": []
+    },
+    {
+      "slug": "commercial-fleet-wraps-austin-es",
+      "width": 1024,
+      "overflow": false,
+      "heroTop": 636.7066650390625,
+      "heroHeight": 67.751708984375,
+      "anchors": true,
+      "keyboard": true,
+      "emptyFormInvalid": true,
+      "contract": {
+        "valid": false,
+        "fields": [
+          {
+            "name": "name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "phone",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "service",
+            "type": "select-one",
+            "required": false
+          },
+          {
+            "name": "message",
+            "type": "textarea",
+            "required": false
+          }
+        ],
+        "services": [
+          "",
+          "van",
+          "truck",
+          "box-truck",
+          "food-truck",
+          "fleet",
+          "other"
+        ]
+      },
+      "mediaLoaded": 4,
+      "pageErrors": []
+    },
+    {
+      "slug": "commercial-fleet-wraps-austin-es",
+      "width": 1440,
+      "overflow": false,
+      "heroTop": 669.9115600585938,
+      "heroHeight": 69.1656494140625,
+      "anchors": true,
+      "keyboard": true,
+      "emptyFormInvalid": true,
+      "contract": {
+        "valid": false,
+        "fields": [
+          {
+            "name": "name",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "phone",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "service",
+            "type": "select-one",
+            "required": false
+          },
+          {
+            "name": "message",
+            "type": "textarea",
+            "required": false
+          }
+        ],
+        "services": [
+          "",
+          "van",
+          "truck",
+          "box-truck",
+          "food-truck",
+          "fleet",
+          "other"
+        ]
+      },
+      "mediaLoaded": 4,
+      "pageErrors": []
+    }
+  ],
+  "policy": "Local preview, tracking/backend requests blocked. No submit event triggered; empty form validity inspected only. Contact focused, not called/emailed."
+}

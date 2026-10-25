@@ -1,0 +1,730 @@
+diff --git a/private/tmp/canvas-fleet-live-rXDaIo/commercial-fleet-wraps-austin.html b/private/tmp/canvas-fleet-oct25/commercial-fleet-wraps-austin.html
+index 7328dd2..2d073bf 100644
+--- a/private/tmp/canvas-fleet-live-rXDaIo/commercial-fleet-wraps-austin.html
++++ b/private/tmp/canvas-fleet-oct25/commercial-fleet-wraps-austin.html
+@@ -17,11 +17,11 @@
+         gtag('js', new Date());
+         gtag('config', 'G-98HWWM4BDW');
+     </script>
+-<meta content="Commercial fleet wraps in Austin, TX. Brand your vans, trucks &amp; trailers with consistent fleet graphics. Free design &amp; professional installation." name="description"/>
++<meta content="Commercial fleet wraps in Austin: compare full wraps, partial graphics and lettering. Send vehicle details, photos and artwork for a project-specific quote." name="description"/>
+ <meta content="commercial fleet wraps Austin, business vehicle wraps, fleet branding TX, transit van wraps Austin, box truck wraps, fleet graphics" name="keywords"/>
+ <!-- Open Graph / Facebook -->
+ <meta content="Commercial Fleet Wraps Austin | Canvas Advertising" property="og:title"/>
+-<meta content="Austin's premier commercial fleet wrap specialists. We design, print, and install high-impact wraps for business fleets of all sizes." property="og:description"/>
++<meta content="Commercial fleet wraps in Austin: compare full wraps, partial graphics and lettering. Send vehicle details, photos and artwork for a project-specific quote." property="og:description"/>
+ <meta content="website" property="og:type"/>
+ <meta content="https://canvas-advertising.com/commercial-fleet-wraps-austin" property="og:url"/>
+ <meta content="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fwaterloo-sparkling-water-fleet-wrap-austin.webp?alt=media&amp;token=c4805ad5-1929-4d37-a23d-fef7e1733aa4" property="og:image"/>
+@@ -32,7 +32,7 @@
+ <!-- Canonical URL -->
+ 
+ <link href="favicon.png" rel="icon" type="image/png"/>
+-<title>Commercial Fleet Wraps Austin | Business Vehicles | Canvas Advertising</title>
++<title>Commercial Fleet Wraps Austin | Canvas Advertising</title>
+ <link href="https://fonts.googleapis.com" rel="preconnect"/>
+ <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+ <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+@@ -41,69 +41,79 @@
+ <script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+ <!-- Service Schema JSON-LD -->
+ <script type="application/ld+json">
++{
++  "@context": "https://schema.org",
++  "@graph": [
+     {
+-      "@context": "https://schema.org",
+-      "@graph": [
++      "@type": "Service",
++      "@id": "https://canvas-advertising.com/commercial-fleet-wraps-austin#service",
++      "serviceType": "Commercial Fleet Wraps",
++      "provider": {
++        "@type": "LocalBusiness",
++        "name": "Canvas Advertising LLC",
++        "address": {
++          "@type": "PostalAddress",
++          "streetAddress": "10601 N Lamar Blvd",
++          "addressLocality": "Austin",
++          "addressRegion": "TX",
++          "postalCode": "78753",
++          "addressCountry": "US"
++        }
++      },
++      "areaServed": {
++        "@type": "AdministrativeArea",
++        "name": "Austin"
++      },
++      "description": "Commercial fleet wraps in Austin: compare full wraps, partial graphics and lettering. Send vehicle details, photos and artwork for a project-specific quote.",
++      "url": "https://canvas-advertising.com/commercial-fleet-wraps-austin",
++      "name": "Commercial Fleet Wraps Austin | Canvas Advertising"
++    },
++    {
++      "@type": "FAQPage",
++      "@id": "https://canvas-advertising.com/commercial-fleet-wraps-austin#faq",
++      "mainEntity": [
++        {
++          "@type": "Question",
++          "name": "What should I include in a fleet-wrap quote request?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Send the unit count, year, make and model of each vehicle, photos of its sides and surfaces, logo files and intended coverage. Identify the design approver and when vehicles can be made available. Canvas will review materials, design and installation requirements before preparing a project-specific quote."
++          }
++        },
++        {
++          "@type": "Question",
++          "name": "Do I need a full wrap, or will lettering and partial graphics work?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Lettering and partial graphics can display your name, services and contact details while using the vehicle’s existing color. A full wrap covers more surface. The choice depends on your message, vehicle, paint condition and requested coverage; we will review those options with you rather than assume every unit needs the same treatment."
++          }
++        },
+         {
+-          "@type": "Service",
+-          "@id": "https://canvas-advertising.com/commercial-fleet-wraps-austin#service",
+-          "serviceType": "Commercial Fleet Wraps",
+-          "provider": {
+-            "@type": "LocalBusiness",
+-            "name": "Canvas Advertising LLC",
+-            "address": {
+-              "@type": "PostalAddress",
+-              "streetAddress": "10601 N Lamar Blvd",
+-              "addressLocality": "Austin",
+-              "addressRegion": "TX",
+-              "postalCode": "78753",
+-              "addressCountry": "US"
+-            }
+-          },
+-          "areaServed": {
+-            "@type": "AdministrativeArea",
+-            "name": "Austin"
+-          },
+-          "description": "Commercial fleet wraps in Austin, TX. Specialized branding for transit vans, box trucks, and service fleets. Consistent, high-impact ROI for your business."
++          "@type": "Question",
++          "name": "Can I order print production if I already have an installer?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Yes. Canvas offers vinyl printing, lamination and contour cutting. Specify production without installation, final dimensions, quantities, artwork and how panels should be identified. Confirm specifications with your installer before approving production; pickup or shipping arrangements are confirmed in the project quote."
++          }
+         },
+         {
+-          "@type": "FAQPage",
+-          "@id": "https://canvas-advertising.com/vehicle-wraps-austin#faq",
+-          "mainEntity": [
+-            {
+-              "@type": "Question",
+-              "name": "How much does a vehicle wrap cost in Austin?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "The cost of a vehicle wrap in Austin typically ranges from $1,500 to $4,500+ depending on the size of the vehicle, the type of vinyl used (partial vs. full wrap), and the design complexity. We provide custom quotes for every project."
+-              }
+-            },
+-            {
+-              "@type": "Question",
+-              "name": "How long do vehicle wraps last in Texas heat?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "Service life depends on the selected film and laminate, installation, vehicle surfaces, exposure, cleaning, storage, and maintenance. Review the written product documentation and inspect fleet graphics regularly."
+-              }
+-            },
+-            {
+-              "@type": "Question",
+-              "name": "Will a vinyl wrap damage my car's paint?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "No, a professional vehicle wrap actually protects your OEM paint from minor scratches, road debris, and UV rays. When professionally removed, the vinyl leaves no residue."
+-              }
+-            }
+-          ]
++          "@type": "Question",
++          "name": "What should I check about paint, service life and care?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Compatibility and service life depend on paint condition, previous repairs, material, installation, exposure, cleaning and removal. Send photos of damaged or repaired paint for review. Request the documentation applicable to the selected film system; do not assume a fixed lifespan or warranty without its written terms."
++          }
+         }
+       ]
+     }
+-    </script>
++  ]
++}
++</script>
+ 
+     <!-- Twitter Card metadata -->
+     <meta name="twitter:card" content="summary_large_image">
+-    <meta name="twitter:title" content="Commercial Fleet Wraps Austin | Business Vehicles | Canvas Advertising">
+-    <meta name="twitter:description" content="Commercial fleet wraps in Austin, TX. Brand your vans, trucks &amp; trailers with consistent fleet graphics. Free design &amp; professional installation.">
++    <meta name="twitter:title" content="Commercial Fleet Wraps Austin | Canvas Advertising">
++    <meta name="twitter:description" content="Commercial fleet wraps in Austin: compare full wraps, partial graphics and lettering. Send vehicle details, photos and artwork for a project-specific quote.">
+     <meta name="twitter:image" content="https://canvas-advertising.com/images/og-share.jpg">
+ </head>
+ <body>
+@@ -164,12 +174,10 @@
+ <div class="partner-hero__content" data-reveal="">
+ <p class="section-label" style="color: var(--accent);">Austin's B2B Wrap Partner</p>
+ <h1 class="partner-hero__title">COMMERCIAL FLEET<br/><span class="text-accent">WRAPS AUSTIN.</span></h1>
+-<p class="partner-hero__subtitle">Turn your business vehicles into mobile billboards. We specialize in consistent, high-impact branding for transit vans, box trucks, and service fleets across Texas. Every project includes <strong>FREE professional design</strong>.</p>
++<p class="partner-hero__subtitle">Printed graphics, partial wraps and lettering for working vans, pickups and box trucks. Share your vehicle list, photos and intended coverage; Canvas will review design, production and installation requirements for a project-specific quote.</p>
+ <div class="partner-hero__cta">
+-<button class="btn btn--primary btn--large btn--pulse" data-cal-config='{"layout":"month_view"}' data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting" data-cal-namespace="canvas-advertising-strategy-meeting">
+-                        Get a Free Quote
+-                    </button>
+-<a class="btn btn--secondary btn--large" href="#types">See Wrap Types</a>
++<a class="btn btn--primary btn--large" href="#contact">Request a Fleet Quote</a>
++<a class="btn btn--secondary btn--large" href="commercial-fleet-wraps-austin#types">See Wrap Types</a>
+ </div>
+ </div>
+ </div>
+@@ -209,48 +217,22 @@
+         </div>
+     </section>
+ <!-- ===== Trust Bar ===== -->
+-<section class="trust-bar" data-reveal="">
++<section class="site-flow-band" id="fleet-specs" aria-labelledby="fleet-specs-title">
+ <div class="container">
+-<div class="trust-bar__grid">
+-<div class="trust-bar__item">
+-<div class="trust-bar__icon">
+-<svg fill="none" stroke="currentColor" viewbox="0 0 24 24">
+-<path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+-<path d="M22 4L12 14.01l-3-3"></path>
+-</svg>
+-</div>
+-<span class="trust-bar__number" data-count="500">500+</span>
+-<span class="trust-bar__label">Vehicles Wrapped</span>
+-</div>
+-<div class="trust-bar__item">
+-<div class="trust-bar__icon">
+-<svg fill="none" stroke="currentColor" viewbox="0 0 24 24">
+-<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+-</svg>
+-</div>
+-<span class="trust-bar__number">100%</span>
+-<span class="trust-bar__label">In-House Quality Control</span>
+-</div>
+-<div class="trust-bar__item">
+-<div class="trust-bar__icon trust-bar__icon--accent">
+-<svg fill="none" stroke="currentColor" viewbox="0 0 24 24">
+-<path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+-<path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+-<path d="M2 2l7.586 7.586"></path>
+-<circle cx="11" cy="11" r="2"></circle>
+-</svg>
+-</div>
+-<span class="trust-bar__number trust-bar__number--accent">FREE</span>
+-<span class="trust-bar__label">Custom Graphic Design</span>
+-</div>
+-<div class="trust-bar__item trust-bar__item--insured">
+-<div class="trust-bar__icon trust-bar__icon--dark">
+-<img src="images/fully-insured-company.png" alt="Fully Insured" width="48" height="48" loading="lazy">
+-</div>
+-<span class="trust-bar__number">Fully</span>
+-<span class="trust-bar__label">Insured Shop</span>
+-</div>
++<h2 id="fleet-specs-title">WHAT SHOULD I SEND FOR AN AUSTIN FLEET-WRAP QUOTE?</h2>
++<ul>
++<li>Unit count, year, make, model and a unit identifier for each vehicle.</li>
++<li>Photos of both sides, front and rear; flag damage, repainted areas or existing graphics.</li>
++<li>Logo, available artwork, contact details and the message drivers should read.</li>
++<li>Coverage per unit: lettering, partial graphics or a full wrap.</li>
++<li>Design approver, vehicle availability and whether you need installation or production only.</li>
++</ul>
++<p>Include these details in the form’s Project Details field. If artwork is not ready, describe what you have; design scope is confirmed in the quote.</p>
++<div class="partner-hero__cta">
++<a class="btn btn--primary btn--large" href="#contact">Send Fleet Details</a>
++<a class="btn btn--secondary btn--large" href="tel:+15124343793">Call (512) 434-3793</a>
+ </div>
++<p><a href="contractor-fleet-graphics-planning-checklist">Organize units and approvals</a> · <a href="large-format-printing-austin">Review production without installation</a></p>
+ </div>
+ </section>
+ <!-- ===== Types of Wraps ===== -->
+@@ -266,7 +248,7 @@
+ <div class="service-card" data-reveal="">
+ <h3 class="service-card__title">Commercial Fleet Wraps</h3>
+ <p class="service-card__desc">Standardize your brand across multiple transit vans, box trucks, and cars. We handle large fleet rollouts with consistency and precision.</p>
+-<span class="service-card__tag">High ROI</span>
++<span class="service-card__tag">Coverage by unit</span>
+ </div>
+ <a class="service-card" data-reveal="" href="food-truck-wraps-austin" style="text-decoration: none; cursor: pointer; display: block;">
+ <h3 class="service-card__title">Food Truck Wraps</h3>
+@@ -291,8 +273,8 @@
+ <div class="process__grid">
+ <div class="process__step" data-reveal="">
+ <div class="process__number">01</div>
+-<h3 class="process__title">Free Design</h3>
+-<p class="process__desc">We take your logo, brand guidelines, and ideas, and our design team creates a custom 3D mockup of your vehicle wrap — completely free.</p>
++<h3 class="process__title">Design Review</h3>
++<p class="process__desc">We review your logo, brand guidelines and coverage for each unit. Design scope and required approvals are agreed before production.</p>
+ </div>
+ <div class="process__step" data-reveal="">
+ <div class="process__number">02</div>
+@@ -341,24 +323,28 @@
+ </div>
+ </section>
+ <!-- ===== FAQ Section ===== -->
+-<section class="faq">
++<section class="faq" id="faq">
+ <div class="container">
+ <div class="section-header" data-reveal="">
+ <p class="section-label">Got Questions?</p>
+ <h2 class="section-title">WRAP FAQS</h2>
+ </div>
+ <div class="faq__list" data-reveal="">
+-<div class="faq__item" style="background: var(--primary); border: none;">
+-<h3 class="faq__question">How much does a vehicle wrap cost in Austin?</h3>
+-<p class="faq__answer">The cost typically ranges from $1,500 to $4,500+ depending on vehicle size, wrap coverage (partial vs. full), and material type. Contact us for a free, precise quote.</p>
++<div class="faq__item">
++<h3 class="faq__question">What should I include in a fleet-wrap quote request?</h3>
++<p class="faq__answer">Send the unit count, year, make and model of each vehicle, photos of its sides and surfaces, logo files and intended coverage. Identify the design approver and when vehicles can be made available. Canvas will review materials, design and installation requirements before preparing a project-specific quote.</p>
++</div>
++<div class="faq__item">
++<h3 class="faq__question">Do I need a full wrap, or will lettering and partial graphics work?</h3>
++<p class="faq__answer">Lettering and partial graphics can display your name, services and contact details while using the vehicle’s existing color. A full wrap covers more surface. The choice depends on your message, vehicle, paint condition and requested coverage; we will review those options with you rather than assume every unit needs the same treatment.</p>
+ </div>
+-<div class="faq__item" style="background: var(--primary); border: none;">
+-<h3 class="faq__question">How long do vehicle wraps last in Texas heat?</h3>
+-<p class="faq__answer">Service life depends on the selected film and laminate, installation, surfaces, exposure, cleaning, storage, and maintenance. Review the applicable product documentation and inspect graphics regularly.</p>
++<div class="faq__item">
++<h3 class="faq__question">Can I order print production if I already have an installer?</h3>
++<p class="faq__answer">Yes. Canvas offers vinyl printing, lamination and contour cutting. Specify production without installation, final dimensions, quantities, artwork and how panels should be identified. Confirm specifications with your installer before approving production; pickup or shipping arrangements are confirmed in the project quote.</p>
+ </div>
+-<div class="faq__item" style="background: var(--primary); border: none;">
+-<h3 class="faq__question">Will a vinyl wrap damage my car's paint?</h3>
+-<p class="faq__answer">No, it actually protects your OEM paint from minor scratches and sun damage. When removed professionally, it leaves the paint underneath looking brand new.</p>
++<div class="faq__item">
++<h3 class="faq__question">What should I check about paint, service life and care?</h3>
++<p class="faq__answer">Compatibility and service life depend on paint condition, previous repairs, material, installation, exposure, cleaning and removal. Send photos of damaged or repaired paint for review. Request the documentation applicable to the selected film system; do not assume a fixed lifespan or warranty without its written terms.</p>
+ </div>
+ </div>
+ <p class="section-subtitle">Planning several service vehicles? Use the <a href="contractor-fleet-graphics-planning-checklist">contractor fleet graphics checklist</a> to organize unit data and approvals, then use the <a href="texas-commercial-wrap-durability-maintenance-guide">Texas commercial wrap maintenance guide</a> to plan inspections, washing, repairs, and replacement records.</p>
+@@ -368,9 +354,9 @@
+ <section class="cta section--accent" id="contact">
+ <div class="container">
+ <div class="cta__grid">
+-<div class="cta__content" data-reveal="">
++<div class="cta__content" data-reveal="" style="min-width: 0;">
+ <h2 class="cta__title">READY TO GET<br/>WRAPPED?</h2>
+-<p class="cta__subtitle">Fill out the form to get your free design mockup and quote.</p>
++<p class="cta__subtitle">Describe your vehicles, coverage and available artwork. We will review your request before preparing a project-specific quote. Submitting this form is not a purchase.</p>
+ <button class="cta__phone" data-cal-config='{"layout":"month_view"}' data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting" data-cal-namespace="canvas-advertising-strategy-meeting">
+ <svg class="cta__phone-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+ <rect height="18" rx="2" width="18" x="3" y="4"></rect>
+@@ -378,7 +364,7 @@
+ <line x1="8" x2="8" y1="2" y2="6"></line>
+ <line x1="3" x2="21" y1="10" y2="10"></line>
+ </svg>
+-                        Schedule a Consultation
++                        Discuss Project
+                     </button>
+ <div class="cta__info">
+ <div class="cta__info-item">
+@@ -392,7 +378,7 @@
+ </div>
+ </div>
+ </div>
+-<div class="cta__form" data-reveal="">
++<div class="cta__form" data-reveal="" style="min-width: 0;">
+ <h3 class="cta__form-title">Request a Quote</h3>
+ <form class="form" id="quoteForm">
+ <div class="form__group">
+@@ -419,7 +405,7 @@
+ <label class="form__label" for="message">Project Details</label>
+ <textarea class="form__textarea" id="message" name="message" placeholder="Year, Make, Model, and any design ideas?" rows="4"></textarea>
+ </div>
+-<button class="btn btn--white btn--full" type="submit">Get Free Quote &amp; Design</button>
++<button class="btn btn--white btn--full" type="submit">Request a Fleet Quote</button>
+ </form>
+ <div class="form__success" id="formSuccess" style="display: none;">
+ <svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+
+diff --git a/private/tmp/canvas-fleet-live-rXDaIo/commercial-fleet-wraps-austin-es.html b/private/tmp/canvas-fleet-oct25/commercial-fleet-wraps-austin-es.html
+index 0d858ae..62fe347 100644
+--- a/private/tmp/canvas-fleet-live-rXDaIo/commercial-fleet-wraps-austin-es.html
++++ b/private/tmp/canvas-fleet-oct25/commercial-fleet-wraps-austin-es.html
+@@ -17,13 +17,13 @@
+         gtag('js', new Date());
+         gtag('config', 'G-98HWWM4BDW');
+     </script>
+-<meta content="Looking for commercial fleet wraps in Austin, TX? Canvas Advertising specializes in branding business fleets, transit vans, and box trucks. Free design included!" name="description"/>
++<meta content="Rotulación de flotillas en Austin: compare cobertura completa, parcial y letras. Envíe vehículos, fotos y archivos para una cotización específica con Canvas." name="description"/>
+ <meta content="commercial fleet wraps Austin, business vehicle wraps, fleet branding TX, transit van wraps Austin, box truck wraps, fleet graphics" name="keywords"/>
+ <!-- Open Graph / Facebook -->
+-<meta content="Flotillas Comerciales Austin | Canvas Advertising" property="og:title"/>
+-<meta content="Austin's premier commercial fleet wrap specialists. We design, print, and install high-impact wraps for business fleets of all sizes." property="og:description"/>
++<meta content="Rotulación de Flotillas en Austin | Canvas Advertising" property="og:title"/>
++<meta content="Rotulación de flotillas en Austin: compare cobertura completa, parcial y letras. Envíe vehículos, fotos y archivos para una cotización específica con Canvas." property="og:description"/>
+ <meta content="website" property="og:type"/>
+-<meta content="https://canvas-advertising.com/commercial-fleet-wraps-austin" property="og:url"/>
++<meta content="https://canvas-advertising.com/commercial-fleet-wraps-austin-es" property="og:url"/>
+ <meta content="https://firebasestorage.googleapis.com/v0/b/merkadagency-dd2aa.firebasestorage.app/o/Canvas%20Advertising%2FWebsite%20Images%2Fwaterloo-sparkling-water-fleet-wrap-austin.webp?alt=media&amp;token=c4805ad5-1929-4d37-a23d-fef7e1733aa4" property="og:image"/>
+ <meta content="1200" property="og:image:width"/>
+ <meta content="630" property="og:image:height"/>
+@@ -32,7 +32,7 @@
+ <!-- Canonical URL -->
+ 
+ <link href="favicon.png" rel="icon" type="image/png"/>
+-<title>Flotillas Comerciales Austin | Business Vehicles | Canvas Advertising</title>
++<title>Rotulación de Flotillas en Austin | Canvas Advertising</title>
+ <link href="https://fonts.googleapis.com" rel="preconnect"/>
+ <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+ <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+@@ -41,69 +41,79 @@
+ <script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+ <!-- Service Schema JSON-LD -->
+ <script type="application/ld+json">
++{
++  "@context": "https://schema.org",
++  "@graph": [
+     {
+-      "@context": "https://schema.org",
+-      "@graph": [
++      "@type": "Service",
++      "@id": "https://canvas-advertising.com/commercial-fleet-wraps-austin-es#service",
++      "serviceType": "Flotillas Comerciales",
++      "provider": {
++        "@type": "LocalBusiness",
++        "name": "Canvas Advertising LLC",
++        "address": {
++          "@type": "PostalAddress",
++          "streetAddress": "10601 N Lamar Blvd",
++          "addressLocality": "Austin",
++          "addressRegion": "TX",
++          "postalCode": "78753",
++          "addressCountry": "US"
++        }
++      },
++      "areaServed": {
++        "@type": "AdministrativeArea",
++        "name": "Austin"
++      },
++      "description": "Rotulación de flotillas en Austin: compare cobertura completa, parcial y letras. Envíe vehículos, fotos y archivos para una cotización específica con Canvas.",
++      "url": "https://canvas-advertising.com/commercial-fleet-wraps-austin-es",
++      "name": "Rotulación de Flotillas en Austin | Canvas Advertising"
++    },
++    {
++      "@type": "FAQPage",
++      "@id": "https://canvas-advertising.com/commercial-fleet-wraps-austin-es#faq",
++      "mainEntity": [
++        {
++          "@type": "Question",
++          "name": "¿Qué debe incluir mi solicitud de cotización para una flotilla?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Envíe la cantidad de unidades, año, marca y modelo de cada vehículo, fotos de sus lados y de la superficie, logotipo y cobertura deseada. Indique quién aprueba el diseño y las fechas en que puede dejar los vehículos. Canvas revisará materiales, diseño e instalación antes de preparar una cotización específica."
++          }
++        },
++        {
++          "@type": "Question",
++          "name": "¿Necesito una rotulación completa o bastan letras y gráficos parciales?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Las letras y los gráficos parciales permiten mostrar el nombre, los servicios y los datos de contacto aprovechando el color del vehículo. Una rotulación completa cubre más superficie. La elección depende del mensaje, el vehículo, la condición de la pintura y la cobertura solicitada; revisaremos esas opciones con usted."
++          }
++        },
+         {
+-          "@type": "Service",
+-          "@id": "https://canvas-advertising.com/commercial-fleet-wraps-austin#service",
+-          "serviceType": "Flotillas Comerciales",
+-          "provider": {
+-            "@type": "LocalBusiness",
+-            "name": "Canvas Advertising LLC",
+-            "address": {
+-              "@type": "PostalAddress",
+-              "streetAddress": "10601 N Lamar Blvd",
+-              "addressLocality": "Austin",
+-              "addressRegion": "TX",
+-              "postalCode": "78753",
+-              "addressCountry": "US"
+-            }
+-          },
+-          "areaServed": {
+-            "@type": "AdministrativeArea",
+-            "name": "Austin"
+-          },
+-          "description": "Commercial fleet wraps in Austin, TX. Specialized branding for transit vans, box trucks, and service fleets. Consistent, high-impact ROI for your business."
++          "@type": "Question",
++          "name": "¿Puedo pedir solo impresión si ya tengo instalador?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "Sí. Canvas ofrece impresión de vinil, laminado y corte de contorno. Indique que necesita producción sin instalación, las medidas finales, cantidades, archivos y cómo deben identificarse los paneles. Revise con su instalador las especificaciones antes de aprobar la producción; recogida o envío se confirman en la cotización."
++          }
+         },
+         {
+-          "@type": "FAQPage",
+-          "@id": "https://canvas-advertising.com/vehicle-wraps-austin#faq",
+-          "mainEntity": [
+-            {
+-              "@type": "Question",
+-              "name": "¿Cuánto cuesta rotular un vehículo en Austin?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "The cost of a vehicle wrap in Austin typically ranges from $1,500 to $4,500+ depending on the size of the vehicle, the type of vinyl used (partial vs. full wrap), and the design complexity. We provide custom quotes for every project."
+-              }
+-            },
+-            {
+-              "@type": "Question",
+-              "name": "¿Cuánto duran las rotulaciones en el calor de Texas?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "La vida útil depende del vinil y laminado seleccionados, la instalación, superficies, exposición, limpieza, almacenamiento y mantenimiento. Consulte la documentación escrita del producto e inspeccione los gráficos regularmente."
+-              }
+-            },
+-            {
+-              "@type": "Question",
+-              "name": "¿El vinilo dañará la pintura de mi auto?",
+-              "acceptedAnswer": {
+-                "@type": "Answer",
+-                "text": "No, a professional vehicle wrap actually protects your OEM paint from minor scratches, road debris, and UV rays. When professionally removed, the vinyl leaves no residue."
+-              }
+-            }
+-          ]
++          "@type": "Question",
++          "name": "¿Qué debo revisar sobre pintura, duración y mantenimiento?",
++          "acceptedAnswer": {
++            "@type": "Answer",
++            "text": "La compatibilidad y la vida útil dependen de la pintura, reparaciones previas, material, instalación, exposición, limpieza y retiro. Envíe fotos de pintura dañada o reparada para revisión. Pida la documentación aplicable al sistema seleccionado; no dé por hecho un plazo de duración ni una garantía sin condiciones escritas."
++          }
+         }
+       ]
+     }
+-    </script>
++  ]
++}
++</script>
+ 
+     <!-- Twitter Card metadata -->
+     <meta name="twitter:card" content="summary_large_image">
+-    <meta name="twitter:title" content="Flotillas Comerciales Austin | Business Vehicles | Canvas Advertising">
+-    <meta name="twitter:description" content="Looking for commercial fleet wraps in Austin, TX? Canvas Advertising specializes in branding business fleets, transit vans, and box trucks. Free design included!">
++    <meta name="twitter:title" content="Rotulación de Flotillas en Austin | Canvas Advertising">
++    <meta name="twitter:description" content="Rotulación de flotillas en Austin: compare cobertura completa, parcial y letras. Envíe vehículos, fotos y archivos para una cotización específica con Canvas.">
+     <meta name="twitter:image" content="https://canvas-advertising.com/images/og-share.jpg">
+ </head>
+ <body>
+@@ -164,12 +174,10 @@
+ <div class="partner-hero__content" data-reveal="">
+ <p class="section-label" style="color: var(--accent);">Socio de Rotulación B2B de Austin</p>
+ <h1 class="partner-hero__title">ROTULACIÓN DE FLOTILLAS<br/><span class="text-accent">COMERCIALES EN AUSTIN.</span></h1>
+-<p class="partner-hero__subtitle">Convierte los vehículos de tu negocio en carteleras móviles. Nos especializamos en branding consistente y de alto impacto para vans de tránsito, camiones de carga y flotas de servicios en todo Texas. Diseño profesional GRATIS.</p>
++<p class="partner-hero__subtitle">Gráficos impresos, rotulación parcial y letras para vans, camionetas y camiones de trabajo. Comparta su lista de vehículos, fotos y cobertura deseada; Canvas revisará el diseño, la producción y la instalación para preparar una cotización específica.</p>
+ <div class="partner-hero__cta">
+-<button class="btn btn--primary btn--large btn--pulse" data-cal-config='{"layout":"month_view"}' data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting" data-cal-namespace="canvas-advertising-strategy-meeting">
+-                        Obtener Cotización Gratis
+-                    </button>
+-<a class="btn btn--secondary btn--large" href="#types">Ver Tipos de Rotulación</a>
++<a class="btn btn--primary btn--large" href="#contact">Solicitar Cotización de Flotilla</a>
++<a class="btn btn--secondary btn--large" href="commercial-fleet-wraps-austin-es#types">Ver Tipos de Rotulación</a>
+ </div>
+ </div>
+ </div>
+@@ -209,48 +217,22 @@
+         </div>
+     </section>
+ <!-- ===== Trust Bar ===== -->
+-<section class="trust-bar" data-reveal="">
++<section class="site-flow-band" id="fleet-specs" aria-labelledby="fleet-specs-title">
+ <div class="container">
+-<div class="trust-bar__grid">
+-<div class="trust-bar__item">
+-<div class="trust-bar__icon">
+-<svg fill="none" stroke="currentColor" viewbox="0 0 24 24">
+-<path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+-<path d="M22 4L12 14.01l-3-3"></path>
+-</svg>
+-</div>
+-<span class="trust-bar__number" data-count="500">500+</span>
+-<span class="trust-bar__label">Vehicles Wrapped</span>
+-</div>
+-<div class="trust-bar__item">
+-<div class="trust-bar__icon">
+-<svg fill="none" stroke="currentColor" viewbox="0 0 24 24">
+-<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+-</svg>
+-</div>
+-<span class="trust-bar__number">100%</span>
+-<span class="trust-bar__label">In-House Quality Control</span>
+-</div>
+-<div class="trust-bar__item">
+-<div class="trust-bar__icon trust-bar__icon--accent">
+-<svg fill="none" stroke="currentColor" viewbox="0 0 24 24">
+-<path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+-<path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+-<path d="M2 2l7.586 7.586"></path>
+-<circle cx="11" cy="11" r="2"></circle>
+-</svg>
+-</div>
+-<span class="trust-bar__number trust-bar__number--accent">FREE</span>
+-<span class="trust-bar__label">Custom Graphic Design</span>
+-</div>
+-<div class="trust-bar__item trust-bar__item--insured">
+-<div class="trust-bar__icon trust-bar__icon--dark">
+-<img src="images/fully-insured-company.png" alt="Fully Insured" width="48" height="48" loading="lazy">
+-</div>
+-<span class="trust-bar__number">Fully</span>
+-<span class="trust-bar__label">Insured Shop</span>
+-</div>
++<h2 id="fleet-specs-title">¿QUÉ DEBO ENVIAR PARA COTIZAR MI FLOTILLA EN AUSTIN?</h2>
++<ul>
++<li>Cantidad de unidades, año, marca, modelo e identificación de cada vehículo.</li>
++<li>Fotos de ambos lados, frente y parte trasera; señale daños, repintado o gráficos anteriores.</li>
++<li>Logotipo, archivos disponibles, datos de contacto y mensaje que debe leerse.</li>
++<li>Cobertura por unidad: letras, gráficos parciales o rotulación completa.</li>
++<li>Persona que aprueba, disponibilidad de vehículos y si necesita instalación o solo producción.</li>
++</ul>
++<p>Incluya estos datos en el campo Detalles del Proyecto del formulario. Si todavía no tiene archivos, describa lo que tiene disponible; el alcance del diseño se confirma en la cotización.</p>
++<div class="partner-hero__cta">
++<a class="btn btn--primary btn--large" href="#contact">Enviar Detalles de la Flotilla</a>
++<a class="btn btn--secondary btn--large" href="tel:+15129459783">Llamar al (512) 945-9783</a>
+ </div>
++<p><a href="lista-planificacion-graficos-flotilla-contratistas">Organizar unidades y aprobaciones</a> · <a href="large-format-printing-austin-es">Revisar impresión sin instalación</a></p>
+ </div>
+ </section>
+ <!-- ===== Types of Wraps ===== -->
+@@ -258,7 +240,7 @@
+ <div class="section__grain"></div>
+ <div class="container">
+ <div class="section-header section-header--light" data-reveal="">
+-<p class="section-label">Wrap Solutions</p>
++<p class="section-label">Soluciones de Rotulación</p>
+ <h2 class="section-title">TIPOS DE ROTULACIÓN QUE OFRECEMOS</h2>
+ <p class="section-subtitle">Seleccionamos impresión, vinil, laminado y acabado después de revisar el vehículo, cobertura, exposición, instalación y mantenimiento.</p>
+ </div>
+@@ -266,15 +248,15 @@
+ <div class="service-card" data-reveal="">
+ <h3 class="service-card__title">Flotillas Comerciales</h3>
+ <p class="service-card__desc">Estandariza tu marca en múltiples vans de tránsito, camiones de carga y autos. Nos encargamos de despliegues de grandes flotas con consistencia y precisión.</p>
+-<span class="service-card__tag">High ROI</span>
++<span class="service-card__tag">Cobertura por unidad</span>
+ </div>
+-<a class="service-card" data-reveal="" href="food-truck-wraps-austin" style="text-decoration: none; cursor: pointer; display: block;">
++<a class="service-card" data-reveal="" href="food-truck-wraps-austin-es" style="text-decoration: none; cursor: pointer; display: block;">
+ <h3 class="service-card__title">Rotulación de Food Trucks</h3>
+ <p class="service-card__desc">Austin es la capital de los food trucks. Destaca en los parques concurridos con gráficos vibrantes y apetitosos que atraigan a la gente.</p>
+ <div style="margin-top: 1rem; color: var(--accent); font-weight: bold; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Más Información →</div>
+ </a>
+ <div class="service-card" data-reveal="">
+-<h3 class="service-card__title">Partial Wraps &amp; Decals</h3>
++<h3 class="service-card__title">Rotulación Parcial y Calcomanías</h3>
+ <p class="service-card__desc">Una opción muy económica. Integramos el color base de tu vehículo en el diseño utilizando calcomanías y rotulaciones parciales para ahorrarte dinero.</p>
+ </div>
+ </div>
+@@ -284,25 +266,25 @@
+ <section class="partner-process">
+ <div class="container">
+ <div class="section-header" data-reveal="">
+-<p class="section-label">Our Process</p>
++<p class="section-label">Nuestro Proceso</p>
+ <h2 class="section-title">DEL CONCEPTO A LA CALLE</h2>
+ <p class="section-subtitle">Nos encargamos de todo el proceso bajo un mismo techo para que no tengas que tratar con múltiples proveedores.</p>
+ </div>
+ <div class="process__grid">
+ <div class="process__step" data-reveal="">
+ <div class="process__number">01</div>
+-<h3 class="process__title">Diseño Gratis</h3>
+-<p class="process__desc">Tomamos tu logotipo, pautas de marca e ideas, y nuestro equipo de diseño crea un mockup 3D personalizado de tu rotulación — completamente gratis.</p>
++<h3 class="process__title">Revisión del Diseño</h3>
++<p class="process__desc">Revisamos el logotipo, las pautas de marca y la cobertura por unidad. El alcance del diseño y las aprobaciones necesarias se acuerdan antes de producir.</p>
+ </div>
+ <div class="process__step" data-reveal="">
+ <div class="process__number">02</div>
+-<h3 class="process__title">Print &amp; Prep</h3>
++<h3 class="process__title">Impresión y Preparación</h3>
+ <p class="process__desc">Una vez aprobado, imprimimos el diseño de forma interna en nuestra impresora HP Latex 800W y aplicamos un laminado protector UV.</p>
+ </div>
+ <div class="process__step" data-reveal="">
+ <div class="process__number">03</div>
+-<h3 class="process__title">Install &amp; Handover</h3>
+-<p class="process__desc">Dejas tu vehículo y nuestro equipo de instalación certificado aplica la rotulación de manera impecable. Conduce y empieza a destacar.</p>
++<h3 class="process__title">Instalación y Entrega</h3>
++<p class="process__desc">Entrega el vehículo preparado; el equipo sigue el plan de paneles aprobado y los requisitos documentados de aplicación.</p>
+ </div>
+ </div>
+ </div>
+@@ -312,7 +294,7 @@
+ <div class="section__grain"></div>
+ <div class="container">
+ <div class="section-header section-header--light" data-reveal="">
+-<p class="section-label">Our Portfolio</p>
++<p class="section-label">Nuestro Portafolio</p>
+ <h2 class="section-title">ROTULACIONES RECIENTES EN AUSTIN</h2>
+ <p class="section-subtitle">Mira algunas de nuestras transformaciones recientes de rotulación de vehículos en la ciudad.</p>
+ </div>
+@@ -341,24 +323,28 @@
+ </div>
+ </section>
+ <!-- ===== FAQ Section ===== -->
+-<section class="faq">
++<section class="faq" id="faq">
+ <div class="container">
+ <div class="section-header" data-reveal="">
+-<p class="section-label">Got Questions?</p>
++<p class="section-label">¿Tiene Preguntas?</p>
+ <h2 class="section-title">PREGUNTAS FRECUENTES</h2>
+ </div>
+ <div class="faq__list" data-reveal="">
+-<div class="faq__item" style="background: var(--primary); border: none;">
+-<h3 class="faq__question">¿Cuánto cuesta rotular un vehículo en Austin?</h3>
+-<p class="faq__answer">The cost typically ranges from $1,500 to $4,500+ depending on vehicle size, wrap coverage (partial vs. full), and material type. Contacto us for a free, precise quote.</p>
++<div class="faq__item">
++<h3 class="faq__question">¿Qué debe incluir mi solicitud de cotización para una flotilla?</h3>
++<p class="faq__answer">Envíe la cantidad de unidades, año, marca y modelo de cada vehículo, fotos de sus lados y de la superficie, logotipo y cobertura deseada. Indique quién aprueba el diseño y las fechas en que puede dejar los vehículos. Canvas revisará materiales, diseño e instalación antes de preparar una cotización específica.</p>
++</div>
++<div class="faq__item">
++<h3 class="faq__question">¿Necesito una rotulación completa o bastan letras y gráficos parciales?</h3>
++<p class="faq__answer">Las letras y los gráficos parciales permiten mostrar el nombre, los servicios y los datos de contacto aprovechando el color del vehículo. Una rotulación completa cubre más superficie. La elección depende del mensaje, el vehículo, la condición de la pintura y la cobertura solicitada; revisaremos esas opciones con usted.</p>
+ </div>
+-<div class="faq__item" style="background: var(--primary); border: none;">
+-<h3 class="faq__question">¿Cuánto duran las rotulaciones en el calor de Texas?</h3>
+-<p class="faq__answer">La vida útil depende del vinil y laminado, instalación, superficies, exposición, limpieza, almacenamiento y mantenimiento. Consulte la documentación del producto e inspeccione los gráficos regularmente.</p>
++<div class="faq__item">
++<h3 class="faq__question">¿Puedo pedir solo impresión si ya tengo instalador?</h3>
++<p class="faq__answer">Sí. Canvas ofrece impresión de vinil, laminado y corte de contorno. Indique que necesita producción sin instalación, las medidas finales, cantidades, archivos y cómo deben identificarse los paneles. Revise con su instalador las especificaciones antes de aprobar la producción; recogida o envío se confirman en la cotización.</p>
+ </div>
+-<div class="faq__item" style="background: var(--primary); border: none;">
+-<h3 class="faq__question">¿El vinilo dañará la pintura de mi auto?</h3>
+-<p class="faq__answer">La compatibilidad depende de la condición y tipo de pintura, reparaciones previas, preparación, material, instalación y retiro. La pintura dañada, repintada o mal adherida puede presentar mayor riesgo.</p>
++<div class="faq__item">
++<h3 class="faq__question">¿Qué debo revisar sobre pintura, duración y mantenimiento?</h3>
++<p class="faq__answer">La compatibilidad y la vida útil dependen de la pintura, reparaciones previas, material, instalación, exposición, limpieza y retiro. Envíe fotos de pintura dañada o reparada para revisión. Pida la documentación aplicable al sistema seleccionado; no dé por hecho un plazo de duración ni una garantía sin condiciones escritas.</p>
+ </div>
+ </div>
+ <p class="section-subtitle">¿Planea varios vehículos de servicio? Use la <a href="lista-planificacion-graficos-flotilla-contratistas">lista para flotillas de contratistas</a> para organizar unidades y aprobaciones, y la <a href="guia-mantenimiento-wraps-comerciales-texas">guía de mantenimiento de wraps comerciales</a> para planear inspecciones, lavado, reparaciones y reemplazos.</p>
+@@ -368,9 +354,9 @@
+ <section class="cta section--accent" id="contact">
+ <div class="container">
+ <div class="cta__grid">
+-<div class="cta__content" data-reveal="">
+-<h2 class="cta__title">READY TO GET<br/>WRAPPED?</h2>
+-<p class="cta__subtitle">Llena el formulario para obtener tu diseño gráfico y cotización gratis.</p>
++<div class="cta__content" data-reveal="" style="min-width: 0;">
++<h2 class="cta__title">¿LISTO PARA ROTULAR<br/>SU FLOTILLA?</h2>
++<p class="cta__subtitle">Describa sus vehículos, cobertura y archivos disponibles. Revisaremos su solicitud antes de preparar una cotización específica. Enviar el formulario no realiza una compra.</p>
+ <button class="cta__phone" data-cal-config='{"layout":"month_view"}' data-cal-link="canvas-advertising-6kkn3h/canvas-advertising-strategy-meeting" data-cal-namespace="canvas-advertising-strategy-meeting">
+ <svg class="cta__phone-icon" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+ <rect height="18" rx="2" width="18" x="3" y="4"></rect>
+@@ -378,7 +364,7 @@
+ <line x1="8" x2="8" y1="2" y2="6"></line>
+ <line x1="3" x2="21" y1="10" y2="10"></line>
+ </svg>
+-                        Programar una Consulta
++                        Hablar del Proyecto
+                     </button>
+ <div class="cta__info">
+ <div class="cta__info-item">
+@@ -392,7 +378,7 @@
+ </div>
+ </div>
+ </div>
+-<div class="cta__form" data-reveal="">
++<div class="cta__form" data-reveal="" style="min-width: 0;">
+ <h3 class="cta__form-title">Solicitar una Cotización</h3>
+ <form class="form" id="quoteForm">
+ <div class="form__group">
+@@ -419,7 +405,7 @@
+ <label class="form__label" for="message">Detalles del Proyecto</label>
+ <textarea class="form__textarea" id="message" name="message" placeholder="¿Año, marca, modelo y alguna idea de diseño?" rows="4"></textarea>
+ </div>
+-<button class="btn btn--white btn--full" type="submit">Get Free Quote &amp; Design</button>
++<button class="btn btn--white btn--full" type="submit">Solicitar Cotización de Flotilla</button>
+ </form>
+ <div class="form__success" id="formSuccess" style="display: none;">
+ <svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">

@@ -1,0 +1,36 @@
+{
+  "english": {
+    "page": "/commercial-fleet-wraps-austin",
+    "form": "#contact",
+    "phone": "tel:+15124343793",
+    "production": "/large-format-printing-austin",
+    "checklist": "/contractor-fleet-graphics-planning-checklist"
+  },
+  "spanish": {
+    "page": "/commercial-fleet-wraps-austin-es",
+    "form": "#contact",
+    "phone": "tel:+15129459783",
+    "production": "/large-format-printing-austin-es",
+    "checklist": "/lista-planificacion-graficos-flotilla-contratistas",
+    "foodTruck": "/food-truck-wraps-austin-es"
+  },
+  "email": "mailto:sales@canvas-advertising.com",
+  "fields": [
+    "name",
+    "phone",
+    "service",
+    "message"
+  ],
+  "serviceValues": [
+    "",
+    "van",
+    "truck",
+    "box-truck",
+    "food-truck",
+    "fleet",
+    "other"
+  ],
+  "formContract": "Existing fields/constraints/options/runtime exact; submit text only changed. No production acceptance test.",
+  "calendar": "Existing destination unchanged; not activated",
+  "payments": "Existing invoicing arrangements unchanged"
+}
