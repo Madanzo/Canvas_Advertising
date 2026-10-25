@@ -1,0 +1,636 @@
+{
+  "project": "canvas-adnvertising",
+  "source": "f052e584fc6d9b2fb617e4c35dbb106450bd993a",
+  "archiveSha256": "10c424b2cf4700292220fa2f1574ca395f95555f989acfe50dfe9f0f3e0512a4",
+  "preflight": {
+    "at": "2026-10-25T20:31:45.051Z",
+    "version": "projects/canvas-adnvertising/sites/canvas-adnvertising/versions/045ff606071bf95f",
+    "release": "projects/canvas-adnvertising/sites/canvas-adnvertising/channels/live/releases/1792958907952000",
+    "releaseTime": "2026-10-25T20:08:27.952Z",
+    "manifestSha256": "c5d0994b00ef307f9506623f23749f64e914d5e0ab0f674c0a56ffa4a72298f6",
+    "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3"
+  },
+  "proposedVerification": {
+    "at": "2026-10-25T20:34:00.802Z",
+    "manifestSha256": "53dadcf41e3a8184ffeeeaa0eea5948d6186d97408b5998d4405db68c9f83b70",
+    "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3"
+  },
+  "finalizedVerification": {
+    "at": "2026-10-25T20:34:01.911Z",
+    "manifestSha256": "53dadcf41e3a8184ffeeeaa0eea5948d6186d97408b5998d4405db68c9f83b70",
+    "configurationSha256": "7ba29fbe97ccbc88fe26c25e5551c408af09a9a36eea00e49cf510941ebc68c3"
+  },
+  "release": {
+    "name": "projects/835646149135/sites/canvas-adnvertising/channels/live/releases/1792960442367000",
+    "version": "projects/835646149135/sites/canvas-adnvertising/versions/5c9aaec803776b8d",
+    "releaseTime": "2026-10-25T20:34:02.367Z"
+  },
+  "counts": {
+    "replacements": 2,
+    "unchanged": 140,
+    "additions": 0,
+    "deletions": 0,
+    "metadataEntries": 0
+  },
+  "http": {
+    "status": "PASS",
+    "at": "2026-10-25T20:34:44.623Z",
+    "completeMapAndConfigurationMatch": true,
+    "checks": [
+      {
+        "url": "https://canvas-advertising.com/.git/HEAD",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.git/HEAD?foodtruck_verify=1792960468403",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.git/config",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.git/config?foodtruck_verify=1792960469598",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.git/index",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.git/index?foodtruck_verify=1792960470282",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/%2egit/HEAD",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/%2egit/HEAD?foodtruck_verify=1792960471104",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.agents/AGENTS.md",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.agents/AGENTS.md?foodtruck_verify=1792960471682",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.codex/config.toml",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/.codex/config.toml?foodtruck_verify=1792960472298",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-advertising.com/",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/index-es",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/large-format-printing-austin",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/large-format-printing-austin-es",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/commercial-fleet-wraps-austin",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/commercial-fleet-wraps-austin-es",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/3m-vs-avery-dennison-wrap-film",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/projects/tech-center-signage",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/es/proyectos/tech-center-signage",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/images/logo.png",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/css/styles.20260727.min.css",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-advertising.com/food-truck-wraps-austin",
+        "status": 200,
+        "receivedSha256": "21e0d86b26919c3d8710904e2a2f506f2fd65f245573ae683e06ae5e4263fe2a",
+        "normalizedSha256": "909abc7f11c2d0df1b90230d502f5d140824836b9713cdf7d588f8ab152d3a1f",
+        "validatedCloudflareOnly": true
+      },
+      {
+        "url": "https://canvas-advertising.com/food-truck-wraps-austin-es",
+        "status": 200,
+        "receivedSha256": "dfec04a44bf044de6d62818278cd78de6107653dff4a729283a62206f4654861",
+        "normalizedSha256": "accdb0255d716ac6903621a535fd5a371bb8dcfb0cbb61ffdc6d7bd61495cfd9",
+        "validatedCloudflareOnly": true
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.git/HEAD",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.git/HEAD?foodtruck_verify=1792960478700",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.git/config",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.git/config?foodtruck_verify=1792960479165",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.git/index",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.git/index?foodtruck_verify=1792960479623",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/%2egit/HEAD",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/%2egit/HEAD?foodtruck_verify=1792960480076",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.agents/AGENTS.md",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.agents/AGENTS.md?foodtruck_verify=1792960480602",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.codex/config.toml",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/.codex/config.toml?foodtruck_verify=1792960481046",
+        "status": 404
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/index-es",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/large-format-printing-austin",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/large-format-printing-austin-es",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/commercial-fleet-wraps-austin",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/commercial-fleet-wraps-austin-es",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/3m-vs-avery-dennison-wrap-film",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/projects/tech-center-signage",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/es/proyectos/tech-center-signage",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/images/logo.png",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/css/styles.20260727.min.css",
+        "status": 200
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/food-truck-wraps-austin",
+        "status": 200,
+        "receivedSha256": "909abc7f11c2d0df1b90230d502f5d140824836b9713cdf7d588f8ab152d3a1f",
+        "normalizedSha256": "909abc7f11c2d0df1b90230d502f5d140824836b9713cdf7d588f8ab152d3a1f",
+        "validatedCloudflareOnly": false
+      },
+      {
+        "url": "https://canvas-adnvertising.web.app/food-truck-wraps-austin-es",
+        "status": 200,
+        "receivedSha256": "accdb0255d716ac6903621a535fd5a371bb8dcfb0cbb61ffdc6d7bd61495cfd9",
+        "normalizedSha256": "accdb0255d716ac6903621a535fd5a371bb8dcfb0cbb61ffdc6d7bd61495cfd9",
+        "validatedCloudflareOnly": false
+      }
+    ],
+    "submissions": 0,
+    "calls": 0,
+    "emails": 0
+  },
+  "browser": [
+    {
+      "at": "2026-10-25T20:36:09.183Z",
+      "status": "PASS",
+      "rows": [
+        {
+          "host": "https://canvas-advertising.com",
+          "slug": "food-truck-wraps-austin",
+          "width": 375,
+          "overflow": false,
+          "heroTop": 530.734375,
+          "heroHeight": 60.796875,
+          "anchors": true,
+          "keyboard": true,
+          "emptyFormInvalid": true,
+          "contract": {
+            "valid": false,
+            "fields": [
+              {
+                "name": "name",
+                "type": "text",
+                "required": true
+              },
+              {
+                "name": "phone",
+                "type": "tel",
+                "required": true
+              },
+              {
+                "name": "service",
+                "type": "select-one",
+                "required": false
+              },
+              {
+                "name": "message",
+                "type": "textarea",
+                "required": false
+              }
+            ],
+            "services": [
+              "food-truck",
+              "food-trailer",
+              "concession-trailer",
+              "other"
+            ]
+          },
+          "referenceBackgroundPreserved": true,
+          "pageErrors": []
+        },
+        {
+          "host": "https://canvas-advertising.com",
+          "slug": "food-truck-wraps-austin",
+          "width": 1440,
+          "overflow": false,
+          "heroTop": 599.625,
+          "heroHeight": 64.796875,
+          "anchors": true,
+          "keyboard": true,
+          "emptyFormInvalid": true,
+          "contract": {
+            "valid": false,
+            "fields": [
+              {
+                "name": "name",
+                "type": "text",
+                "required": true
+              },
+              {
+                "name": "phone",
+                "type": "tel",
+                "required": true
+              },
+              {
+                "name": "service",
+                "type": "select-one",
+                "required": false
+              },
+              {
+                "name": "message",
+                "type": "textarea",
+                "required": false
+              }
+            ],
+            "services": [
+              "food-truck",
+              "food-trailer",
+              "concession-trailer",
+              "other"
+            ]
+          },
+          "referenceBackgroundPreserved": true,
+          "pageErrors": []
+        },
+        {
+          "host": "https://canvas-advertising.com",
+          "slug": "food-truck-wraps-austin-es",
+          "width": 375,
+          "overflow": false,
+          "heroTop": 590.53125,
+          "heroHeight": 60.796875,
+          "anchors": true,
+          "keyboard": true,
+          "emptyFormInvalid": true,
+          "contract": {
+            "valid": false,
+            "fields": [
+              {
+                "name": "name",
+                "type": "text",
+                "required": true
+              },
+              {
+                "name": "phone",
+                "type": "tel",
+                "required": true
+              },
+              {
+                "name": "service",
+                "type": "select-one",
+                "required": false
+              },
+              {
+                "name": "message",
+                "type": "textarea",
+                "required": false
+              }
+            ],
+            "services": [
+              "food-truck",
+              "food-trailer",
+              "other"
+            ]
+          },
+          "referenceBackgroundPreserved": true,
+          "pageErrors": []
+        },
+        {
+          "host": "https://canvas-advertising.com",
+          "slug": "food-truck-wraps-austin-es",
+          "width": 1440,
+          "overflow": false,
+          "heroTop": 645.5555419921875,
+          "heroHeight": 64.82415771484375,
+          "anchors": true,
+          "keyboard": true,
+          "emptyFormInvalid": true,
+          "contract": {
+            "valid": false,
+            "fields": [
+              {
+                "name": "name",
+                "type": "text",
+                "required": true
+              },
+              {
+                "name": "phone",
+                "type": "tel",
+                "required": true
+              },
+              {
+                "name": "service",
+                "type": "select-one",
+                "required": false
+              },
+              {
+                "name": "message",
+                "type": "textarea",
+                "required": false
+              }
+            ],
+            "services": [
+              "food-truck",
+              "food-trailer",
+              "other"
+            ]
+          },
+          "referenceBackgroundPreserved": true,
+          "pageErrors": []
+        }
+      ],
+      "policy": "Live https://canvas-advertising.com, tracking/backend requests blocked. No submit event triggered; empty form validity inspected only. Contact focused, not called/emailed."
+    },
+    {
+      "at": "2026-10-25T20:36:08.658Z",
+      "status": "PASS",
+      "rows": [
+        {
+          "host": "https://canvas-adnvertising.web.app",
+          "slug": "food-truck-wraps-austin",
+          "width": 375,
+          "overflow": false,
+          "heroTop": 530.734375,
+          "heroHeight": 60.796875,
+          "anchors": true,
+          "keyboard": true,
+          "emptyFormInvalid": true,
+          "contract": {
+            "valid": false,
+            "fields": [
+              {
+                "name": "name",
+                "type": "text",
+                "required": true
+              },
+              {
+                "name": "phone",
+                "type": "tel",
+                "required": true
+              },
+              {
+                "name": "service",
+                "type": "select-one",
+                "required": false
+              },
+              {
+                "name": "message",
+                "type": "textarea",
+                "required": false
+              }
+            ],
+            "services": [
+              "food-truck",
+              "food-trailer",
+              "concession-trailer",
+              "other"
+            ]
+          },
+          "referenceBackgroundPreserved": true,
+          "pageErrors": []
+        },
+        {
+          "host": "https://canvas-adnvertising.web.app",
+          "slug": "food-truck-wraps-austin",
+          "width": 1440,
+          "overflow": false,
+          "heroTop": 600.5304565429688,
+          "heroHeight": 64.8590087890625,
+          "anchors": true,
+          "keyboard": true,
+          "emptyFormInvalid": true,
+          "contract": {
+            "valid": false,
+            "fields": [
+              {
+                "name": "name",
+                "type": "text",
+                "required": true
+              },
+              {
+                "name": "phone",
+                "type": "tel",
+                "required": true
+              },
+              {
+                "name": "service",
+                "type": "select-one",
+                "required": false
+              },
+              {
+                "name": "message",
+                "type": "textarea",
+                "required": false
+              }
+            ],
+            "services": [
+              "food-truck",
+              "food-trailer",
+              "concession-trailer",
+              "other"
+            ]
+          },
+          "referenceBackgroundPreserved": true,
+          "pageErrors": []
+        },
+        {
+          "host": "https://canvas-adnvertising.web.app",
+          "slug": "food-truck-wraps-austin-es",
+          "width": 375,
+          "overflow": false,
+          "heroTop": 590.53125,
+          "heroHeight": 60.796875,
+          "anchors": true,
+          "keyboard": true,
+          "emptyFormInvalid": true,
+          "contract": {
+            "valid": false,
+            "fields": [
+              {
+                "name": "name",
+                "type": "text",
+                "required": true
+              },
+              {
+                "name": "phone",
+                "type": "tel",
+                "required": true
+              },
+              {
+                "name": "service",
+                "type": "select-one",
+                "required": false
+              },
+              {
+                "name": "message",
+                "type": "textarea",
+                "required": false
+              }
+            ],
+            "services": [
+              "food-truck",
+              "food-trailer",
+              "other"
+            ]
+          },
+          "referenceBackgroundPreserved": true,
+          "pageErrors": []
+        },
+        {
+          "host": "https://canvas-adnvertising.web.app",
+          "slug": "food-truck-wraps-austin-es",
+          "width": 1440,
+          "overflow": false,
+          "heroTop": 645.21875,
+          "heroHeight": 64.796875,
+          "anchors": true,
+          "keyboard": true,
+          "emptyFormInvalid": true,
+          "contract": {
+            "valid": false,
+            "fields": [
+              {
+                "name": "name",
+                "type": "text",
+                "required": true
+              },
+              {
+                "name": "phone",
+                "type": "tel",
+                "required": true
+              },
+              {
+                "name": "service",
+                "type": "select-one",
+                "required": false
+              },
+              {
+                "name": "message",
+                "type": "textarea",
+                "required": false
+              }
+            ],
+            "services": [
+              "food-truck",
+              "food-trailer",
+              "other"
+            ]
+          },
+          "referenceBackgroundPreserved": true,
+          "pageErrors": []
+        }
+      ],
+      "policy": "Live https://canvas-adnvertising.web.app, tracking/backend requests blocked. No submit event triggered; empty form validity inspected only. Contact focused, not called/emailed."
+    }
+  ],
+  "browserAdditionalAssertion": "Both primary contact and secondary checklist anchors passed in all eight cases.",
+  "finalConfirmation": {
+    "at": "2026-10-25T20:36:16.673Z",
+    "completeMapAndConfigurationMatch": true,
+    "releaseStillCurrent": true
+  },
+  "fallback": "UNUSED",
+  "measurement": {
+    "fleetCutoff": "2026-10-25",
+    "qualified": "UNKNOWN",
+    "quoted": "UNKNOWN",
+    "paid": "UNKNOWN",
+    "privateReportsPublished": false
+  },
+  "boundaries": "Hosting only. Exact reviewed gzip uploaded. No backend, CRM, payment, tracking, indexing or production submissions/calls/emails. Original checkout untouched."
+}
