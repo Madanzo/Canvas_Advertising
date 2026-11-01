@@ -4469,6 +4469,65 @@ window.initCanvasCommerce = async function () {
     const restore = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch { return fallback; } };
     let cart = restore('canvas_commerce_cart_v1', []);
     let catalog, quote, order, publicConfiguration;
+    // Read-only composition seam for the preserved configurator. This is local,
+    // visitor-editable configuration, NEVER staff authority or a CRM receipt.
+    // No customer, token, quote capability or server total is exported.
+    const freezeConfiguration = (value) => {
+        if (value && typeof value === 'object') {
+            Object.values(value).forEach(freezeConfiguration); Object.freeze(value);
+        }
+        return value;
+    };
+    const sourceRecord = (value, keys) => value && typeof value === 'object' && !Array.isArray(value)
+        && Object.keys(value).every((key) => keys.includes(key));
+    const sourceText = (value) => value === undefined || typeof value === 'string';
+    const sourceConfigurationValid = (item) => {
+        if (!sourceRecord(item, ['lineItemId', 'productId', 'configuration'])
+            || typeof item.lineItemId !== 'string' || typeof item.productId !== 'string') return false;
+        const p = catalog?.products.find((product) => product.productId === item.productId), c = item.configuration;
+        if (!p || !sourceRecord(c, ['quantity', 'options', 'variants', 'artworkMode', 'designBrief', 'notes', 'dimensions'])
+            || !Number.isSafeInteger(c.quantity) || c.quantity < 1
+            || !sourceRecord(c.options, Object.keys(p.options))
+            || !Object.entries(c.options).every(([key, value]) => typeof value === 'string' && p.options[key].includes(value))
+            || !Array.isArray(c.variants) || !c.variants.every((v) =>
+                sourceRecord(v, ['sku', 'color', 'size', 'quantity', 'personalization'])
+                && ['sku', 'color', 'size', 'personalization'].every((key) => sourceText(v[key]))
+                && Number.isSafeInteger(v.quantity) && v.quantity > 0)
+            || !sourceText(c.artworkMode) || !sourceText(c.designBrief) || !sourceText(c.notes)) return false;
+        return c.dimensions === undefined || (sourceRecord(c.dimensions, ['width', 'height', 'unit'])
+            && Number.isFinite(c.dimensions.width) && c.dimensions.width > 0
+            && Number.isFinite(c.dimensions.height) && c.dimensions.height > 0
+            && ['in', 'ft', 'mm', 'cm', 'm'].includes(c.dimensions.unit));
+    };
+    const configurationSource = Object.freeze({
+        version: 'canvas-commerce-configuration-source.v1',
+        snapshot: () => {
+            // Fail the whole projection explicitly instead of silently dropping
+            // unsupported restored data or exporting unknown nested fields.
+            const valid = Boolean(catalog) && Array.isArray(cart) && cart.every(sourceConfigurationValid);
+            return freezeConfiguration({
+                version: 'canvas-commerce-configuration-source.v1',
+                authority: 'browser_editable_configuration_only',
+                catalogVersion: catalog?.version || null,
+                status: valid ? 'configuration_only' : 'review_required',
+                reason: valid ? null : 'unsupported_or_unavailable_configuration',
+                items: valid ? structuredClone(cart.map((item) => ({
+                    lineItemId: item.lineItemId, productId: item.productId,
+                    configuration: item.configuration
+                }))) : []
+            });
+        }
+    });
+    Object.defineProperty(app, 'canvasConfigurationSource', {
+        value: configurationSource, configurable: true
+    });
+    const publishConfiguration = () => app.dispatchEvent(new CustomEvent(
+        'canvas:configuration-changed', { detail: configurationSource.snapshot() }
+    ));
+    window.addEventListener('pagehide', (event) => {
+        if (!event.persisted && app.canvasConfigurationSource === configurationSource)
+            delete app.canvasConfigurationSource;
+    });
     let checkout = restore('canvas_commerce_checkout_v1', null);
     let payment = restore('canvas_commerce_payment_v1', null);
     let uploads = restore('canvas_commerce_uploads_v1', {});
@@ -4783,6 +4842,7 @@ window.initCanvasCommerce = async function () {
         form.addEventListener('change', persistConfigurationDraft);
     }
     function renderCart() {
+        publishConfiguration();
         updateDock();
         const holder = document.getElementById('commerce-cart'); holder.replaceChildren();
         if (!cart.length) { holder.append(node('p', txt('Your order starts here.', 'Tu pedido comienza aquí.'))); return; }
