@@ -67,3 +67,19 @@ Bind them to current saved revisions, preserve uncertain exact requests during
 cart changes, and test the combined EN/ES screen against actual isolated handlers.
 No production adapter is bound by this proposal. No deployment, customer records,
 payment, notification, retention, cleanup or existing sales-flow changes occur.
+
+## Explicit assignment controls
+
+`js/canvas-staff-assignments.js` supplies default-disabled local controls for job,
+unique design, placement and installation-review inputs, alongside the existing
+configurator. It has no sign-in, API, file, price or storage operation. Blank
+identities are not generated or inferred. Refresh retains values only for the
+same stable item ID; a duplicated/new line starts without another line's design.
+An edited cart requires explicit refresh before mapping. Failed refresh preserves
+local entries but invalidates preparation; it never repairs a business record.
+This module is not mounted by the public store pages.
+
+The composed CRM workspace is a separate source candidate and must be tested
+against the exact website revision. Simulated component API/authentication is
+not actual handler, durable storage or production acceptance. The original
+store/cart/reference/proof/recovery implementation remains in place.
