@@ -4901,7 +4901,16 @@ window.initCanvasCommerce = async function () {
             await checkoutSaved();
         });
     });
-    async function refresh() { order = await api('order', { orderId: order.id }); await renderOrder(); }
+    async function refresh() {
+        const orderId = order.id;
+        const updated = await api('order', { orderId });
+        if (order?.id !== orderId || updated.id !== orderId || updated.revision < order.revision) return;
+        // The reconciliation hold is sticky on the server. A read started before
+        // capture can still return after the payment result has raised the hold.
+        if (order.workOrderReconciliationRequired === true && updated.workOrderReconciliationRequired !== true) return;
+        order = updated;
+        await renderOrder();
+    }
     async function pay(collection = 'required') {
         if (order.workOrderReconciliationRequired === true) return;
         let result;
