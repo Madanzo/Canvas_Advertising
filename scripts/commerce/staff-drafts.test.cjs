@@ -133,7 +133,13 @@ test('website HTTP → pinned CRM handlers: staff parity, authority, immutable d
     assert.equal((await ok('complete-draft-upload', { quoteId: staffQuote.quoteId, sessionId: upload.sessionId }, 'after_purchase', null, buyerCookie)).assetId, completed.assetId, 'committed receipt remains recoverable');
     assert.equal((await invoke('create-draft-upload', { ...manifest, requestId: 'new_after_purchase' }, 'new_after_purchase', null, buyerCookie)).ok, false);
     assert.equal([...backend.store.data.keys()].filter((k) => /\/commerceOrders\//.test(k)).length, 1);
-    for (const name of ['payments', 'commercePaymentAttempts', 'leads', 'workOrders'])
+    assert.equal(order.workOrderId, purchased.workOrderId);
+    const jobs = [...backend.store.data.entries()].filter(([key]) => /\/workOrders\/[^/]+$/.test(key));
+    assert.equal(jobs.length, 1);
+    assert.equal(jobs[0][0].split('/').at(-1), order.workOrderId);
+    assert.equal(jobs[0][1].status, 'held');
+    assert.ok(order.items.every((item) => !item.workOrderId), 'accepted checkout does not release production');
+    for (const name of ['payments', 'commercePaymentAttempts', 'leads'])
         assert.equal([...backend.store.data.keys()].filter((k) => k.includes('/' + name + '/')).length, 0);
     assert.ok(!JSON.stringify([...websiteStore.data.values()]).includes(admin), 'no staff tokens persisted');
     assert.ok(!JSON.stringify([...websiteStore.data.values()]).includes(ticket.ticket), 'only ticket digest persisted');
