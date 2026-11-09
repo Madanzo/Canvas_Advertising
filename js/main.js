@@ -4903,6 +4903,8 @@ window.initCanvasCommerce = async function () {
     });
     async function refresh() { order = await api('order', { orderId: order.id }); await renderOrder(); }
     async function pay(collection = 'required') {
+        if (order.workOrderReconciliationRequired === true) return;
+        let result;
         if (order.financial === 'failed') {
             payment = null;
             sessionStorage.removeItem('canvas_commerce_payment_payload_v1');
@@ -4910,11 +4912,11 @@ window.initCanvasCommerce = async function () {
         if (payment && payment.orderId === order.id && (payment.collection || 'required') === collection) {
             // Retry existing server intent; if the initial HTTP request never
             // reached it, the tab retains the same token bytes, not a new charge.
-            try { await api('payment', null, payment.attemptId); }
+            try { result = await api('payment', null, payment.attemptId); }
             catch (error) {
                 const saved = sessionStorage.getItem('canvas_commerce_payment_payload_v1');
                 if (error.code !== 'retry_not_found' || !saved) throw error;
-                await api('payment', saved, payment.attemptId);
+                result = await api('payment', saved, payment.attemptId);
             }
         } else {
             if (!window.CanvasFinix || typeof window.CanvasFinix.tokenize !== 'function') {
@@ -4925,8 +4927,14 @@ window.initCanvasCommerce = async function () {
             localStorage.setItem('canvas_commerce_payment_v1', JSON.stringify(payment));
             const raw = JSON.stringify({ orderId: order.id, requestId: payment.attemptId, token, collection });
             sessionStorage.setItem('canvas_commerce_payment_payload_v1', raw);
-            const result = await api('payment', raw, payment.attemptId);
-            payment.state = result.state; localStorage.setItem('canvas_commerce_payment_v1', JSON.stringify(payment));
+            result = await api('payment', raw, payment.attemptId);
+        }
+        payment.state = result.state;
+        localStorage.setItem('canvas_commerce_payment_v1', JSON.stringify(payment));
+        if (result.workOrderReconciliationRequired === true) {
+            order.workOrderReconciliationRequired = true;
+            sessionStorage.removeItem('canvas_commerce_payment_payload_v1');
+            await renderOrder();
         }
         await refresh();
         if (order.financial === 'paid') sessionStorage.removeItem('canvas_commerce_payment_payload_v1');
@@ -5040,6 +5048,13 @@ window.initCanvasCommerce = async function () {
         document.getElementById('commerce-checkout').hidden = true;
         const holder = document.getElementById('commerce-order'); holder.replaceChildren(); holder.hidden = false;
         holder.append(node('h2', txt('Your order', 'Tu pedido')), node('p', order.id, { class: 'c-order-id' }));
+        if (order.workOrderReconciliationRequired === true) {
+            holder.append(node('p', txt(
+                'Payment received. Our team is reviewing your order. Please do not pay again. Production is on hold.',
+                'Recibimos tu pago. Nuestro equipo está revisando tu pedido. No vuelvas a pagar. La producción está en pausa.'
+            ), { role: 'status' }), button(txt('Refresh authoritative status', 'Actualizar estado autorizado'), refresh, true));
+            return;
+        }
         const badges = node('div', null, { class: 'c-badges' });
         badges.append(node('span', txt('Payment: ', 'Pago: ') + (es ? valueLabel(order.financial) : order.financial), { class: 'c-badge' + (order.financial !== 'paid' ? ' c-badge--hold' : '') }));
         holder.append(badges);
