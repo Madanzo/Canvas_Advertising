@@ -126,6 +126,49 @@ for (const brokenLink of ['quote', 'work-order']) test(
         assert.equal(count('payments'), 0, 'held capture must not post to the quote payment ledger');
         assert.equal(count('captureEvidence'), 1, 'verified capture is isolated on the original attempt');
         assert.equal(count('workOrders'), 0);
+
+        // The CRM handler authenticates the fixture admin and resolves only after
+        // the original association has been restored.
+        store.data.set(root.slice(0, -1), { ...store.data.get(root.slice(0, -1)), slug: 'canvas_advertising' });
+        store.data.set(root + 'members/preview_staff', { role: 'admin', status: 'active' });
+        const staff = (operation, body, token = 'preview_staff_only') =>
+            preview.backend.request(operation, JSON.stringify(body), token);
+        const review = await staff('staff-capture-review', { orderId });
+        assert.equal(review.ok, true, JSON.stringify(review));
+        const request = {
+            orderId, requestId: 'fixture_staff_resolution',
+            expectedRevision: review.result.revision, evidenceHash: review.result.evidenceHash,
+            reason: 'Verified the original fixture capture and order.',
+        };
+        const denied = await staff('staff-resolve-capture', request, preview.backend.staffTokens.quotes_only);
+        assert.equal(denied.httpStatus, 403);
+        const mismatch = await staff('staff-resolve-capture', request);
+        assert.equal(mismatch.code, 'capture_binding_conflict', JSON.stringify(mismatch));
+        await holder.getByRole('button', { name: es ? 'Refresh authoritative status' : 'Actualizar estado autorizado', exact: true }).click();
+        await holder.getByText(es ? enMessage : esMessage, { exact: true }).waitFor();
+        assert.equal(count('commerceCaptureResolutions'), 0);
+        assert.equal(count('workOrders'), 0);
+
+        store.data.set(quoteKey, quote);
+        const resolutions = await Promise.all([
+            staff('staff-resolve-capture', request), staff('staff-resolve-capture', request),
+        ]);
+        assert.equal(resolutions[0].ok, true, JSON.stringify(resolutions[0]));
+        assert.deepEqual(resolutions[0], resolutions[1]);
+        assert.equal(resolutions[0].result.status, 'resolved');
+        assert.equal(count('commerceCaptureResolutions'), 1);
+        assert.equal(count('workOrders'), 1);
+        assert.equal(count('payments'), 1);
+        const attemptPrefix = root + 'commercePaymentAttempts/';
+        assert.equal([...store.data.keys()].filter((key) =>
+            key.startsWith(attemptPrefix) && !key.slice(attemptPrefix.length).includes('/')).length, 1);
+        await holder.getByRole('button', { name: es ? 'Refresh authoritative status' : 'Actualizar estado autorizado', exact: true }).click();
+        await holder.getByText(es ? 'Payment: paid' : 'Pago: Pagado', { exact: true }).waitFor();
+        assert.equal(await holder.getByText(es ? enMessage : esMessage, { exact: true }).count(), 0);
+        assert.equal(await holder.getByRole('button', { name: paymentControls }).count(), 1, 'only the remaining deposit balance can be paid');
+        await holder.getByRole('button', { name: es ? 'Pay remaining balance' : 'Pagar saldo restante', exact: true }).waitFor();
+        assert.equal(paymentRequests.length, 2, 'staff resolution does not repeat payment');
+        assert.equal(preview.backend.controls.submits, 1);
         assert.equal(preview.mailbox.length, 0);
     } finally {
         await browser?.close();

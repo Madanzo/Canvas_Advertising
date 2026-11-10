@@ -4901,13 +4901,13 @@ window.initCanvasCommerce = async function () {
             await checkoutSaved();
         });
     });
+    let orderReadGeneration = 0;
     async function refresh() {
         const orderId = order.id;
+        const generation = orderReadGeneration;
         const updated = await api('order', { orderId });
-        if (order?.id !== orderId || updated.id !== orderId || updated.revision < order.revision) return;
-        // The reconciliation hold is sticky on the server. A read started before
-        // capture can still return after the payment result has raised the hold.
-        if (order.workOrderReconciliationRequired === true && updated.workOrderReconciliationRequired !== true) return;
+        if (generation !== orderReadGeneration || order?.id !== orderId || updated.id !== orderId || updated.revision < order.revision) return;
+        if (order.workOrderReconciliationRequired === true && updated.workOrderReconciliationRequired !== true && updated.revision === order.revision) return;
         order = updated;
         await renderOrder();
     }
@@ -4940,7 +4940,9 @@ window.initCanvasCommerce = async function () {
         }
         payment.state = result.state;
         localStorage.setItem('canvas_commerce_payment_v1', JSON.stringify(payment));
-        if (result.workOrderReconciliationRequired === true) {
+        if (result.orderId === order?.id && result.workOrderReconciliationRequired === true) {
+            // Invalidate reads that started before the payment result raised the hold.
+            orderReadGeneration++;
             order.workOrderReconciliationRequired = true;
             sessionStorage.removeItem('canvas_commerce_payment_payload_v1');
             await renderOrder();

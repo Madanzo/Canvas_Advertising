@@ -47,9 +47,49 @@ export class FirestoreCommerceStore {
     transaction<T>(callback: any) { return store.transaction<T>(callback); }
     findContacts(...args: Parameters<MemoryStore['findContacts']>) { return store.findContacts(...args); }
 }
+// Minimal snapshots for the staff review HTTP handler in the browser fixture.
+function reviewDoc(path: string) {
+    return { path: path.replace(/^tenants\/canvas_advertising(?=\/|$)/, 'tenants/canvas_test') };
+}
+function reviewSnapshot(path: string, value: any) {
+    return {
+        id: path.split('/').pop(), exists: value != null, data: () => value,
+        get: (field: string) => value?.[field], createTime: { seconds: 1, nanoseconds: 0 },
+    };
+}
+function reviewCollection(path: string) {
+    const collection = reviewDoc(path).path;
+    const query = (filter?: { field: string; value: unknown }) => ({
+        limit: (limit: number) => ({ collection, filter, limit }),
+    });
+    return {
+        ...query(),
+        where: (field: string, op: string, value: unknown) => {
+            if (op !== '==') throw Error('Unsupported fixture query');
+            return query({ field, value });
+        },
+        doc: (id: string) => reviewDoc(collection + '/' + id),
+    };
+}
 export function getAdminDb() {
     if (demoDb) return demoDb;
-    return { doc: (path: string) => ({ get: async () => {
+    return {
+        collection: reviewCollection,
+        runTransaction: (callback: (tx: any) => Promise<unknown>) => store.transaction((tx) => callback({
+            get: async (ref: any) => {
+                if (ref.path) return reviewSnapshot(ref.path, await tx.get(ref.path));
+                const prefix = ref.collection + '/';
+                const docs = [...store.data.entries()]
+                    .filter(([key, value]) => key.startsWith(prefix) && !key.slice(prefix.length).includes('/')
+                        && (!ref.filter || (value as any)?.[ref.filter.field] === ref.filter.value))
+                    .slice(0, ref.limit)
+                    .map(([key, value]) => reviewSnapshot(key, structuredClone(value)));
+                return { docs, size: docs.length };
+            },
+            set: (ref: { path: string }, value: unknown) => tx.set(ref.path, value),
+            create: (ref: { path: string }, value: unknown) => tx.create(ref.path, value),
+        })),
+        doc: (path: string) => ({ ...reviewDoc(path), get: async () => {
         const role = Object.keys(staffTokens).find((r) => path.endsWith('/members/preview_' + r));
         const data = path.endsWith('/members/preview_staff') ? { role: 'admin' }
             : role && role !== 'outsider' ? { role }
